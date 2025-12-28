@@ -1,0 +1,20 @@
+<nav class="container relative mx-auto p-6">
+  <div class="flex items-center justify-between space-x-20 my-6">
+    <div class="z-30">
+      <%= image_tag('aji_logo_transparent.png', width: "100px") %>
+    </div>
+
+    <div class="items-center space-x-6 uppercase text-grayishBlue md:flex">
+      <%= link_to "Features", root_path, class: "tracking-widest hover:text-softRed" %>
+      <%= link_to "About", root_path, class: "tracking-widest hover:text-softRed" %>
+      <%= link_to "Get Started", root_path, class: "tracking-widest hover:text-softRed" %>
+      <%= link_to "Sign Up", root_path, class: "tracking-widest hover:text-softRed" %>
+      <%= link_to "Log In", root_path, class: "px-8 py-2 text-white bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white" %>
+    </div>
+
+    <div class="flex items-center space-x-2 my-6 uppercase text-grayishBlue md:flex">
+      <%= image_tag('languages.png', width: '25px') %>
+      <%= link_to "Languages", root_path, class: "tracking-widest hover:text-softRed" %>
+    </div>
+  </div>
+</nav>
