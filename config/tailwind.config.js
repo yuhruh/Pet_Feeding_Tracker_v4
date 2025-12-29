@@ -3,6 +3,7 @@ module.exports = {
     './app/helpers/**/*.rb',
     './app/javascript/**/*.js',
     './app/views/**/*',],
+  darkMode: 'class',
   theme: {
     screens: {
       sm: '480px',
@@ -24,6 +25,11 @@ module.exports = {
         dots: "url('../images/bg-dots.svg')",
       })
     },
+  },
+  variants: {
+    extend: {
+      backgroundImage: ['dark']
+    }
   },
   plugins: [],
 }
