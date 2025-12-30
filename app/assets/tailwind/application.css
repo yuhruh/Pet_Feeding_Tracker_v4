@@ -8,6 +8,11 @@
   brightness(101%) contrast(96%)
 }
 
+.required:after {
+    content:"\00a0\*\00a0";
+    color:red;
+}
+
 /* HAMBURGER MENU */
 
 .hamburger {
