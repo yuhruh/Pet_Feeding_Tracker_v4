@@ -93,6 +93,18 @@ function setupPage() {
     // Add the click listener to the toggle button
     themeToggleBtn.addEventListener('click', toggleMode);
   }
+
+  const btn = document.getElementById('menu-btn');
+  const menu = document.getElementById('menu');
+
+  const navToggle = () => {
+    btn.classList.toggle('open');
+    menu.classList.toggle('flex');
+    menu.classList.toggle('hidden');
+  }
+
+  btn.addEventListener('click', navToggle);
+
 }
 
 // Key change: Execute the setup function on 'turbo:load', which fires
