@@ -14,7 +14,7 @@
   <%= form_with url: session_url, class: "contents" do |form| %>
     <div class="flex flex-col justify-center items-center space-x-3 mb-4 md:flex-row">
       <label for="" class="text-base font-medium mx-4 text-gray-700 required">Email</label>
-      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address], class: "shadow-md rounded-md border border-gray-400 focus:outline-blue-400 px-3 py-2 w-1/2" %>
+      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address], class: "shadow-md rounded-md border border-gray-400 focus:outline-softBlue px-3 py-2 w-1/2" %>
     </div>
 
     <div class="flex flex-col justify-center items-center space-x-3 mb-4 md:flex-row">
