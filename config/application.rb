@@ -16,6 +16,10 @@ module PetTrackerV4
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
 
+    # disable the field_with_errors wrapper
+    config.action_view.field_error_proc = Proc.new do |html_tag, instance|
+      html_tag.html_safe
+    end
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

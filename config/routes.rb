@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
   root "pages#hero_section"
-  resource :session, except: [:new]
-  resource :registrations, only: [:new, :create]
+  resource :session, except: [ :new ]
+  resource :registrations, only: [ :new, :create ]
   # get '/signup', to: "registrations#new", as: :new_registrations
   # post 'registration/create', to: "registrations#create", as: :registrations
-  get '/login', to: "sessions#new", as: :new_session
+  get "/login", to: "sessions#new", as: :new_session
   resources :passwords, param: :token
   get "/home", to: "pages#hero_section"
   get "/about", to: "pages#about"

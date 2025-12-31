@@ -6,5 +6,18 @@ class RegistrationsController < ApplicationController
   end
 
   def create
+    @user = User.new(user_params)
+    if @user.save
+      start_new_session_for @user
+      UserMailer.with(user: @user).welcome.deliver_later
+      redirect_to root_path, notice: "You've successfully signed up to Cat Feeding Tracker App. Welcome #{@user.username.capitalize}!"
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  private
+  def user_params
+    params.expect(user: [ :username, :email_address, :email_address_confirmation, :password, :password_confirmation ])
   end
 end
