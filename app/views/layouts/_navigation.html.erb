@@ -8,8 +8,8 @@
       <a href="/home#features" class="tracking-widest hover:text-softRed">Features</a>
       <%= link_to "About", about_path, class: "tracking-widest hover:text-softRed" %>
       <%= link_to "Get Started", root_path, class: "tracking-widest hover:text-softRed" %>
-      <%= link_to "Sign Up", root_path, class: "tracking-widest hover:text-softRed" %>
-      <%= link_to "Log In", root_path, class: "px-8 py-2 text-white bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white" %>
+      <%= link_to "Sign Up", new_registrations_path, class: "tracking-widest hover:text-softRed" %>
+      <%= link_to "Log In", new_session_path, class: "px-8 py-2 text-white bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white" %>
     </div>
 
     <div class="hidden flex items-center space-x-2 my-6 uppercase text-grayishBlue md:flex">
@@ -62,7 +62,7 @@
       <%= link_to "Get Started", about_path, class: "block hover:text-softRed"%>
     </div>
     <div class="w-full py-3 text-center">
-      <%= link_to "Sign In", about_path, class: "block hover:text-softRed"%>
+      <%= link_to "Log In", new_session_path, class: "block hover:text-softRed"%>
     </div>
     <div class="w-full py-8 text-center">
       <%= link_to "Languages", root_path, class: "block hover:text-softRed" %>

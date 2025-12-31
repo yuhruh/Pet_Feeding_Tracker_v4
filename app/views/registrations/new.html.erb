@@ -1,0 +1,88 @@
+<div class="container flex flex-col justify-center mb-4 mt-2 md:flex-row">
+  <div class="flex flex-col justify-center border border-b-2 border-gray-300 rounded-md p-4 sm:p-6">
+    <div class="mx-auto mb-6">
+      <h1 class="text-center font-semibold text-xl capitalize md:text-2xl lg:text-4xl">🐾 Sign up Cat Trackers App 🐾</h1>
+    </div>
+
+    <%= form_with url: registrations_url, model: @user, class: "contents" do |form| %>
+      <div class="flex flex-col justify-center items-center mb-4 md:flex-row">
+        <div class="flex justify-end md:w-1/3">
+          <label for="" class="font-medium text-gray-700 mb-1 md:mb-0 required">Userame</label>
+        </div>
+        <div class="flex justify-center md:w-5/6">
+          <%= form.text_field :username, required: true, autofocus: true, placeholder: "Enter your username", class: "shadow-md rounded-md border border-gray-400 focus:outline-softBlue px-3 py-2 w-1/2" %>
+        </div>
+      </div>
+
+      <div class="flex flex-col justify-center items-center mb-4 md:flex-row">
+        <div class="flex justify-end md:w-1/3">
+          <label for="" class="text-base font-medium text-gray-700 required">Email</label>
+        </div>
+        <div class="flex justify-center md:w-5/6">
+          <%= form.email_field :email_address, required: true, placeholder: "Enter your email address", maxlength: 72, class: "shadow-md rounded-md border border-gray-400 focus:outline-blue-400 px-3 py-2 w-1/2 #{'invalid' if form.object.errors[:email_address].any?}:border-red-500" %>
+          <% form.object.errors.full_messages_for(:email_address).each do |message| %>
+            <div class="text-start">
+              <%= message %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="flex flex-col justify-center items-center mb-4 md:flex-row">
+        <div class="flex justify-end md:w-1/3">
+          <label for="" class="text-base font-medium text-gray-700 capitalize required">Email confirmation</label>
+        </div>
+        <div class="flex justify-center md:w-5/6">
+          <%= form.email_field :email_address_confirmation, required: true, autocomplete: "email", placeholder: "Enter your email address again", maxlength: 72, class: "shadow-md rounded-md border border-gray-400 focus:outline-blue-400 px-3 py-2 w-1/2 #{'invalid' if form.object.errors[:email_address_confirmation].any?}:border-red-500" %>
+          <% form.object.errors.full_messages_for(:email_address).each do |message| %>
+            <div class="text-start">
+              <%= message %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="flex flex-col justify-center items-center mb-4 md:flex-row">
+        <div class="flex justify-end md:w-1/3">
+          <label for="" class="text-base font-medium text-gray-700 required">Password</label>
+        </div>
+        <div class="flex justify-center md:w-5/6">
+          <%= form.email_field :password, required: true, placeholder: "Enter your password", maxlength: 72, class: "shadow-md rounded-md border border-gray-400 focus:outline-blue-400 px-3 py-2 w-1/2 #{'invalid' if form.object.errors[:password].any?}:border-red-500" %>
+          <% form.object.errors.full_messages_for(:password).each do |message| %>
+            <div class="text-start">
+              <%= message %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="flex flex-col justify-center items-center mb-4 md:flex-row">
+        <div class="flex justify-end md:w-1/3">
+          <label for="" class="text-base font-medium text-gray-700 capitalize required">Password confirmation</label>
+        </div>
+        <div class="flex justify-center md:w-5/6">
+          <%= form.password_field :password_confirmation, required: true, autocomplete: "current-password", placeholder: "Enter your password again", maxlength: 72, class: "shadow-md rounded-md border border-gray-400 focus:outline-blue-400 px-3 py-2 w-1/2 #{'invalid' if form.object.errors[:password_confirmation].any?}:border-red-500" %>
+          <% form.object.errors.full_messages_for(:password_confirmation).each do |message| %>
+            <div class="invalid-feedback d-block text-start">
+              <%= message %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="flex justify-center mb-4">
+        <%= form.submit "Sign Up", class: "text-center rounded-md px-3.5 py-2.5 text-white bg-softBlue hover:bg-white hover:text-softBlue hover:border-2 hover:border-softBlue inline-block font-medium cursor-pointer" %>
+      </div>
+
+      <div class="flex flex-col justify-center items-center space-x-4 mb-4 md:flex-row">
+        <div class="text-base items-center text-gray-500 md:mt-0">
+          <p class="text-xl text-gray-700">Already have an account?</p>
+        </div>
+
+        <div class="text-xl font-bold items-center text-softBlue md:mt-0 md:text-2xl">
+          <%= link_to "Sign In", new_session_path, class: "hover:underline" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

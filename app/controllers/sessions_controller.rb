@@ -16,6 +16,7 @@ class SessionsController < ApplicationController
 
   def destroy
     terminate_session
+    flash[:alert] = "You have been signed out."
     redirect_to new_session_path
   end
 end
