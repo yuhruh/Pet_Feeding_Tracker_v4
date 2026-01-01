@@ -70,6 +70,8 @@
         </div>
       </div>
 
+      <%= render "shared/time_zone_select", {form: form} %>
+
       <div class="flex justify-center mb-4">
         <%= form.submit "Sign Up", class: "text-center rounded-md px-3.5 py-2.5 text-white bg-softBlue hover:bg-white hover:text-softBlue hover:border-2 hover:border-softBlue inline-block font-medium cursor-pointer" %>
       </div>
