@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[edit update destroy]
-  before_action :authenticate?, only: %i[edit update destroy]
+  before_action :authenticated?, only: %i[edit update destroy]
 
   def edit
     @user = Current.user
@@ -9,8 +9,8 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to user_path(@user), notice: "Account was successfully updated." }
-        format.json { render :show, status: :ok, location: user_path(@user) }
+        format.html { redirect_to users_path, notice: "Account was successfully updated." }
+        format.json { render :show, status: :ok, location: users_path }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @user.errors, status: :unprocessable_entity }
@@ -31,10 +31,10 @@ class UsersController < ApplicationController
 
   private
   def set_user
-    @user = User.find(params.expect(:id))
+    @user = Current.user
   end
 
   def user_params
-    params.expect(user: [ :username, :email, :password, :password_confirmation, :timezone ])
+    params.require(:user).permit(:username, :email, :password, :password_confirmation, :timezone)
   end
 end

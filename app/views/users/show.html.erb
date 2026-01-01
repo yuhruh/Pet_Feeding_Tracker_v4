@@ -1,36 +1,43 @@
-<div class="container mb-2 mt-2" data-controller="timezone">
-  <div class="px-6 py-4 border border-slate-500 rounded-lg">
-    <h1 class="text-center font-bold underline underline-offset-4 mt-4 mb-3"><%= Current.user.username.split(' ').map(&:capitalize).join(' ') %></h1>
+<div class="container mx-auto mb-2 mt-2 w-full md:w-1/2" data-controller="timezone">
+  <div class="flex flex-col px-6 py-4 border border-2 border-slate-300 rounded-lg shadow-sm divide-y-2 divide-slate-200">
+    <div class="flex flex-col justify-center">
+      <div class='flex flex-col justify-center text-center mb-3'>
+        <h1 class="text-2xl text-center font-bold underline underline-offset-4 mt-4 mb-4 md:text-4xl"><%= Current.user.username.split(' ').map(&:capitalize).join(' ') %></h1>
+      </div>
 
-    <div class='flex flex-row text-center mb-3'>
-      <p>
-        <strong class="capitalize">user name:</strong>
-        <%= Current.user.username.split(' ').map(&:capitalize).join(' ') %>
-      </p>
+      <div class='flex flex-col justify-center text-center mb-3'>
+        <div class="flex justify-center text-lg space-x-3 mb-2 md:text-2xl">
+          <strong class="capitalize">user name:</strong>
+          <div class="flex">
+            <%= Current.user.username.split(' ').map(&:capitalize).join(' ') %>
+          </div>
+        </div>
 
-      <p>
-        <strong class="capitalize">email:</strong>
-        <%= Current.user.email_address %>
-      </p>
+        <div class="flex justify-center text-lg space-x-3 mb-2 md:text-2xl">
+          <strong class="capitalize">email:</strong>
+          <div class="flex">
+            <%= Current.user.email_address %>
+          </div>
+        </div>
 
-      <p>
-        <strong class="capitalize">time zone:</strong>
-        <%= Current.user.timezone %>
-      </p>
+        <div class="flex justify-center text-lg space-x-3 mb-2 md:text-2xl">
+          <strong class="capitalize">time zone:</strong>
+          <div class="flex">
+            <%= Current.user.timezone %>
+          </div>
+        </div>
 
-      <p>
-        <strong class="capitalize">pets count:</strong>
-        <%= Current.user.pets.count %> - 
-        <%= Current.user.pets.map do |pet| %>
-          <% pet.petname.capitalize %>
-        <% end %>
-      </p>
+        <div class="flex justify-center text-lg space-x-3 mb-2 md:text-2xl">
+          <strong class="capitalize">pets count:</strong>
+          <div class="flex"></div>
+        </div>
 
+      </div>
     </div>
 
-    <div class="text-center mt-3">
-      <%= link_to t('users.show.edit'), edit_user_path(Current.user), class: "btn btn-outline-success btn-sm mb-4" %>
-      <%= link_to t('users.show.delete'), user_path(Current.user), class: "btn btn-outline-danger btn-sm mb-4 text-danger", data: {"turbo-confirm":  t('users.show.confirm'), "turbo-method": :delete } %>
+    <div class="flex justify-center text-center space-x-4 mt-3">
+      <%= link_to "Edit Profile", edit_users_path(Current.user), class: "p-4 mt-4 text-sm font-semibold text-green-600 bg-green-200 rounded shadow-md border-2 border-green-200 md:text-base hover:bg-white hover:text-green-500" %>
+      <%= link_to "Delete Profile", users_path, class: "p-4 mt-4 text-sm font-semibold text-red-600 bg-red-200 rounded shadow-md border-2 border-red-200 md:text-base hover:bg-white hover:text-red-500", data: {"turbo-confirm":  "Are you sure to delete this user account? The user and associated trackers will all gone..", "turbo-method": "delete"} %>
     </div>
   </div>
 </div>
