@@ -105,6 +105,22 @@ function setupPage() {
 
   btn.addEventListener('click', navToggle);
 
+  // 4. Setup alert dismissal
+  const closeAlertBtn = document.getElementById('close-alert');
+  if (closeAlertBtn) {
+    closeAlertBtn.addEventListener('click', () => {
+      const alertMessage = document.getElementById('alert-message');
+      if (alertMessage) {
+        // Add opacity-0 for fade-out effect, matching the CSS transition
+        alertMessage.classList.add('opacity-0');
+
+        // Remove the alert from the DOM after the transition
+        setTimeout(() => {
+          alertMessage.remove();
+        }, 300); // Should match the duration in the HTML
+      }
+    });
+  }
 }
 
 // Key change: Execute the setup function on 'turbo:load', which fires

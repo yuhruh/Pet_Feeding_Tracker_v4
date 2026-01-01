@@ -10,7 +10,7 @@ class RegistrationsController < ApplicationController
     if @user.save
       start_new_session_for @user
       UserMailer.with(user: @user).welcome.deliver_later
-      redirect_to root_path, notice: "You've successfully signed up to Cat Feeding Tracker App. Welcome #{@user.username.capitalize}!"
+      redirect_to users_path, notice: "You've successfully signed up to Cat Feeding Tracker App. Welcome #{@user.username.capitalize}!"
     else
       render :new, status: :unprocessable_entity
     end
@@ -18,6 +18,6 @@ class RegistrationsController < ApplicationController
 
   private
   def user_params
-    params.expect(user: [ :username, :email_address, :email_address_confirmation, :password, :password_confirmation ])
+    params.expect(user: [ :username, :email_address, :email_address_confirmation, :password, :password_confirmation, :timezone ])
   end
 end

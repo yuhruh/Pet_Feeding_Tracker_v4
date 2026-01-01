@@ -7,6 +7,7 @@ class SessionsController < ApplicationController
 
   def create
     if user = User.authenticate_by(params.permit(:email_address, :password))
+      flash[:notice] = "You have been signed in"
       start_new_session_for user
       redirect_to after_authentication_url
     else
