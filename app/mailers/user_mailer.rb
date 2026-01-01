@@ -3,11 +3,11 @@ class UserMailer < ApplicationMailer
   # with the following lookup:
   #
   #   en.user_mailer.welcome.subject
-  
-  default from: 'notifications@example.com'
+
+  default from: "notifications@example.com"
 
   def welcome
     @user = params[:user]
-    mail(to: @user.email_address, cc: "ajicaretracker@gmail.com", subject: 'Welcome to Cat Trackers App!')
+    mail(to: @user.email_address, cc: "ajicaretracker@gmail.com", subject: "Welcome to Cat Trackers App!")
   end
 end
