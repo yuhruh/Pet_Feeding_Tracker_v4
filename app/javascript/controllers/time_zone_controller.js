@@ -5,5 +5,6 @@ export default class extends Controller {
 
   connect() {
     this.tzTarget.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log(this.tzTarget.value);
   }
 }

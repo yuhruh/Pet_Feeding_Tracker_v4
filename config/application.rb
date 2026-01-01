@@ -16,7 +16,7 @@ module PetTrackerV4
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
 
-    # disable the field_with_errors wrapper
+    # disable the field_with_errors wrapper for tailwind css
     config.action_view.field_error_proc = Proc.new do |html_tag, instance|
       html_tag.html_safe
     end
