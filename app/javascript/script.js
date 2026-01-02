@@ -121,6 +121,15 @@ function setupPage() {
       }
     });
   }
+
+  const dropDownButton = document.getElementById('dropdownBtn');
+  const dropDownMenu = document.getElementById('dropdownMenu');
+  const dropDownToggle = () => {
+    dropDownMenu.classList.toggle('hidden');
+  }
+  if (dropDownButton) {
+    dropDownButton.addEventListener('click', dropDownToggle);
+  }
 }
 
 // Key change: Execute the setup function on 'turbo:load', which fires

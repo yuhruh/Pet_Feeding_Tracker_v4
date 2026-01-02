@@ -8,10 +8,27 @@
       <a href="/home#features" class="tracking-widest hover:text-softRed">Features</a>
       <%= link_to "About", about_path, class: "tracking-widest hover:text-softRed" %>
       <%= link_to "Get Started", root_path, class: "tracking-widest hover:text-softRed" %>
-      <%= link_to "Sign Up", new_registrations_path, class: "tracking-widest hover:text-softRed" %>
       <% if authenticated? %>
+        <div class="relative">
+          <div id="dropdownBtn" class="inline-flex w-full justify-center gap-x-1 5 bg-white px-3 py-2 
+          text-grayishBlue tracking-widest inset-ring-1 inset-ring-gray-300 hover:text-softRed">
+            <%= Current.user.username.split(' ').map(&:capitalize).join(" ") %>'s Profile
+            <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400">
+              <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
+            </svg>
+          </div>
+          <div id="dropdownMenu" class="absolute hidden inset-x-0 top-full mt-2 py-2 bg-white text-grayishBlue border border-gray-200 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out">
+            <div class="py-1">
+              <%= link_to "Edit", edit_users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-green-100 hover:text-green-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+              <%= link_to "Delete", users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-red-100 hover:text-softRed focus:bg-gray-100 focus:text-softRed focus:outline-hidden", 
+              data: {"turbo-confirm": "Are you sure to delete this user account? The user and associated trackers will all gone..", "turbo-method": "delete"} %>
+            </div>
+          </div>
+        </div>
         <%= button_to "Sign Out", session_path, class: "px-8 py-2 text-white bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white", method: :delete %>
+
       <% else %>
+        <%= link_to "Sign Up", new_registrations_path, class: "tracking-widest hover:text-softRed" %>
         <%= link_to "Sign In", new_session_path, class: "px-8 py-2 text-white bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white" %>
       <% end %>
     </div>
