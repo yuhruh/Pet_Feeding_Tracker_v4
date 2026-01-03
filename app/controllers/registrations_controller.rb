@@ -7,10 +7,13 @@ class RegistrationsController < ApplicationController
 
   def create
     @user = User.new(user_params)
+    @user.sing_in_count = 1
     if @user.save
       start_new_session_for @user
       UserMailer.with(user: @user).welcome.deliver_later
-      redirect_to users_path, notice: "You've successfully signed up to Cat Feeding Tracker App. Welcome #{@user.username.capitalize}!"
+      redirect_to users_path, notice: "Hello, #{Current.user.username.capitalize} 👋. You've successfully signed up to Cat Feeding Tracker App and 
+                                      this is your first time to sign in, please add a new cat first for further tracker.
+                                      Welcome #{@user.username.capitalize}!"
     else
       render :new, status: :unprocessable_entity
     end

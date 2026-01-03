@@ -1,6 +1,6 @@
 <div class="container flex justify-center mx-auto">
   <% flash.each do |name, msg| %>
-    <div id="alert-message" class="flex justify-between text-center items-center p-4 mb-4 text-base rounded-lg <%= name == 'notice' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' %> transition-opacity duration-300 ease-in opacity-100 w-full md:w-1/2" role="alert">
+    <div id="alert-message" class="flex justify-between text-start items-center p-4 mb-4 text-base rounded-lg <%= name == 'notice' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' %> transition-opacity duration-300 ease-in opacity-100 w-full md:w-2/3" role="alert">
       <div>
         <%= msg %>
       </div>
