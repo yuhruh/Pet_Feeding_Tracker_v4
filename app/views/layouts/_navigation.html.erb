@@ -84,6 +84,12 @@
     </div>
     <% if authenticated? %>
       <div class="w-full py-3 text-center">
+        <%= Current.user.username.split(' ').map(&:capitalize).join(" ") %>'s Profile
+        <%= link_to "Edit Profile", edit_users_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-green-100 hover:text-green-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+        <%= link_to "Delete Profile", users_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-red-100 hover:text-softRed focus:bg-gray-100 focus:text-softRed focus:outline-hidden", 
+        data: {"turbo-confirm": "Are you sure to delete this user account? The user and associated trackers will all gone..", "turbo-method": "delete"} %>
+      </div>
+      <div class="w-full py-3 text-center">
         <%= button_to "Sign Out", session_path, class: "block mx-auto hover:text-softRed", method: :delete %>
       </div>
     <% else %>
