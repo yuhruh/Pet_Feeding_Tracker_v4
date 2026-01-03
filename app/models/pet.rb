@@ -1,5 +1,5 @@
 class Pet < ApplicationRecord
   belongs_to :user
-  validates :petname, presence: true, 
+  validates :petname, presence: true,
                       length: { minimum: 2, maximum: 25 }
 end
