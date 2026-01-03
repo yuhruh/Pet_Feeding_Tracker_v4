@@ -1,41 +1,55 @@
-<nav class="container relative mx-auto p-6">
-  <div class="flex items-center justify-between space-x-10 my-6">
+<nav class="container relative mx-auto p-4">
+  <div class="flex items-center justify-between space-x-8 my-6">
     <div class="z-30">
-      <%= image_tag('aji_logo_transparent.png', width: "100px") %>
+      <%= image_tag('aji_icon_512.png', width: "80px") %>
     </div>
 
-    <div class="hidden items-center space-x-6 uppercase text-grayishBlue md:flex">
-      <a href="/home#features" class="tracking-widest hover:text-softRed">Features</a>
-      <%= link_to "About", about_path, class: "tracking-widest hover:text-softRed" %>
-      <%= link_to "Get Started", root_path, class: "tracking-widest hover:text-softRed" %>
+    <div class="hidden items-center space-x-5 uppercase text-grayishBlue md:flex">
+      <a href="/home#features" class="tracking-wide hover:text-softRed">Features</a>
+      <%= link_to "About", about_path, class: "tracking-wide hover:text-softRed" %>
+      <%= link_to "Get Started", root_path, class: "tracking-wide hover:text-softRed" %>
       <% if authenticated? %>
-        <div class="relative">
-          <div id="dropdownBtn" class="inline-flex w-full justify-center gap-x-1 5 bg-white px-3 py-2 
-          text-grayishBlue tracking-widest inset-ring-1 inset-ring-gray-300 hover:text-softRed">
-            <%= Current.user.username.split(' ').map(&:capitalize).join(" ") %>'s Profile
-            <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400">
-              <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
-            </svg>
-          </div>
-          <div id="dropdownMenu" class="absolute hidden inset-x-0 top-full mt-2 py-2 bg-white text-grayishBlue border border-gray-200 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out">
-            <div class="py-1">
-              <%= link_to "Edit", edit_users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-green-100 hover:text-green-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
-              <%= link_to "Delete", users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-red-100 hover:text-softRed focus:bg-gray-100 focus:text-softRed focus:outline-hidden", 
-              data: {"turbo-confirm": "Are you sure to delete this user account? The user and associated trackers will all gone..", "turbo-method": "delete"} %>
+          <div class="relative">
+            <div class="inline-flex w-full justify-center gap-x-1 5 bg-white px-3 py-2 
+            text-grayishBlue tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed btn" data-target="btn-1">
+              <%= Current.user.username.split(' ').map(&:capitalize).join(" ") %>'s Profile
+              <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400">
+                <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
+              </svg>
+            </div>
+            <div id="btn-1" class="absolute hidden inset-x-0 top-full mt-2 py-2 bg-white text-grayishBlue border border-gray-200 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out menu" data-target="menu-1">
+              <div class="py-1">
+                <%= link_to "Edit", edit_users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-green-100 hover:text-green-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+                <%= link_to "Delete", users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-red-100 hover:text-softRed focus:bg-gray-100 focus:text-softRed focus:outline-hidden", 
+                data: {"turbo-confirm": "Are you sure to delete this user account? The user and associated trackers will all gone..", "turbo-method": "delete"} %>
+              </div>
             </div>
           </div>
-        </div>
+          <div class="relative">
+            <div class="inline-flex w-full justify-center gap-x-1 5 bg-white px-3 py-2 
+            text-grayishBlue tracking-wid inset-ring-1 inset-ring-gray-300 hover:text-softRed btn" data-target="btn-2">
+              <%= Current.user.username.split(' ').map(&:capitalize).join(" ") %>'s Cats
+              <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400">
+                <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
+              </svg>
+            </div>
+            <div id="btn-2" class="absolute hidden inset-x-0 top-full mt-2 py-2 bg-white text-grayishBlue border border-gray-200 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out menu" data-target="menu-2">
+              <div class="py-1">
+                <%= link_to "Add a cat", new_pet_path, class: "block px-2 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden capitalize" %>
+              </div>
+            </div>
+          </div>
         <%= button_to "Sign Out", session_path, class: "px-8 py-2 text-white bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white", method: :delete %>
 
       <% else %>
-        <%= link_to "Sign Up", new_registrations_path, class: "tracking-widest hover:text-softRed" %>
+        <%= link_to "Sign Up", new_registrations_path, class: "tracking-wide hover:text-softRed" %>
         <%= link_to "Sign In", new_session_path, class: "px-8 py-2 text-white bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white" %>
       <% end %>
     </div>
 
     <div class="hidden flex items-center space-x-2 my-6 uppercase text-grayishBlue md:flex">
       <%= image_tag('languages.png', width: '25px') %>
-      <%= link_to "Languages", root_path, class: "tracking-widest hover:text-softRed" %>
+      <%= link_to "Languages", root_path, class: "tracking-wide hover:text-softRed" %>
     </div>
 
     <button id="theme-toggle" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2 5">
@@ -72,7 +86,10 @@
     </button>
   </div>
 
-  <div id="menu" class="fixed inset-0 z-20 hidden flex-col items-center self-end w-full h-full m-h-screen px-6 py-1 pt-24 pb-4 tracking-widest text-white uppercase divide-y divide-gray-500 opacity-90 bg-veryDarkBlue">
+  <div id="menu" class="fixed inset-0 z-20 hidden flex-col items-center self-end w-full h-full m-h-screen px-6 py-1 pt-24 pb-4 tracking-wide text-white uppercase divide-y divide-gray-500 opacity-90 bg-veryDarkBlue">
+    <div class="w-full py-3 text-center">
+      <%= image_tag('aji_icon_512.png', width: "100px", class: "mx-auto") %>
+    </div>
     <div class="w-full py-3 text-center">
       <a href="/home#features" class="block hover:text-softRed">Features</a>
     </div>
@@ -88,6 +105,10 @@
         <%= link_to "Edit Profile", edit_users_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-green-100 hover:text-green-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
         <%= link_to "Delete Profile", users_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-red-100 hover:text-softRed focus:bg-gray-100 focus:text-softRed focus:outline-hidden", 
         data: {"turbo-confirm": "Are you sure to delete this user account? The user and associated trackers will all gone..", "turbo-method": "delete"} %>
+      </div>
+      <div class="w-full py-3 text-center">
+        <%= Current.user.username.split(' ').map(&:capitalize).join(" ") %>'s Cats
+
       </div>
       <div class="w-full py-3 text-center">
         <%= button_to "Sign Out", session_path, class: "block mx-auto hover:text-softRed", method: :delete %>

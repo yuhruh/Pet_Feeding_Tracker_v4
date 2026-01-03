@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_31_035259) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_03_112154) do
+  create_table "pets", force: :cascade do |t|
+    t.string "petname"
+    t.datetime "birthday"
+    t.decimal "weight"
+    t.string "gender"
+    t.string "breed"
+    t.integer "user_id"
+    t.integer "users_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["users_id"], name: "index_pets_on_users_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "ip_address"
@@ -27,11 +40,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_31_035259) do
     t.datetime "updated_at", null: false
     t.string "username"
     t.string "timezone"
-    t.integer "sing_in_count", default: 0
+    t.integer "sing_in_count"
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "pets", "users", column: "users_id"
   add_foreign_key "sessions", "users"
 end

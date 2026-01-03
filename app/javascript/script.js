@@ -122,14 +122,15 @@ function setupPage() {
     });
   }
 
-  const dropDownButton = document.getElementById('dropdownBtn');
-  const dropDownMenu = document.getElementById('dropdownMenu');
-  const dropDownToggle = () => {
-    dropDownMenu.classList.toggle('hidden');
+  const dropdownBtns = document.querySelectorAll(".btn");
+  const dropDownMenus = document.querySelectorAll(".menu");
+  
+  const onBtnClick = (e) => {
+    dropDownMenus.forEach((menu) => menu.classList.add('hidden'));
+    const classString = e.target.getAttribute('data-target');
+    document.getElementById(classString).classList.remove('hidden');
   }
-  if (dropDownButton) {
-    dropDownButton.addEventListener('click', dropDownToggle);
-  }
+  dropdownBtns.forEach((tab) => tab.addEventListener('click', onBtnClick));
 }
 
 // Key change: Execute the setup function on 'turbo:load', which fires

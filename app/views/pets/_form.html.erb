@@ -1,0 +1,85 @@
+<%= form_with(model: pet, class: "contents") do |form| %>
+  <% if pet.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
+      <h2><%= pluralize(pet.errors.count, "error") %> prohibited this pet from being saved:</h2>
+
+      <ul class="list-disc ml-6">
+        <% pet.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :petname, class: "text-base font-medium text-gray-700 dark:text-gray-100 capitalize required" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.text_field :petname, required: true, class: ["shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": pet.errors[:petname].none?, "border-red-400 focus:outline-red-600": pet.errors[:petname].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :birthday, class: "text-base font-medium text-gray-700 dark:text-gray-100 capitalize optional"  %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.date_field :birthday, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": pet.errors[:birthday].none?, "border-red-400 focus:outline-red-600": pet.errors[:birthday].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :weight, class: "text-base font-medium text-gray-700 dark:text-gray-100 capitalize required"  %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.number_field :weight, max: 100, min: 0.0, step: :any, required: true, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": pet.errors[:weight].none?, "border-red-400 focus:outline-red-600": pet.errors[:weight].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :gender, class: "text-base font-medium text-gray-700 dark:text-gray-100 capitalize required"  %>
+    </div>
+    <div class="flex flex-col item-center md:items-start md:w-5/6">
+      <%= form.text_field :gender, required: true, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": pet.errors[:gender].none?, "border-red-400 focus:outline-red-600": pet.errors[:gender].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :breed, class: "text-base font-medium text-gray-700 dark:text-gray-100 capitalize optional"  %>
+    </div>
+    <div class="flex flex-col item-center md:items-start md:w-5/6">
+      <%= form.text_field :breed, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": pet.errors[:breed].none?, "border-red-400 focus:outline-red-600": pet.errors[:breed].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col hidden justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :user_id, class: "text-base font-medium text-gray-700 dark:text-gray-100 capitalize required"  %>
+    </div>
+    <div class="flex flex-col item-center md:items-start md:w-5/6">
+      <%= form.number_field :user_id, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": pet.errors[:user_id].none?, "border-red-400 focus:outline-red-600": pet.errors[:user_id].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col hidden justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :users_id, class: "text-base font-medium text-gray-700 dark:text-gray-100 capitalize required"  %>
+    </div>
+    <div class="flex flex-col item-center md:items-start md:w-5/6">
+      <%= form.text_field :users_id, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": pet.errors[:users_id].none?, "border-red-400 focus:outline-red-600": pet.errors[:users_id].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center items-center gap-4 mb-4 md:flex-row">
+    <div class="flex justify-center">
+      <%= form.submit "Add a cat", class: "text-center rounded-md px-3.5 py-2.5 text-white bg-softBlue hover:bg-white hover:text-softBlue hover:border-2 hover:border-softBlue inline-block font-medium cursor-pointer capitalize" %>
+    </div>
+    <div class="flex justify-center">
+      <%= link_to "Back to cats' list", pets_path, class: "text-center rounded-md px-3.5 py-2.5 text-white bg-gray-500 hover:bg-white hover:text-gray-500 hover:border-2 hover:border-gray-500 inline-block font-medium cursor-pointer capitalize" %>
+    </div>
+  </div>
+<% end %>

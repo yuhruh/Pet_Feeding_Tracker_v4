@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 .ficon:hover {
   filter: invert(53%) sepia(38%) saturate(3303%)
   hue-rotate(326deg)
@@ -11,6 +12,11 @@
 .required:after {
     content:"\00a0\*\00a0";
     color:red;
+}
+
+.optional:after {
+    content:"\00a0\(OPTIONAL)\00a0";
+    color:grey;
 }
 
 /* HAMBURGER MENU */
