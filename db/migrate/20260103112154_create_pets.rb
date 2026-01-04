@@ -6,8 +6,7 @@ class CreatePets < ActiveRecord::Migration[8.0]
       t.decimal :weight
       t.string :gender
       t.string :breed
-      t.integer :user_id
-      t.references :users, null: false, foreign_key: true
+      t.references :user, null: false, foreign_key: true
 
       t.timestamps
     end

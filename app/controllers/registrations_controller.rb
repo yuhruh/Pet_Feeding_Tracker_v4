@@ -11,7 +11,7 @@ class RegistrationsController < ApplicationController
     if @user.save
       start_new_session_for @user
       UserMailer.with(user: @user).welcome.deliver_later
-      redirect_to users_path, notice: "Hello, #{Current.user.username.capitalize} 👋. You've successfully signed up to Cat Feeding Tracker App and
+      redirect_to new_pet_path, notice: "Hello, #{Current.user.username.capitalize} 👋. You've successfully signed up to Cat Feeding Tracker App and
                                       this is your first time to sign in, please add a new cat first for further tracker.
                                       Welcome #{@user.username.capitalize}!"
     else

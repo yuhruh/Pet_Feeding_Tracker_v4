@@ -18,10 +18,10 @@ class SessionsController < ApplicationController
 
         if user.new_user?
           flash[:notice] = "Hello, #{Current.user.username.capitalize} 👋. This is your first time to sign in, please add a new cat first for further tracker."
-          redirect_to after_authentication_url
+          redirect_to new_pet_path
         else
           flash[:notice] = "Welcome back to Cat Feeding Tracker, #{Current.user.username.capitalize}"
-          redirect_to users_path
+          redirect_to pets_path
         end
       else
         redirect_to new_session_path, alert: "The password is not correct"
