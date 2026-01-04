@@ -1,47 +1,45 @@
-<div id="<%= dom_id pet %>">
-  <div class="flex flex-col justify-center items-center px-6 border border-2 border-slate-300 rounded-lg shadow-sm divide-y-2 divide-slate-200">
-    <div class="flex flex-col gap-y-4 justify-center">
-      <div class='flex flex-col justify-center text-center mb-3'>
-        <div class="flex justify-center text-lg space-x-3 mt-3 mb-3 md:text-2xl">
-          <strong class="capitalize">name:</strong>
-          <div class="flex">
-            <%= pet.petname %>
-          </div>
+<div id="<%= dom_id pet %>"> 
+  <div class="flex flex-col gap-y-4 justify-center">
+    <div class='flex flex-col justify-center text-center mb-3'>
+      <div class="flex justify-center text-lg space-x-3 mt-3 mb-3 md:text-2xl">
+        <strong class="capitalize">name:</strong>
+        <div class="flex">
+          <%= pet.petname %>
         </div>
+      </div>
 
-        <div class="flex justify-center text-lg space-x-3 mb-3 md:text-2xl">
-          <strong class="capitalize">Birthday:</strong>
-          <div class="flex">
-            <%= pet.birthday.strftime("%Y-%m-%d") %>
-          </div>
+      <div class="flex justify-center text-lg space-x-3 mb-3 md:text-2xl">
+        <strong class="capitalize">Birthday:</strong>
+        <div class="flex">
+          <%= pet.birthday.strftime("%Y-%m-%d") %>
         </div>
+      </div>
 
-        <div class="flex justify-center text-lg space-x-3 mb-3 md:text-2xl">
-          <strong class="capitalize">Weight:</strong>
-          <div class="flex">
-            <%= pet.weight %>
-          </div>
+      <div class="flex justify-center text-lg space-x-3 mb-3 md:text-2xl">
+        <strong class="capitalize">Weight:</strong>
+        <div class="flex">
+          <%= pet.weight %>
         </div>
+      </div>
 
-        <div class="flex justify-center text-lg space-x-3 mb-3 md:text-2xl">
-          <strong class="capitalize">Gender:</strong>
-          <div class="flex">
-            <%= pet.gender %>
-          </div>
+      <div class="flex justify-center text-lg space-x-3 mb-3 md:text-2xl">
+        <strong class="capitalize">Gender:</strong>
+        <div class="flex">
+          <%= pet.gender %>
         </div>
+      </div>
 
-        <div class="flex justify-center text-lg space-x-3 mb-3 md:text-2xl">
-          <strong class="capitalize">Breed:</strong>
-          <div class="flex">
-            <%= pet.breed %>
-          </div>
+      <div class="flex justify-center text-lg space-x-3 mb-3 md:text-2xl">
+        <strong class="capitalize">Breed:</strong>
+        <div class="flex">
+          <%= pet.breed %>
         </div>
+      </div>
 
-        <div class="flex justify-center text-lg space-x-3 mb-3 md:text-2xl">
-          <strong class="capitalize">cat owner:</strong>
-          <div class="flex">
-            <%= Current.user.username.split(" ").map(&:capitalize).join(" ") %>
-          </div>
+      <div class="flex justify-center text-lg space-x-3 mb-3 md:text-2xl">
+        <strong class="capitalize">cat owner:</strong>
+        <div class="flex">
+          <%= Current.user.username.split(" ").map(&:capitalize).join(" ") %>
         </div>
       </div>
     </div>

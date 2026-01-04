@@ -1,6 +1,6 @@
 <% content_for :title, "#{Current.user.username.split(" ").map(&:capitalize).join(" ")}'s Cat List" %>
 
-<div class="container mx-auto w-full md:w-1/2">
+<div class="container mx-auto w-full md:w-2/3">
   <div class="flex flex-row justify-center space-x-3">
     <%= image_tag('add_pet.png', width:'25px', height: '25px') %>
     <%= link_to "add a cat", new_pet_path, class: "text-sky-500 text-lg underline decoration-2 decoration-sky-500 font-bold transition duration-300 ease-in-out hover:scale-110 capitalize md:text-xl" %>
@@ -10,17 +10,19 @@
     <h1 class="text-center font-bold text-2xl mt-5 capitalize md:text-4xl"><%= Current.user.username.split(" ").map(&:capitalize).join(" ") %>'s cat list</h1>
   </div>
 
-  <div id="pets" class="flex flex-col justify-center items-center mt-4">
+  <div id="pets" class="flex flex-row gap-8 justify-center items-center mt-4">
     <% if @pets.any? %>
       <% @pets.each do |pet| %>
-        <div class="flex flex-col justify-between items-center">
-          <div class="flex flex-col gap-4 w-full mb-4 mt-4 md:flex-row sm:w-auto">
-            <%= render pet %>
-          </div>
-          <div class="flex flex-col gap-2 w-full mb-4 mt-4 md:flex-row sm:w-auto">
-            <%= link_to "Show #{pet.petname.capitalize}'s profile", pet, class: "w-full sm:w-auto text-center rounded-md px-3 py-2 text-orange-600 bg-orange-200 border-2 border-orange-200 transition duration-300 ease-in-out hover:scale-110 hover:bg-gray-100 hover:text-orange-600 hover:border-orange-600 inline-block font-medium capitalize cursor-pointer capitalize" %>
-            <%= link_to "Edit #{pet.petname.capitalize}'s profile", edit_pet_path(pet), class: "w-full sm:w-auto text-center rounded-md px-3 py-2 text-green-600 bg-green-200 border-2 border-green-200 transition duration-300 ease-in-out hover:scale-110 hover:bg-gray-100 hover:text-green-600 hover:border-green-600 inline-block font-medium capitalize cursor-pointer capitalize" %>
-            <%= button_to "Destroy #{pet.petname.capitalize}'s profile", pet, method: :delete, class: "w-full sm:w-auto rounded-md px-3 py-2 text-red-600 bg-red-200 border-2 border-red-200 transition duration-300 ease-in-out hover:scale-110 hover:bg-gray-100 hover:text-red-600 hover:border-red-600 inline-block font-medium capitalize cursor-pointer capitalize", data: { turbo_confirm: "Are you sure?" } %>
+        <div class="flex flex-col justify-center items-center px-6 mb-4 border border-2 border-slate-300 rounded-lg shadow-lg divide-y-2 divide-slate-200">
+          <div class="flex flex-col justify-between items-center">
+            <div class="flex flex-col gap-4 w-full mb-4 mt-4 md:flex-row sm:w-auto">
+              <%= render pet %>
+            </div>
+            <div class="flex flex-col gap-2 w-full mb-4 mt-4 md:flex-row sm:w-auto">
+              <%= link_to "Show #{pet.petname.capitalize}'s profile", pet, class: "w-full sm:w-auto text-center rounded-md px-3 py-2 text-orange-600 bg-orange-200 border-2 border-orange-200 transition duration-300 ease-in-out hover:scale-110 hover:bg-gray-100 hover:text-orange-600 hover:border-orange-600 inline-block font-medium capitalize cursor-pointer capitalize" %>
+              <%= link_to "Edit #{pet.petname.capitalize}'s profile", edit_pet_path(pet), class: "w-full sm:w-auto text-center rounded-md px-3 py-2 text-green-600 bg-green-200 border-2 border-green-200 transition duration-300 ease-in-out hover:scale-110 hover:bg-gray-100 hover:text-green-600 hover:border-green-600 inline-block font-medium capitalize cursor-pointer capitalize" %>
+              <%= button_to "Destroy #{pet.petname.capitalize}'s profile", pet, method: :delete, class: "w-full sm:w-auto rounded-md px-3 py-2 text-red-600 bg-red-200 border-2 border-red-200 transition duration-300 ease-in-out hover:scale-110 hover:bg-gray-100 hover:text-red-600 hover:border-red-600 inline-block font-medium capitalize cursor-pointer capitalize", data: { turbo_confirm: "Are you sure?" } %>
+            </div>
           </div>
         </div>
       <% end %>
