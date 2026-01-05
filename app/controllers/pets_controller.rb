@@ -39,7 +39,7 @@ class PetsController < ApplicationController
   def update
     respond_to do |format|
       if @pet.update(pet_params)
-        format.html { redirect_to @pet, notice: "Cat was successfully updated.", status: :see_other }
+        format.html { redirect_to @pet, notice: "Cat #{@pet.petname.capitalize} was successfully updated.", status: :see_other }
         format.json { render :show, status: :ok, location: @pet }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -67,6 +67,6 @@ class PetsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def pet_params
-      params.expect(pet: [ :petname, :birthday, :weight, :gender, :breed, :user_id ])
+      params.expect(pet: [ :pet_avatar, :petname, :birthday, :weight, :gender, :breed, :user_id ])
     end
 end

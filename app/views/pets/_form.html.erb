@@ -1,15 +1,16 @@
 <%= form_with(model: pet, id: "pet-form", class: "contents") do |form| %>
-  <% if pet.errors.any? %>
-    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
-      <h2><%= pluralize(pet.errors.count, "error") %> prohibited this pet from being saved:</h2>
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <%= render 'shared/errors', obj: @pet %>
+  </div>
 
-      <ul class="list-disc ml-6">
-        <% pet.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :pet_avatar, class: "text-base font-medium text-gray-700 dark:text-gray-100 capitalize optional" %>
     </div>
-  <% end %>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.file_field :pet_avatar, direct_upload: true %>
+    </div>
+  </div>
 
   <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
     <div class="flex justify-center md:justify-end md:w-1/3">
