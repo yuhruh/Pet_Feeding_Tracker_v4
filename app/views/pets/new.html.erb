@@ -1,17 +1,17 @@
 <% content_for :title, "New pet" %>
 
 <div class="mx-auto md:w-2/3 w-full">
-  <div class="flex flex-col justify-center mb-4 dark:bg-gray-800 border-2 border-gray-300 shadow-md rounded-lg p-4 sm:p-6">
+  <div class="flex flex-col justify-center mb-4 dark:bg-gray-800 border-2 border-gray-200 shadow-md rounded-lg p-4 sm:p-6">
     <h1 class="text-center font-bold text-4xl mt-4 capitalize">🐾 Add a cat 🐾</h1>
-
     <%= render "form", pet: @pet %>
-    <div class="flex flex-col justify-center items-center gap-4 mb-4 md:flex-row">
+
+    <div class="flex flex-col justify-center items-center gap-4 mb-4 pt-4 md:flex-row">
       <div class="flex justify-center">
         <%= button_tag("Add a cat", type: "submit", form: "pet-form", class: "btn text-center rounded-md px-3.5 py-2.5 text-white bg-softBlue hover:bg-white hover:text-softBlue hover:border-2 hover:border-softBlue inline-block font-medium cursor-pointer capitalize") %>
       </div>
       <div class="flex justify-center">
         <%= link_to "Back to cats' list", pets_path, class: "text-center rounded-md px-3.5 py-2.5 text-white bg-gray-500 hover:bg-white hover:text-gray-500 hover:border-2 hover:border-gray-500 inline-block font-medium cursor-pointer capitalize" %>
       </div>
-  </div>
+    </div>
   </div>
 </div>
