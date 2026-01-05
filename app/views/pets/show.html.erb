@@ -5,14 +5,14 @@
     <h1 class="text-center font-bold text-4xl mb-4"><%= @pet.petname.split(" ").map(&:capitalize).join(" ")%>'s Profile</h1>
   </div>
   <div class="flex flex-col justify-center items-center px-6 mb-4 border border-2 border-slate-300 rounded-lg shadow-lg">
-    <div class="flex flex-col justify-center">
+    <div class="flex flex-col justify-center mx-auto">
       <%= render @pet %>
     </div>
 
-    <div class="flex justify-center space-x-4 mb-4 md:flex-row border-t-2 border-slate-200 pt-4">
+    <div class="flex flex-col justify-center gap-4 mb-4 md:flex-row border-t-2 border-slate-200 pt-4">
       <%= link_to "Edit #{@pet.petname.capitalize}'s Profile", edit_pet_path(@pet), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 text-green-600 bg-green-200 border-2 border-green-200 transition duration-300 ease-in-out hover:scale-110 hover:bg-gray-100 hover:text-green-600 hover:border-green-600 inline-block font-medium capitalize cursor-pointer" %>
-      <%= link_to "Back to #{Current.user.username.split(" ").map(&:capitalize).join(" ")}'s cats list", pets_path, class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 text-blue-600 bg-blue-200 border-2 border-blue-200 transition duration-300 ease-in-out hover:scale-110 hover:bg-gray-100 hover:text-blue-600 hover:border-blue-600 inline-block font-medium capitalize cursor-pointer" %>
-      <%= button_to "Destroy this pet", @pet, method: :delete, form_class: "sm:inline-block sm:w-auto", class: "w-full rounded-md px-3.5 py-2.5 text-red-600 bg-red-200 border-2 border-red-200 transition duration-300 ease-in-out hover:scale-110 hover:bg-gray-100 hover:text-red-600 hover:border-red-600 font-medium cursor-pointer capitalize cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+      <%= link_to "Go to #{Current.user.username.split(" ").map(&:capitalize).join(" ")}'s cats list", pets_path, class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 text-blue-600 bg-blue-200 border-2 border-blue-200 transition duration-300 ease-in-out hover:scale-110 hover:bg-gray-100 hover:text-blue-600 hover:border-blue-600 inline-block font-medium capitalize cursor-pointer" %>
+      <%= button_to "Destroy this pet", @pet, method: :delete, form_class: "sm:inline-block sm:w-auto", class: "w-full items-center rounded-md px-3.5 py-2.5 text-red-600 bg-red-200 border-2 border-red-200 transition duration-300 ease-in-out hover:scale-110 hover:bg-gray-100 hover:text-red-600 hover:border-red-600 font-medium cursor-pointer capitalize cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
     </div>
   </div>
 </div>

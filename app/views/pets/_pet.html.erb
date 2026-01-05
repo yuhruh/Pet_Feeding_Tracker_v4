@@ -1,52 +1,62 @@
 <div id="<%= dom_id pet %>"> 
   <div class="flex flex-col gap-y-4 justify-center">
     <div class='flex flex-col justify-center text-center mb-3'>
-      <div class="flex justify-center text-lg space-x-3 mb-3 mt-3 md:text-2xl">
+      <div class="flex justify-center text-md space-x-3 mb-3 mt-3 md:text-xl">
         <% if pet.pet_avatar.attached? %>
           <%= image_tag pet.pet_avatar.variant(resize_to_limit: [150, 150]).processed, class: "rounded-full shadow-md" %>
         <% else %>
-          <div class="flex justify-center items-center w-[150px] h-[150px] bg-sky-100 rounded-full shadow-md text-sky-700 border-sky-500">
-            <%= pet.petname.upcase %>
-          </div>
+          <% if pet.gender_was.include?("Male") %>
+            <div class="flex justify-center items-center w-[150px] h-[150px] bg-sky-100 rounded-full shadow-md text-sky-700 border-sky-500">
+              <%= pet.petname.upcase %>
+            </div>
+          <% elsif pet.gender_was.include?("Female")%>
+            <div class="flex justify-center items-center w-[150px] h-[150px] bg-rose-100 rounded-full shadow-md text-rose-700 border-rose-500">
+              <%= pet.petname.upcase %>
+            </div>
+          <% else %>
+            <div class="flex justify-center items-center w-[150px] h-[150px] bg-amber-100 rounded-full shadow-md text-amber-700 border-amber-500">
+              <%= pet.petname.upcase %>
+            </div>
+          <% end %>
         <% end %>
       </div>
 
-      <div class="flex justify-center text-lg space-x-3 mt-3 mb-3 md:text-2xl">
+      <div class="flex justify-center text-base space-x-3 mt-3 mb-3 md:text-xl">
         <strong class="capitalize">name:</strong>
         <div class="flex">
           <%= pet.petname %>
         </div>
       </div>
 
-      <div class="flex justify-center text-lg space-x-3 mb-3 md:text-2xl">
+      <div class="flex justify-center text-base space-x-3 mt-3 mb-3 md:text-xl">
         <strong class="capitalize">Birthday:</strong>
         <div class="flex">
           <%= pet.birthday.strftime("%Y-%m-%d") %>
         </div>
       </div>
 
-      <div class="flex justify-center text-lg space-x-3 mb-3 md:text-2xl">
+      <div class="flex justify-center text-base space-x-3 mt-3 mb-3 md:text-xl">
         <strong class="capitalize">Weight:</strong>
         <div class="flex">
           <%= pet.weight %>
         </div>
       </div>
 
-      <div class="flex justify-center text-lg space-x-3 mb-3 md:text-2xl">
+      <div class="flex justify-center text-base space-x-3 mt-3 mb-3 md:text-xl">
         <strong class="capitalize">Gender:</strong>
         <div class="flex">
           <%= pet.gender %>
         </div>
       </div>
 
-      <div class="flex justify-center text-lg space-x-3 mb-3 md:text-2xl">
+      <div class="flex justify-center text-base space-x-3 mt-3 mb-3 md:text-xl">
         <strong class="capitalize">Breed:</strong>
         <div class="flex">
           <%= pet.breed %>
         </div>
       </div>
 
-      <div class="flex justify-center text-lg space-x-3 mb-3 md:text-2xl">
+      <div class="flex justify-center text-base space-x-3 mt-3 mb-3 md:text-xl">
         <strong class="capitalize">cat owner:</strong>
         <div class="flex">
           <%= Current.user.username.split(" ").map(&:capitalize).join(" ") %>
