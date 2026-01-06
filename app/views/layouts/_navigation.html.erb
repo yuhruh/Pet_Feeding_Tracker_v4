@@ -43,6 +43,20 @@
               <% end %>
             </div>
           </div>
+          <div class="relative">
+            <div class="inline-flex w-full justify-center gap-x-1 5 bg-white px-3 py-2 
+            text-grayishBlue tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed cursor-pointer btn" data-target="btn-3">
+              DryFood Storage 
+              <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400">
+                <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
+              </svg>
+            </div>
+            <div id="btn-3" class="absolute hidden inset-x-0 top-full mt-2 py-2 bg-white text-grayishBlue border border-gray-200 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out menu" data-target="menu-3">
+              <div class="py-1">
+                <%= link_to "Storage list", dry_foods_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-cyan-100 hover:text-cyan-600 focus:bg-cyan-100 focus:text-softRed focus:outline-hidden" %>
+              </div>
+            </div>
+          </div>
         <%= button_to "Sign Out", session_path, class: "px-8 py-2 text-white bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white", method: :delete %>
 
       <% else %>
@@ -112,7 +126,10 @@
       </div>
       <div class="w-full py-3 text-center">
         <%= Current.user.username.split(' ').map(&:capitalize).join(" ") %>'s Cats
-
+        <%= link_to "Add a cat", new_pet_path, class: "block px-2 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+          <% Current.user.pets.select(&:persisted?).each do |pet| %>
+            <%= link_to "View #{pet.petname.split(" ").map(&:capitalize).join(" ")}'s Profile", pet_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+          <% end %>
       </div>
       <div class="w-full py-3 text-center">
         <%= button_to "Sign Out", session_path, class: "block mx-auto hover:text-softRed", method: :delete %>

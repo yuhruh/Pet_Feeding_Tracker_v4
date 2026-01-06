@@ -1,0 +1,67 @@
+<%= form_with(model: dry_food, class: "contents") do |form| %>
+  <% if dry_food.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
+      <h2><%= pluralize(dry_food.errors.count, "error") %> prohibited this dry_food from being saved:</h2>
+
+      <ul class="list-disc ml-6">
+        <% dry_food.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5">
+    <%= form.label :brand %>
+    <%= form.text_field :brand, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": dry_food.errors[:brand].none?, "border-red-400 focus:outline-red-600": dry_food.errors[:brand].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :food_type %>
+    <%= form.text_field :food_type, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": dry_food.errors[:food_type].none?, "border-red-400 focus:outline-red-600": dry_food.errors[:food_type].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :description %>
+    <%= form.text_field :description, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": dry_food.errors[:description].none?, "border-red-400 focus:outline-red-600": dry_food.errors[:description].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :amount %>
+    <%= form.text_field :amount, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": dry_food.errors[:amount].none?, "border-red-400 focus:outline-red-600": dry_food.errors[:amount].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :used_amount %>
+    <%= form.text_field :used_amount, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": dry_food.errors[:used_amount].none?, "border-red-400 focus:outline-red-600": dry_food.errors[:used_amount].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :average_used_amount %>
+    <%= form.text_field :average_used_amount, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": dry_food.errors[:average_used_amount].none?, "border-red-400 focus:outline-red-600": dry_food.errors[:average_used_amount].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :total_ate_amount %>
+    <%= form.text_field :total_ate_amount, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": dry_food.errors[:total_ate_amount].none?, "border-red-400 focus:outline-red-600": dry_food.errors[:total_ate_amount].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :left_amount %>
+    <%= form.text_field :left_amount, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": dry_food.errors[:left_amount].none?, "border-red-400 focus:outline-red-600": dry_food.errors[:left_amount].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :days_remaining %>
+    <%= form.date_field :days_remaining, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": dry_food.errors[:days_remaining].none?, "border-red-400 focus:outline-red-600": dry_food.errors[:days_remaining].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :user_id %>
+    <%= form.text_field :user_id, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": dry_food.errors[:user_id].none?, "border-red-400 focus:outline-red-600": dry_food.errors[:user_id].any?}] %>
+  </div>
+
+  <div class="inline">
+    <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>

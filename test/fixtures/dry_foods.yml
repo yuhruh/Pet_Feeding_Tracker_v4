@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  brand: MyString
+  food_type: MyString
+  description: MyString
+  amount: 9.99
+  used_amount: 9.99
+  average_used_amount: 9.99
+  total_ate_amount: 9.99
+  left_amount: 9.99
+  days_remaining: 2026-01-06
+  User: one
+
+two:
+  brand: MyString
+  food_type: MyString
+  description: MyString
+  amount: 9.99
+  used_amount: 9.99
+  average_used_amount: 9.99
+  total_ate_amount: 9.99
+  left_amount: 9.99
+  days_remaining: 2026-01-06
+  User: two
