@@ -53,6 +53,7 @@
             </div>
             <div id="btn-3" class="absolute hidden inset-x-0 top-full mt-2 py-2 bg-white text-grayishBlue border border-gray-200 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out menu" data-target="menu-3">
               <div class="py-1">
+                <%= link_to "Add dry food", new_dry_food_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-cyan-100 hover:text-cyan-600 focus:bg-cyan-100 focus:text-softRed focus:outline-hidden" %>
                 <%= link_to "Storage list", dry_foods_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-cyan-100 hover:text-cyan-600 focus:bg-cyan-100 focus:text-softRed focus:outline-hidden" %>
               </div>
             </div>
@@ -130,6 +131,13 @@
           <% Current.user.pets.select(&:persisted?).each do |pet| %>
             <%= link_to "View #{pet.petname.split(" ").map(&:capitalize).join(" ")}'s Profile", pet_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
           <% end %>
+      </div>
+      <div class="w-full py-3 text-center">
+        <div>
+          Dry Food Storage
+        </div>
+        <%= link_to "Add dry food", new_dry_food_path, class: "block px-2 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+        <%= link_to "storage list", dry_foods_path, class: "block px-2 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
       </div>
       <div class="w-full py-3 text-center">
         <%= button_to "Sign Out", session_path, class: "block mx-auto hover:text-softRed", method: :delete %>

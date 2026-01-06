@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :dry_foods
+  resources :dry_foods, only: [:new, :create, :index, :destroy]
   resources :pets
   root "pages#hero_section"
   resource :session, except: [ :new ]

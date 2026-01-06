@@ -1,13 +1,13 @@
-<% content_for :title, "Dry foods" %>
+<% content_for :title, "Dry Foods Storage" %>
 
-<div class="w-full">
-  <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
-  <% end %>
+<div class="container mx-auto w-full overflow-auto shadow-lg rounded-xl mb-4 md:w-2/3">
+  <div class="flex flex-col justify-center items-center mb-3">
+    <h1 class="text-center font-bold text-2xl mt-5 capitalize md:text-4xl">Dry foods Storage List</h1>
+  </div>
 
-  <div class="flex justify-between items-center">
-    <h1 class="font-bold text-4xl">Dry foods</h1>
-    <%= link_to "New dry food", new_dry_food_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
+  <div class="flex flex-row justify-center items-center space-x-3">
+    <%= image_tag('add_dry_food_removebg.png', width:'50px', height: '50px') %>
+    <%= link_to "add dry food", new_dry_food_path, class: "text-sky-500 text-lg underline decoration-2 decoration-sky-500 font-bold transition duration-300 ease-in-out hover:scale-110 capitalize md:text-xl" %>
   </div>
 
   <div id="dry_foods" class="min-w-full divide-y divide-gray-200 space-y-5">
@@ -16,8 +16,6 @@
         <div class="flex flex-col sm:flex-row justify-between items-center pb-5 sm:pb-0">
           <%= render dry_food %>
           <div class="w-full sm:w-auto flex flex-col sm:flex-row space-x-2 space-y-2">
-            <%= link_to "Show", dry_food, class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-            <%= link_to "Edit", edit_dry_food_path(dry_food), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
             <%= button_to "Destroy", dry_food, method: :delete, class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
           </div>
         </div>
