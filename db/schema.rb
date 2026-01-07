@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_06_042308) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_07_121009) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -76,6 +76,31 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_06_042308) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "trackers", force: :cascade do |t|
+    t.date "date"
+    t.time "feed_time"
+    t.string "come_back_to_eat"
+    t.string "food_type"
+    t.string "brand"
+    t.string "description"
+    t.string "hungry"
+    t.decimal "amount", precision: 5, scale: 2
+    t.decimal "left_amount", precision: 5, scale: 2
+    t.string "love"
+    t.decimal "total_ate_amount", precision: 5, scale: 2
+    t.integer "frequency"
+    t.string "result"
+    t.integer "favorite_score", default: 0
+    t.string "note"
+    t.decimal "weight", precision: 4, scale: 2
+    t.integer "pet_id", null: false
+    t.integer "dry_food_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dry_food_id"], name: "index_trackers_on_dry_food_id"
+    t.index ["pet_id"], name: "index_trackers_on_pet_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email_address", null: false
     t.string "password_digest", null: false
@@ -94,4 +119,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_06_042308) do
   add_foreign_key "dry_foods", "Users", column: "user_id"
   add_foreign_key "pets", "users"
   add_foreign_key "sessions", "users"
+  add_foreign_key "trackers", "dry_foods"
+  add_foreign_key "trackers", "pets"
 end
