@@ -4,17 +4,17 @@ class Tracker < ApplicationRecord
   before_save { self.brand = brand.downcase }
   before_save { self.description = description.downcase }
   validates :food_type, presence: true
-  validates :brand, presence: true, length: {minimum: 1, maximum: 50}
-  validates :description, presence: true, length: {minimum: 2, maximum: 100}
+  validates :brand, presence: true, length: { minimum: 1, maximum: 50 }
+  validates :description, presence: true, length: { minimum: 2, maximum: 100 }
   validates :amount, numericality: true, comparison: { greater_than: 0 }
   validates :left_amount, numericality: true, comparison: { less_than_or_equal_to: :amount }
   validate :amount_less_than_dry_food_left_amount, if: :dry_food?
 
-  after_commit :update_dry_food_used_amount, on: [:create, :update, :destroy]
+  after_commit :update_dry_food_used_amount, on: [ :create, :update, :destroy ]
 
   private
 
-  def dry_food? 
+  def dry_food?
     food_type == "Dry" && dry_food.present?
   end
 

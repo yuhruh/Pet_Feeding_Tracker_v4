@@ -43,11 +43,11 @@ class TrackersController < ApplicationController
 
   # PATCH/PUT /trackers/1 or /trackers/1.json
   def update
-    @tracker.update!(params.expect(tracker: [:amount, :left_amount, :hungry, :come_back_to_eat, :love]))
+    @tracker.update!(params.expect(tracker: [ :amount, :left_amount, :hungry, :come_back_to_eat, :love ]))
     @tracker.total_ate_amount = @tracker.amount - @tracker.left_amount
     @tracker.frequency = calculate_frequency(@tracker.come_back_to_eat)
-    @tracker.result = [@tracker.hungry[0], @tracker.love[0]].join(' - ')
-    @tracker.favorite_score = calculate_favorite([@tracker.hungry[0], @tracker.love[0]])
+    @tracker.result = [ @tracker.hungry[0], @tracker.love[0] ].join(" - ")
+    @tracker.favorite_score = calculate_favorite([ @tracker.hungry[0], @tracker.love[0] ])
 
     respond_to do |format|
       if @tracker.update(tracker_params)
@@ -65,7 +65,7 @@ class TrackersController < ApplicationController
     @tracker.destroy!
 
     respond_to do |format|
-      format.html { redirect_to [@pet, :trackers], notice: "Tracker was successfully destroyed.", status: :see_other }
+      format.html { redirect_to [ @pet, :trackers ], notice: "Tracker was successfully destroyed.", status: :see_other }
       format.json { head :no_content }
     end
   end
@@ -99,18 +99,18 @@ class TrackersController < ApplicationController
     end
 
     def calculate_frequency(time_string)
-      time_string == '-' ? 0 : time_string.split(', ').count
+      time_string == "-" ? 0 : time_string.split(", ").count
     end
 
     def calculate_favorite(arr)
-      hungry = {"💖": 10, "🔺": 5, "❌": 0 }
-      love = {"💕": 15,  "🔺": 5, "❌": 0}
+      hungry = { "💖": 10, "🔺": 5, "❌": 0 }
+      love = { "💕": 15,  "🔺": 5, "❌": 0 }
 
       hungry_score = hungry[arr[0].to_sym]
       love_score = love[arr[1].to_sym]
       left_amount_score = @tracker.left_amount < (@tracker.amount)/4 ? 15 : 8
       frequent_score = @tracker.frequency * 2
-      
+
       hungry_score.to_i + love_score.to_i + left_amount_score + frequent_score
     end
 end

@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   # resources :trackers
   resources :dry_foods, only: [ :new, :create, :index, :destroy ]
-  resources :pets do 
+  resources :pets do
     resources :trackers
   end
   root "pages#hero_section"
