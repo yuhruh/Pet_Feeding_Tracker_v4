@@ -49,6 +49,6 @@ class DryFoodsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def dry_food_params
-      params.expect(dry_food: [ :brand, :food_type, :description, :amount, :used_amount, :user_id])
+      params.expect(dry_food: [ :brand, :food_type, :description, :amount, :used_amount, :user_id ])
     end
 end

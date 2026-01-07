@@ -1,6 +1,6 @@
 <% content_for :title, "#{Current.user.username.split(" ").map(&:capitalize).join(" ")}'s Cat List" %>
 
-<div class="container mx-auto w-full overflow-auto shadow-lg rounded-xl mb-4 md:w-2/3">
+<div class="container mx-auto w-full shadow-lg rounded-xl mb-4 p-6 md:w-4/5">
   <div class="flex flex-row justify-center space-x-3">
     <%= image_tag('add_pet.png', width:'25px', height: '25px') %>
     <%= link_to "add a cat", new_pet_path, class: "text-sky-500 text-lg underline decoration-2 decoration-sky-500 font-bold transition duration-300 ease-in-out hover:scale-110 capitalize md:text-xl" %>
@@ -10,12 +10,12 @@
     <h1 class="text-center font-bold text-2xl mt-5 capitalize md:text-4xl"><%= Current.user.username.split(" ").map(&:capitalize).join(" ") %>'s cat list</h1>
   </div>
 
-  <div id="pets" class="flex flex-col gap-8 justify-center items-center mt-4 lg:flex-row">
+  <div id="pets" class="flex flex-row justify-start items-center mt-4 overflow-x-scroll">
     <% if @pets.any? %>
       <% @pets.each do |pet| %>
-        <div class="flex flex-col justify-center items-center border-2 border-gray-200 px-6 mb-4 rounded-lg shadow-lg md:flex-row">
+        <div class="flex flex-col justify-center items-center border-2 border-gray-200 gap-4 px-6 mb-4 mx-2 rounded-lg shadow-lg md:flex-row">
           <div class="flex flex-col justify-between items-center">
-            <div class="flex flex-col gap-4 w-full mb-4 mt-4 md:flex-row sm:w-auto">
+            <div class="flex flex-col w-full mb-4 mt-4 lg:flex-row sm:w-auto">
               <%= render pet %>
             </div>
             <div class="flex flex-col gap-2 w-full mb-4 mt-4 border-t-2 border-slate-200 pt-4 md:flex-row bordersm:w-auto">
