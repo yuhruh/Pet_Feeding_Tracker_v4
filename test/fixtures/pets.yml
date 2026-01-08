@@ -7,7 +7,7 @@ one:
   gender: MyString
   breed: MyString
   user_id: 1
-  users: one
+  user: one
 
 two:
   petname: MyString
@@ -16,4 +16,4 @@ two:
   gender: MyString
   breed: MyString
   user_id: 1
-  users: two
+  user: two

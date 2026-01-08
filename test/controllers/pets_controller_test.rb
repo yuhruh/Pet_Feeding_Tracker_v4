@@ -2,7 +2,9 @@ require "test_helper"
 
 class PetsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    log_in_as(users(:one))
     @pet = pets(:one)
+    @pet.user = users(:one)
   end
 
   test "should get index" do
@@ -17,7 +19,7 @@ class PetsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create pet" do
     assert_difference("Pet.count") do
-      post pets_url, params: { pet: { birthday: @pet.birthday, breed: @pet.breed, gender: @pet.gender, petname: @pet.petname, user_id: @pet.user_id, users_id: @pet.users_id, weight: @pet.weight } }
+      post pets_url, params: { pet: { birthday: @pet.birthday, breed: @pet.breed, gender: @pet.gender, petname: @pet.petname, user_id: @pet.user_id, weight: @pet.weight } }
     end
 
     assert_redirected_to pet_url(Pet.last)
@@ -34,7 +36,7 @@ class PetsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update pet" do
-    patch pet_url(@pet), params: { pet: { birthday: @pet.birthday, breed: @pet.breed, gender: @pet.gender, petname: @pet.petname, user_id: @pet.user_id, users_id: @pet.users_id, weight: @pet.weight } }
+    patch pet_url(@pet), params: { pet: { birthday: @pet.birthday, breed: @pet.breed, gender: @pet.gender, petname: @pet.petname, user_id: @pet.user_id, weight: @pet.weight } }
     assert_redirected_to pet_url(@pet)
   end
 

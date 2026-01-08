@@ -29,6 +29,7 @@ class TrackersController < ApplicationController
   def create
     # @tracker = Tracker.new(tracker_params)
     @tracker = @pet.trackers.build(tracker_params)
+    @tracker.dry_food_id = nil if params[:tracker][:dry_food_id].blank?
 
     respond_to do |format|
       if @tracker.save
@@ -44,6 +45,7 @@ class TrackersController < ApplicationController
   # PATCH/PUT /trackers/1 or /trackers/1.json
   def update
     @tracker.update!(params.expect(tracker: [ :amount, :left_amount, :hungry, :come_back_to_eat, :love ]))
+    @tracker.dry_food_id = nil if params[:tracker][:dry_food_id].blank?
     @tracker.total_ate_amount = @tracker.amount - @tracker.left_amount
     @tracker.frequency = calculate_frequency(@tracker.come_back_to_eat)
     @tracker.result = [ @tracker.hungry[0], @tracker.love[0] ].join(" - ")

@@ -10,7 +10,7 @@ one:
   total_ate_amount: 9.99
   left_amount: 9.99
   days_remaining: 2026-01-06
-  User: one
+  user: one
 
 two:
   brand: MyString
@@ -22,4 +22,4 @@ two:
   total_ate_amount: 9.99
   left_amount: 9.99
   days_remaining: 2026-01-06
-  User: two
+  user: two

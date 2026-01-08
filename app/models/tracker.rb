@@ -7,7 +7,7 @@ class Tracker < ApplicationRecord
   validates :brand, presence: true, length: { minimum: 1, maximum: 50 }
   validates :description, presence: true, length: { minimum: 2, maximum: 100 }
   validates :amount, numericality: true, comparison: { greater_than: 0 }
-  validates :left_amount, numericality: true, comparison: { less_than_or_equal_to: :amount }
+  validates :left_amount, presence: true, numericality: true, comparison: { less_than_or_equal_to: :amount }, on: :update
   validate :amount_less_than_dry_food_left_amount, if: :dry_food?
 
   after_commit :update_dry_food_used_amount, on: [ :create, :update, :destroy ]

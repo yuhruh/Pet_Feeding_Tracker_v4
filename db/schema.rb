@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_07_121009) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_08_120000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -94,7 +94,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_07_121009) do
     t.string "note"
     t.decimal "weight", precision: 4, scale: 2
     t.integer "pet_id", null: false
-    t.integer "dry_food_id", null: false
+    t.integer "dry_food_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["dry_food_id"], name: "index_trackers_on_dry_food_id"
