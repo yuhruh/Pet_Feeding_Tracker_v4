@@ -1,107 +1,69 @@
-<%= form_with(model: tracker, class: "contents") do |form| %>
-  <% if tracker.errors.any? %>
-    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
-      <h2><%= pluralize(tracker.errors.count, "error") %> prohibited this tracker from being saved:</h2>
+<%= form_with(model: [@pet, tracker], id: "tracker-form", class: "contents") do |form| %>
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <%= render 'shared/errors', obj: @tracker %>
+  </div>
 
-      <ul class="list-disc ml-6">
-        <% tracker.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+  
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :date, class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize required md:text-base" %>
     </div>
-  <% end %>
-
-  <div class="my-5">
-    <%= form.label :date %>
-    <%= form.date_field :date, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:date].none?, "border-red-400 focus:outline-red-600": tracker.errors[:date].any?}] %>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.date_field :date, required: true, value: set_current_date, max: set_current_date, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:date].none?, "border-red-400 focus:outline-red-600": tracker.errors[:date].any?}] %>
+    </div>
   </div>
 
-  <div class="my-5">
-    <%= form.label :feed_time %>
-    <%= form.time_field :feed_time, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:feed_time].none?, "border-red-400 focus:outline-red-600": tracker.errors[:feed_time].any?}] %>
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :feed_time, class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize required md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.time_field :feed_time, required: true, value: set_current_time, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:feed_time].none?, "border-red-400 focus:outline-red-600": tracker.errors[:feed_time].any?}] %>
+    </div>
   </div>
 
-  <div class="my-5">
-    <%= form.label :come_back_to_eat %>
-    <%= form.text_field :come_back_to_eat, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:come_back_to_eat].none?, "border-red-400 focus:outline-red-600": tracker.errors[:come_back_to_eat].any?}] %>
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :food_type, class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize required md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.select :food_type, [["🧆 Kibble", "Dry"], ["🧆 Freeze-Dried", "Dry"], ["🍲 Wet", "Wet"], ["🌯 Other", "Other"]], { prompt: "Please Select Food Type" }, required: true, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:food_type].none?, "border-red-400 focus:outline-red-600": tracker.errors[:food_type].any?}] %>
+    </div>
   </div>
 
-  <div class="my-5">
-    <%= form.label :food_type %>
-    <%= form.text_field :food_type, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:food_type].none?, "border-red-400 focus:outline-red-600": tracker.errors[:food_type].any?}] %>
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :brand, class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize required md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.text_field :brand, required: true, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:brand].none?, "border-red-400 focus:outline-red-600": tracker.errors[:brand].any?}] %>
+    </div>
   </div>
 
-  <div class="my-5">
-    <%= form.label :brand %>
-    <%= form.text_field :brand, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:brand].none?, "border-red-400 focus:outline-red-600": tracker.errors[:brand].any?}] %>
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :description, class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize required md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.text_field :description, required: true, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:description].none?, "border-red-400 focus:outline-red-600": tracker.errors[:description].any?}] %>
+    </div>
   </div>
 
-  <div class="my-5">
-    <%= form.label :description %>
-    <%= form.text_field :description, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:description].none?, "border-red-400 focus:outline-red-600": tracker.errors[:description].any?}] %>
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :hungry, class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize required md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.select :hungry, ["💖 Yes, eat right away", "🔺 No, not really. Ate A Little", "❌ No, not interested."], { prompt: "Is #{@pet.petname.capitalize} hungry? Please select..."}, required: true, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:hungry].none?, "border-red-400 focus:outline-red-600": tracker.errors[:hungry].any?}] %>
+    </div>
   </div>
 
-  <div class="my-5">
-    <%= form.label :hungry %>
-    <%= form.text_field :hungry, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:hungry].none?, "border-red-400 focus:outline-red-600": tracker.errors[:hungry].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :amount %>
-    <%= form.text_field :amount, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:amount].none?, "border-red-400 focus:outline-red-600": tracker.errors[:amount].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :left_amount %>
-    <%= form.text_field :left_amount, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:left_amount].none?, "border-red-400 focus:outline-red-600": tracker.errors[:left_amount].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :love %>
-    <%= form.text_field :love, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:love].none?, "border-red-400 focus:outline-red-600": tracker.errors[:love].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :total_ate_amount %>
-    <%= form.text_field :total_ate_amount, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:total_ate_amount].none?, "border-red-400 focus:outline-red-600": tracker.errors[:total_ate_amount].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :frequency %>
-    <%= form.number_field :frequency, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:frequency].none?, "border-red-400 focus:outline-red-600": tracker.errors[:frequency].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :result %>
-    <%= form.text_field :result, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:result].none?, "border-red-400 focus:outline-red-600": tracker.errors[:result].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :favorite_score %>
-    <%= form.number_field :favorite_score, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:favorite_score].none?, "border-red-400 focus:outline-red-600": tracker.errors[:favorite_score].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :note %>
-    <%= form.text_field :note, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:note].none?, "border-red-400 focus:outline-red-600": tracker.errors[:note].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :weight %>
-    <%= form.text_field :weight, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:weight].none?, "border-red-400 focus:outline-red-600": tracker.errors[:weight].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :pet_id %>
-    <%= form.text_field :pet_id, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:pet_id].none?, "border-red-400 focus:outline-red-600": tracker.errors[:pet_id].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :dry_food_id %>
-    <%= form.text_field :dry_food_id, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:dry_food_id].none?, "border-red-400 focus:outline-red-600": tracker.errors[:dry_food_id].any?}] %>
-  </div>
-
-  <div class="inline">
-    <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label "Amount(g)", class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize required md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.number_field :amount, step: :any, placeholder: "Please just enter number" , class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:amount].none?, "border-red-400 focus:outline-red-600": tracker.errors[:amount].any?}], required: true, min: 0 %>
+    </div>
   </div>
 <% end %>
