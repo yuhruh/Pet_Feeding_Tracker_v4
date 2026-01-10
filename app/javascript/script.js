@@ -127,7 +127,7 @@ function setupPage() {
   
   const onBtnClick = (e) => {
     dropDownMenus.forEach((menu) => menu.classList.add('hidden'));
-    const classString = e.target.getAttribute('data-target');
+    const classString = e.currentTarget.getAttribute('data-target');
     document.getElementById(classString).classList.remove('hidden');
   }
   dropdownBtns.forEach((tab) => tab.addEventListener('click', onBtnClick));

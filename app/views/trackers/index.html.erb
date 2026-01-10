@@ -1,10 +1,5 @@
 <% content_for :title, "#{@pet.petname.capitalize}'s Trackers" %>
 
-<div class="w-full">
-  <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
-  <% end %>
-
   <div class="flex flex-col justify-center items-center mb-3">
     <h1 class="font-bold text-center text-2xl mt-5 capitalize md:text-4xl"><%=@pet.petname.capitalize%>'s trackers</h1>
   </div>
@@ -15,14 +10,6 @@
   </div>
 
   <div id="trackers" class="min-w-full divide-y divide-gray-200 space-y-5">
-    <% if @trackers.any? %>
-      <% @trackers.each do |tracker| %>
-        <div class="container mx-auto w-full overflow-auto shadow-lg rounded-xl mb-4 md:w-7/8">
-          <%= render tracker %>
-        </div>
-      <% end %>
-    <% else %>
-      <p class="text-lg text-center my-10">No <%=@pet.petname%>'s trackers found. How about adding it right now?</p>
-    <% end %>
+    <%= render 'tracker' %>
   </div>
 </div>

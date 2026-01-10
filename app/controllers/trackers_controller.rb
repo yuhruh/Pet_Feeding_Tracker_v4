@@ -53,8 +53,8 @@ class TrackersController < ApplicationController
 
     respond_to do |format|
       if @tracker.update(tracker_params)
-        format.html { redirect_to @tracker, notice: "Tracker was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @tracker }
+        format.html { redirect_to [@pet, :trackers], notice: "Tracker was successfully updated.", status: :see_other }
+        format.json { render :show, status: :ok, location: [@pet, :trackers] }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @tracker.errors, status: :unprocessable_entity }
