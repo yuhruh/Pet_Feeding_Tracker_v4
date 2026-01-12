@@ -1,4 +1,5 @@
 <% content_for :title, "#{@pet.petname.capitalize}'s Trackers" %>
+  <%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
 
   <div class="flex flex-col justify-center items-center mb-3">
     <h1 class="font-bold text-center text-2xl mt-5 capitalize md:text-4xl"><%=@pet.petname.capitalize%>'s trackers</h1>
@@ -7,6 +8,36 @@
   <div class="flex flex-row justify-center space-x-3">
     <%= image_tag('add_tracker_removebg.png', width:'40px', height: '40px') %>
     <%= link_to "New tracker for #{@pet.petname.capitalize}", new_pet_tracker_path, class: "text-purple-500 text-lg underline decoration-2 decoration-purple-500 font-bold transition duration-300 ease-in-out hover:scale-110 capitalize md:text-xl" %>
+  </div>
+
+  <div class="flex flex-col mt-5 mb-4 justify-center items-center mx-auto w-full">
+    <% if @dry_properties.present? || @wet_properties.present? %>
+      <%= column_chart @data, adapter: "google", height: "300px", library: {
+        title: "Amount & Weight Over Time",
+        isStacked: true,
+        series: {
+          0 => {type: 'bar', targetAxisIndex: 0},
+          1 => {type: 'bar', targetAxisIndex: 0},
+          2 => {type: 'line', targetAxisIndex: 1, pointSize: 5}
+        },
+        colors: ['#C1D7EC', '#FFDAB9', '#6B4AB9'],
+        chartArea: {left: 100, right: 100},
+        hAxis: {
+          title: 'Date',
+          titleTextStyle: {italic: true}
+        },
+        vAxes: {
+          0 => {title: 'Amount (g)'},
+          1 => {title: 'Weight (kg)', viewWindow: {min: 0, max: 15}, gridlines: {color: 'transparent'}}
+        },
+        legend: {position: 'top'},
+        titleTextStyle: {bold: true, fontSize: 20}
+      } %>
+    <% else %>
+      <div class="text-center p-8 my-4 bg-gray-100 rounded-lg shadow-lg">
+        <p class="font-semibold text-gray-700">No tracking data available to display the chart.</p>
+      </div>
+    <% end %>
   </div>
 
   <div id="trackers" class="min-w-full divide-y divide-gray-200 space-y-5">

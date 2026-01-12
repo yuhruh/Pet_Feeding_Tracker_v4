@@ -3,5 +3,8 @@
   "private": true,
   "devDependencies": {
     "tailwindcss": "^3.4.1"
+  },
+  "dependencies": {
+    "apexcharts": "^3.54.1"
   }
 }
