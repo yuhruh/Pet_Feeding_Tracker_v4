@@ -9,11 +9,11 @@ class TrackersController < ApplicationController
     # @trackers = Tracker.all
     @trackers = @pet.trackers
     @trackers = @trackers.order(date: :asc, feed_time: :asc)
-    @dry_properties = @trackers.where(food_type: "Dry").where.not(total_ate_amount: nil).group(:date).order(:date).sum(:total_ate_amount).transform_keys { |key| key.strftime("%b %d")}.transform_values(&:to_f)
-    @wet_properties = @trackers.where(food_type: "Wet").where.not(total_ate_amount: nil).group(:date).order(:date).sum(:total_ate_amount).transform_keys { |key| key.strftime("%b %d")}.transform_values(&:to_f)
-    
+    @dry_properties = @trackers.where(food_type: "Dry").where.not(total_ate_amount: nil).group(:date).order(:date).sum(:total_ate_amount).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
+    @wet_properties = @trackers.where(food_type: "Wet").where.not(total_ate_amount: nil).group(:date).order(:date).sum(:total_ate_amount).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
+
     # Using average for weight is safer than sum, in case multiple entries exist for one day.
-    @weight = @trackers.where.not(weight: nil).group(:date).order(:date).average(:weight).transform_keys { |key| key.strftime("%b %d")}.transform_values(&:to_f)
+    @weight = @trackers.where.not(weight: nil).group(:date).order(:date).average(:weight).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
 
     @data = [
       { name: "Wet Food (g)", data: @wet_properties },
@@ -64,8 +64,8 @@ class TrackersController < ApplicationController
 
     respond_to do |format|
       if @tracker.update(tracker_params)
-        format.html { redirect_to [@pet, :trackers], notice: "Tracker was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: [@pet, :trackers] }
+        format.html { redirect_to [ @pet, :trackers ], notice: "Tracker was successfully updated.", status: :see_other }
+        format.json { render :show, status: :ok, location: [ @pet, :trackers ] }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @tracker.errors, status: :unprocessable_entity }

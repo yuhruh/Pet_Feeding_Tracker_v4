@@ -10,7 +10,7 @@ module TrackersHelper
   end
 
   def tracker_row_class(tracker)
-    classes = ["border-b"]
+    classes = [ "border-b" ]
     if tracker.total_ate_amount.blank?
       classes << "bg-red-100"
     elsif tracker.come_back_to_eat.blank?
