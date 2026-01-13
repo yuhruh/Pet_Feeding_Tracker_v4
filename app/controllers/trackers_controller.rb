@@ -9,6 +9,14 @@ class TrackersController < ApplicationController
     # @trackers = Tracker.all
     @trackers = @pet.trackers
     @trackers = @trackers.order(date: :asc, feed_time: :asc)
+
+    respond_to do |format|
+      format.html
+      format.csv do
+        send_data Tracker.to_csv, filename: "#{@pet.petname.capitalize}-trackers-#{Date.today}.csv", type: 'text/csv'
+      end
+    end
+
     @dry_properties = @trackers.where(food_type: "Dry").where.not(total_ate_amount: nil).group(:date).order(:date).sum(:total_ate_amount).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
     @wet_properties = @trackers.where(food_type: "Wet").where.not(total_ate_amount: nil).group(:date).order(:date).sum(:total_ate_amount).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
 

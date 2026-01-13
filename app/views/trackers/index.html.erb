@@ -10,6 +10,11 @@
     <%= link_to "New tracker for #{@pet.petname.capitalize}", new_pet_tracker_path, class: "text-purple-500 text-lg underline decoration-2 decoration-purple-500 font-bold transition duration-300 ease-in-out hover:scale-110 capitalize md:text-xl" %>
   </div>
 
+  <fieldset class="flex flex-row gap-3 justify-center mb-3">
+    <%= image_tag('download.png', width: '25px', height: '25px') %>
+    <%= link_to "Export to CSV", pet_trackers_path(@pet, format: :csv), class: "text-base font-bold text-sky-500 transition duration-300 ease-in-out hover:scale-110 capitalize md:text-lg" %>
+  </fieldset>
+
   <div class="flex flex-col mt-5 mb-4 justify-center items-center mx-auto w-full">
     <% if @dry_properties.present? || @wet_properties.present? %>
       <%= column_chart @data, adapter: "google", height: "300px", library: {
