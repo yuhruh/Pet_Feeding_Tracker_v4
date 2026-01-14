@@ -1,8 +1,18 @@
 class TrackersController < ApplicationController
+  include TrackersCalculable
   before_action :set_pet
   before_action :set_tracker, only: %i[ show edit update destroy ]
   before_action :require_authentication
   before_action :set_current_date, :set_current_time
+
+  def import
+    file = params[:file]
+    return redirect_to pet_trackers_path, alert: "Only CSV please" unless file.content_type == "text/csv"
+    
+    CsvImportTrackersService.new(@pet).call(file)
+
+    redirect_to pet_trackers_path, notice: "#{@pet.petname.capitalize}'s trackers imported!"
+  end
 
   # GET /trackers or /trackers.json
   def index
@@ -49,7 +59,7 @@ class TrackersController < ApplicationController
     # @tracker = Tracker.new(tracker_params)
     @tracker = @pet.trackers.build(tracker_params)
     @tracker.dry_food_id = nil if params[:tracker][:dry_food_id].blank?
-
+    
     respond_to do |format|
       if @tracker.save
         format.html { redirect_to pet_trackers_path, notice: "Tracker was successfully created." }
@@ -65,10 +75,10 @@ class TrackersController < ApplicationController
   def update
     @tracker.update!(params.expect(tracker: [ :amount, :left_amount, :hungry, :come_back_to_eat, :love ]))
     @tracker.dry_food_id = nil if params[:tracker][:dry_food_id].blank?
-    @tracker.total_ate_amount = @tracker.amount - @tracker.left_amount
+    @tracker.total_ate_amount = @tracker.amount.to_f - @tracker.left_amount.to_f
     @tracker.frequency = calculate_frequency(@tracker.come_back_to_eat)
     @tracker.result = [ @tracker.hungry[0], @tracker.love[0] ].join(" - ")
-    @tracker.favorite_score = calculate_favorite([ @tracker.hungry[0], @tracker.love[0] ])
+    @tracker.favorite_score = calculate_favorite(@tracker.hungry[0], @tracker.love[0], @tracker.left_amount, @tracker.amount, @tracker.frequency)
 
     respond_to do |format|
       if @tracker.update(tracker_params)
@@ -118,20 +128,5 @@ class TrackersController < ApplicationController
     def tracker_params
       params.expect(tracker: [ :date, :feed_time, :come_back_to_eat, :food_type, :brand, :description, :hungry, :amount, :left_amount, :love, :total_ate_amount, :frequency, :result, :favorite_score, :note, :weight, :pet_id, :dry_food_id ])
     end
-
-    def calculate_frequency(time_string)
-      time_string == "-" ? 0 : time_string.split(", ").count
-    end
-
-    def calculate_favorite(arr)
-      hungry = { "💖": 10, "🔺": 5, "❌": 0 }
-      love = { "💕": 15,  "🔺": 5, "❌": 0 }
-
-      hungry_score = hungry[arr[0].to_sym]
-      love_score = love[arr[1].to_sym]
-      left_amount_score = @tracker.left_amount < (@tracker.amount)/4 ? 15 : 8
-      frequent_score = @tracker.frequency * 2
-
-      hungry_score.to_i + love_score.to_i + left_amount_score + frequent_score
-    end
+    
 end

@@ -2,7 +2,11 @@ Rails.application.routes.draw do
   # resources :trackers
   resources :dry_foods, only: [ :new, :create, :index, :destroy ]
   resources :pets do
-    resources :trackers
+    resources :trackers do
+      collection do
+        post :import
+      end
+    end
   end
   root "pages#hero_section"
   resource :session, except: [ :new ]
