@@ -14,7 +14,7 @@ class CsvImportTrackersService
       csv.each do |row|
         tracker_hash = Hash.new
         tracker_hash[:date] = row["date"]
-        tracker_hash[:feed_time] = row["feed_time"]      
+        tracker_hash[:feed_time] = row["feed_time"]
         tracker_hash[:come_back_to_eat] = row["come_back_to_eat"]
         tracker_hash[:food_type] = row["food_type"]
         tracker_hash[:brand] = row["brand"]
@@ -24,12 +24,12 @@ class CsvImportTrackersService
         tracker_hash[:total_ate_amount] = row["amount"].to_f - row["left_amount"].to_f
         tracker_hash[:hungry] = row["hungry"]
         tracker_hash[:love] = row["love"]
-        tracker_hash[:result] = [row["hungry"].to_s.first, row["love"].to_s.first].join(" - ") if row["hungry"].present? && row["love"].present?
-        tracker_hash[:note] = row["note"] if row["note"].present?       
+        tracker_hash[:result] = [ row["hungry"].to_s.first, row["love"].to_s.first ].join(" - ") if row["hungry"].present? && row["love"].present?
+        tracker_hash[:note] = row["note"] if row["note"].present?
         tracker_hash[:weight] = row["weight"] if row["weight"].present?
         eat_frequency = calculate_frequency(row["come_back_to_eat"])
         tracker_hash[:frequency] = eat_frequency.to_i
-        tracker_hash[:favorite_score] = calculate_favorite([row["hungry"].to_s.first, row["love"].to_s.first], row["left_amount"].to_f, row["amount"].to_f, eat_frequency.to_i)
+        tracker_hash[:favorite_score] = calculate_favorite([ row["hungry"].to_s.first, row["love"].to_s.first ], row["left_amount"].to_f, row["amount"].to_f, eat_frequency.to_i)
         # binding.b
         @pet.trackers.create(tracker_hash)
       end

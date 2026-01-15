@@ -8,7 +8,7 @@ class TrackersController < ApplicationController
   def import
     file = params[:file]
     return redirect_to pet_trackers_path, alert: "Only CSV please" unless file.content_type == "text/csv"
-    
+
     CsvImportTrackersService.new(@pet).call(file)
 
     redirect_to pet_trackers_path, notice: "#{@pet.petname.capitalize}'s trackers imported!"
@@ -23,7 +23,7 @@ class TrackersController < ApplicationController
     respond_to do |format|
       format.html
       format.csv do
-        send_data Tracker.to_csv, filename: "#{@pet.petname.capitalize}-trackers-#{Date.today}.csv", type: 'text/csv'
+        send_data Tracker.to_csv, filename: "#{@pet.petname.capitalize}-trackers-#{Date.today}.csv", type: "text/csv"
       end
     end
 
@@ -59,7 +59,7 @@ class TrackersController < ApplicationController
     # @tracker = Tracker.new(tracker_params)
     @tracker = @pet.trackers.build(tracker_params)
     @tracker.dry_food_id = nil if params[:tracker][:dry_food_id].blank?
-    
+
     respond_to do |format|
       if @tracker.save
         format.html { redirect_to pet_trackers_path, notice: "Tracker was successfully created." }
@@ -79,7 +79,7 @@ class TrackersController < ApplicationController
     @tracker.frequency = calculate_frequency(@tracker.come_back_to_eat)
     @tracker.result = [ @tracker.hungry[0], @tracker.love[0] ].join(" - ")
     @tracker.favorite_score = calculate_favorite([ @tracker.hungry[0], @tracker.love[0] ])
-    
+
     respond_to do |format|
       if @tracker.update(tracker_params)
         format.html { redirect_to [ @pet, :trackers ], notice: "Tracker was successfully updated.", status: :see_other }

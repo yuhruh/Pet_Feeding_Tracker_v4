@@ -53,9 +53,9 @@ class Tracker < ApplicationRecord
   end
 
   def self.to_csv
-    require 'csv'
-    CSV.generate(headers: true, col_sep: ';') do |csv|
-      csv << ["date", "feed_time", "come_back_to_eat", "food_type", "brand", "description", "amount", "left_amount", "total_ate_amount", "hungry", "result", "note", "weight"]
+    require "csv"
+    CSV.generate(headers: true, col_sep: ";") do |csv|
+      csv << [ "date", "feed_time", "come_back_to_eat", "food_type", "brand", "description", "amount", "left_amount", "total_ate_amount", "hungry", "result", "note", "weight" ]
       all.each do |tracker|
         csv << [
           tracker.date,

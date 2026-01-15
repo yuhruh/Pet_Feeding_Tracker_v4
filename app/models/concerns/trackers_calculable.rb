@@ -16,4 +16,4 @@ module TrackersCalculable
 
     hungry_score + love_score + left_amount_score + frequent_score
   end
-end 
+end
