@@ -1,5 +1,5 @@
 class TrackersController < ApplicationController
-  include TrackersCalculable
+  # include TrackersCalculable
   before_action :set_pet
   before_action :set_tracker, only: %i[ show edit update destroy ]
   before_action :require_authentication
@@ -78,8 +78,8 @@ class TrackersController < ApplicationController
     @tracker.total_ate_amount = @tracker.amount.to_f - @tracker.left_amount.to_f
     @tracker.frequency = calculate_frequency(@tracker.come_back_to_eat)
     @tracker.result = [ @tracker.hungry[0], @tracker.love[0] ].join(" - ")
-    @tracker.favorite_score = calculate_favorite(@tracker.hungry[0], @tracker.love[0], @tracker.left_amount, @tracker.amount, @tracker.frequency)
-
+    @tracker.favorite_score = calculate_favorite([ @tracker.hungry[0], @tracker.love[0] ])
+    
     respond_to do |format|
       if @tracker.update(tracker_params)
         format.html { redirect_to [ @pet, :trackers ], notice: "Tracker was successfully updated.", status: :see_other }
@@ -128,5 +128,20 @@ class TrackersController < ApplicationController
     def tracker_params
       params.expect(tracker: [ :date, :feed_time, :come_back_to_eat, :food_type, :brand, :description, :hungry, :amount, :left_amount, :love, :total_ate_amount, :frequency, :result, :favorite_score, :note, :weight, :pet_id, :dry_food_id ])
     end
-    
+
+    def calculate_frequency(time_string)
+      time_string == "-" ? 0 : time_string.split(", ").count
+    end
+
+    def calculate_favorite(arr)
+      hungry = { "💖": 10, "🔺": 5, "❌": 0 }
+      love = { "💕": 15,  "🔺": 5, "❌": 0 }
+
+      hungry_score = hungry[arr[0].to_sym]
+      love_score = love[arr[1].to_sym]
+      left_amount_score = @tracker.left_amount < (@tracker.amount)/4 ? 15 : 8
+      frequent_score = @tracker.frequency * 2
+
+      hungry_score.to_i + love_score.to_i + left_amount_score + frequent_score
+    end
 end
