@@ -31,7 +31,9 @@ class TrackersController < ApplicationController
     @wet_properties = @trackers.where(food_type: "Wet").where.not(total_ate_amount: nil).group(:date).order(:date).sum(:total_ate_amount).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
 
     # Using average for weight is safer than sum, in case multiple entries exist for one day.
-    @weight = @trackers.where.not(weight: nil).group(:date).order(:date).average(:weight).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
+    @weight = @trackers.where.not(weight: nil).group(:date).order(:date).average(:weight).transform_keys{ |key| key.strftime("%b %d") }.transform_values(&:to_f)
+    # weights_by_date = @trackers.where.not(weight: nil).group(:date).average(:weight)
+    # @weight = weights_by_date.sort_by { |date, _weight| date }.map { |date, weight| [date.strftime("%b %d"), weight.to_f] }
 
     @data = [
       { name: "Wet Food (g)", data: @wet_properties },
@@ -73,15 +75,18 @@ class TrackersController < ApplicationController
 
   # PATCH/PUT /trackers/1 or /trackers/1.json
   def update
-    @tracker.update!(params.expect(tracker: [ :amount, :left_amount, :hungry, :come_back_to_eat, :love ]))
+    # @tracker.update!(params.expect(tracker: [ :amount, :left_amount, :hungry, :come_back_to_eat, :love ]))
+    @tracker.assign_attributes(tracker_params)
     @tracker.dry_food_id = nil if params[:tracker][:dry_food_id].blank?
     @tracker.total_ate_amount = @tracker.amount.to_f - @tracker.left_amount.to_f
     @tracker.frequency = calculate_frequency(@tracker.come_back_to_eat)
-    @tracker.result = [ @tracker.hungry[0], @tracker.love[0] ].join(" - ")
-    @tracker.favorite_score = calculate_favorite([ @tracker.hungry[0], @tracker.love[0] ])
+    if @tracker.hungry.present? && @tracker.love.present?
+      @tracker.result = [ @tracker.hungry[0], @tracker.love[0] ].join(" - ")
+      @tracker.favorite_score = calculate_favorite([ @tracker.hungry[0], @tracker.love[0] ])
+    end
 
     respond_to do |format|
-      if @tracker.update(tracker_params)
+      if @tracker.save
         format.html { redirect_to [ @pet, :trackers ], notice: "Tracker was successfully updated.", status: :see_other }
         format.json { render :show, status: :ok, location: [ @pet, :trackers ] }
       else

@@ -11,10 +11,12 @@ module TrackersHelper
 
   def tracker_row_class(tracker)
     classes = [ "border-b" ]
-    if tracker.total_ate_amount.blank?
+    if tracker.come_back_to_eat.blank?
+      classes << "bg-yellow-100"
+    elsif tracker.total_ate_amount.blank?
       classes << "bg-red-100"
-    elsif tracker.come_back_to_eat.blank?
-      classes << "bg-yellow-200"
+    elsif tracker.result.blank? || tracker.hungry.blank?
+      classes << "bg-blue-200"
     end
     classes.join(" ")
   end
