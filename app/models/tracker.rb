@@ -35,14 +35,14 @@ class Tracker < ApplicationRecord
         days_remaining = (left_amount / average_used_amount).to_i rescue nil
         expected_running_out = days_remaining ? dry_food.created_at + days_remaining : nil
 
-        dry_food.update_to_columns(
+        dry_food.update_columns(
           used_amount: used_amount,
           left_amount: left_amount,
           average_used_amount: average_used_amount.round(2),
           days_remaining: expected_running_out
         )
       else
-        dry_food.update_to_columns(
+        dry_food.update_columns(
           used_amount: used_amount,
           left_amount: left_amount,
           average_used_amount: 0,
