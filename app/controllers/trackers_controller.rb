@@ -31,7 +31,7 @@ class TrackersController < ApplicationController
     @wet_properties = @trackers.where(food_type: "Wet").where.not(total_ate_amount: nil).group(:date).order(:date).sum(:total_ate_amount).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
 
     # Using average for weight is safer than sum, in case multiple entries exist for one day.
-    @weight = @trackers.where.not(weight: nil).group(:date).order(:date).average(:weight).transform_keys{ |key| key.strftime("%b %d") }.transform_values(&:to_f)
+    @weight = @trackers.where.not(weight: nil).group(:date).order(:date).average(:weight).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
     # weights_by_date = @trackers.where.not(weight: nil).group(:date).average(:weight)
     # @weight = weights_by_date.sort_by { |date, _weight| date }.map { |date, weight| [date.strftime("%b %d"), weight.to_f] }
 

@@ -7,6 +7,7 @@ class User < ApplicationRecord
 
   attr_accessor :email_address_confirmation
 
+  validates :username, presence: true
   validates :email_address, presence: true,
                     uniqueness: { case_sensitive: false },
                     length: { maximum: 105 },

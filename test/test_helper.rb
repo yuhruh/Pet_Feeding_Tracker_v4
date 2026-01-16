@@ -12,7 +12,8 @@ module ActiveSupport
 
     # Add more helper methods to be used by all tests here...
     def log_in_as(user)
-      post sessions_url, params: { email_address: user.email_address, password: "password" }
+      post new_session_path, params: { email_address: user.email_address, password: "password" }
+      follow_redirect!
     end
   end
 end
