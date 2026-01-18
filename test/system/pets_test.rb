@@ -47,7 +47,7 @@ class PetsTest < ApplicationSystemTestCase
   test "should destroy Pet" do
     sign_in_as @user
     visit pet_url(@pet)
-    accept_confirm { click_on "Destroy #{@pet.petname}'s profile and records"}
+    accept_confirm { click_on "Destroy #{@pet.petname}'s profile and records" }
 
     assert_text "Cat #{@pet.petname} was successfully destroyed."
   end
