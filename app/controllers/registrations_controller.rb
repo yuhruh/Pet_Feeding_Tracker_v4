@@ -7,7 +7,7 @@ class RegistrationsController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    @user.sing_in_count = 1
+    @user.sign_in_count = 1
     if @user.save
       start_new_session_for @user
       UserMailer.with(user: @user).welcome.deliver_later

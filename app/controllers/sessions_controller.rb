@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
         start_new_session_for user
         user.last_sign_in_at = user.current_sign_in_at
         user.current_sign_in_at = Time.current
-        user.sing_in_count = user.sing_in_count.to_i + 1
+        user.sign_in_count = user.sign_in_count.to_i + 1
         user.save(validate: false)
 
         if user.new_user?

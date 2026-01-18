@@ -21,6 +21,6 @@ class User < ApplicationRecord
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
   def new_user?
-    sing_in_count == 1
+    sign_in_count == 1
   end
 end

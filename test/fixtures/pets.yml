@@ -4,16 +4,14 @@ one:
   petname: MyString
   birthday: 2026-01-03 19:21:54
   weight: 9.99
-  gender: MyString
+  gender: "♂️ Male"
   breed: MyString
-  user_id: 1
   user: one
 
 two:
   petname: MyString
   birthday: 2026-01-03 19:21:54
   weight: 9.99
-  gender: MyString
+  gender: "♀️ Female"
   breed: MyString
-  user_id: 1
   user: two
