@@ -1,7 +1,7 @@
 class OmniAuth::SessionsController < ApplicationController
-  allow_unauthenticated_access only: [:create, :failure]
-  before_action :set_service, only: [:create]
-  before_action :set_user, only: [:create]
+  allow_unauthenticated_access only: [ :create, :failure ]
+  before_action :set_service, only: [ :create ]
+  before_action :set_user, only: [ :create ]
 
   def create
     if !@service.present?
@@ -38,10 +38,10 @@ class OmniAuth::SessionsController < ApplicationController
 
   private
 
-  
+
 
   def user_info
-    @user_info ||= request.env['omniauth.auth']
+    @user_info ||= request.env["omniauth.auth"]
   end
 
   def set_service
@@ -75,9 +75,9 @@ class OmniAuth::SessionsController < ApplicationController
 
   def create_user
     email = user_info.dig(:info, :email)
-    username = user_info.dig(:info, :name) || user_info.dig(:info, :email).split('@').first
+    username = user_info.dig(:info, :name) || user_info.dig(:info, :email).split("@").first
     random_password = SecureRandom.hex(10)
-    user_timezone = request.env.dig('omniauth.params', 'timezone')
+    user_timezone = request.env.dig("omniauth.params", "timezone")
 
     User.create!(
       email_address: email,
@@ -86,5 +86,4 @@ class OmniAuth::SessionsController < ApplicationController
       password_confirmation: random_password,
       timezone: user_timezone)
   end
-
 end
