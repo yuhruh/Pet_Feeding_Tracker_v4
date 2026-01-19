@@ -10,7 +10,7 @@
 
   <div class="flex flex-col justify-center items-center gap-4 mb-4 pt-4 md:flex-row">
     <div class="flex justify-center">
-      <%= button_tag("Add a record for #{@pet.petname}", type: "submit", form: "tracker-form", class: "btn text-center rounded-md px-3.5 py-2.5 text-white bg-softBlue hover:bg-white hover:text-softBlue hover:border-2 hover:border-softBlue inline-block font-medium cursor-pointer capitalize") %>
+      <%= button_tag("Add a record for #{@pet.petname.capitalize}", type: "submit", form: "tracker-form", class: "btn text-center rounded-md px-3.5 py-2.5 text-white bg-softBlue hover:bg-white hover:text-softBlue hover:border-2 hover:border-softBlue inline-block font-medium cursor-pointer capitalize") %>
     </div>
     <div class="flex justify-center">
       <%= link_to "Back to #{@pet.petname}'s record", pet_trackers_path, class: "text-center rounded-md px-3.5 py-2.5 text-white bg-gray-500 hover:bg-white hover:text-gray-500 hover:border-2 hover:border-gray-500 inline-block font-medium cursor-pointer capitalize" %>

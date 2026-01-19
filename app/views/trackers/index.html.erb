@@ -14,12 +14,12 @@
   </div>
   
   <div class="flex flex-col justify-center items-center mb-3">
-    <h1 class="font-bold text-center text-2xl mt-5 capitalize md:text-4xl"><%=@pet.petname.capitalize%>'s trackers</h1>
+    <h1 class="font-bold text-center text-2xl mt-5 md:text-4xl"><%=@pet.petname.capitalize%>'s Trackers</h1>
   </div>
 
   <div class="flex flex-row justify-center space-x-3">
     <%= image_tag('add_tracker_removebg.png', width:'40px', height: '40px') %>
-    <%= link_to "New tracker for #{@pet.petname.capitalize}", new_pet_tracker_path, class: "text-purple-500 text-lg underline decoration-2 decoration-purple-500 font-bold transition duration-300 ease-in-out hover:scale-110 capitalize md:text-xl" %>
+    <%= link_to "New tracker for #{@pet.petname.capitalize}", new_pet_tracker_path(@pet), class: "text-purple-500 text-lg underline decoration-2 decoration-purple-500 font-bold transition duration-300 ease-in-out hover:scale-110 capitalize md:text-xl" %>
   </div>
 
   <fieldset class="flex flex-row gap-3 justify-center mb-3">

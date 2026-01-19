@@ -2,73 +2,55 @@ require "application_system_test_case"
 
 class TrackersTest < ApplicationSystemTestCase
   setup do
+    @user = users(:one)
+    @pet = pets(:one)
     @tracker = trackers(:one)
   end
 
   test "visiting the index" do
-    visit trackers_url
-    assert_selector "h1", text: "Trackers"
+    sign_in_as @user
+    visit pet_trackers_url(@pet)
+    assert_selector "h1", text: "#{@pet.petname.capitalize}'s Trackers"
   end
 
   test "should create tracker" do
-    visit trackers_url
-    click_on "New tracker"
+    sign_in_as @user
+    visit pet_trackers_url(@pet)
+    click_on "New tracker for #{@pet.petname.capitalize}"
 
-    fill_in "Amount", with: @tracker.amount
-    fill_in "Brand", with: @tracker.brand
-    fill_in "Come back to eat", with: @tracker.come_back_to_eat
-    fill_in "Date", with: @tracker.date
-    fill_in "Description", with: @tracker.description
-    fill_in "Dry food", with: @tracker.dry_food_id
-    fill_in "Favorite score", with: @tracker.favorite_score
-    fill_in "Feed time", with: @tracker.feed_time
-    fill_in "Food type", with: @tracker.food_type
-    fill_in "Frequency", with: @tracker.frequency
-    fill_in "Hungry", with: @tracker.hungry
-    fill_in "Left amount", with: @tracker.left_amount
-    fill_in "Love", with: @tracker.love
-    fill_in "Note", with: @tracker.note
-    fill_in "Pet", with: @tracker.pet_id
-    fill_in "Result", with: @tracker.result
-    fill_in "Total ate amount", with: @tracker.total_ate_amount
-    fill_in "Weight", with: @tracker.weight
-    click_on "Create Tracker"
+    fill_in "tracker_amount", with: @tracker.amount
+    fill_in "tracker_brand", with: @tracker.brand
+    fill_in "tracker_date", with: @tracker.date
+    fill_in "tracker_description", with: @tracker.description
+    fill_in "tracker_feed_time", with: @tracker.feed_time
+    select @tracker.food_type, from: "tracker_food_type"
+    select @tracker.hungry, from: "tracker_hungry"
+    click_on "Add a record for #{@pet.petname.capitalize}"
 
     assert_text "Tracker was successfully created"
-    click_on "Back"
   end
 
   test "should update Tracker" do
-    visit tracker_url(@tracker)
-    click_on "Edit this tracker", match: :first
+    sign_in_as @user
+    visit pet_trackers_url(@pet)
+    find("a[href='#{edit_pet_tracker_path(@pet, @tracker)}']").click
 
-    fill_in "Amount", with: @tracker.amount
-    fill_in "Brand", with: @tracker.brand
-    fill_in "Come back to eat", with: @tracker.come_back_to_eat
-    fill_in "Date", with: @tracker.date
-    fill_in "Description", with: @tracker.description
-    fill_in "Dry food", with: @tracker.dry_food_id
-    fill_in "Favorite score", with: @tracker.favorite_score
-    fill_in "Feed time", with: @tracker.feed_time.to_s
-    fill_in "Food type", with: @tracker.food_type
-    fill_in "Frequency", with: @tracker.frequency
-    fill_in "Hungry", with: @tracker.hungry
-    fill_in "Left amount", with: @tracker.left_amount
-    fill_in "Love", with: @tracker.love
-    fill_in "Note", with: @tracker.note
-    fill_in "Pet", with: @tracker.pet_id
-    fill_in "Result", with: @tracker.result
-    fill_in "Total ate amount", with: @tracker.total_ate_amount
-    fill_in "Weight", with: @tracker.weight
-    click_on "Update Tracker"
+    fill_in "tracker_come_back_to_eat", with: "10:00"
+    fill_in "tracker_left_amount", with: 5
+    select "💕 Love it So Much", from: "tracker_love"
+    fill_in "tracker_note", with: "This is a test note."
+    fill_in "tracker_weight", with: 5.5
+    click_on "Update Record"
 
     assert_text "Tracker was successfully updated"
-    click_on "Back"
   end
 
   test "should destroy Tracker" do
-    visit tracker_url(@tracker)
-    accept_confirm { click_on "Destroy this tracker", match: :first }
+    sign_in_as @user
+    visit pet_trackers_url(@pet)
+    accept_confirm do
+      find("a[href='#{pet_tracker_path(@pet, @tracker)}'][data-turbo-method='delete']").click
+    end
 
     assert_text "Tracker was successfully destroyed"
   end

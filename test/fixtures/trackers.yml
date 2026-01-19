@@ -4,10 +4,10 @@ one:
   date: 2026-01-07
   feed_time: 2026-01-07 20:10:09
   come_back_to_eat: MyString
-  food_type: MyString
+  food_type: "🧆 Kibble"
   brand: MyString
   description: MyString
-  hungry: MyString
+  hungry: "💖 Yes, eat right away"
   amount: 9.99
   left_amount: 9.99
   love: MyString
