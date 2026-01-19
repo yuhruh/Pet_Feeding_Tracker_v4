@@ -24,6 +24,12 @@ class SessionsController < ApplicationController
           redirect_to pets_path
         end
       else
+        local_user = User.find_by(email_address: params[:email_address])
+        if local_user.connected_service.any?
+          flash[:alert] = "You've previously signed in using your #{connected_services_string(local_user)} account. Please use that to sign in."
+        else
+          flash[:alert] = "Try another email address or password."
+        end
         redirect_to new_session_path, alert: "The password is not correct"
       end
     else
@@ -35,5 +41,10 @@ class SessionsController < ApplicationController
     terminate_session
     flash[:alert] = "You have been signed out."
     redirect_to new_session_path
+  end
+
+  private
+  def connected_services_string(user)
+    user.connected_services.map(&:provider).to_sentence(last_word_connector: " or")
   end
 end
