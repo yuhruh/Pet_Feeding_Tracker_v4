@@ -92,41 +92,39 @@
         <span class="flex-shrink text-sm mx-4 text-gray-400 md:text-base">Or, sign up with</span>
         <div class="flex-grow border-t border-gray-400"></div>
     </div>
-      <div class="mt-3 flex justify-center items-center gap-4">
-        <%= form_with url: "/auth/google_oauth2", method: :post, data: { controller: "time-zone", action: "submit->time-zone#setAuthUrl", turbo: false } do |form| %>
-          <button type="submit" class="btn flex items-center justify-center py-2 rounded-md text-sm cursor-pointer">
-            <%= image_tag "icons8-google-40.png", style: "width: 20px; height: 20px;" %>
-            <span class="ml-2 text-softBlue font-semibold underline decoration-2 decoration-softBlue">Google</span>
-          </button>
-        <% end %>
+    <div class="mt-3 flex justify-center items-center gap-4">
+      <%= form_with url: "/auth/google_oauth2", method: :post, data: { controller: "time-zone", action: "submit->time-zone#setAuthUrl", turbo: false } do |form| %>
+        <button type="submit" class="btn flex items-center justify-center py-2 rounded-md text-sm cursor-pointer">
+          <%= image_tag "icons8-google-40.png", style: "width: 20px; height: 20px;" %>
+          <span class="ml-2 text-softBlue font-semibold underline decoration-2 decoration-softBlue">Google</span>
+        </button>
+      <% end %>
 
-        <%= form_with url: "/auth/line", method: :post, data: { controller: "time-zone", action: "submit->time-zone#setAuthUrl", turbo: false } do |form| %>
-          <button type="submit" class="btn flex items-center justify-center py-2 rounded-md text-sm cursor-pointer">
-            <%= image_tag "icons8-line-48.png", style: "width: 20px; height: 20px;" %>
-            <span class="ml-2 text-softBlue font-semibold underline decoration-2 decoration-softBlue">Line</span>
-          </button>
-        <% end %>
+      <%= form_with url: "/auth/line", method: :post, data: { controller: "time-zone", action: "submit->time-zone#setAuthUrl", turbo: false } do |form| %>
+        <button type="submit" class="btn flex items-center justify-center py-2 rounded-md text-sm cursor-pointer">
+          <%= image_tag "icons8-line-48.png", style: "width: 20px; height: 20px;" %>
+          <span class="ml-2 text-softBlue font-semibold underline decoration-2 decoration-softBlue">Line</span>
+        </button>
+      <% end %>
 
-        <% if Rails.env.development? %>
-          <%= button_to "/auth/developer", method: :post, data: {turbo: false}, class: "btn flex items-center justify-center py-2 rounded-md text-sm cursor-pointer" do %>
-            <span class="ml-2 text-softBlue font-semibold underline decoration-2 decoration-softBlue">Developer</span>
-          <% end %>
+      <% if Rails.env.development? %>
+        <%= button_to "/auth/developer", method: :post, data: {turbo: false}, class: "btn flex items-center justify-center py-2 rounded-md text-sm cursor-pointer" do %>
+          <span class="ml-2 text-softBlue font-semibold underline decoration-2 decoration-softBlue">Developer</span>
         <% end %>
-      </div>
-      <span id="HelpBlock" class="text-center text-gray-800">If you are using <%= image_tag "icons8-google-40.png", style: "width: 20px; height: 20px;", class: "inline-block align-middle" %> to sign up, please use 
-        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 48 48" class="w-6 h-6 inline-block align-middle">
-          <path fill="#ffc107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path>
-          <path fill="#ff3d00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path>
-          <path fill="#4caf50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.657-3.356-11.303-7.918l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path>
-          <path fill="#1976d2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.574l6.19,5.238C39.902,35.688,44,30.138,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path>
-        </svg> Chrome / <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 inline-block align-middle">
-          <rect width="24" height="24" fill="none"/>
-          <path d="M2.74,10.81C3.83-1.36,22.5-1.36,21.2,13.56H8.61c0,4.29,5.81,5.65,10.93,2.75v4.22C13.25,23.88,5,21.43,5,14.09a7.86,7.86,0,0,1,5-7.28,7,7,0,0,0-1.43,3.24H15.7C15.7,2.93,5.9,5.57,2.74,10.81Z"/>
-        </svg> Edge / <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 135.47 135.47" class="w-6 h-6 inline-block align-middle">
-          <defs><linearGradient id="linearGradient892" x1="45.022" x2="103.7" y1="13.922" y2="109.33" gradientTransform="matrix(1.1389 0 0 1.1389 -9.419 -9.419)" gradientUnits="userSpaceOnUse"><stop stop-color="#FFC700" offset="0"/><stop stop-color="#FF8500" offset=".22"/><stop stop-color="#FF3200" offset=".5"/><stop stop-color="#E1000F" offset=".77"/><stop stop-color="#C0002A" offset="1"/></linearGradient><linearGradient id="linearGradient884" x1="68.527" x2="68.527" y1="12.832" y2="123.3" gradientTransform="matrix(1.1389 0 0 1.1389 -9.419 -9.419)" gradientUnits="userSpaceOnUse"><stop stop-color="#00A1E0" offset="0"/><stop stop-color="#0086CF" offset=".13"/><stop stop-color="#005FB8" offset=".38"/><stop stop-color="#003791" offset=".7"/><stop stop-color="#00257D" offset="1"/></linearGradient><linearGradient id="linearGradient876" x1="61.531" x2="123.4" y1="62.28" y2="100.13" gradientTransform="matrix(1.1389 0 0 1.1389 -9.419 -9.419)" gradientUnits="userSpaceOnUse"><stop stop-color="#FFC700" offset="0"/><stop stop-color="#FF8500" offset=".22"/><stop stop-color="#FF3200" offset=".5"/><stop stop-color="#E1000F" offset=".77"/><stop stop-color="#C0002A" offset="1"/></linearGradient><linearGradient id="linearGradient868" x1="12.832" x2="123.3" y1="68.527" y2="68.527" gradientTransform="matrix(1.1389 0 0 1.1389 -9.419 -9.419)" gradientUnits="userSpaceOnUse"><stop stop-color="#FF3200" offset="0"/><stop stop-color="#E1000F" offset=".13"/><stop stop-color="#C0002A" offset=".38"/><stop stop-color="#890057" offset=".7"/><stop stop-color="#750065" offset="1"/></linearGradient></defs>
-          <g transform="translate(2.2133 -2.2133)"><path d="m106.9 36.355c-2.82-3.898-6.35-7.22-10.37-9.75-10.58-6.67-23.5-9.1-36.1-6.4-14.2 3-26.5 11.6-34.2 24.1-7.6 12.5-9.7 27.4-5.8 41.5 3.8 14.1 12.9 26 25.4 33.1 12.5 7.1 27.1 8.6 40.8 4.4 13.7-4.2 25.2-13.7 32.2-26.6 7-12.9 8.5-27.8 4.2-41.5-2.2-7-5.6-13.4-10-18.9zm-1.1 4.2c3.8 4.8 6.8 10.4 8.6 16.6 4 12.8 2.6 26.7-3.8 38.7-6.4 12-17 20.7-29.7 24.6-12.7 3.9-26.3 2.5-38-3.8-11.7-6.3-20-17.2-23.5-29.9-3.5-12.7-1.5-26.5 5.3-38 7-11.5 18.1-20 30.9-22.8 11.7-2.5 23.8-0.2 34.2 6.1 3.6 2.2 6.7 5.1 9.3 8.4z" fill="url(#linearGradient868)" style="paint-order:markers stroke fill"/><path d="m106.9 36.355c-13.2-14.8-33.4-21.3-52.2-16.1-18.8 5.2-33.1 19.8-37.9 38.5-4.8 18.7 1.3 38.9 16.1 52.2 14.8 13.2 35 19.3 53.7 14.1 18.7-5.2 33.1-19.8 37.9-38.5 4.8-18.7-1.3-38.9-17.6-50.2zm-40.2 80.2c-17.8 0-32.3-14.5-32.3-32.3s14.5-32.3 32.3-32.3 32.3 14.5 32.3 32.3-14.5 32.3-32.3 32.3z" fill="url(#linearGradient884)" style="paint-order:markers stroke fill"/><path d="m116.1 55.155c-3.3-13.5-11.5-25.1-23.1-32.4-11.6-7.3-25.6-9.5-38.8-6.1-13.2 3.4-24.6 11.5-31.9 23.1-7.3 11.6-9.5 25.6-6.1 38.8 3.4 13.2 11.5 24.6 23.1 31.9 11.6 7.3 25.6 9.5 38.8 6.1 13.2-3.4 24.6-11.5 31.9-23.1 5.2-8.2 7.3-17.7 6-27-1.3-9.3-5.4-17.8-11.8-24.3z" fill="url(#linearGradient892)" style="paint-order:markers stroke fill"/><path d="m96.37 84.42c-12.7-1.1-22.9-11.4-24-24-1.1-12.7 6.8-23.8 18.1-27.4-5.5-10.1-16.7-16.7-29.1-16.7-18.4 0-33.3 14.9-33.3 33.3s14.9 33.3 33.3 33.3c9.2 0 17.5-3.7 23.5-9.8 1.8 10.3 10.2 18.4 20.8 19.1 11.8 0.8 21.9-8.2 22.7-20-0.1-0.1-0.1-0.1-0.2-0.2-5.2 7.1-13.6 11.8-23.2 12.4-1.1 0.1-2.2 0.1-3.3 0.1-0.8 0-1.6-0.1-2.4-0.1z" fill="url(#linearGradient876)" style="paint-order:markers stroke fill"/></g>
-        </svg> FireFox to open the link</span>
+      <% end %>
     </div>
-
+    <span id="HelpBlock" class="text-center text-gray-500">If you are using <%= image_tag "icons8-google-40.png", style: "width: 20px; height: 20px;", class: "inline-block align-middle" %> to sign up, please use 
+      <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 48 48" class="w-6 h-6 inline-block align-middle">
+        <path fill="#ffc107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path>
+        <path fill="#ff3d00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path>
+        <path fill="#4caf50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.657-3.356-11.303-7.918l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path>
+        <path fill="#1976d2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.574l6.19,5.238C39.902,35.688,44,30.138,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path>
+      </svg> Chrome / <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 inline-block align-middle">
+        <rect width="24" height="24" fill="none"/>
+        <path d="M2.74,10.81C3.83-1.36,22.5-1.36,21.2,13.56H8.61c0,4.29,5.81,5.65,10.93,2.75v4.22C13.25,23.88,5,21.43,5,14.09a7.86,7.86,0,0,1,5-7.28,7,7,0,0,0-1.43,3.24H15.7C15.7,2.93,5.9,5.57,2.74,10.81Z"/>
+      </svg> Edge / <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 135.47 135.47" class="w-6 h-6 inline-block align-middle">
+        <defs><linearGradient id="linearGradient892" x1="45.022" x2="103.7" y1="13.922" y2="109.33" gradientTransform="matrix(1.1389 0 0 1.1389 -9.419 -9.419)" gradientUnits="userSpaceOnUse"><stop stop-color="#FFC700" offset="0"/><stop stop-color="#FF8500" offset=".22"/><stop stop-color="#FF3200" offset=".5"/><stop stop-color="#E1000F" offset=".77"/><stop stop-color="#C0002A" offset="1"/></linearGradient><linearGradient id="linearGradient884" x1="68.527" x2="68.527" y1="12.832" y2="123.3" gradientTransform="matrix(1.1389 0 0 1.1389 -9.419 -9.419)" gradientUnits="userSpaceOnUse"><stop stop-color="#00A1E0" offset="0"/><stop stop-color="#0086CF" offset=".13"/><stop stop-color="#005FB8" offset=".38"/><stop stop-color="#003791" offset=".7"/><stop stop-color="#00257D" offset="1"/></linearGradient><linearGradient id="linearGradient876" x1="61.531" x2="123.4" y1="62.28" y2="100.13" gradientTransform="matrix(1.1389 0 0 1.1389 -9.419 -9.419)" gradientUnits="userSpaceOnUse"><stop stop-color="#FFC700" offset="0"/><stop stop-color="#FF8500" offset=".22"/><stop stop-color="#FF3200" offset=".5"/><stop stop-color="#E1000F" offset=".77"/><stop stop-color="#C0002A" offset="1"/></linearGradient><linearGradient id="linearGradient868" x1="12.832" x2="123.3" y1="68.527" y2="68.527" gradientTransform="matrix(1.1389 0 0 1.1389 -9.419 -9.419)" gradientUnits="userSpaceOnUse"><stop stop-color="#FF3200" offset="0"/><stop stop-color="#E1000F" offset=".13"/><stop stop-color="#C0002A" offset=".38"/><stop stop-color="#890057" offset=".7"/><stop stop-color="#750065" offset="1"/></linearGradient></defs>
+        <g transform="translate(2.2133 -2.2133)"><path d="m106.9 36.355c-2.82-3.898-6.35-7.22-10.37-9.75-10.58-6.67-23.5-9.1-36.1-6.4-14.2 3-26.5 11.6-34.2 24.1-7.6 12.5-9.7 27.4-5.8 41.5 3.8 14.1 12.9 26 25.4 33.1 12.5 7.1 27.1 8.6 40.8 4.4 13.7-4.2 25.2-13.7 32.2-26.6 7-12.9 8.5-27.8 4.2-41.5-2.2-7-5.6-13.4-10-18.9zm-1.1 4.2c3.8 4.8 6.8 10.4 8.6 16.6 4 12.8 2.6 26.7-3.8 38.7-6.4 12-17 20.7-29.7 24.6-12.7 3.9-26.3 2.5-38-3.8-11.7-6.3-20-17.2-23.5-29.9-3.5-12.7-1.5-26.5 5.3-38 7-11.5 18.1-20 30.9-22.8 11.7-2.5 23.8-0.2 34.2 6.1 3.6 2.2 6.7 5.1 9.3 8.4z" fill="url(#linearGradient868)" style="paint-order:markers stroke fill"/><path d="m106.9 36.355c-13.2-14.8-33.4-21.3-52.2-16.1-18.8 5.2-33.1 19.8-37.9 38.5-4.8 18.7 1.3 38.9 16.1 52.2 14.8 13.2 35 19.3 53.7 14.1 18.7-5.2 33.1-19.8 37.9-38.5 4.8-18.7-1.3-38.9-17.6-50.2zm-40.2 80.2c-17.8 0-32.3-14.5-32.3-32.3s14.5-32.3 32.3-32.3 32.3 14.5 32.3 32.3-14.5 32.3-32.3 32.3z" fill="url(#linearGradient884)" style="paint-order:markers stroke fill"/><path d="m116.1 55.155c-3.3-13.5-11.5-25.1-23.1-32.4-11.6-7.3-25.6-9.5-38.8-6.1-13.2 3.4-24.6 11.5-31.9 23.1-7.3 11.6-9.5 25.6-6.1 38.8 3.4 13.2 11.5 24.6 23.1 31.9 11.6 7.3 25.6 9.5 38.8 6.1 13.2-3.4 24.6-11.5 31.9-23.1 5.2-8.2 7.3-17.7 6-27-1.3-9.3-5.4-17.8-11.8-24.3z" fill="url(#linearGradient892)" style="paint-order:markers stroke fill"/><path d="m96.37 84.42c-12.7-1.1-22.9-11.4-24-24-1.1-12.7 6.8-23.8 18.1-27.4-5.5-10.1-16.7-16.7-29.1-16.7-18.4 0-33.3 14.9-33.3 33.3s14.9 33.3 33.3 33.3c9.2 0 17.5-3.7 23.5-9.8 1.8 10.3 10.2 18.4 20.8 19.1 11.8 0.8 21.9-8.2 22.7-20-0.1-0.1-0.1-0.1-0.2-0.2-5.2 7.1-13.6 11.8-23.2 12.4-1.1 0.1-2.2 0.1-3.3 0.1-0.8 0-1.6-0.1-2.4-0.1z" fill="url(#linearGradient876)" style="paint-order:markers stroke fill"/></g>
+      </svg> FireFox to open the link</span>
   </div>
 </div>
