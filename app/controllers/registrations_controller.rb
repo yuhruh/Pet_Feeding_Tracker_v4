@@ -8,19 +8,19 @@ class RegistrationsController < ApplicationController
     if session["omniauth.auth"].present?
       auth_data = session["omniauth.auth"]
       auth_info = auth_data["info"] || {}
-    
+
       # Handle LINE-specific username structure
       if auth_data["provider"] == "line"
         # LINE typically provides displayName or name
-        @user.username = auth_info["name"] || 
-                        auth_info["displayName"] || 
+        @user.username = auth_info["name"] ||
+                        auth_info["displayName"] ||
                         "line_user_#{auth_data['uid']}"
-        
+
         # Email might not be available for LINE without permission
         @user.email_address = auth_info["email"] if auth_info["email"].present?
       else
         # Handle other providers
-        @user.username = auth_info["name"] || auth_info["email"]&.split('@')&.first
+        @user.username = auth_info["name"] || auth_info["email"]&.split("@")&.first
         @user.email_address = auth_info["email"]
       end
     end
