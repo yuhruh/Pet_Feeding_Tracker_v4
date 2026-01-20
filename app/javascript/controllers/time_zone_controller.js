@@ -5,6 +5,6 @@ export default class extends Controller {
 
   connect() {
     this.tzTarget.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    console.log(this.tzTarget.value);
+    console.log("Timezone set in hidden field:", this.tzTarget.value);
   }
 }

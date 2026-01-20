@@ -10,6 +10,7 @@ class OmniAuth::SessionsController < ApplicationController
 
     if Current.user.present?
       flash[:notice] = "#{@service.provider.to_s.humanize} connected"
+      redirect_to pets_path
     else
       start_new_session_for @user
       @user.last_sign_in_at = @user.current_sign_in_at
@@ -22,6 +23,7 @@ class OmniAuth::SessionsController < ApplicationController
         redirect_to new_pet_path
       else
         flash[:notice] = "You have been signed in. Welcome back to Cat Feeding Tracker App. #{Current.user.username.capitalize}"
+        redirect_to pets_path
       end
     end
   end
@@ -77,7 +79,12 @@ class OmniAuth::SessionsController < ApplicationController
     email = user_info.dig(:info, :email)
     username = user_info.dig(:info, :name) || user_info.dig(:info, :email).split("@").first
     random_password = SecureRandom.hex(10)
-    user_timezone = request.env.dig("omniauth.params", "timezone")
+    user_timezone = session["omniauth.timezone"]
+    if user_timezone.blank?
+      Rails.logger.error "OmniAuth create_user: Timezone is missing from session!"
+    else
+      Rails.logger.info "Creating user via OmniAuth. Timezone from session: #{user_timezone}"
+    end
 
     User.create!(
       email_address: email,

@@ -15,14 +15,13 @@ Rails.application.routes.draw do
   # get '/signup', to: "registrations#new", as: :new_registrations
   # post 'registration/create', to: "registrations#create", as: :registrations
   get "/login", to: "sessions#new", as: :new_session
-  resources :passwords, param: :token
+  resources :passwords, only: [:new, :create, :edit, :update], param: :token
   get "/home", to: "pages#hero_section"
   get "/about", to: "pages#about"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   get "auth/:provider/callback", to: "omni_auth/sessions#create"
   post "auth/:provider/callback", to: "omni_auth/sessions#create"
-  get "/auth/:provider/callback", to: "sessions#omniauth"
   get "auth/failure", to: "omni_auth/sessions#failure"
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
