@@ -44,7 +44,7 @@ class User < ApplicationRecord
 
     # Associate the new provider with the user
     user.connected_services.build(provider: auth.provider, uid: auth.uid)
-    
+
     user.save
     user
   end

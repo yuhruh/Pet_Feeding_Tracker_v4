@@ -7,7 +7,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
       callback_path: "/auth/google_oauth2/callback",
       request_path: "/auth/google_oauth2"
     }
-   
+
 
     # provider :line, ENV['LINE_CLIENT_ID'], ENV['LINE_CLIENT_SECRET'], {
     #   :scope => "profile openid email",

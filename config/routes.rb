@@ -11,12 +11,12 @@ Rails.application.routes.draw do
   root "pages#hero_section"
   resource :session, except: [ :new ]
   resource :registrations, only: [ :new, :create ]
-  resource :timezone, only: [:create]
+  resource :timezone, only: [ :create ]
   resource :users, except: [ :new ]
   # get '/signup', to: "registrations#new", as: :new_registrations
   # post 'registration/create', to: "registrations#create", as: :registrations
   get "/login", to: "sessions#new", as: :new_session
-  resources :passwords, only: [:new, :create, :edit, :update], param: :token
+  resources :passwords, only: [ :new, :create, :edit, :update ], param: :token
   get "/home", to: "pages#hero_section"
   get "/about", to: "pages#about"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

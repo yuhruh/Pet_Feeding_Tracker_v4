@@ -46,7 +46,7 @@ class DryFoodsController < ApplicationController
     def set_dry_food
       @dry_food = DryFood.find(params.expect(:id))
     rescue ActiveRecord::RecordNotFound
-      flash[:alert] = t('.not_found')
+      flash[:alert] = t(".not_found")
       redirect_to dry_foods_path
     end
 
