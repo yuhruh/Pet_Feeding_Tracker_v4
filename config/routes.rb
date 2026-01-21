@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   root "pages#hero_section"
   resource :session, except: [ :new ]
   resource :registrations, only: [ :new, :create ]
+  resource :timezone, only: [:create]
   resource :users, except: [ :new ]
   # get '/signup', to: "registrations#new", as: :new_registrations
   # post 'registration/create', to: "registrations#create", as: :registrations

@@ -80,11 +80,7 @@ class OmniAuth::SessionsController < ApplicationController
     username = user_info.dig(:info, :name) || user_info.dig(:info, :email).split("@").first
     random_password = SecureRandom.hex(10)
     user_timezone = session["omniauth.timezone"]
-    if user_timezone.blank?
-      Rails.logger.error "OmniAuth create_user: Timezone is missing from session!"
-    else
-      Rails.logger.info "Creating user via OmniAuth. Timezone from session: #{user_timezone}"
-    end
+    binding.b
 
     User.create!(
       email_address: email,
@@ -94,3 +90,5 @@ class OmniAuth::SessionsController < ApplicationController
       timezone: user_timezone)
   end
 end
+
+# request.env.dig['rack.request.cookie_hash']["omniauth.timezone"]

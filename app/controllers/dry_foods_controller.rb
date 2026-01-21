@@ -45,6 +45,9 @@ class DryFoodsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_dry_food
       @dry_food = DryFood.find(params.expect(:id))
+    rescue ActiveRecord::RecordNotFound
+      flash[:alert] = t('.not_found')
+      redirect_to dry_foods_path
     end
 
     # Only allow a list of trusted parameters through.

@@ -24,4 +24,28 @@ class User < ApplicationRecord
   def new_user?
     sign_in_count == 1
   end
+
+  def self.from_omniauth(auth)
+    # Find the connected account first
+    connected_service = ConnectedService.find_by(provider: auth.provider, uid: auth.uid)
+
+    # If the connected account exists, return its user
+    return connected_service.user if connected_service
+
+    # If no connected account, find or create the user by email
+    user = User.find_or_initialize_by(email_address: auth.info.email)
+
+    # If the user is new, set their details
+    if user.new_record?
+      user.name = auth.info.name       # Assuming you have a 'name' attribute
+      user.password = SecureRandom.hex # Set a random password for OAuth users
+      # You might want to skip email confirmation for OAuth users if you have that feature
+    end
+
+    # Associate the new provider with the user
+    user.connected_services.build(provider: auth.provider, uid: auth.uid)
+    
+    user.save
+    user
+  end
 end

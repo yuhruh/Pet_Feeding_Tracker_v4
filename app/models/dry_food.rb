@@ -4,6 +4,8 @@ class DryFood < ApplicationRecord
 
   before_create :set_left_amount
 
+  private
+
   def set_left_amount
     self.left_amount = amount
   end
