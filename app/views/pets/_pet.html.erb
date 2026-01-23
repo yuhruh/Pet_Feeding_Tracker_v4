@@ -31,7 +31,11 @@
       <div class="flex justify-center text-base space-x-3 mt-3 mb-3 md:text-xl">
         <strong class="capitalize">Birthday:</strong>
         <div class="flex">
-          <%= pet.birthday.strftime("%Y-%m-%d") %>
+          <% if pet.birthday.present? %>
+            <%= pet.birthday.strftime("%Y-%m-%d") %>
+          <% else %>
+            <p>Unknown</p>
+          <% end %>
         </div>
       </div>
 
