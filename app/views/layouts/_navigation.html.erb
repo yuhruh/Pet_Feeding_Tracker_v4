@@ -8,7 +8,6 @@
       <a href="/home#features" class="tracking-wide hover:text-softRed">Features</a>
       <%= link_to "About", about_path, class: "tracking-wide hover:text-softRed" %>
       <%= link_to "Docs", doc_path, class: "tracking-wide hover:text-softRed" %>
-      <%= link_to "Get Started", root_path, class: "tracking-wide hover:text-softRed" %>
       <% if authenticated? %>
           <div class="relative">
             <div class="inline-flex w-full justify-center gap-x-1 5 bg-white px-3 py-2 
@@ -79,7 +78,7 @@
         <%= button_to "Sign Out", session_path, class: "px-8 py-2 text-white bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white", method: :delete %>
 
       <% else %>
-        <%= link_to "Sign Up", new_registrations_path, class: "tracking-wide hover:text-softRed" %>
+        <%= link_to "Get Started", new_registrations_path, class: "px-8 py-2 text-white bg-grayishBlue border-2 border-grayishBlue rounded-lg shadow-md tracking-wide hover:text-grayishBlue hover:bg-white" %>
         <%= link_to "Sign In", new_session_path, class: "px-8 py-2 text-white bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white" %>
       <% end %>
     </div>
