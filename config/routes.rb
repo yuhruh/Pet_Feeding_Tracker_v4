@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   resources :passwords, only: [ :new, :create, :edit, :update ], param: :token
   get "/home", to: "pages#hero_section"
   get "/about", to: "pages#about"
+  get "/doc", to: "pages#doc"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   get "auth/:provider/callback", to: "omni_auth/sessions#create"
