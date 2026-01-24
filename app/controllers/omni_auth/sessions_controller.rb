@@ -80,8 +80,8 @@ class OmniAuth::SessionsController < ApplicationController
     username = user_info.dig(:info, :name) || user_info.dig(:info, :email).split("@").first
     random_password = SecureRandom.hex(10)
     # user_timezone = session["omniauth.timezone"]
-    user_timezone = request.env.dig("omniauth.params", "timezone")
-    binding.b
+    user_timezone = request.env.dig("omniauth.params", "timezone") || session["omniauth.timezone"]
+    # binding.b
 
     User.create!(
       email_address: email,
