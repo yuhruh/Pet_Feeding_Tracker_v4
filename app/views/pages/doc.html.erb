@@ -64,49 +64,125 @@
 
       <h3 class="text-xl font-semibold mb-2">Adding Dry Food</h3>
       <ol class="list-decimal list-inside mb-4">
-        <li><strong>Go to Dry Foods:</strong> Navigate to the "Dry Foods" section.</li>
-        <li><strong>New Dry Food:</strong> Click the "New Dry Food" button.</li>
-        <li><strong>Enter Food Details:</strong> Provide the brand, name, and quantity of the dry food.</li>
-        <li><strong>Save:</strong> Click "Create Dry Food" to add it to your inventory.</li>
+        <li><strong>Go to Dry Foods:</strong> Navigate to the "DryFood Storage" section.</li>
+        <li><strong>New Dry Food:</strong> Click the "Add Dry Food" in the dropdown menu.</li>
+        <li><strong>Enter Food Details:</strong> Provide the brand, food type, description/brand, and quantity of the dry food.</li>
+        <li><strong>Save:</strong> Click "Add Dry Food" to add it to your inventory.</li>
       </ol>
 
       <h3 class="text-xl font-semibold mb-2">Managing Inventory</h3>
       <ul class="list-disc list-inside mb-4">
         <li><strong>View:</strong> See a list of all your dry foods and their current quantities.</li>
-        <li><strong>Edit:</strong> Update the details or quantity of a dry food entry.</li>
         <li><strong>Delete:</strong> Remove a dry food entry from your inventory.</li>
       </ul>
     </div>
 
      <div class="container border-2 border-grayishBlue rounded-lg shadow-lg p-6">
       <h2 class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2">Trackers</h2>
-      <p class="mb-4">Trackers are used to log your pet's daily activities, such as feeding times, walks, and health observations.</p>
+      <p class="mb-4">Trackers are used to log your pet's daily doetary, such as feeding times, amount, and health observations.</p>
 
       <h3 class="text-xl font-semibold mb-2">Creating a Tracker</h3>
       <ol class="list-decimal list-inside mb-4">
         <li><strong>Go to Trackers:</strong> Navigate to the "Trackers" section.</li>
-        <li><strong>New Tracker:</strong> Click the "New Tracker" button.</li>
-        <li><strong>Select Pet:</strong> Choose the pet you want to create a tracker for.</li>
-        <li><strong>Enter Details:</strong> Fill in the activity details, such as the type of activity, time, and any notes.</li>
-        <li><strong>Save:</strong> Click "Create Tracker" to log the activity.</li>
+        <li><strong>New Tracker:</strong> In petname's tracker page, click on "New Tracker For Petname" button</li>
+        <li><strong>Select Pet:</strong> Choose the "Petname's Tracker" in the dropdown menu.</li>
+        <li><strong>Enter Details:</strong> Fill in the dietary details, such as the type of food, feeding time, and any notes.</li>
+        <li><strong>Save:</strong> Click "Add A Record For petname" to log the dietary information you want to create for.</li>
       </ol>
 
       <h3 class="text-xl font-semibold mb-2">Importing Trackers from CSV</h3>
       <p class="mb-4">For bulk data entry, you can import trackers from a CSV file.</p>
       <ol class="list-decimal list-inside mb-4">
         <li><strong>Go to Trackers:</strong> Navigate to the "Trackers" section.</li>
-        <li><strong>Import CSV:</strong> Click the "Import CSV" button.</li>
+        <li><strong>Import CSV:</strong> Click the "Choose File" button.</li>
         <li><strong>Choose File:</strong> Select the CSV file you want to import.</li>
         <li><strong>Upload:</strong> Click "Import" to upload and process the file.</li>
       </ol>
 
-      <p class="mb-2">The CSV file should have the following columns:</p>
+      <h3 class="text-xl font-semibold mb-2">📋 Import Guide Summary</h3>
+      <p class="mb-4">To successfully import your cat's diet records, please ensure your CSV file includes the following columns and follows these value conventions:</p>
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="px-4 py-2 border-b text-center">Column Name</th>
+              <th class="px-4 py-2 border-b text-center">Description</th>
+              <th class="px-4 py-2 border-b text-center">Example Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="px-4 py-2 border-b text-center">date</td>
+              <td class="px-4 py-2 border-b text-center">The date of feeding</td>
+              <td class="px-4 py-2 border-b text-center">2026-01-14</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 border-b text-center">feed_time</td>
+              <td class="px-4 py-2 border-b text-center">The time food was served</td>
+              <td class="px-4 py-2 border-b text-center">19:50</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 border-b text-center">food_type</td>
+              <td class="px-4 py-2 border-b text-center">Type of food (Wet/Dry)</td>
+              <td class="px-4 py-2 border-b text-center">Wet</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 border-b text-center">brand</td>
+              <td class="px-4 py-2 border-b text-center">Brand name</td>
+              <td class="px-4 py-2 border-b text-center">ciao</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 border-b text-center">description</td>
+              <td class="px-4 py-2 border-b text-center">Product name or flavor</td>
+              <td class="px-4 py-2 border-b text-center">IMC-222 Jelly Cup</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 border-b text-center">amount</td>
+              <td class="px-4 py-2 border-b text-center">Total amount served (g)</td>
+              <td class="px-4 py-2 border-b text-center">105</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 border-b text-center">hungry</td>
+              <td class="px-4 py-2 border-b text-center">Cat's appetite status</td>
+              <td class="px-4 py-2 border-b text-center">See below</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="text-lg font-semibold mt-4 mb-2">🥣 "Hungry" Column Options</h4>
+      <p class="mb-2">Please use one of these exact phrases (including the symbols) for the hungry column:</p>
       <ul class="list-disc list-inside">
-        <li><code>pet_name</code></li>
-        <li><code>activity_type</code></li>
-        <li><code>activity_time</code></li>
-        <li><code>notes</code></li>
+        <li>💖 Yes, eat right away</li>
+        <li>❌ No, not interested</li>
+        <li>🔺 No, not really. Ate A Little</li>
       </ul>
+
+      <h4 class="text-lg font-semibold mt-4 mb-2">💡 CSV Example Row</h4>
+      <p class="mb-2">You can use this format for your file to import:</p>
+      <table>
+        <thead>
+          <tr class="bg-sky-100">
+            <th class="px-4 py-2 border-b text-center">date</th>
+            <th class="px-4 py-2 border-b text-center">feed_time</th>
+            <th class="px-4 py-2 border-b text-center">food_type</th>
+            <th class="px-4 py-2 border-b text-center">brand</th>
+            <th class="px-4 py-2 border-b text-center">description</th>
+            <th class="px-4 py-2 border-b text-center">amount</th>
+            <th class="px-4 py-2 border-b text-center">hungry</th>
+          </tr>
+        </thead>
+          <tr>
+            <td class="px-4 py-2 border-b text-center">2026-01-14</td>
+            <td class="px-4 py-2 border-b text-center">19:50</td>
+            <td class="px-4 py-2 border-b text-center">Wet</td>
+            <td class="px-4 py-2 border-b text-center">ciao</td>
+            <td class="px-4 py-2 border-b text-center">IMC-222 果凍杯 鮪魚+雞肉+干貝 x3</td>
+            <td class="px-4 py-2 border-b text-center">105</td>
+            <td class="px-4 py-2 border-b text-center">💖 Yes, eat right away</td>
+          </tr>
+        <tbody>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
