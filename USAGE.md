@@ -24,7 +24,7 @@ You can also sign in using a third-party provider for a more streamlined experie
 
 ### Timezone
 
-Set your local timezone in your account settings to ensure all tracking data is accurate.
+App will automatically detect where your local timezone when seeting your accounts to ensure all tracking data is accurate.
 
 ## Pet Management
 

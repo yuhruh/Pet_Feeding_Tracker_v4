@@ -7,144 +7,163 @@
     <div class="container border-2 border-grayishBlue rounded-lg shadow-lg p-6">
       <h2 class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2">User Account</h2>
       <p class="mb-4">Your user account is the central hub for managing your pets and tracking their dietary.</p>
+      <div class="flex flex-col md:flex-row">
+        <div class="flex flex-col">
+          <h3 class="text-xl font-semibold mb-2">Creating an Account</h3>
+          <ol class="list-decimal list-inside mb-4">
+            <li><strong>Sign Up:</strong> Navigate to the "Get Started" page.</li>
+            <li>There are 4 ways to create account: </li>
+              <div class="font-semibold ml-4 mt-1">
+                Enter Your Details (App's Form): Provide your email address and a secure password.
+              </div>
+              <div class="font-semibold ml-4 mt-1">
+                Google/GitHub: Using Google or GitHub to create account.
+              </div>
+              <div class="font-semibold ml-4 mt-1">
+                Line: Using Line to create account.
+              </div>
+              <div class="font-semibold text-softBlue text-sm ml-4 mt-1 mb-3">Using line to sign up, the page will redirect to the form for filling email and password</div>
+            </li>
+            <li><strong>Register:</strong> Click the "Sign Up" button to create your account.</li>
+          </ol>
 
-      <h3 class="text-xl font-semibold mb-2">Creating an Account</h3>
-      <ol class="list-decimal list-inside mb-4">
-        <li><strong>Sign Up:</strong> Navigate to the "Get Started" page.</li>
-        <li>There are 4 ways to create account: </li>
-          <div class="font-semibold ml-4 mt-1">
-            Enter Your Details (App's Form): Provide your email address and a secure password.
-          </div>
-          <div class="font-semibold ml-4 mt-1">
-            Google/GitHub: Using Google or GitHub to create account.
-          </div>
-          <div class="font-semibold ml-4 mt-1">
-            Line: Using Line to create account.
-          </div>
-          <div class="font-semibold text-softBlue text-sm ml-4 mt-1 mb-3">Using line to sign up, the page will redirect to the form for filling email and password</div>
-        </li>
-        <li><strong>Register:</strong> Click the "Sign Up" button to create your account.</li>
-      </ol>
+          <h3 class="text-xl font-semibold mb-2">Signing In</h3>
+          <ol class="list-decimal list-inside mb-4">
+            <li><strong>Sign In:</strong> Go to the "Sign In" page.</li>
+            <li><strong>Enter Your Credentials:</strong> Enter your email and password.</li>
+            <li><strong>Access Your Account:</strong> Click the "Sign In" button to access your dashboard.</li>
+          </ol>
 
-      <h3 class="text-xl font-semibold mb-2">Signing In</h3>
-      <ol class="list-decimal list-inside mb-4">
-        <li><strong>Sign In:</strong> Go to the "Sign In" page.</li>
-        <li><strong>Enter Your Credentials:</strong> Enter your email and password.</li>
-        <li><strong>Access Your Account:</strong> Click the "Sign In" button to access your dashboard.</li>
-      </ol>
+          <h3 class="text-xl font-semibold mb-2">Third-Party Sign-In</h3>
+          <p class="mb-4">You can also sign in using a third-party provider for a more streamlined experience.</p>
 
-      <h3 class="text-xl font-semibold mb-2">Third-Party Sign-In</h3>
-      <p class="mb-4">You can also sign in using a third-party provider for a more streamlined experience.</p>
-
-      <h3 class="text-xl font-semibold mb-2">Timezone</h3>
-      <p class="mb-4">App will automatically set your local timezone during your account settings to ensure all tracking data is accurate.</p>
+          <h3 class="text-xl font-semibold mb-2">Timezone</h3>
+          <p class="mb-4">App will automatically set your local timezone during your account settings to ensure all tracking data is accurate.</p>
+        </div>
+        
+        <%=image_tag("User_account.png", class: "w-full md:w-1/2 p-2") %>
+      </div>
     </div>
 
     <div class="container border-2 border-grayishBlue rounded-lg shadow-lg p-6">
       <h2 class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2">Pet Management</h2>
       <p class="mb-4">The "Pets" section allows you to create and manage profiles for each of your pets.</p>
+      <div class="flex flex-col md:flex-row">
+        <div class="flex flex-col my-auto">
+          <h3 class="text-xl font-semibold mb-2">Adding a Pet</h3>
+          <ol class="list-decimal list-inside mb-4">
+            <li><strong>Go to Pets:</strong> Navigate to the "User's Cats" section from the main menu.</li>
+            <li><strong>New Pet:</strong> Click the "Add A Cat" button.</li>
+            <li><strong>Enter Pet Details:</strong> Fill in your pet's name, species, and other relevant information.</li>
+            <li><strong>Save:</strong> Click "Add A Cat" to save the profile.</li>
+          </ol>
 
-      <h3 class="text-xl font-semibold mb-2">Adding a Pet</h3>
-      <ol class="list-decimal list-inside mb-4">
-        <li><strong>Go to Pets:</strong> Navigate to the "User's Cats" section from the main menu.</li>
-        <li><strong>New Pet:</strong> Click the "Add A Cat" button.</li>
-        <li><strong>Enter Pet Details:</strong> Fill in your pet's name, species, and other relevant information.</li>
-        <li><strong>Save:</strong> Click "Add A Cat" to save the profile.</li>
-      </ol>
-
-      <h3 class="text-xl font-semibold mb-2">Viewing and Editing Pets</h3>
-      <ul class="list-disc list-inside mb-4">Navigate to the "User's Cats" section from the main menu. The dropdown menu will show all the pets' name. Click on a pet's name to see their detailed profile.</li>
-        <li><strong>Edit:</strong> From the pet's profile page, click "Edit pet's name Porfile" to update their information.</li>
-      </ul>
+          <h3 class="text-xl font-semibold mb-2">Viewing and Editing Pets</h3>
+          <ul class="list-disc list-inside mb-4">Navigate to the "User's Cats" section from the main menu. The dropdown menu will show all the pets' name. Click on a pet's name to see their detailed profile.</li>
+            <li><strong>Edit:</strong> From the pet's profile page, click "Edit pet's name Porfile" to update their information.</li>
+          </ul>
+        </div>
+        <%=image_tag("pet_management.png", class: "w-full md:w-1/2 p-2") %>
+      </div>
     </div>
 
-     <div class="container border-2 border-grayishBlue rounded-lg shadow-lg p-6">
+    <div class="container border-2 border-grayishBlue rounded-lg shadow-lg p-6">
       <h2 class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2">Dry Food Storage</h2>
       <p class="mb-4">The "Dry Food Storage" feature helps you keep track of your pet's dry food inventory.</p>
 
-      <h3 class="text-xl font-semibold mb-2">Adding Dry Food</h3>
-      <ol class="list-decimal list-inside mb-4">
-        <li><strong>Go to Dry Foods:</strong> Navigate to the "DryFood Storage" section.</li>
-        <li><strong>New Dry Food:</strong> Click the "Add Dry Food" in the dropdown menu.</li>
-        <li><strong>Enter Food Details:</strong> Provide the brand, food type, description/brand, and quantity of the dry food.</li>
-        <li><strong>Save:</strong> Click "Add Dry Food" to add it to your inventory.</li>
-      </ol>
+      <div class="flex flex-col md:flex-row">
+        <div class="flex flex-col my-auto">
+          <h3 class="text-xl font-semibold mb-2">Adding Dry Food</h3>
+          <ol class="list-decimal list-inside mb-4">
+            <li><strong>Go to Dry Foods:</strong> Navigate to the "DryFood Storage" section.</li>
+            <li><strong>New Dry Food:</strong> Click the "Add Dry Food" in the dropdown menu.</li>
+            <li><strong>Enter Food Details:</strong> Provide the brand, food type, description/brand, and quantity of the dry food.</li>
+            <li><strong>Save:</strong> Click "Add Dry Food" to add it to your inventory.</li>
+          </ol>
 
-      <h3 class="text-xl font-semibold mb-2">Managing Inventory</h3>
-      <ul class="list-disc list-inside mb-4">
-        <li><strong>View:</strong> See a list of all your dry foods and their current quantities.</li>
-        <li><strong>Delete:</strong> Remove a dry food entry from your inventory.</li>
-      </ul>
+          <h3 class="text-xl font-semibold mb-2">Managing Inventory</h3>
+          <ul class="list-disc list-inside mb-4">
+            <li><strong>View:</strong> See a list of all your dry foods and their current quantities.</li>
+            <li><strong>Delete:</strong> Remove a dry food entry from your inventory.</li>
+          </ul>
+        </div>
+        <%=image_tag("Dry_food.png", class: "w-full md:w-1/2 p-2") %>
+      </div>
     </div>
 
     <div class="container border-2 border-grayishBlue rounded-lg shadow-lg p-6">
       <h2 class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2">Trackers</h2>
       <p class="mb-4">Trackers are used to log your pet's daily doetary, such as feeding times, amount, and health observations.</p>
 
-      <h3 class="text-xl font-semibold mb-2">Creating a Tracker</h3>
-      <ol class="list-decimal list-inside mb-4">
-        <li><strong>Go to Trackers:</strong> Navigate to the "Trackers" section.</li>
-        <li><strong>New Tracker:</strong> In petname's tracker page, click on "New Tracker For Petname" button</li>
-        <li><strong>Select Pet:</strong> Choose the "Petname's Tracker" in the dropdown menu.</li>
-        <li><strong>Enter Details:</strong> Fill in the dietary details, such as the type of food, feeding time, and any notes.</li>
-        <li><strong>Save:</strong> Click "Add A Record For petname" to log the dietary information you want to create for.</li>
-      </ol>
+      <div class="flex flex-col md:flex-row">
+        <div class="flex flex-col">
+          <h3 class="text-xl font-semibold mb-2">Creating a Tracker</h3>
+          <ol class="list-decimal list-inside mb-4">
+            <li><strong>Go to Trackers:</strong> Navigate to the "Trackers" section.</li>
+            <li><strong>New Tracker:</strong> In petname's tracker page, click on "New Tracker For Petname" button</li>
+            <li><strong>Select Pet:</strong> Choose the "Petname's Tracker" in the dropdown menu.</li>
+            <li><strong>Enter Details:</strong> Fill in the dietary details, such as the type of food, feeding time, and any notes.</li>
+            <li><strong>Save:</strong> Click "Add A Record For petname" to log the dietary information you want to create for.</li>
+          </ol>
 
-      <h3 class="text-xl font-semibold mb-2">Importing Trackers from CSV</h3>
-      <p class="mb-4">For bulk data entry, you can import trackers from a CSV file.</p>
-      <ol class="list-decimal list-inside mb-4">
-        <li><strong>Go to Trackers:</strong> Navigate to the "Trackers" section.</li>
-        <li><strong>Import CSV:</strong> Click the "Choose File" button.</li>
-        <li><strong>Choose File:</strong> Select the CSV file you want to import.</li>
-        <li><strong>Upload:</strong> Click "Import" to upload and process the file.</li>
-      </ol>
+          <h3 class="text-xl font-semibold mb-2">Importing Trackers from CSV</h3>
+          <p class="mb-4">For bulk data entry, you can import trackers from a CSV file.</p>
+          <ol class="list-decimal list-inside mb-4">
+            <li><strong>Go to Trackers:</strong> Navigate to the "Trackers" section.</li>
+            <li><strong>Import CSV:</strong> Click the "Choose File" button.</li>
+            <li><strong>Choose File:</strong> Select the CSV file you want to import.</li>
+            <li><strong>Upload:</strong> Click "Import" to upload and process the file.</li>
+          </ol>
+        </div>
+        <%=image_tag("Trackers.png", class: "w-full md:w-1/2 p-2") %>
+      </div>
 
       <h3 class="text-xl font-semibold mb-2">📋 Import Guide Summary</h3>
       <p class="mb-4">To successfully import your cat's diet records, please ensure your CSV file includes the following columns and follows these value conventions:</p>
       <div class="overflow-x-auto">
-        <table class="min-w-full bg-white border border-gray-200">
+        <table class="min-w-full bg-white border border-gray-200 dark:bg-slate-700 rounded-lg">
           <thead>
-            <tr class="bg-gray-100">
-              <th class="px-4 py-2 border-b text-center">Column Name</th>
-              <th class="px-4 py-2 border-b text-center">Description</th>
-              <th class="px-4 py-2 border-b text-center">Example Value</th>
+            <tr class="bg-gray-100 dark:bg-black">
+              <th class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">Column Name</th>
+              <th class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">Description</th>
+              <th class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">Example Value</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="px-4 py-2 border-b text-center">date</td>
-              <td class="px-4 py-2 border-b text-center">The date of feeding</td>
-              <td class="px-4 py-2 border-b text-center">2026-01-14</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">date</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">The date of feeding</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">2026-01-14</td>
             </tr>
             <tr>
-              <td class="px-4 py-2 border-b text-center">feed_time</td>
-              <td class="px-4 py-2 border-b text-center">The time food was served</td>
-              <td class="px-4 py-2 border-b text-center">19:50</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">feed_time</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">The time food was served</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">19:50</td>
             </tr>
             <tr>
-              <td class="px-4 py-2 border-b text-center">food_type</td>
-              <td class="px-4 py-2 border-b text-center">Type of food (Wet/Dry)</td>
-              <td class="px-4 py-2 border-b text-center">Wet</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">food_type</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">Type of food (Wet/Dry)</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">Wet</td>
             </tr>
             <tr>
-              <td class="px-4 py-2 border-b text-center">brand</td>
-              <td class="px-4 py-2 border-b text-center">Brand name</td>
-              <td class="px-4 py-2 border-b text-center">ciao</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">brand</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">Brand name</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">ciao</td>
             </tr>
             <tr>
-              <td class="px-4 py-2 border-b text-center">description</td>
-              <td class="px-4 py-2 border-b text-center">Product name or flavor</td>
-              <td class="px-4 py-2 border-b text-center">IMC-222 Jelly Cup</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">description</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">Product name or flavor</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">IMC-222 Jelly Cup</td>
             </tr>
             <tr>
-              <td class="px-4 py-2 border-b text-center">amount</td>
-              <td class="px-4 py-2 border-b text-center">Total amount served (g)</td>
-              <td class="px-4 py-2 border-b text-center">105</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">amount</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">Total amount served (g)</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">105</td>
             </tr>
             <tr>
-              <td class="px-4 py-2 border-b text-center">hungry</td>
-              <td class="px-4 py-2 border-b text-center">Cat's appetite status</td>
-              <td class="px-4 py-2 border-b text-center">See below</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">hungry</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">Cat's appetite status</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">See below</td>
             </tr>
           </tbody>
         </table>
@@ -160,66 +179,68 @@
       <h4 class="text-lg font-semibold mt-4 mb-2">💡 CSV Example Row</h4>
       <p class="mb-2">You can use this format for your file to import:</p>
       <div class="hidden lg:block overflow-x-auto">
-        <table class="border-collapse border border-slate-400">
+        <table class="border-collapse border border-slate-200 dark:bg-slate-700 rounded-lg">
           <thead>
-            <tr class="bg-sky-100">
-              <th class="px-4 py-2 border-b text-center border border-slate-300">date</th>
-              <th class="px-4 py-2 border-b text-center border border-slate-300">feed_time</th>
-              <th class="px-4 py-2 border-b text-center border border-slate-300">food_type</th>
-              <th class="px-4 py-2 border-b text-center border border-slate-300">brand</th>
-              <th class="px-4 py-2 border-b text-center border border-slate-300">description</th>
-              <th class="px-4 py-2 border-b text-center border border-slate-300">amount</th>
-              <th class="px-4 py-2 border-b text-center border border-slate-300">hungry</th>
+            <tr class="bg-sky-100 dark:bg-slate-900">
+              <th class="px-4 py-2 text-center border border-slate-300 dark:text-white">date</th>
+              <th class="px-4 py-2 text-center border border-slate-300 dark:text-white">feed_time</th>
+              <th class="px-4 py-2 text-center border border-slate-300 dark:text-white">food_type</th>
+              <th class="px-4 py-2 text-center border border-slate-300 dark:text-white">brand</th>
+              <th class="px-4 py-2 text-center border border-slate-300 dark:text-white">description</th>
+              <th class="px-4 py-2 text-center border border-slate-300 dark:text-white">amount</th>
+              <th class="px-4 py-2 text-center border border-slate-300 dark:text-white">hungry</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="px-4 py-2 border-b text-center border border-slate-300">2026-01-14</td>
-              <td class="px-4 py-2 border-b text-center border border-slate-300">19:50, 21:46, </td>
-              <td class="px-4 py-2 border-b text-center border border-slate-300">Wet</td>
-              <td class="px-4 py-2 border-b text-center border border-slate-300">ciao</td>
-              <td class="px-4 py-2 border-b text-center border border-slate-300">IMC-222 果凍杯 鮪魚+雞肉+干貝 x3</td>
-              <td class="px-4 py-2 border-b text-center border border-slate-300">105</td>
-              <td class="px-4 py-2 border-b text-center border border-slate-300">💖 Yes, eat right away</td>
+              <td class="px-4 py-2 text-center border border-slate-300 dark:text-white">2026-01-14</td>
+              <td class="px-4 py-2 text-center border border-slate-300 dark:text-white">19:50, 21:46, </td>
+              <td class="px-4 py-2 text-center border border-slate-300 dark:text-white">Wet</td>
+              <td class="px-4 py-2 text-center border border-slate-300 dark:text-white">ciao</td>
+              <td class="px-4 py-2 text-center border border-slate-300 dark:text-white">IMC-222 果凍杯 鮪魚+雞肉+干貝 x3</td>
+              <td class="px-4 py-2 text-center border border-slate-300 dark:text-white">105</td>
+              <td class="px-4 py-2 text-center border border-slate-300 dark:text-white">💖 Yes, eat right away</td>
             </tr>
           </tbody>
         </table>
+        <%=image_tag("import_csv.png", class: "w-full h-auto p-2") %>
       </div>
 
       <!-- Transposed Table for Small Screens -->
       <div class="block lg:hidden overflow-x-auto">
-        <table class="table-auto mb-2 px-2 w-full shadow-md border border-slate-400">
+        <table class="table-auto mb-2 px-2 w-full shadow-md border border-slate-400 dark:bg-slate-700 rounded-lg">
           <tbody>
             <tr class="border-b">
-              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300">date</th>
-                <td class="text-sm text-center p-2 border-t border border-slate-300">2026-01-14</td>
+              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300 dark:bg-black dark:text-white">date</th>
+                <td class="text-sm text-center p-2 border border-slate-300 dark:text-white">2026-01-14</td>
              </tr>
              <tr class="border-b">
-              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300">feed_time</th>
-                <td class="text-sm text-center p-2 border border-slate-300">19:50, 21:46, </td>
+              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300 dark:bg-black dark:text-white">feed_time</th>
+                <td class="text-sm text-center p-2 border border-slate-300 dark:text-white">19:50, 21:46, </td>
              </tr>
              <tr class="border-b">
-              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300">food_type</th>
-                <td class="text-sm text-center p-2 border border-slate-300">Wet</td>
+              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300 dark:bg-black dark:text-white">food_type</th>
+                <td class="text-sm text-center p-2 border border-slate-300 dark:text-white">Wet</td>
              </tr>
              <tr class="border-b">
-              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300">brand</th>
-                <td class="text-sm text-center p-2 border border-slate-300">ciao</td>
+              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300 dark:bg-black dark:text-white">brand</th>
+                <td class="text-sm text-center p-2 border border-slate-300 dark:text-white">ciao</td>
              </tr>
              <tr class="border-b">
-              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300">description</th>
-                <td class="text-sm text-center p-2 border border-slate-300">IMC-222 果凍杯 鮪魚+雞肉+干貝 x3</td>
+              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300 dark:bg-black dark:text-white">description</th>
+                <td class="text-sm text-center p-2 border border-slate-300 dark:text-white">IMC-222 果凍杯 鮪魚+雞肉+干貝 x3</td>
              </tr>
              <tr class="border-b">
-              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300">amount</th>
-                <td class="text-sm text-center p-2 border border-slate-300">105</td>
+              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300 dark:bg-black dark:text-white">amount</th>
+                <td class="text-sm text-center p-2 border border-slate-300 dark:text-white">105</td>
              </tr>
              <tr class="border-b">
-              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300">hungry</th>
-                <td class="text-sm text-center p-2 border border-slate-300">💖 Yes, eat right away</td>
+              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300 dark:bg-black dark:text-white">hungry</th>
+                <td class="text-sm text-center p-2 border border-slate-300 dark:text-white">💖 Yes, eat right away</td>
              </tr>
           </tbody>
         </table>
+        <%=image_tag("import_csv.png", class: "w-full h-auto p-2") %>
       </div>
     </div>
   </div>
