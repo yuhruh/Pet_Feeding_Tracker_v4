@@ -94,12 +94,29 @@ document.addEventListener('turbo:load', () => {
 
   // Handle hamburger menu
   if (hamburgerBtn && hamburgerMenu) {
-    hamburgerBtn.addEventListener('click', (event) => {
-      event.stopPropagation();
+    const toggleHamburgerMenu = () => {
       hamburgerBtn.classList.toggle('open');
       hamburgerMenu.classList.toggle('flex');
       hamburgerMenu.classList.toggle('hidden');
+    };
+
+    hamburgerBtn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      toggleHamburgerMenu();
     });
+
+    // Close hamburger menu on window resize if screen is larger than lg breakpoint
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) { // Tailwind's lg breakpoint
+        if (!hamburgerMenu.classList.contains('hidden')) {
+          hamburgerBtn.classList.remove('open');
+          hamburgerMenu.classList.add('hidden');
+          hamburgerMenu.classList.remove('flex');
+        }
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
   }
 
   // Global click listener to close all menus
