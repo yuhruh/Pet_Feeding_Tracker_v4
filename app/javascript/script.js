@@ -1,26 +1,16 @@
-// Encapsulate all setup logic in a function to be called on page loads
-function setupPage() {
-  // 1. Setup tab switching functionality
+document.addEventListener('turbo:load', () => {
+  // --- Tab Switching Logic ---
   const tabs = document.querySelectorAll('.tab');
   const panels = document.querySelectorAll('.panel');
 
   if (tabs.length > 0 && panels.length > 0) {
     const onTabClick = (e) => {
-      // Deactivate all tabs
-      tabs.forEach((tab) => {
+      tabs.forEach(tab => {
         if (tab.children[0]) {
-          tab.children[0].classList.remove(
-            'border-softRed',
-            'border-b-4',
-            'md:border-b-0'
-          );
+          tab.children[0].classList.remove('border-softRed', 'border-b-4', 'md:border-b-0');
         }
       });
-
-      // Hide all panels
-      panels.forEach((panel) => panel.classList.add('hidden'));
-
-      // Activate the clicked tab and corresponding panel
+      panels.forEach(panel => panel.classList.add('hidden'));
       if (e.target) {
         e.target.classList.add('border-softRed', 'border-b-4');
         const panelString = e.target.getAttribute('data-target');
@@ -33,23 +23,17 @@ function setupPage() {
         }
       }
     };
-
-    tabs.forEach((tab) => tab.addEventListener('click', onTabClick));
+    tabs.forEach(tab => tab.addEventListener('click', onTabClick));
   }
 
-  // 2. Setup theme toggling functionality
+  // --- Dark/Light Mode Toggle ---
   const themeToggleBtn = document.getElementById('theme-toggle');
   if (themeToggleBtn) {
     const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
     const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
 
-    // Function to apply the correct theme and icon state
     const applyTheme = () => {
-      if (
-        localStorage.getItem('color-theme') === 'dark' ||
-        (!('color-theme' in localStorage) &&
-          window.matchMedia('(prefers-color-scheme: dark)').matches)
-      ) {
+      if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark');
         if (themeToggleLightIcon) themeToggleLightIcon.classList.remove('hidden');
         if (themeToggleDarkIcon) themeToggleDarkIcon.classList.add('hidden');
@@ -60,13 +44,9 @@ function setupPage() {
       }
     };
 
-    // Function to handle the button click
     const toggleMode = () => {
-      // Toggle icon visibility
       if (themeToggleDarkIcon) themeToggleDarkIcon.classList.toggle('hidden');
       if (themeToggleLightIcon) themeToggleLightIcon.classList.toggle('hidden');
-
-      // Check localStorage and toggle the theme
       if (localStorage.getItem('color-theme')) {
         if (localStorage.getItem('color-theme') === 'light') {
           document.documentElement.classList.add('dark');
@@ -76,7 +56,6 @@ function setupPage() {
           localStorage.setItem('color-theme', 'light');
         }
       } else {
-        // If theme is not explicitly set in localStorage
         if (document.documentElement.classList.contains('dark')) {
           document.documentElement.classList.remove('dark');
           localStorage.setItem('color-theme', 'light');
@@ -86,53 +65,69 @@ function setupPage() {
         }
       }
     };
-
-    // Apply the theme as soon as the page loads
     applyTheme();
-
-    // Add the click listener to the toggle button
     themeToggleBtn.addEventListener('click', toggleMode);
   }
 
-  const btn = document.getElementById('menu-btn');
-  const menu = document.getElementById('menu');
+  // --- Dropdown and Hamburger Menu Logic ---
+  const dropdownButtons = document.querySelectorAll('.btn');
+  const dropdownMenus = document.querySelectorAll('.menu');
+  const hamburgerBtn = document.getElementById('menu-btn');
+  const hamburgerMenu = document.getElementById('menu');
 
-  const navToggle = () => {
-    btn.classList.toggle('open');
-    menu.classList.toggle('flex');
-    menu.classList.toggle('hidden');
+  // Handle dropdown menus
+  dropdownButtons.forEach(button => {
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const targetMenuId = button.dataset.target;
+      const targetMenu = document.getElementById(targetMenuId);
+      dropdownMenus.forEach(menu => {
+        if (menu.id !== targetMenuId) {
+          menu.classList.add('hidden');
+        }
+      });
+      if (targetMenu) {
+        targetMenu.classList.toggle('hidden');
+      }
+    });
+  });
+
+  // Handle hamburger menu
+  if (hamburgerBtn && hamburgerMenu) {
+    hamburgerBtn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      hamburgerBtn.classList.toggle('open');
+      hamburgerMenu.classList.toggle('flex');
+      hamburgerMenu.classList.toggle('hidden');
+    });
   }
 
-  btn.addEventListener('click', navToggle);
+  // Global click listener to close all menus
+  document.addEventListener('click', (event) => {
+    const isClickInsideDropdownButton = Array.from(dropdownButtons).some(btn => btn.contains(event.target));
+    const isClickInsideDropdownMenu = Array.from(dropdownMenus).some(menu => menu.contains(event.target));
+    const isClickOnHamburgerBtn = hamburgerBtn ? hamburgerBtn.contains(event.target) : false;
+    const isClickInsideHamburgerMenu = hamburgerMenu ? hamburgerMenu.contains(event.target) : false;
 
-  // 4. Setup alert dismissal
+    if (!isClickInsideDropdownButton && !isClickInsideDropdownMenu && !isClickOnHamburgerBtn && !isClickInsideHamburgerMenu) {
+      dropdownMenus.forEach(menu => menu.classList.add('hidden'));
+      if (hamburgerMenu) {
+        hamburgerMenu.classList.add('hidden');
+      }
+    }
+  });
+
+  // --- Alert Dismissal ---
   const closeAlertBtn = document.getElementById('close-alert');
   if (closeAlertBtn) {
     closeAlertBtn.addEventListener('click', () => {
       const alertMessage = document.getElementById('alert-message');
       if (alertMessage) {
-        // Add opacity-0 for fade-out effect, matching the CSS transition
         alertMessage.classList.add('opacity-0');
-
-        // Remove the alert from the DOM after the transition
         setTimeout(() => {
           alertMessage.remove();
-        }, 300); // Should match the duration in the HTML
+        }, 300);
       }
     });
   }
-
-  const dropdownBtns = document.querySelectorAll(".btn");
-  const dropDownMenus = document.querySelectorAll(".menu");
-  
-  const onBtnClick = (e) => {
-    dropDownMenus.forEach((menu) => menu.classList.add('hidden'));
-    const classString = e.currentTarget.getAttribute('data-target');
-    document.getElementById(classString).classList.remove('hidden');
-  }
-  dropdownBtns.forEach((tab) => tab.addEventListener('click', onBtnClick));
-}
-
-// Key change: Execute the setup function on 'turbo:load', which fires
-// on the initial page load and after every Turbo-driven navigation.
-document.addEventListener('turbo:load', setupPage);
+});
