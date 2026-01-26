@@ -106,6 +106,10 @@ class TrackersController < ApplicationController
     end
   end
 
+  def favorite_food
+    @favorite_foods = @pet.trackers.order(favorite_score: :desc)
+  end
+
   private
     def set_pet
       @pet = Pet.find(params[:pet_id])

@@ -1,0 +1,28 @@
+<div class="flex justify-center">
+  <% if @favorite_foods.blank? %>
+    <h3 class="text-center text-semibold mb-4 md:text-lg">You do not have any eating record for <%= @pet.petname %> yet 😿</h3>
+  <% else %>
+    <table class="border-collapse border border-slate-200 mb-4 dark:bg-slate-700">
+      <thead>
+        <tr class="bg-sky-100 dark:bg-slate-900">
+          <th class="px-4 py-2 text-center capitalize border border-slate-300 dark:text-white">food type</th>
+          <th class="px-4 py-2 text-center capitalize border border-slate-300 dark:text-white">brand</th>
+          <th class="px-4 py-2 text-center capitalize border border-slate-300 dark:text-white">description</th>
+          <th class="px-4 py-2 text-center capitalize border border-slate-300 dark:text-white">favorite score</th>
+          <th class="px-4 py-2 text-center capitalize border border-slate-300 dark:text-white">Last Fed Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @favorite_foods.each do |tracker| %>
+          <tr>
+            <td class="px-4 py-2 text-center border border-slate-300 dark:text-white"><%= tracker.food_type %></td>
+            <td class="px-4 py-2 text-center border border-slate-300 dark:text-white"><%= tracker.brand %></td>
+            <td class="px-4 py-2 text-center border border-slate-300 dark:text-white"><%= tracker.description %></td>
+            <td class="px-4 py-2 text-center border border-slate-300 dark:text-white"><%= tracker.favorite_score %></td>
+            <td class="px-4 py-2 text-center border border-slate-300 dark:text-white"><%= tracker.date %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>

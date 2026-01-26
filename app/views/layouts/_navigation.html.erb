@@ -51,7 +51,13 @@
           <div id="btn-2" class="absolute hidden w-max top-full mt-2 py-2 bg-white text-grayishBlue border border-gray-200 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out menu" data-target="menu-2">
             <div class="py-1">
               <% Current.user.pets.select(&:persisted?).each do |pet| %>
-                <%= link_to "#{pet.petname.capitalize}'s Tracker", pet_trackers_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-violet-100 hover:text-violet-600 focus:bg-violet-100 focus:text-softRed focus:outline-hidden" %>
+                <div class="px-4 py-2 text-sm text-gray-700 font-semibold border-b-2 border-gray-200">
+                  <%= pet.petname %>
+                </div>
+                <div>
+                  <%= link_to "View #{pet.petname.split(" ").map(&:capitalize).join(" ")}'s Trackers", pet_trackers_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+                  <%= link_to "#{pet.petname.split(" ").map(&:capitalize).join(" ")}'s Favorite List", favorite_food_pet_trackers_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-rose-100 hover:text-rose-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+                </div>
               <% end %>
             </div>
           </div>

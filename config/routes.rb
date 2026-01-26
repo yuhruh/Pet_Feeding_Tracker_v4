@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     resources :trackers do
       collection do
         post :import
+        get "favorite_food"
       end
     end
   end
