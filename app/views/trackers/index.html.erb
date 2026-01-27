@@ -1,5 +1,4 @@
 <% content_for :title, "#{@pet.petname.capitalize}'s Trackers" %>
-  <%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
 
   <div class="container mx-auto border-2 border-garyishBlue rounded-md shadow-md w-full lg:w-1/2">
     <div class="flex flex-col justify-center items-center pt-4 mb-4">
@@ -32,6 +31,7 @@
       <%= column_chart @data, adapter: "google", height: "300px", library: {
         title: "Amount & Weight Over Time",
         isStacked: true,
+        interpolateNulls: true, 
         series: {
           0 => {type: 'bar', targetAxisIndex: 0},
           1 => {type: 'bar', targetAxisIndex: 0},

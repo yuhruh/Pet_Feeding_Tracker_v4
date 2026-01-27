@@ -1,6 +1,8 @@
 <div class="flex justify-center">
   <% if @favorite_foods.blank? %>
-    <h3 class="text-center text-semibold mb-4 md:text-lg">You do not have any eating record for <%= @pet.petname %> yet 😿</h3>
+    <div class="items-center p-8 mb-8 border-2 border-orange-200 bg-orange-100 rounded-lg shadow-lg">
+      <h3 class="text-center text-gray-700 font-semibold md:text-lg"><span class="underline decoration-double"><%= @pet.petname.capitalize %></span> does not have any eating record yet 😿</h3>
+    </div>
   <% else %>
     <table class="border-collapse border border-slate-200 mb-4 dark:bg-slate-700">
       <thead>
