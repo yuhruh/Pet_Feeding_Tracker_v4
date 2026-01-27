@@ -41,7 +41,7 @@
               </div>
                 <%= link_to "View", users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-blue-100 focus:text-softRed focus:outline-hidden" %>
                 <%= link_to "Edit", edit_users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-green-100 hover:text-green-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
-                <%= link_to "cat list", pets_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-green-100 hover:text-green-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+                <%= link_to "cat list", pets_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
                 <%= link_to "Delete", users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-red-100 hover:text-softRed focus:bg-gray-100 focus:text-softRed focus:outline-hidden", 
                 data: {"turbo-confirm": "Are you sure to delete this user account? The user and associated trackers will all gone..", "turbo-method": "delete"} %>
               </div>
@@ -94,7 +94,7 @@
             </div>
           </div>
         </div>
-        <%= button_to "Sign Out", session_path, class: "px-8 py-2 text-white bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white", method: :delete %>
+        <%= button_to "Sign Out", session_path, class: "px-8 py-2 text-white uppercase bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white", method: :delete %>
 
       <% else %>
         <%= link_to "Get Started", new_registrations_path, class: "px-8 py-2 text-white bg-grayishBlue border-2 border-grayishBlue rounded-lg shadow-md tracking-wide hover:text-grayishBlue hover:bg-white" %>
@@ -140,10 +140,7 @@
     </button>
   </div>
 
-  <div id="menu" class="fixed inset-0 z-20 hidden flex-col items-center self-end w-full h-full m-h-screen px-6 py-1 pt-24 pb-4 tracking-wide text-white uppercase divide-y divide-gray-500 opacity-90 bg-veryDarkBlue">
-    <div class="w-full py-3 text-center">
-      <%= image_tag('aji_icon_512.png', width: "100px", class: "mx-auto") %>
-    </div>
+  <div id="menu" class="fixed inset-0 z-20 hidden flex-col items-center self-end w-full h-full m-h-screen px-6 py-1 pt-24 pb-4 tracking-wide text-white uppercase divide-y divide-gray-500 opacity-90 bg-veryDarkBlue overflow-y-scroll">
     <div class="w-full py-3 text-center">
       <a href="/home#features" class="block hover:text-softRed">Features</a>
     </div>
@@ -151,14 +148,19 @@
       <%= link_to "About", about_path, class: "block hover:text-softRed"%>
     </div>
     <div class="w-full py-3 text-center">
-      <%= link_to "Get Started", about_path, class: "block hover:text-softRed"%>
+      <%= link_to "Doc", doc_path, class: "block hover:text-softRed"%>
+    </div>
+    <div class="w-full py-3 text-center">
+      <%= link_to "Get Started", new_registrations_path, class: "block hover:text-softRed"%>
     </div>
     <% if authenticated? %>
       <div class="w-full py-3 text-center">
         <%= Current.user.username.split(' ').map(&:capitalize).join(" ") %>'s Profile
+        <%= link_to "View Profile", users_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
         <%= link_to "Edit Profile", edit_users_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-green-100 hover:text-green-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
         <%= link_to "Delete Profile", users_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-red-100 hover:text-softRed focus:bg-gray-100 focus:text-softRed focus:outline-hidden", 
         data: {"turbo-confirm": "Are you sure to delete this user account? The user and associated trackers will all gone..", "turbo-method": "delete"} %>
+        <%= link_to "Cats List", pets_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
       </div>
       <div class="w-full py-3 text-center">
         <%= Current.user.username.split(' ').map(&:capitalize).join(" ") %>'s Cats
@@ -175,11 +177,27 @@
         <%= link_to "storage list", dry_foods_path, class: "block px-2 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
       </div>
       <div class="w-full py-3 text-center">
-        <%= button_to "Sign Out", session_path, class: "block mx-auto hover:text-softRed", method: :delete %>
+        <div>
+          Trackers
+        </div>
+        <% Current.user.pets.select(&:persisted?).each do |pet| %>
+          <div class="flex flex-col justify-center p-2">
+            <div class="flex items-center justify-center">
+              <%= pet.petname.split(" ").map(&:capitalize).join(" ") %>
+            </div>
+            <div class="flex items-center justify-center">
+              <%= link_to "View #{pet.petname.split(" ").map(&:capitalize).join(" ")}'s Trackers", pet_trackers_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 hover:scale-90 hover:rounded-lg focus:bg-gray-100 focus:text-softRed underline underline-offset-4 focus:outline-hidden" %>
+              <%= link_to "#{pet.petname.split(" ").map(&:capitalize).join(" ")}'s Favorite List", favorite_food_pet_trackers_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-rose-100 hover:text-rose-600 hover:scale-90 hover:rounded-lg focus:bg-gray-100 underline underline-offset-4 focus:text-softRed focus:outline-hidden" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="w-full py-3 text-center">
+        <%= button_to "Sign Out", session_path, class: "block uppercase mx-auto hover:text-softRed", method: :delete %>
       </div>
     <% else %>
       <div class="w-full py-3 text-center">
-        <%= link_to "Sign In", new_session_path, class: "block hover:text-softRed"%>
+        <%= link_to "Sign In", new_session_path, class: "block mx-auto hover:text-softRed"%>
       </div>
     <% end %>
     <div class="w-full py-8 text-center">
