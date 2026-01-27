@@ -27,7 +27,16 @@
       <%= form.label :food_type, class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize required md:text-base" %>
     </div>
     <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.select :food_type, [["🧆 Kibble", "Dry"], ["🧆 Freeze-Dried", "Dry"], ["🍲 Wet", "Wet"], ["🌯 Other", "Other"]], { prompt: "Please Select Food Type" }, required: true, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:food_type].none?, "border-red-400 focus:outline-red-600": tracker.errors[:food_type].any?}] %>
+      <%= form.select :food_type, [["🧆 Kibble", "Kibble"], ["🧆 Freeze-Dried", "Freeze-Dried"], ["🍲 Wet", "Wet"], ["🌯 Other", "Other"]], { prompt: "Please Select Food Type" }, required: true, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:food_type].none?, "border-red-400 focus:outline-red-600": tracker.errors[:food_type].any?}] %>
+    </div>
+  </div>
+
+  <div id="dry-food-options" class="hidden flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :dry_food_id, "Dry Food List", class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.collection_select :dry_food_id, Current.user.dry_foods, :id, :brand_with_description, { prompt: "Select a dry food" }, class: "block shadow-sm rounded-md border px-3 py-2 mt-2 w-full border-gray-400 focus:outline-blue-600", data: { dry_foods: Current.user.dry_foods.to_json(only: [:id, :brand, :description, :left_amount]) } %>
     </div>
   </div>
 
@@ -64,6 +73,62 @@
     </div>
     <div class="flex flex-col items-center md:items-start md:w-5/6">
       <%= form.number_field :amount, step: :any, placeholder: "Please just enter number" , class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": tracker.errors[:amount].none?, "border-red-400 focus:outline-red-600": tracker.errors[:amount].any?}], required: true, min: 0 %>
+      <div id="amount-alert" class="text-red-500 italic mt-1"></div>
     </div>
   </div>
 <% end %>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const foodTypeSelect = document.getElementById("tracker_food_type");
+    const dryFoodOptions = document.getElementById("dry-food-options");
+    const dryFoodSelect = document.getElementById("tracker_dry_food_id");
+    const brandInput = document.getElementById("tracker_brand");
+    const descriptionInput = document.getElementById("tracker_description");
+    const amountInput = document.getElementById("tracker_amount");
+    const amountAlert = document.getElementById("amount-alert");
+    const dryFoods = JSON.parse(dryFoodSelect.dataset.dryFoods);
+
+    function toggleDryFoodOptions() {
+      if (foodTypeSelect.value === "Kibble" || foodTypeSelect.value === "Freeze-Dried") {
+        dryFoodOptions.classList.remove("hidden");
+      } else {
+        dryFoodOptions.classList.add("hidden");
+      }
+    }
+
+    function checkAmount() {
+      const selectedDryFoodId = dryFoodSelect.value;
+      const amount = parseFloat(amountInput.value);
+
+      if (selectedDryFoodId && amount) {
+        const selectedDryFood = dryFoods.find(df => df.id == selectedDryFoodId);
+        if (selectedDryFood && amount > selectedDryFood.left_amount) {
+          amountAlert.textContent = `Warning: Amount is greater than stock left (${selectedDryFood.left_amount}g).`;
+        } else {
+          amountAlert.textContent = "";
+        }
+      } else {
+        amountAlert.textContent = "";
+      }
+    }
+
+    toggleDryFoodOptions();
+
+    foodTypeSelect.addEventListener("change", toggleDryFoodOptions);
+
+    dryFoodSelect.addEventListener("change", function() {
+      checkAmount();
+      const selectedDryFoodId = this.value;
+      if (selectedDryFoodId) {
+        const selectedDryFood = dryFoods.find(df => df.id == selectedDryFoodId);
+        if (selectedDryFood) {
+          brandInput.value = selectedDryFood.brand;
+          descriptionInput.value = selectedDryFood.description;
+        }
+      }
+    });
+
+    amountInput.addEventListener("input", checkAmount);
+  });
+</script>

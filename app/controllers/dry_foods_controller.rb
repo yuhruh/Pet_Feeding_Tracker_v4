@@ -18,7 +18,6 @@ class DryFoodsController < ApplicationController
   # POST /dry_foods or /dry_foods.json
   def create
     @dry_food = Current.user.dry_foods.build(dry_food_params)
-    # @dry_food = DryFood.new(dry_food_params)
 
     respond_to do |format|
       if @dry_food.save

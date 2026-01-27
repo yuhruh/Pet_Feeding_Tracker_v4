@@ -4,6 +4,10 @@ class DryFood < ApplicationRecord
 
   before_create :set_left_amount
 
+  def brand_with_description
+    "#{brand} - #{description}"
+  end
+
   private
 
   def set_left_amount
