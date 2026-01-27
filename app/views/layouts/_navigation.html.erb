@@ -7,7 +7,24 @@
     <div class="hidden items-center space-x-3 uppercase text-grayishBlue lg:flex">
       <a href="/home#features" class="tracking-wide hover:text-softRed">Features</a>
       <%= link_to "About", about_path, class: "tracking-wide hover:text-softRed" %>
-      <%= link_to "Docs", doc_path, class: "tracking-wide hover:text-softRed" %>
+      <div class="relative">
+        <div class="inline-flex w-full justify-center bg-white px-3 py-2 
+            text-grayishBlue tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed dark:bg-darkBlue cursor-pointer" data-target="btn-doc">
+          <%= link_to "Docs", doc_path, class: "tracking-wide hover:text-softRed" %>
+          <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400 btn" data-target="btn-doc">
+            <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
+          </svg>
+        </div>
+        <div id="btn-doc" class="absolute hidden w-max top-full mt-2 py-2 bg-white text-grayishBlue border border-gray-200 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out menu" data-target="menu-doc">
+          <div class="py-1">
+            <%= link_to "User Account", "/doc#user_account", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-blue-100 focus:text-softRed focus:outline-hidden" %>
+            <%= link_to "Pet Management", "/doc#pet_manage", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-sky-100 hover:text-sky-600 focus:bg-sky-100 focus:text-softRed focus:outline-hidden" %>
+            <%= link_to "Dry Food Storage", "/doc#dry_food", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-indigo-100 hover:text-indigo-600 focus:bg-indigo-100 focus:text-softRed focus:outline-hidden" %>
+            <%= link_to "Trackers", "/doc#trackers", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-lime-100 hover:text-lime-600 focus:bg-lime-100 focus:text-softRed focus:outline-hidden" %>
+            <%= link_to "Import CSV", "/doc#import", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-orange-100 focus:text-softRed focus:outline-hidden" %>
+          </div>
+        </div>
+      </div>
       <% if authenticated? %>
         <div class="relative">
           <div class="inline-flex w-full justify-center bg-white px-3 py-2 
@@ -17,7 +34,7 @@
               <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
             </svg>
           </div>
-          <div id="btn-1" class="absolute hidden inset-x-0 top-full mt-2 py-2 bg-white text-grayishBlue border border-gray-200 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out menu" data-target="menu-1">
+          <div id="btn-1" class="absolute hidden w-max top-full mt-2 py-2 bg-white text-grayishBlue border border-gray-200 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out menu" data-target="menu-1">
             <div class="py-1">
               <div class="px-4 py-2 text-sm text-gray-700 font-semibold border-b-2 border-gray-200">
                 <%= Current.user.username.split(' ').map(&:capitalize).join(" ") %>'s Profile

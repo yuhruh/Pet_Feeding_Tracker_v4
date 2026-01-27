@@ -5,7 +5,7 @@
 
   <div class="space-y-8">
     <div class="container mx-auto border-2 border-grayishBlue rounded-lg shadow-lg p-6">
-      <h2 class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2">User Account</h2>
+      <h2 id="user_account" class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2">User Account</h2>
       <p class="mb-4">Your user account is the central hub for managing your pets and tracking their dietary.</p>
       <div class="flex flex-col md:flex-row">
         <div class="flex flex-col p-2">
@@ -46,7 +46,7 @@
     </div>
 
     <div class="container border-2 border-grayishBlue rounded-lg shadow-lg p-6">
-      <h2 class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2">Pet Management</h2>
+      <h2 id="pet_manage" class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2">Pet Management</h2>
       <p class="mb-4">The "Pets" section allows you to create and manage profiles for each of your pets.</p>
       <div class="flex flex-col md:flex-row">
         <div class="flex flex-col my-auto p-2">
@@ -68,7 +68,7 @@
     </div>
 
     <div class="container border-2 border-grayishBlue rounded-lg shadow-lg p-6">
-      <h2 class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2">Dry Food Storage</h2>
+      <h2 id="dry_food" class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2">Dry Food Storage</h2>
       <p class="mb-4">The "Dry Food Storage" feature helps you keep track of your pet's dry food inventory.</p>
 
       <div class="flex flex-col md:flex-row">
@@ -92,7 +92,7 @@
     </div>
 
     <div class="container border-2 border-grayishBlue rounded-lg shadow-lg p-6">
-      <h2 class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2">Trackers</h2>
+      <h2 id="trackers" class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2">Trackers</h2>
       <p class="mb-4">Trackers are used to log your pet's daily doetary, such as feeding times, amount, and health observations.</p>
 
       <div class="flex flex-col md:flex-row">
@@ -118,7 +118,7 @@
         <%=image_tag("trackers.png", class: "border-2 border-slate-200 rounded-lg shadow-md w-full md:w-1/2 p-2") %>
       </div>
 
-      <h3 class="text-xl font-semibold mb-2">📋 Import Guide Summary</h3>
+      <h3 id="import" class="text-xl font-semibold mb-2">📋 Import Guide Summary</h3>
       <p class="mb-4">To successfully import your cat's diet records, please ensure your CSV file includes the following columns and follows these value conventions:</p>
       <div class="overflow-x-auto">
         <table class="min-w-full bg-white border border-gray-200 dark:bg-slate-700">
