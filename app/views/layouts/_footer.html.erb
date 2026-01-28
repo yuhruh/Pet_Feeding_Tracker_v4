@@ -4,6 +4,7 @@
       <%= image_tag('footer_aji_logo.png', width: "80px") %>
       <a href="/home#features" class="uppercase hover:text-softRed">Features</a>
       <%= link_to 'About', about_path, class: 'uppercase hover:text-softRed'%>
+      <%= link_to 'Docs', doc_path, class: 'uppercase hover:text-softRed'%>
       <% if authenticated? %>
         <%= button_to "Sign Out", session_path, class: "px-8 py-2 uppercase text-white bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white", method: :delete %>
       <% else %>
