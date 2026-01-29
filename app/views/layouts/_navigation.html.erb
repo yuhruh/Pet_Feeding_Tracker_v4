@@ -142,29 +142,62 @@
 
   <div id="menu" class="fixed inset-0 z-20 hidden flex-col items-center self-end w-full h-full m-h-screen px-6 py-1 pt-24 pb-4 tracking-wide text-white uppercase divide-y divide-gray-500 opacity-90 bg-veryDarkBlue overflow-y-scroll">
     <div class="w-full py-3 text-center">
-      <a href="/home#features" class="block hover:text-softRed">Features</a>
+      <div class="flex flex-row justify-center gap-3">
+        <%= image_tag('icons8-features-64.png', width: "25px", height: "25px") %>
+        <a href="/home#features" class="block hover:text-softRed">Features</a>
+      </div>
     </div>
     <div class="w-full py-3 text-center">
-      <%= link_to "About", about_path, class: "block hover:text-softRed"%>
+      <div class="flex flex-row justify-center gap-3">
+        <%= image_tag('icons8-about-100.png', width: "25px", height: "25px") %>
+        <%= link_to "About", about_path, class: "block hover:text-softRed"%>
+      </div>
     </div>
     <div class="w-full py-3 text-center">
-      <%= link_to "Doc", doc_path, class: "block hover:text-softRed"%>
+      <div class="flex flex-row justify-center gap-3">
+        <svg width="20px" height="20px" viewBox="-12.5 0 164 164" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g clip-path="url(#clip0)">
+            <path d="M138.217 84.0462C138.217 98.8257 138.262 113.605 138.187 128.385C138.209 132.172 137.977 135.958 137.493 139.714C136.49 146.852 132.761 152.406 126.748 156.414C122.354 159.425 117.265 161.279 111.956 161.801C91.8761 163.801 71.652 163.925 51.5488 162.171C43.591 161.478 35.55 161.454 27.8051 159.254C23.7697 158.194 19.8289 156.806 16.023 155.102C8.70901 151.643 4.28973 145.757 2.57189 137.808C1.52697 133.382 0.971024 128.856 0.91394 124.311C1.03849 98.9197 1.1253 73.5276 1.17433 48.1354C1.25767 40.5551 1.84376 32.989 2.92867 25.4857C3.35997 22.106 4.23538 18.7971 5.53244 15.6446C9.07621 7.29288 15.3564 2.24274 24.6662 1.70212C34.9205 1.10576 45.1839 0.569936 55.4512 0.341114C64.9596 0.126553 74.4823 0.199665 83.9919 0.427839C91.2115 0.601562 98.4214 1.20569 105.634 1.64389C107.541 1.7706 109.37 2.45065 110.893 3.60058C120.085 10.362 128.485 18.1321 135.932 26.7637C138.061 29.2024 138.65 31.9664 138.601 35.1615C138.336 51.4539 138.234 67.7493 138.074 84.0436L138.217 84.0462ZM75.0538 155.573C84.5778 155.227 95.2103 154.86 105.843 154.441C108.122 154.352 110.4 154.164 112.654 153.849C116.066 153.365 119.248 151.858 121.779 149.529C125.601 146.111 128.158 141.965 128.613 136.839C129.048 131.947 129.18 127.023 129.321 122.11C129.581 113.035 129.767 103.96 129.949 94.8852C130.032 90.7255 130.413 86.527 129.999 82.4121C128.969 72.2065 129.361 61.993 129.326 51.7842C129.313 48.0018 129.261 44.2188 129.145 40.4403C129.089 38.5754 127.415 37.1249 125.305 37.0536C120.368 36.8857 115.426 36.8453 110.493 36.6048C108.223 36.4669 105.966 36.1656 103.74 35.7027C101.748 35.3138 99.664 32.8567 99.4388 30.8537C99.2507 29.3544 99.142 27.8465 99.1133 26.3358C99.086 21.7983 99.1433 17.2607 99.1381 12.7232C99.0769 11.9769 98.7729 11.2707 98.2717 10.7126C97.7698 10.1546 97.0993 9.77563 96.3611 9.6327C95.2272 9.53028 94.0919 9.40018 92.9554 9.38073C78.895 9.13895 64.8346 8.86261 50.7743 8.71417C45.0779 8.65453 39.3776 8.88647 33.6792 8.99018C29.4873 9.09305 25.3474 9.93995 21.4545 11.4919C16.0211 13.6071 12.9362 17.6566 12.4292 23.4802C12.3145 25.3683 12.3331 27.2622 12.4851 29.1477C13.1745 41.6305 12.9239 54.1122 12.6765 66.602C12.2944 85.8982 12.0783 105.199 11.9221 124.498C11.8518 129.038 12.1108 133.577 12.6967 138.08C12.9894 140.544 13.9104 142.892 15.3723 144.901C16.8342 146.911 18.7882 148.513 21.0483 149.557C23.4378 150.705 25.952 151.575 28.5413 152.15C34.085 153.484 39.747 154.272 45.4457 154.502C54.9462 154.771 64.4395 155.179 75.0538 155.573ZM114.526 29.0686C116.348 28.9733 117.846 28.9941 119.295 28.7685C119.831 28.6849 120.343 28.0758 120.727 27.5961C120.783 27.4272 120.798 27.2473 120.771 27.0714C120.743 26.8954 120.674 26.728 120.569 26.5839C117.883 23.0697 114.595 20.054 110.858 17.6753C110.566 17.6308 110.267 17.649 109.983 17.7279C109.698 17.8068 109.433 17.9446 109.206 18.133C109.069 21.05 109 23.9771 109.111 26.8941C109.196 27.2461 109.366 27.5719 109.606 27.8443C109.845 28.1167 110.147 28.3277 110.487 28.4583C111.816 28.7581 113.167 28.9614 114.526 29.0673V29.0686Z" fill="#fff"/>
+            <path d="M69.0014 56.3711C80.027 56.5228 91.0527 56.6548 102.078 56.8414C104.739 56.8584 107.397 57.015 110.041 57.3111C111.523 57.5984 112.968 58.052 114.347 58.6633C115.488 59.0833 116.804 61.1467 116.765 62.2791C116.727 63.3869 115.203 65.4132 114.193 65.8093C110.592 67.2185 106.817 67.4979 103.009 67.5536C95.4043 67.6645 87.7967 67.9484 80.1969 67.8129C70.3189 67.6347 60.4469 67.131 50.5727 66.7382C44.4948 66.4964 38.4176 66.2338 32.3463 65.9065C30.4248 65.889 28.5691 65.2077 27.0964 63.9782C26.6424 63.6367 26.2746 63.1947 26.0223 62.6868C25.7699 62.179 25.64 61.619 25.6429 61.0524C25.708 59.7494 26.896 57.7744 28.0514 57.5643C29.8894 57.1479 31.7603 56.8921 33.643 56.7996C45.4302 56.7309 57.2182 56.7648 69.0053 56.7648L69.0014 56.3711Z" fill="#fff"/>
+            <path d="M72.5581 84.8527C62.0742 84.5798 51.8114 84.3723 41.5539 84.0138C38.1412 83.8797 34.7399 83.54 31.3686 82.9955C29.906 82.6545 28.5232 82.0355 27.2957 81.1733C27.0133 80.9458 26.7836 80.6606 26.6221 80.3365C26.4606 80.0124 26.3711 79.6578 26.3597 79.2961C26.3484 78.935 26.4155 78.5753 26.5565 78.2414C26.6975 77.9083 26.9089 77.6088 27.1766 77.3644C28.0653 76.676 29.1061 76.2099 30.2125 76.0031C32.8413 75.622 35.492 75.4068 38.1481 75.3607C53.7344 75.2136 69.3248 74.8927 84.9058 75.1462C94.0073 75.294 103.094 76.3888 112.184 77.1032C112.929 77.2497 113.651 77.4914 114.332 77.8227C115.343 78.1876 116.723 80.5861 116.258 81.5474C115.793 82.5087 115.134 83.6217 114.252 84.0722C111.127 85.6642 107.648 85.7167 104.227 85.7044C93.5907 85.6623 82.9308 86.4661 72.5581 84.8527Z" fill="#fff"/>
+            <path d="M70.5187 94.9412C81.5554 95.0909 92.5928 95.2218 103.629 95.4053C105.91 95.4195 108.189 95.5758 110.451 95.8727C111.528 96.0256 112.548 96.7011 113.551 97.221C114.631 97.7804 115.721 100.133 115.192 101.126C114.683 102.079 113.938 103.165 113.018 103.583C111.63 104.174 110.138 104.488 108.628 104.504C99.1159 104.742 89.6011 105.028 80.0882 105.004C70.5753 104.979 61.0519 104.801 51.5521 104.327C44.7237 103.986 37.92 103.091 31.1183 102.33C29.9917 102.189 28.9315 101.722 28.07 100.985C27.3255 100.183 26.7905 99.211 26.5123 98.1544C26.2767 97.4498 27.6658 95.6425 28.3642 95.5537C30.5994 95.1784 32.8549 94.9353 35.119 94.8258C46.918 94.7538 58.7177 94.7927 70.5174 94.7927L70.5187 94.9412Z" fill="#fff"/>
+            <path d="M58.378 123.588C50.454 123.302 42.5287 123.042 34.6067 122.713C31.9438 122.707 29.3422 121.917 27.1307 120.439C26.5141 120.012 26.0186 119.434 25.6922 118.76C25.3658 118.086 25.2197 117.339 25.2677 116.593C25.2938 115.275 26.6894 113.662 27.8923 113.191C31.1542 111.912 34.5502 111.988 37.9507 112.134C47.7585 112.553 57.574 112.862 67.3694 113.484C73.386 113.866 79.3734 114.725 85.3686 115.413C86.1042 115.57 86.8241 115.791 87.5213 116.073C88.1937 116.274 89.5672 118.062 89.2788 118.737C88.8655 119.709 88.3675 120.912 87.5369 121.384C86.2279 122.105 84.7756 122.528 83.283 122.622C77.6328 122.986 71.9722 123.206 66.3129 123.4C63.6727 123.493 61.026 123.417 58.3825 123.417L58.378 123.588Z" fill="#fff"/>
+            <path d="M43.1534 45.4441C39.4645 45.2127 35.277 45.0767 31.1279 44.6288C29.2531 44.3509 27.4284 43.8051 25.7101 43.0082C25.1882 42.7803 24.7414 42.4103 24.4211 41.9409C24.101 41.4715 23.9202 40.9217 23.8998 40.3545C23.808 39.0885 25.1236 37.1289 26.2627 36.8456C26.622 36.7214 26.9893 36.6217 27.3622 36.5475C36.4513 35.5914 45.5496 35.1699 54.6622 36.2012C55.4148 36.3003 56.1455 36.5245 56.8239 36.864C57.5097 37.1765 58.1091 37.65 58.5707 38.244C59.0323 38.838 59.3422 39.5346 59.4739 40.2741C59.6959 41.3969 58.3335 43.4902 57.154 43.883C56.1095 44.3207 55.0171 44.6348 53.8992 44.8199C50.4883 45.1038 47.0675 45.2295 43.1534 45.4441Z" fill="#fff"/>
+          </g>
+          <defs>
+            <clipPath id="clip0">
+            <rect width="138" height="164" fill="white" transform="translate(0.777344)"/>
+            </clipPath>
+          </defs>
+        </svg>
+        <%= link_to "Doc", doc_path, class: "block hover:text-softRed"%>
+      </div>
     </div>
     <div class="w-full py-3 text-center">
-      <%= link_to "Get Started", new_registrations_path, class: "block hover:text-softRed"%>
+      <div class="flex flex-row justify-center gap-3">
+        <svg width="20px" height="20px" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M6.85357 3.85355L7.65355 3.05353C8.2981 2.40901 9.42858 1.96172 10.552 1.80125C11.1056 1.72217 11.6291 1.71725 12.0564 1.78124C12.4987 1.84748 12.7698 1.97696 12.8965 2.10357C13.0231 2.23018 13.1526 2.50125 13.2188 2.94357C13.2828 3.37086 13.2779 3.89439 13.1988 4.44801C13.0383 5.57139 12.591 6.70188 11.9464 7.34645L7.49999 11.7929L6.35354 10.6465C6.15827 10.4512 5.84169 10.4512 5.64643 10.6465C5.45117 10.8417 5.45117 11.1583 5.64643 11.3536L7.14644 12.8536C7.34171 13.0488 7.65829 13.0488 7.85355 12.8536L8.40073 12.3064L9.57124 14.2572C9.65046 14.3893 9.78608 14.4774 9.9389 14.4963C10.0917 14.5151 10.2447 14.4624 10.3535 14.3536L12.3535 12.3536C12.4648 12.2423 12.5172 12.0851 12.495 11.9293L12.0303 8.67679L12.6536 8.05355C13.509 7.19808 14.0117 5.82855 14.1887 4.58943C14.2784 3.9618 14.2891 3.33847 14.2078 2.79546C14.1287 2.26748 13.9519 1.74482 13.6035 1.39645C13.2552 1.04809 12.7325 0.871332 12.2045 0.792264C11.6615 0.710945 11.0382 0.721644 10.4105 0.8113C9.17143 0.988306 7.80189 1.491 6.94644 2.34642L6.32322 2.96968L3.07071 2.50504C2.91492 2.48278 2.75773 2.53517 2.64645 2.64646L0.646451 4.64645C0.537579 4.75533 0.484938 4.90829 0.50375 5.0611C0.522563 5.21391 0.61073 5.34954 0.742757 5.42876L2.69364 6.59928L2.14646 7.14645C2.0527 7.24022 2.00002 7.3674 2.00002 7.50001C2.00002 7.63261 2.0527 7.75979 2.14646 7.85356L3.64647 9.35356C3.84173 9.54883 4.15831 9.54883 4.35357 9.35356C4.54884 9.1583 4.54884 8.84172 4.35357 8.64646L3.20712 7.50001L3.85357 6.85356L6.85357 3.85355ZM10.0993 13.1936L9.12959 11.5775L11.1464 9.56067L11.4697 11.8232L10.0993 13.1936ZM3.42251 5.87041L5.43935 3.85356L3.17678 3.53034L1.80638 4.90074L3.42251 5.87041ZM2.35356 10.3535C2.54882 10.1583 2.54882 9.8417 2.35356 9.64644C2.1583 9.45118 1.84171 9.45118 1.64645 9.64644L0.646451 10.6464C0.451188 10.8417 0.451188 11.1583 0.646451 11.3535C0.841713 11.5488 1.1583 11.5488 1.35356 11.3535L2.35356 10.3535ZM3.85358 11.8536C4.04884 11.6583 4.04885 11.3417 3.85359 11.1465C3.65833 10.9512 3.34175 10.9512 3.14648 11.1465L1.14645 13.1464C0.95119 13.3417 0.951187 13.6583 1.14645 13.8535C1.34171 14.0488 1.65829 14.0488 1.85355 13.8536L3.85358 11.8536ZM5.35356 13.3535C5.54882 13.1583 5.54882 12.8417 5.35356 12.6464C5.1583 12.4512 4.84171 12.4512 4.64645 12.6464L3.64645 13.6464C3.45119 13.8417 3.45119 14.1583 3.64645 14.3535C3.84171 14.5488 4.1583 14.5488 4.35356 14.3535L5.35356 13.3535ZM9.49997 6.74881C10.1897 6.74881 10.7488 6.1897 10.7488 5.5C10.7488 4.8103 10.1897 4.25118 9.49997 4.25118C8.81026 4.25118 8.25115 4.8103 8.25115 5.5C8.25115 6.1897 8.81026 6.74881 9.49997 6.74881Z"
+            fill="#fff"
+          />
+        </svg>
+        <%= link_to "Get Started", new_registrations_path, class: "block hover:text-softRed"%>
+      </div>
     </div>
     <% if authenticated? %>
       <div class="w-full py-3 text-center">
-          <div class="flex flex-row justify-center gap-3">
-            <svg width="25" height="25" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="50" cy="50" r="48" stroke="#ffffff" stroke-width="4"/>
-              <circle cx="50" cy="40" r="15" fill="#ffffff"/>
-              <path d="M25 80C25 65 35 58 50 58C65 58 75 65 75 80" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
-            </svg>
-            <div class="font-bold">
-              My Profile
-            </div>
+        <div class="flex flex-row justify-center gap-3">
+          <svg width="20" height="20" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="48" stroke="#ffffff" stroke-width="4"/>
+            <circle cx="50" cy="40" r="15" fill="#ffffff"/>
+            <path d="M25 80C25 65 35 58 50 58C65 58 75 65 75 80" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+          <div class="font-bold">
+            My Profile
           </div>
+        </div>
         <%= link_to "View Profile", users_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
         <%= link_to "Edit Profile", edit_users_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-green-100 hover:text-green-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
         <%= link_to "Delete Profile", users_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-red-100 hover:text-softRed focus:bg-gray-100 focus:text-softRed focus:outline-hidden", 
@@ -173,7 +206,7 @@
       </div>
       <div class="w-full py-3 text-center">
         <div class="flex flex-row justify-center gap-3">
-          <svg width="25" height="25" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <svg width="20" height="20" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <path d="M25,65 Q25,45 50,45 Q75,45 75,65 Q75,85 50,90 Q25,85 25,65 Z" fill="#fff" />
             <ellipse cx="20" cy="40" rx="10" ry="12" fill="#fff" />
             <ellipse cx="40" cy="25" rx="11" ry="14" fill="#fff" />
@@ -191,7 +224,7 @@
       </div>
       <div class="w-full py-3 text-center">
         <div class="flex flex-row justify-center gap-3">
-          <svg width="25" height="30" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+          <svg width="20" height="25" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <style>
                 .bag-color { fill: #C8A165; stroke: #96794B; stroke-width: 2; }
@@ -228,11 +261,11 @@
           </div>
         </div>
         <%= link_to "Add dry food", new_dry_food_path, class: "block px-2 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
-        <%= link_to "storage list", dry_foods_path, class: "block px-2 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+        <%= link_to "storage list", dry_foods_path, class: "block px-2 py-2 text-sm text-gray-300 hover:bg-violet-100 hover:text-violet-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
       </div>
       <div class="w-full py-3 text-center">
         <div class="flex flex-row justify-center gap-3">
-          <svg width="30" height="25" viewBox="70 20 60 85" xmlns="http://www.w3.org/2000/svg">
+          <svg width="25" height="20" viewBox="70 20 60 85" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <style>
                 .tracker-bg { fill: #F5F7FA; stroke: #CCD1D9; stroke-width: 2; }
@@ -267,7 +300,7 @@
         <% Current.user.pets.select(&:persisted?).each do |pet| %>
           <div class="flex flex-col justify-center p-2">
             <div class="flex flex-row justify-center gap-3">
-              <svg width="25" height="25" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                 <g id="SVGRepo_iconCarrier"> 
@@ -287,21 +320,51 @@
             </div>
             <div class="flex items-center justify-center">
               <%= link_to "View #{pet.petname.split(" ").map(&:capitalize).join(" ")}'s Trackers", pet_trackers_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 hover:scale-90 hover:rounded-lg focus:bg-gray-100 focus:text-softRed underline underline-offset-4 focus:outline-hidden" %>
-              <%= link_to "#{pet.petname.split(" ").map(&:capitalize).join(" ")}'s Favorite List", favorite_food_pet_trackers_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-rose-100 hover:text-rose-600 hover:scale-90 hover:rounded-lg focus:bg-gray-100 underline underline-offset-4 focus:text-softRed focus:outline-hidden" %>
+              <%= link_to "#{pet.petname.split(" ").map(&:capitalize).join(" ")}'s Favorite List", favorite_food_pet_trackers_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-emerald-100 hover:text-emerald-600 hover:scale-90 hover:rounded-lg focus:bg-gray-100 underline underline-offset-4 focus:text-softRed focus:outline-hidden" %>
             </div>
           </div>
         <% end %>
       </div>
       <div class="w-full py-3 text-center">
-        <%= button_to "Sign Out", session_path, class: "block uppercase mx-auto hover:text-softRed", method: :delete %>
+        <div class="flex flex-row justify-center gap-3">
+          <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M21.593 10.943c.584.585.584 1.53 0 2.116L18.71 15.95c-.39.39-1.03.39-1.42 0a.996.996 0 0 1 0-1.41 9.552 9.552 0 0 1 1.689-1.345l.387-.242-.207-.206a10 10 0 0 1-2.24.254H8.998a1 1 0 1 1 0-2h7.921a10 10 0 0 1 2.24.254l.207-.206-.386-.241a9.562 9.562 0 0 1-1.69-1.348.996.996 0 0 1 0-1.41c.39-.39 1.03-.39 1.42 0l2.883 2.893zM14 16a1 1 0 0 0-1 1v1.5a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1.505a1 1 0 1 0 2 0V5.5A2.5 2.5 0 0 0 12.5 3h-7A2.5 2.5 0 0 0 3 5.5v13A2.5 2.5 0 0 0 5.5 21h7a2.5 2.5 0 0 0 2.5-2.5V17a1 1 0 0 0-1-1z" fill="#fff"/>
+          </svg>
+          <%= button_to "Sign Out", session_path, class: "block uppercase mx-auto hover:text-softRed", method: :delete %>
+        </div>
       </div>
     <% else %>
       <div class="w-full py-3 text-center">
+        <div class="flex flex-row justify-center gap-3">
+          <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M6 8a1 1 0 0 0 1-1V5.923c0-.459.022-.57.082-.684a.364.364 0 0 1 .157-.157c.113-.06.225-.082.684-.082h10.154c.459 0 .57.022.684.082.07.038.12.087.157.157.06.113.082.225.082.684v12.154c0 .459-.022.57-.082.684a.363.363 0 0 1-.157.157c-.113.06-.225.082-.684.082H7.923c-.459 0-.57-.022-.684-.082a.363.363 0 0 1-.157-.157c-.06-.113-.082-.225-.082-.684V17a1 1 0 1 0-2 0v1.077c0 .76.082 1.185.319 1.627.223.419.558.753.977.977.442.237.866.319 1.627.319h10.154c.76 0 1.185-.082 1.627-.319.419-.224.753-.558.977-.977.237-.442.319-.866.319-1.627V5.923c0-.76-.082-1.185-.319-1.627a2.363 2.363 0 0 0-.977-.977C19.262 3.082 18.838 3 18.077 3H7.923c-.76 0-1.185.082-1.627.319a2.363 2.363 0 0 0-.978.977C5.083 4.738 5 5.162 5 5.923V7a1 1 0 0 0 1 1zm9.593 2.943c.584.585.584 1.53 0 2.116L12.71 15.95c-.39.39-1.03.39-1.42 0a.996.996 0 0 1 0-1.41 9.552 9.552 0 0 1 1.689-1.345l.387-.242-.207-.206a10 10 0 0 1-2.24.254H2.998a1 1 0 1 1 0-2h7.921a10 10 0 0 1 2.24.254l.207-.206-.386-.241a9.562 9.562 0 0 1-1.69-1.348.996.996 0 0 1 0-1.41c.39-.39 1.03-.39 1.42 0l2.883 2.893z" fill="#fff"/>
+          </svg>
+        </div>
         <%= link_to "Sign In", new_session_path, class: "block mx-auto hover:text-softRed"%>
       </div>
     <% end %>
     <div class="w-full py-8 text-center">
-      <%= link_to "Languages", root_path, class: "block hover:text-softRed" %>
+      <div class="flex flex-row justify-center gap-3">
+        <svg 
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#fff"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M5 8l6 6" />
+          <path d="M4 14l6-6 2-3" />
+          <path d="M2 5h12" />
+          <path d="M7 2h1" />
+          <path d="M22 22l-5-10-5 10" />
+          <path d="M14 18h6" />
+        </svg>
+        <%= link_to "Languages", root_path, class: "block hover:text-softRed" %>
+      </div>
     </div>
   </div>
 </nav>
