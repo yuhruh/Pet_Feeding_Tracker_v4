@@ -4,6 +4,10 @@ class DryFoodsController < ApplicationController
   # GET /dry_foods or /dry_foods.json
   def index
     @dry_foods = Current.user.dry_foods
+    respond_to do |format|
+      format.html
+      format.json { render json: @dry_foods }
+    end
   end
 
   # GET /dry_foods/1 or /dry_foods/1.json
