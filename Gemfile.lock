@@ -83,8 +83,12 @@ GEM
     bindex (0.8.1)
     bootsnap (1.21.1)
       msgpack (~> 1.2)
-    brakeman (7.1.2)
+    brakeman-min (8.0.1)
+      parallel (~> 1.20)
       racc
+      ruby2ruby (~> 2.5.1)
+      ruby_parser (~> 3.22.0)
+      sexp_processor (~> 4.7)
     builder (3.3.0)
     capybara (3.40.0)
       addressable
@@ -365,6 +369,12 @@ GEM
     ruby-vips (2.3.0)
       ffi (~> 1.12)
       logger
+    ruby2ruby (2.5.2)
+      ruby_parser (~> 3.1)
+      sexp_processor (~> 4.6)
+    ruby_parser (3.22.0)
+      racc (~> 1.5)
+      sexp_processor (~> 4.16)
     rubyzip (3.2.2)
     securerandom (0.4.1)
     selenium-webdriver (4.40.0)
@@ -373,6 +383,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 4.0)
       websocket (~> 1.0)
+    sexp_processor (4.17.5)
     snaky_hash (2.0.3)
       hashie (>= 0.1.0, < 6)
       version_gem (>= 1.1.8, < 3)
@@ -464,7 +475,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt (~> 3.1.7)
   bootsnap
-  brakeman
+  brakeman-min (~> 8.0)
   capybara
   chartkick
   csv

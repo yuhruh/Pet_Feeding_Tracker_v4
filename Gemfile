@@ -59,7 +59,6 @@ group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
-  gem "brakeman", require: false
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
@@ -81,3 +80,5 @@ end
 group :production do
   gem "pg", "~>1.5.9"
 end
+
+gem "brakeman-min", "~> 8.0", group: :development
