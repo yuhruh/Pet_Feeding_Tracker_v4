@@ -5,7 +5,8 @@ class DryFoodsControllerTest < ActionDispatch::IntegrationTest
     @user = User.create(email_address: "example@email.com", password: "password", password_confirmation: "password", username: "John Doe", timezone: "Asia/Taiper")
     post session_url, params: { email_address: @user.email_address, password: "password" }
     @dry_food = dry_foods(:one)
-    @dry_food.user = users(:one)
+    @dry_food.user = @user
+    @dry_food.save
   end
 
   test "should get index" do

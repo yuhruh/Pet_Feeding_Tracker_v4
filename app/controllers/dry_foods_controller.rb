@@ -12,6 +12,10 @@ class DryFoodsController < ApplicationController
 
   # GET /dry_foods/1 or /dry_foods/1.json
   def show
+    respond_to do |format|
+      format.html
+      format.json { render json: @dry_food }
+    end
   end
 
   # GET /dry_foods/new
@@ -47,14 +51,19 @@ class DryFoodsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_dry_food
-      @dry_food = DryFood.find(params.expect(:id))
+      @dry_food = Current.user.dry_foods.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:alert] = t(".not_found")
-      redirect_to dry_foods_path
+      respond_to do |format|
+        format.html do
+          flash[:alert] = "Dry food not found."
+          redirect_to dry_foods_path
+        end
+        format.json { render json: { error: "Dry food not found" }, status: :not_found }
+      end
     end
 
     # Only allow a list of trusted parameters through.
     def dry_food_params
-      params.expect(dry_food: [ :brand, :food_type, :description, :amount, :used_amount, :user_id ])
+      params.require(:dry_food).permit(:brand, :food_type, :description, :amount, :used_amount, :user_id)
     end
 end

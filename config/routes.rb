@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   # resources :trackers
-  resources :dry_foods, only: [ :new, :create, :index, :destroy ]
+  resources :dry_foods, only: [ :new, :create, :index, :destroy, :show ]
   resources :pets do
     resources :trackers do
       collection do

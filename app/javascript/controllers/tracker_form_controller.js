@@ -5,6 +5,7 @@ export default class extends Controller {
   static values = { dryFoods: Array }
 
   connect() {
+    this.csrfToken = document.querySelector("meta[name='csrf-token']").content;
     this.toggleDryFoodOptions()
   }
 
@@ -13,10 +14,9 @@ export default class extends Controller {
     if (type === "Kibble" || type === "Freeze-Dried") {
       this.dryFoodOptionsTarget.classList.remove("hidden");
 
-      const csrfToken = document.querySelector("meta[name='csrf-token']").content;
       const response = await fetch(`/dry_foods`, {
         headers: {
-          "X-CSRF-Token": csrfToken,
+          "X-CSRF-Token": this.csrfToken,
           "Accept": "application/json"
         }
       })
@@ -24,6 +24,8 @@ export default class extends Controller {
       const filteredFoods = data.filter(dry => dry.food_type === type);
 
       this.updateDryFoodOptions(filteredFoods);
+
+      // this.validateAmount(filteredFoods);
 
     } else {
       this.dryFoodOptionsTarget.classList.add("hidden");
@@ -35,8 +37,47 @@ export default class extends Controller {
     foods.forEach(food => {
       const option = document.createElement("option");
       option.value = food.id;
-      option.text = `${food.brand} - ${food.description}`;
+      if (food.left_amount < food.amount * 10/100) {
+        option.text = `⚠️ ${food.brand} - ${food.description} (Left ${food.left_amount} g, should restock)`;
+      } else {
+        option.text = `${food.brand} - ${food.description} (Left ${food.left_amount} g)`;
+      }
       this.dryFoodSelectTarget.add(option);
     });
+  }
+
+  async fillFields() {
+    const foodId = this.dryFoodSelectTarget.value;
+
+    if (foodId) {
+      try {
+        const response = await fetch(`/dry_foods/${foodId}`, {
+          headers: {
+            "X-CSRF-Token": this.csrfToken,
+            "Accept": "application/json"
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        this.brandTarget.value = data.brand;
+        this.descriptionTarget.value = data.description;
+      } catch (error) {
+        console.error("Error fetching dry food data:", error);
+        this.brandTarget.value = "";
+        this.descriptionTarget.value = "";
+      }
+    } else {
+      this.brandTarget.value = "";
+      this.descriptionTarget.value = "";
+    }
+    this.validateAmount();
+  }
+
+  validateAmount() {
+    console.log(this.amountTarget.value)
   }
 }
