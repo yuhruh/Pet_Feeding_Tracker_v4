@@ -6,6 +6,7 @@ export default class extends Controller {
 
   connect() {
     this.csrfToken = document.querySelector("meta[name='csrf-token']").content;
+    this.selectedFoodLeftAmount = null; // Initialize storage state
     this.toggleDryFoodOptions()
   }
 
@@ -65,19 +66,43 @@ export default class extends Controller {
         const data = await response.json();
         this.brandTarget.value = data.brand;
         this.descriptionTarget.value = data.description;
+        // Store the left amount
+        this.selectedFoodLeftAmount = data.left_amount;
+        this.validateAmount(data)
       } catch (error) {
         console.error("Error fetching dry food data:", error);
         this.brandTarget.value = "";
         this.descriptionTarget.value = "";
+        this.selectedFoodLeftAmount = null;
       }
     } else {
       this.brandTarget.value = "";
       this.descriptionTarget.value = "";
+      this.selectedFoodLeftAmount = null;
     }
     this.validateAmount();
   }
 
-  validateAmount() {
-    console.log(this.amountTarget.value)
+  validateAmount(food) {
+    const inputAmount = parseFloat(this.amountTarget.value);
+
+    // only validate if we have a selected dry food and an input amount
+    if (this.selectedFoodLeftAmount != null && !isNaN(inputAmount)) {
+      if (inputAmount > this.selectedFoodLeftAmount) {
+        this.amountAlertTarget.textContent = `⚠️ Only ${this.selectedFoodLeftAmount}g left in storage.`;
+        this.amountAlertTarget.classList.remove('hidden');
+        this.amountAlertTarget.classList.replace("text-green-500", "text-red-500");
+      } else {
+        this.amountAlertTarget.textContent = `${inputAmount}g is valid.`;
+        this.amountAlertTarget.classList.remove('hidden');
+        this.amountAlertTarget.classList.replace("text-red-500", "text-green-500");
+      } 
+    } else {
+      this.hideAlert();
+    }
+  }
+  hideAlert() {
+    this.amountAlertTarget.textContent = "";
+    this.amountAlertTarget.classList.add("hidden");
   }
 }
