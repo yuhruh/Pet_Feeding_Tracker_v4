@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["foodType", "dryFoodOptions", "dryFoodSelect", "brand", "description", "amount", "amountAlert"]
+  static targets = ["foodType", "dryFoodOptions", "dryFoodSelect", "brand", "description", "amount", "amountAlert", "submitButton"]
   static values = { dryFoods: Array }
 
   connect() {
@@ -68,7 +68,7 @@ export default class extends Controller {
         this.descriptionTarget.value = data.description;
         // Store the left amount
         this.selectedFoodLeftAmount = data.left_amount;
-        this.validateAmount(data)
+        this.validateAmount()
       } catch (error) {
         console.error("Error fetching dry food data:", error);
         this.brandTarget.value = "";
@@ -83,7 +83,7 @@ export default class extends Controller {
     this.validateAmount();
   }
 
-  validateAmount(food) {
+  validateAmount() {
     const inputAmount = parseFloat(this.amountTarget.value);
 
     // only validate if we have a selected dry food and an input amount
@@ -92,15 +92,19 @@ export default class extends Controller {
         this.amountAlertTarget.textContent = `⚠️ Only ${this.selectedFoodLeftAmount}g left in storage.`;
         this.amountAlertTarget.classList.remove('hidden');
         this.amountAlertTarget.classList.replace("text-green-500", "text-red-500");
+        // this.submitButtonTarget.disabled = true;
       } else {
         this.amountAlertTarget.textContent = `${inputAmount}g is valid.`;
         this.amountAlertTarget.classList.remove('hidden');
         this.amountAlertTarget.classList.replace("text-red-500", "text-green-500");
-      } 
+        // this.submitButtonTarget.disabled = false;
+      }
     } else {
       this.hideAlert();
+      // this.submitButtonTarget.disabled = false;
     }
   }
+
   hideAlert() {
     this.amountAlertTarget.textContent = "";
     this.amountAlertTarget.classList.add("hidden");

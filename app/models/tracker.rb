@@ -15,7 +15,7 @@ class Tracker < ApplicationRecord
   private
 
   def dry_food?
-    food_type == "Dry" && dry_food.present?
+    (food_type == "Kibble" || food_type == "Freeze-Dried") && dry_food.present?
   end
 
   def amount_less_than_dry_food_left_amount
