@@ -1,5 +1,5 @@
 <%= form_with(model: [@pet, tracker], id: "tracker-form", class: "contents", data: { controller: "tracker-form" }) do |form| %>
-  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+  <div class="flex flex-col justify-center mb-4 md:flex-row">
     <%= render 'shared/errors', obj: @tracker %>
   </div>
 
