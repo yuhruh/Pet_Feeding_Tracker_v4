@@ -22,12 +22,14 @@ export default class extends Controller {
         }
       })
       const data = await response.json()
-      const filteredFoods = data.filter(dry => dry.food_type === type);
-
-      this.updateDryFoodOptions(filteredFoods);
-
-      // this.validateAmount(filteredFoods);
-
+      if (data.length === 0) {
+        alert(`There is no storage in dry food. Please add it first.`);
+        window.location.href = "/dry_foods/new";
+      } else {
+        const filteredFoods = data.filter(dry => dry.food_type === type);
+        this.updateDryFoodOptions(filteredFoods);
+        // this.validateAmount(filteredFoods);
+      }
     } else {
       this.dryFoodOptionsTarget.classList.add("hidden");
     }
