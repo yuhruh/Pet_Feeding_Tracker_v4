@@ -1,4 +1,4 @@
-<%= form_with(model: [@pet, tracker], id: "tracker-form", class: "contents", data: { controller: "tracker-form" }) do |form| %>
+<%= form_with(model: [@pet, tracker], id: "tracker-form", class: "contents") do |form| %>
   <div class="flex flex-col justify-center mb-4 md:flex-row">
     <%= render 'shared/errors', obj: @tracker %>
   </div>

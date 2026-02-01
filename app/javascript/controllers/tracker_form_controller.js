@@ -92,16 +92,16 @@ export default class extends Controller {
         this.amountAlertTarget.textContent = `⚠️ Only ${this.selectedFoodLeftAmount}g left in storage.`;
         this.amountAlertTarget.classList.remove('hidden');
         this.amountAlertTarget.classList.replace("text-green-500", "text-red-500");
-        // this.submitButtonTarget.disabled = true;
+        this.submitButtonTarget.disabled = true;
       } else {
         this.amountAlertTarget.textContent = `${inputAmount}g is valid.`;
         this.amountAlertTarget.classList.remove('hidden');
         this.amountAlertTarget.classList.replace("text-red-500", "text-green-500");
-        // this.submitButtonTarget.disabled = false;
+        this.submitButtonTarget.disabled = false;
       }
     } else {
       this.hideAlert();
-      // this.submitButtonTarget.disabled = false;
+      this.submitButtonTarget.disabled = false;
     }
   }
 
