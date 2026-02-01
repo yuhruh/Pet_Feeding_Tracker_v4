@@ -93,15 +93,21 @@ export default class extends Controller {
         this.amountAlertTarget.classList.remove('hidden');
         this.amountAlertTarget.classList.replace("text-green-500", "text-red-500");
         this.submitButtonTarget.disabled = true;
+        this.submitButtonTarget.classList.remove("bg-softBlue", "hover:bg-white", "hover:text-softBlue", "hover:border-softBlue", "cursor-pointer");
+        this.submitButtonTarget.classList.add("bg-gray-400", "cursor-not-allowed");
       } else {
         this.amountAlertTarget.textContent = `${inputAmount}g is valid.`;
         this.amountAlertTarget.classList.remove('hidden');
         this.amountAlertTarget.classList.replace("text-red-500", "text-green-500");
         this.submitButtonTarget.disabled = false;
+        this.submitButtonTarget.classList.add("bg-softBlue", "hover:bg-white", "hover:text-softBlue", "hover:border-softBlue", "cursor-pointer");
+        this.submitButtonTarget.classList.remove("bg-gray-400", "cursor-not-allowed");
       }
     } else {
       this.hideAlert();
       this.submitButtonTarget.disabled = false;
+      this.submitButtonTarget.classList.add("bg-softBlue", "hover:bg-white", "hover:text-softBlue", "hover:border-softBlue", "cursor-pointer");
+      this.submitButtonTarget.classList.remove("bg-gray-400", "cursor-not-allowed");
     }
   }
 
