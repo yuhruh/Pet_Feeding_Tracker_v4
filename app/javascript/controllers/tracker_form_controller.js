@@ -40,8 +40,10 @@ export default class extends Controller {
           "Accept": "application/json"
         }
       })
-      const data = await response.json()
-      console.log(data);
+      const data = await response.json();
+      const mapWetFoddOptions = data.map(food => [food.brand, food.description, food.favorite_score, food.amount, food.date] )
+      console.log(mapWetFoddOptions);
+      // this.updateWetFoodOptions(data);
 
     } else {
       this.dryFoodOptionsTarget.classList.add("hidden");
@@ -60,6 +62,11 @@ export default class extends Controller {
       }
       this.dryFoodSelectTarget.add(option);
     });
+  }
+
+  updateWetFoodOptions(foods) {
+    this.wetFoodSelectTarget.innerHTML = `<option value="">Select A Wet Food</option>`;
+
   }
 
   async fillFields() {
