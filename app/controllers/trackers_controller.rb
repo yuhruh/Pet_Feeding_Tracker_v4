@@ -108,6 +108,10 @@ class TrackersController < ApplicationController
 
   def favorite_food
     @favorite_foods = @pet.trackers.order(favorite_score: :desc)
+    respond_to do |format|
+      format.html
+      format.json { render json: @favorite_foods }
+    end
   end
 
   private

@@ -1,8 +1,8 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["foodType", "dryFoodOptions", "dryFoodSelect", "brand", "description", "amount", "amountAlert", "submitButton"]
-  static values = { dryFoods: Array }
+  static targets = ["foodType", "dryFoodOptions", "dryFoodSelect", "wetFoodOptions", "wetFoodSelect", "brand", "description", "amount", "amountAlert", "submitButton"]
+  static values = { dryFoods: Array, petId: Number }
 
   connect() {
     this.csrfToken = document.querySelector("meta[name='csrf-token']").content;
@@ -12,6 +12,7 @@ export default class extends Controller {
 
   async toggleDryFoodOptions() {
     const type = this.foodTypeTarget.value
+
     if (type === "Kibble" || type === "Freeze-Dried") {
       this.dryFoodOptionsTarget.classList.remove("hidden");
 
@@ -30,6 +31,18 @@ export default class extends Controller {
         this.updateDryFoodOptions(filteredFoods);
         // this.validateAmount(filteredFoods);
       }
+    } else if (type === "Wet") {
+      this.wetFoodOptionsTarget.classList.remove("hidden");
+
+      const response = await fetch(`/pets/${this.petIdValue}/trackers/favorite_food`, {
+        headers: {
+          "X-CSRF-Token": this.csrfToken,
+          "Accept": "application/json"
+        }
+      })
+      const data = await response.json()
+      console.log(data);
+
     } else {
       this.dryFoodOptionsTarget.classList.add("hidden");
     }

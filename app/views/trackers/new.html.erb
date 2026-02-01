@@ -1,6 +1,6 @@
 <% content_for :title, "New Tracker" %>
 
-<div class="container mx-auto md:w-2/3 w-full" data-controller="tracker-form">
+<div class="container mx-auto md:w-2/3 w-full" data-controller="tracker-form" data-tracker-form-pet-id-value="<%= @pet.id %>">
   <div class="flex flex-row justify-center gap-4 mb-4 dark:bg-gray-800 p-4 sm:p-6">
     <%= image_tag('tracker_removebg.png', width: '48px', height: '40px') %>
     <h1 class="text-center font-bold text-2xl mt-4 capitalize lg:text-4xl">New tracker</h1>
