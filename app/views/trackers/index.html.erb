@@ -45,6 +45,13 @@
 
 
   <div class="flex flex-col mt-5 mb-4 justify-center items-center mx-auto w-full">
+    <div class="flex justify-end items-end pr-8 pt-4 w-full">
+      <%= form_with url: pet_trackers_path(@pet), method: :get, class: "flex items-center" do |form| %>
+        <span class="mr-2">Chart Range:</span>
+        <%= form.select :range, options_for_select([["All time", "all"], ["Last 7 days", "7"], ["Last 30 days", "30"]], params[:range] || "all"), {}, { onchange: 'this.form.submit()', class: "p-1 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700" } %>
+      <% end %>
+    </div>
+
     <% if @dry_properties.present? || @wet_properties.present? %>
       <%= column_chart @data, adapter: "google", height: "300px", library: {
         title: "Amount & Weight Over Time",
