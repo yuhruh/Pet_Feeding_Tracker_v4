@@ -23,13 +23,13 @@ export default class extends Controller {
         }
       })
       const data = await response.json()
-      if (data.length === 0) {
-        alert(`There is no storage in dry food. Please add it first.`);
+      const filteredFoods = data.filter(dry => dry.food_type === type);
+
+      if (filteredFoods.length === 0) {
+        alert(`There is no "${type}" storage in dry food. Please add it first.`);
         window.location.href = "/dry_foods/new";
       } else {
-        const filteredFoods = data.filter(dry => dry.food_type === type);
         this.updateDryFoodOptions(filteredFoods);
-        // this.validateAmount(filteredFoods);
       }
     } else if (type === "Wet") {
       this.wetFoodOptionsTarget.classList.remove("hidden");
@@ -41,9 +41,7 @@ export default class extends Controller {
         }
       })
       const data = await response.json();
-      const mapWetFoddOptions = data.map(food => [food.brand, food.description, food.favorite_score, food.amount, food.date] )
-      console.log(mapWetFoddOptions);
-      // this.updateWetFoodOptions(data);
+      this.updateWetFoodOptions(data);
 
     } else {
       this.dryFoodOptionsTarget.classList.add("hidden");
@@ -66,10 +64,18 @@ export default class extends Controller {
 
   updateWetFoodOptions(foods) {
     this.wetFoodSelectTarget.innerHTML = `<option value="">Select A Wet Food</option>`;
+    const filteredFood = foods.filter(food => food.food_type === "Wet")
+    console.log(filteredFood);
+    filteredFood.forEach(food => {
+      const option = document.createElement('option');
+      option.value = food.id;
+      option.text = `${food.brand} ${food.description}: Favorite Score: ${food.favorite_score} - Last Feed Date: ${food.date}`;
+      this.wetFoodSelectTarget.add(option);
+    })
 
   }
 
-  async fillFields() {
+  async fillDryFoodFields() {
     const foodId = this.dryFoodSelectTarget.value;
 
     if (foodId) {
@@ -103,6 +109,39 @@ export default class extends Controller {
       this.selectedFoodLeftAmount = null;
     }
     this.validateAmount();
+  }
+
+  async fillWetFoodFields() {
+    const foodId = this.wetFoodSelectTarget.value;
+
+    if (foodId) {
+      try {
+        const response = await fetch(`/pets/${this.petIdValue}/trackers/${foodId}`, {
+          headers: {
+            "X-CSRF-Token": this.csrfToken,
+            "Accept": "application/json"
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        this.brandTarget.value = data.brand;
+        this.descriptionTarget.value = data.description;
+        this.amountTarget.value = data.amount;
+      } catch (error) {
+        console.error("Error fetching wet food data:", error);
+        this.brandTarget.value = "";
+        this.descriptionTarget.value = "";
+        this.amountTarget.value = "";
+      }
+    } else {
+      this.brandTarget.value = "";
+      this.descriptionTarget.value = "";
+      this.amountTarget.value = "";
+    }
   }
 
   validateAmount() {

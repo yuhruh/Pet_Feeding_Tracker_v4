@@ -44,6 +44,10 @@ class TrackersController < ApplicationController
 
   # GET /trackers/1 or /trackers/1.json
   def show
+    respond_to do |format|
+      format.html
+      format.json { render json: @tracker }
+    end
   end
 
   # GET /trackers/new
