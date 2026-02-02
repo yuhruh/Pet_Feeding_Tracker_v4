@@ -5,6 +5,7 @@ class TrackersTest < ApplicationSystemTestCase
     @user = users(:one)
     @pet = pets(:one)
     @tracker = trackers(:one)
+    @dry_food = dry_foods(:one)
   end
 
   test "visiting the index" do

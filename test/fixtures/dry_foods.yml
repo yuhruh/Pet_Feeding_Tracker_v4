@@ -2,7 +2,7 @@
 
 one:
   brand: MyString
-  food_type: MyString
+  food_type: "Kibble"
   description: MyString
   amount: 9.99
   used_amount: 9.99
