@@ -45,7 +45,7 @@
       <%= form.label :wet_food_list, class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize md:text-base" %>
     </div>
     <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.collection_select :wet_food_list, Current.user.dry_foods, :id, :brand_with_description, { prompt: "Select a wet food" }, class: "block shadow-sm rounded-md border px-3 py-2 mt-2 w-full border-gray-400 focus:outline-blue-600", data: { action: "change->tracker-form#fillWetFoodFields", tracker_form_target: "wetFoodSelect" } %>
+      <%= form.select :wet_food_list, [], { prompt: "Select a favorite or enter manually" }, class: "block shadow-sm rounded-md border px-3 py-2 mt-2 w-full border-gray-400 focus:outline-blue-600", data: { action: "change->tracker-form#fillWetFoodFields", tracker_form_target: "wetFoodSelect" } %>
     </div>
   </div>
 

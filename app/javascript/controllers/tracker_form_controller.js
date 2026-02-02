@@ -63,9 +63,8 @@ export default class extends Controller {
   }
 
   updateWetFoodOptions(foods) {
-    this.wetFoodSelectTarget.innerHTML = `<option value="">Select A Wet Food</option>`;
+    this.wetFoodSelectTarget.innerHTML = `<option value="">Select a favorite or enter manually</option>`;
     const filteredFood = foods.filter(food => food.food_type === "Wet")
-    console.log(filteredFood);
     filteredFood.forEach(food => {
       const option = document.createElement('option');
       option.value = food.id;
