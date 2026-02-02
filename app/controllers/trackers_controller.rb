@@ -17,8 +17,8 @@ class TrackersController < ApplicationController
   # GET /trackers or /trackers.json
   def index
     # @trackers = Tracker.all
-    @trackers = @pet.trackers
-    @trackers = @trackers.paginate(page: params[:page], per_page: params[:per_page] || 10).order(date: :asc, feed_time: :asc)
+    @all_trackers = @pet.trackers.order(date: :asc, feed_time: :asc)
+    @trackers = @all_trackers.paginate(page: params[:page], per_page: params[:per_page] || 10)
 
     respond_to do |format|
       format.html
@@ -27,11 +27,11 @@ class TrackersController < ApplicationController
       end
     end
 
-    @dry_properties = @trackers.where(food_type: "Dry").where.not(total_ate_amount: nil).group(:date).order(:date).sum(:total_ate_amount).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
-    @wet_properties = @trackers.where(food_type: "Wet").where.not(total_ate_amount: nil).group(:date).order(:date).sum(:total_ate_amount).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
+    @dry_properties = @all_trackers.where(food_type: "Dry").where.not(total_ate_amount: nil).group(:date).order(:date).sum(:total_ate_amount).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
+    @wet_properties = @all_trackers.where(food_type: "Wet").where.not(total_ate_amount: nil).group(:date).order(:date).sum(:total_ate_amount).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
 
     # Using average for weight is safer than sum, in case multiple entries exist for one day.
-    @weight = @trackers.where.not(weight: nil).group(:date).order(:date).average(:weight).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
+    @weight = @all_trackers.where.not(weight: nil).group(:date).order(:date).average(:weight).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
     # weights_by_date = @trackers.where.not(weight: nil).group(:date).average(:weight)
     # @weight = weights_by_date.sort_by { |date, _weight| date }.map { |date, weight| [date.strftime("%b %d"), weight.to_f] }
 
