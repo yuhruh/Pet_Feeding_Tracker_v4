@@ -27,6 +27,12 @@
     <%= link_to "Export to CSV", pet_trackers_path(@pet, format: :csv), class: "text-base font-bold text-sky-500 transition duration-300 ease-in-out hover:scale-110 capitalize md:text-lg" %>
   </fieldset>
 
+  <div class="flex digg_pagination justify-center mt-4">
+    <div class="page_info italic">
+      <%= page_entries_info @trackers %>
+    </div>
+  </div>
+
   <div class="flex flex-col mt-5 mb-4 justify-center items-center mx-auto w-full">
     <% if @dry_properties.present? || @wet_properties.present? %>
       <%= column_chart @data, adapter: "google", height: "300px", library: {
@@ -60,5 +66,11 @@
 
   <div id="trackers" class="flex flex-col mx-auto w-full divide-y divide-gray-200 space-y-5">
     <%= render 'tracker' %>
+  </div>
+
+  <div class="flex digg_pagination justify-center mb-4 mt-4">
+    <div class="page_info italic">
+      <%= page_entries_info @trackers %>
+    </div>
   </div>
 </div>

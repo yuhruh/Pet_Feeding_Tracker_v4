@@ -10,6 +10,12 @@
     <h1 class="text-center font-bold text-2xl mt-5 capitalize md:text-4xl"><%= Current.user.username.split(" ").map(&:capitalize).join(" ") %>'s cat list</h1>
   </div>
 
+  <div class="flex digg_pagination justify-center mt-4">
+    <div class="page_info italic">
+      <%= page_entries_info @pets %>
+    </div>
+  </div>
+
   <div id="pets" class="flex flex-row justify-start items-center mt-4 overflow-x-scroll">
     <% if @pets.any? %>
       <% @pets.each do |pet| %>
@@ -31,5 +37,11 @@
         <h4 class="flex items-center justify-center gap-2">You do not have any pets yet. Why would you add it right now? Press above button <%= image_tag('add_pet.png', width:'25px', height: '25px') %></h4>
       </div>
     <% end %>
+  </div>
+
+  <div class="flex digg_pagination justify-center mt-4">
+    <div class="page_info italic">
+      <%= page_entries_info @pets %>
+    </div>
   </div>
 </div>
