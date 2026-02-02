@@ -18,7 +18,7 @@ class TrackersController < ApplicationController
   def index
     # @trackers = Tracker.all
     @trackers = @pet.trackers
-    @trackers = @trackers.paginate(page:params[:page], per_page: 10).order(date: :asc, feed_time: :asc)
+    @trackers = @trackers.paginate(page:params[:page], per_page: params[:per_page] || 10).order(date: :asc, feed_time: :asc)
 
     respond_to do |format|
       format.html

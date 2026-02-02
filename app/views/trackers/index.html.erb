@@ -27,11 +27,22 @@
     <%= link_to "Export to CSV", pet_trackers_path(@pet, format: :csv), class: "text-base font-bold text-sky-500 transition duration-300 ease-in-out hover:scale-110 capitalize md:text-lg" %>
   </fieldset>
 
-  <div class="flex digg_pagination justify-center mt-4">
-    <div class="page_info italic">
+  <div class="flex flex-col digg_pagination justify-center italic mt-4">
+    <div class="flex justify-center page_info">
       <%= page_entries_info @trackers %>
     </div>
+
+    <div class="flex digg_pagination justify-center mt-4">
+      <%= will_paginate @trackers, :container => true %>
+    </div>
+    <div class="flex justify-end items-start mx-8">
+      <%= form_with url: pet_trackers_path(@pet), method: :get, class: "flex items-center" do |form| %>
+        <span class="mr-2">Items per page:</span>
+        <%= form.select :per_page, options_for_select([5, 10, 20, 50], params[:per_page] || 10), {}, { onchange: 'this.form.submit()', class: "p-1 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700" } %>
+      <% end %>
+    </div>
   </div>
+
 
   <div class="flex flex-col mt-5 mb-4 justify-center items-center mx-auto w-full">
     <% if @dry_properties.present? || @wet_properties.present? %>
@@ -72,5 +83,8 @@
     <div class="page_info italic">
       <%= page_entries_info @trackers %>
     </div>
+  </div>
+  <div class="flex digg_pagination justify-center mt-4 mb-4 italic">
+    <%= will_paginate @trackers, :container => true %>
   </div>
 </div>
