@@ -17,7 +17,8 @@ class TrackersController < ApplicationController
   # GET /trackers or /trackers.json
   def index
     # @trackers = Tracker.all
-    @all_trackers = @pet.trackers.order(date: :asc, feed_time: :asc)
+    # @all_trackers = @pet.trackers.order(date: :asc, feed_time: :asc)
+    @all_trackers = @pet.trackers
 
     # Add the following lines to filter the trackers based on the selected range
     case params[:range]
@@ -27,7 +28,8 @@ class TrackersController < ApplicationController
       @all_trackers = @all_trackers.where("date >= ?", 30.days.ago.to_date)
     end
 
-    @trackers = @all_trackers.paginate(page: params[:page], per_page: params[:per_page] || 10)
+    # @trackers = @all_trackers.paginate(page: params[:page], per_page: params[:per_page] || 10)
+    @trackers = @all_trackers.order(date: :asc, feed_time: :asc).paginate(page: params[:page], per_page: params[:per_page] || 10)
 
     respond_to do |format|
       format.html
