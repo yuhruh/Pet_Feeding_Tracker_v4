@@ -15,14 +15,29 @@
 default: &default
   adapter: postgresql
   encoding: unicode
+  url: <%= ENV["DATABASE_URL"] %>
+  database: pet_tracker_v4
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV["pet_tracker_v4_production"] %>
+  port: 5432
+  username: pet_tracker_v4
+  password: <%= ENV["PET_TRACKER_V4_DATABASE_PASSWORD"] %>
 
+
+default: &default
+  adapter: sqlite3
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
 
 development:
   <<: *default
-  database: pet_tracker_v4_development
+  database: storage/development.sqlite3
+
+# development:
+#   <<: *default
+#   database: pet_tracker_v4_development
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -81,18 +96,22 @@ test:
 production:
   primary: &primary_production
     <<: *default
+    adapter: postgresql
     database: pet_tracker_v4_production
     username: pet_tracker_v4
+    url: <%= ENV['DATABASE_URL'] %>
     password: <%= ENV["PET_TRACKER_V4_DATABASE_PASSWORD"] %>
   cache:
-    <<: *primary_production
+    <<: *default
+    url: <%= ENV['DATABASE_URL'] %>
     database: pet_tracker_v4_production_cache
     migrations_paths: db/cache_migrate
   queue:
-    <<: *primary_production
+    <<: *default
+    url: <%= ENV['DATABASE_URL'] %>
     database: pet_tracker_v4_production_queue
     migrations_paths: db/queue_migrate
   cable:
-    <<: *primary_production
+    <<: *default
     database: pet_tracker_v4_production_cable
     migrations_paths: db/cable_migrate

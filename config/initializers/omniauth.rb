@@ -20,14 +20,14 @@ Rails.application.config.middleware.use OmniAuth::Builder do
       request_path: "/auth/github"
     }
 
-  else
+  elsif Rails.env.development?
     provider :google_oauth2, Rails.application.credentials.dig(:google, :client_id), Rails.application.credentials.dig(:google, :client_secret), {
       scope: "email, profile"
     }
     provider :line, Rails.application.credentials.dig(:line, :client_id), Rails.application.credentials.dig(:line, :client_secret), scope: "profile openid email"
     provider :github, Rails.application.credentials.dig(:github, :client_id), Rails.application.credentials.dig(:github, :client_secret), scope: "user:email"
   end
-
+  
   OmniAuth.config.on_failure = Proc.new do |env|
     OmniAuth::FailureEndpoint.new(env).redirect_to_failure
   end
