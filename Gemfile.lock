@@ -83,7 +83,7 @@ GEM
     bindex (0.8.1)
     bootsnap (1.22.0)
       msgpack (~> 1.2)
-    brakeman-min (8.0.1)
+    brakeman-min (8.0.2)
       parallel (~> 1.20)
       racc
       ruby2ruby (~> 2.5.1)
