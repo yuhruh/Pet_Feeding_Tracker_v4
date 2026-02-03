@@ -27,7 +27,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     provider :line, Rails.application.credentials.dig(:line, :client_id), Rails.application.credentials.dig(:line, :client_secret), scope: "profile openid email"
     provider :github, Rails.application.credentials.dig(:github, :client_id), Rails.application.credentials.dig(:github, :client_secret), scope: "user:email"
   end
-  
+
   OmniAuth.config.on_failure = Proc.new do |env|
     OmniAuth::FailureEndpoint.new(env).redirect_to_failure
   end

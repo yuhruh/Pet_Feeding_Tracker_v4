@@ -7,7 +7,7 @@ gem "propshaft"
 # Use pg as the database for Active Record
 # gem 'pg', '~>1.5.9'
 # gem "pg", ">= 2.1"
-gem "pg", "~> 1.1"
+gem "sqlite3"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
@@ -79,8 +79,8 @@ group :test do
   gem "selenium-webdriver"
 end
 
-# group :production do
-#   gem "pg", "~>1.5.9"
-# end
+group :production do
+  gem "pg", "~>1.5.9"
+end
 
 gem "brakeman-min", "~> 8.0", group: :development
