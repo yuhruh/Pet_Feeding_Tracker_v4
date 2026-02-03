@@ -81,7 +81,7 @@ group :test do
 end
 
 group :production do
-  gem "pg", "~>1.5.9"
+  gem "pg", "~>1.6.3"
 end
 
 gem "brakeman-min", "~> 8.0", group: :development
