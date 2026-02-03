@@ -6,7 +6,7 @@ gem "rails", "8.0.3"
 gem "propshaft"
 # Use pg as the database for Active Record
 # gem 'pg', '~>1.5.9'
-# gem "pg", ">= 2.1"
+gem "pg", ">= 2.1"
 gem "sqlite3"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
@@ -81,7 +81,7 @@ group :test do
 end
 
 group :production do
-  gem "pg", "~>1.5.9"
+  # gem "pg", "~>1.5.9"
 end
 
 gem "brakeman-min", "~> 8.0", group: :development
