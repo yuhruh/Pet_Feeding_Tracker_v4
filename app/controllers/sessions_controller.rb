@@ -25,9 +25,9 @@ class SessionsController < ApplicationController
       else
         msg = if user.connected_services.any?
                 "You've previously signed in using your #{connected_services_string(local_user)} account. Please use that to sign in."
-              else
+        else
                 "The password is not correct"
-              end
+        end
         redirect_to new_session_path, alert: msg, status: :unprocessable_entity
       end
     else
