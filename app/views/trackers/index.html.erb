@@ -7,7 +7,7 @@
         <%= form.file_field :file, accept: ".csv" %>
         <%= form.button "Import", class: "p-2 mt-4 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700 hover:scale-110" %>
         <div class="flex text-sm italic font-semibold text-gray-500">
-          <span>Only CSV file can be imported</span>
+          <span class="dark:text-grayishBlue">Only CSV file can be imported</span>
         </div>
       <% end %>
     </div>
@@ -24,7 +24,7 @@
 
   <fieldset class="flex flex-row gap-3 justify-center mb-3">
     <%= image_tag('download.png', width: '25px', height: '25px') %>
-    <%= link_to "Export to CSV", pet_trackers_path(@pet, format: :csv), class: "text-base font-bold text-sky-500 transition duration-300 ease-in-out hover:scale-110 capitalize md:text-lg" %>
+    <%= link_to "Export to CSV", pet_trackers_path(@pet, format: :csv), class: "text-base font-bold text-sky-500 transition duration-300 ease-in-out hover:scale-110 capitalize md:text-lg dark:text-white" %>
   </fieldset>
 
   <div class="flex flex-col digg_pagination justify-center italic mt-4">
@@ -45,7 +45,7 @@
 
 
   <div class="flex flex-col mt-5 mb-4 justify-center items-center mx-auto w-full">
-    <div class="flex justify-end items-end pr-8 pt-4 w-full">
+    <div class="flex justify-end items-end pr-8 pt-4 mb-4 w-full">
       <%= form_with url: pet_trackers_path(@pet), method: :get, class: "flex items-center" do |form| %>
         <span class="mr-2">Chart Range:</span>
         <%= form.select :range, options_for_select([["All time", "all"], ["Last 7 days", "7"], ["Last 30 days", "30"]], params[:range] || "all"), {}, { onchange: 'this.form.submit()', class: "p-1 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700" } %>
