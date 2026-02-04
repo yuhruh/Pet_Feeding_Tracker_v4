@@ -8,39 +8,36 @@ class SessionsController < ApplicationController
   def create
     user = User.find_by(email_address: params[:email_address])
 
-    if user.present?
+    if user
       if user.authenticate(params[:password])
         start_new_session_for user
-        user.last_sign_in_at = user.current_sign_in_at
-        user.current_sign_in_at = Time.current
-        user.sign_in_count = user.sign_in_count.to_i + 1
-        user.save(validate: false)
+        user.update_columns(
+          last_sign_in_at: user.current_sign_in_at,
+          current_sign_in_at: Time.current,
+          sign_in_count: user.sign_in_count.to_i + 1
+        )
 
         if user.new_user?
-          flash[:notice] = "Hello, #{Current.user.username.capitalize} 👋. This is your first time to sign in, please add a new cat first for further tracker."
-          redirect_to new_pet_path
+          redirect_to new_pet_path, notice: "Hello, #{Current.user.username.capitalize} 👋. This is your first time to sign in, please add a new cat first for further tracker."
         else
-          flash[:notice] = "Welcome back to Cat Feeding Tracker, #{Current.user.username.capitalize}"
-          redirect_to pets_path
+          redirect_to pets_path, notice: "Welcome back to Cat Feeding Tracker, #{Current.user.username.capitalize}"
         end
       else
-        local_user = User.find_by(email_address: params[:email_address])
-        if local_user.connected_services.any?
-          flash[:alert] = "You've previously signed in using your #{connected_services_string(local_user)} account. Please use that to sign in."
-        else
-          flash[:alert] = "Try another email address or password."
-        end
-        redirect_to new_session_path, alert: "The password is not correct"
+        msg = if user.connected_services.any?
+                "You've previously signed in using your #{connected_services_string(local_user)} account. Please use that to sign in."
+              else
+                "The password is not correct"
+              end
+        redirect_to new_session_path, alert: msg, status: :unprocessable_entity
       end
     else
-      redirect_to new_session_path, alert: "This email has not been signed up yet."
+      redirect_to new_registrations_path, alert: "This email has not been signed up yet. Please sign up first", status: :see_other
     end
   end
 
   def destroy
     terminate_session
-    flash[:alert] = "You have been signed out."
-    redirect_to new_session_path
+    redirect_to new_session_path, alert: "You have been signed out.", status: :see_other
   end
 
   private
