@@ -31,7 +31,7 @@ class SessionsController < ApplicationController
         redirect_to new_session_path, alert: msg, status: :see_other
       end
     else
-      redirect_to new_registrations_path, alert: "This email has not been signed up yet. Please sign up first", status: :see_other
+      redirect_to new_registrations_path, alert: "This email has not been signed up yet. Please sign up first", status: :see_other, allow_other_host: true
     end
   end
 
