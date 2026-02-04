@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_04_141558) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_04_144517) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -86,11 +86,13 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_04_141558) do
   end
 
   create_table "solid_cache_entries", force: :cascade do |t|
+    t.integer "key_hash", limit: 8, null: false
     t.binary "key", limit: 1024, null: false
     t.binary "value", limit: 536870912, null: false
     t.datetime "created_at", null: false
-    t.index ["key", "created_at"], name: "index_solid_cache_entries_on_key_and_created_at"
-    t.index ["key"], name: "index_solid_cache_entries_on_key", unique: true
+    t.integer "byte_size", limit: 8, default: 0, null: false
+    t.index ["key_hash", "created_at"], name: "index_solid_cache_entries_on_key_hash_and_created_at"
+    t.index ["key_hash"], name: "index_solid_cache_entries_on_key_hash", unique: true
   end
 
   create_table "trackers", force: :cascade do |t|
