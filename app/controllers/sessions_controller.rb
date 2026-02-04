@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
   def create
     @user = User.find_by(email_address: params[:email_address])
 
-    if @user
+    if @user.present?
       if @user.authenticate(params[:password])
         start_new_session_for @user
         @user.update_columns(

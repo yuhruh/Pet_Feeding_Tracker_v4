@@ -12,7 +12,7 @@ namespace :tailwindcss do
     Dir.chdir(Rails.root) do
       command = "npx tailwindcss -i ./app/assets/tailwind/application.css -o ./app/assets/builds/tailwind.css -c ./config/tailwind.config.js --minify"
 
-      puts 'Running custom Tailwind CSS build command from '#{Dir.pwd}'...'
+      puts "Running custom Tailwind CSS build command from "# {Dir.pwd}'...'
 
       unless system(command)
         abort "Tailwind CSS build failed."
