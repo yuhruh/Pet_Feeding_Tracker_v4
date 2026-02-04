@@ -126,7 +126,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_19_090754) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "connected_services", "users"
-  add_foreign_key "dry_foods", "Users", column: "user_id"
+  add_foreign_key "dry_foods", "users", column: "user_id"
   add_foreign_key "pets", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "trackers", "dry_foods"
