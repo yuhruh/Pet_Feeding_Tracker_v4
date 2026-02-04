@@ -3,7 +3,7 @@
     <h1 class="text-center font-semibold text-xl md:text-2xl lg:text-4xl">🐾 Sign In Cat Trackers App 🐾</h1>
   </div>
 
-  <%= form_with url: session_url, class: "contents" do |form| %>
+  <%= form_with url: session_url, class: "contents", data: { turbo: false } do |form| %>
     <div class="flex flex-col justify-center items-center space-x-3 mb-4 md:flex-row">
       <label for="" class="text-base font-medium mx-4 text-gray-700 required dark:text-gray-100">Email</label>
       <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address], class: "shadow-md rounded-md border border-gray-400 focus:outline-softBlue px-3 py-2 w-1/2 dark:text-black" %>
