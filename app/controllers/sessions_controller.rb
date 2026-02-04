@@ -31,6 +31,7 @@ class SessionsController < ApplicationController
         redirect_to new_session_path, alert: msg, status: :see_other
       end
     else
+      Rails.logger.info "Unregistered user attempt with email: #{params[:email_address]}. Redirecting to sign up."
       redirect_to new_registrations_path, alert: "This email has not been signed up yet. Please sign up first", status: :see_other
     end
   end
