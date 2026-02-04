@@ -24,7 +24,7 @@ class SessionsController < ApplicationController
         end
       else
         msg = if @user.connected_services.any?
-                "You've previously signed in using your #{connected_services_string(user)} account. Please use that to sign in."
+                "You've previously signed in using your #{connected_services_string(@user)} account. Please use that to sign in."
         else
                 "The password is not correct"
         end
