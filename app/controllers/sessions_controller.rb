@@ -24,11 +24,11 @@ class SessionsController < ApplicationController
         end
       else
         msg = if user.connected_services.any?
-                "You've previously signed in using your #{connected_services_string(local_user)} account. Please use that to sign in."
+                "You've previously signed in using your #{connected_services_string(user)} account. Please use that to sign in."
         else
                 "The password is not correct"
         end
-        redirect_to new_session_path, alert: msg, status: :unprocessable_entity
+        redirect_to new_session_path, alert: msg, status: :see_other
       end
     else
       redirect_to new_registrations_path, alert: "This email has not been signed up yet. Please sign up first", status: :see_other
