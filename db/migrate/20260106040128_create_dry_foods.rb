@@ -10,7 +10,7 @@ class CreateDryFoods < ActiveRecord::Migration[8.0]
       t.decimal :total_ate_amount
       t.decimal :left_amount
       t.date :days_remaining
-      t.references :User, null: false, foreign_key: true
+      t.references :user, null: false, foreign_key: true
 
       t.timestamps
     end
