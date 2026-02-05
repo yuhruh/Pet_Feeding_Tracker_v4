@@ -1,44 +1,44 @@
 <div class="container mx-auto py-8">
-  <h1 class="text-3xl font-bold mb-4">Pet Tracker Usage Guide</h1>
+  <h1 class="text-3xl font-bold mb-4"><%= t("doc_page.title") %></h1>
 
-  <p class="text-base mb-6">This guide provides detailed instructions on how to use the key features of Pet Tracker.</p>
+  <p class="text-base mb-6"><%= t("doc_page.description") %></p>
 
   <div class="space-y-8">
     <div class="container mx-auto border-2 border-grayishBlue rounded-lg shadow-lg p-6">
-      <h2 id="user_account" class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2">User Account</h2>
-      <p class="mb-4">Your user account is the central hub for managing your pets and tracking their dietary.</p>
+      <h2 id="user_account" class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2"><%= t("doc_page.user_account_title") %></h2>
+      <p class="mb-4"><%= t("doc_page.user_account_description") %></p>
       <div class="flex flex-col md:flex-row">
         <div class="flex flex-col p-2">
-          <h3 class="text-xl font-semibold mb-2">Creating an Account</h3>
+          <h3 class="text-xl font-semibold mb-2"><%= t("doc_page.creating_account_title") %></h3>
           <ol class="list-decimal list-inside mb-4">
-            <li><strong>Sign Up:</strong> Navigate to the "Get Started" page.</li>
-            <li>There are 4 ways to create account: </li>
+            <li><strong><%= t("doc_page.creating_account_step_1") %></strong></li>
+            <li><%= t("doc_page.creating_account_step_2") %>
               <div class="font-semibold ml-4 mt-1">
-                Enter Your Details (App's Form): Provide your email address and a secure password.
+                <%= t("doc_page.creating_account_step_2a") %>
               </div>
               <div class="font-semibold ml-4 mt-1">
-                Google/GitHub: Using Google or GitHub to create account.
+                <%= t("doc_page.creating_account_step_2b") %>
               </div>
               <div class="font-semibold ml-4 mt-1">
-                Line: Using Line to create account.
+                <%= t("doc_page.creating_account_step_2c") %>
               </div>
-              <div class="font-semibold text-softBlue text-sm ml-4 mt-1 mb-3">Using line to sign up, the page will redirect to the form for filling email and password</div>
+              <div class="font-semibold text-softBlue text-sm ml-4 mt-1 mb-3"><%= t("doc_page.creating_account_step_2d") %></div>
             </li>
-            <li><strong>Register:</strong> Click the "Sign Up" button to create your account.</li>
+            <li><strong><%= t("doc_page.creating_account_step_3") %></strong></li>
           </ol>
 
-          <h3 class="text-xl font-semibold mb-2">Signing In</h3>
+          <h3 class="text-xl font-semibold mb-2"><%= t("doc_page.signing_in_title") %></h3>
           <ol class="list-decimal list-inside mb-4">
-            <li><strong>Sign In:</strong> Go to the "Sign In" page.</li>
-            <li><strong>Enter Your Credentials:</strong> Enter your email and password.</li>
-            <li><strong>Access Your Account:</strong> Click the "Sign In" button to access your dashboard.</li>
+            <li><strong><%= t("doc_page.signing_in_step_1") %></strong></li>
+            <li><strong><%= t("doc_page.signing_in_step_2") %></strong></li>
+            <li><strong><%= t("doc_page.signing_in_step_3") %></strong></li>
           </ol>
 
-          <h3 class="text-xl font-semibold mb-2">Third-Party Sign-In</h3>
-          <p class="mb-4">You can also sign in using a third-party provider for a more streamlined experience.</p>
+          <h3 class="text-xl font-semibold mb-2"><%= t("doc_page.third_party_signin_title") %></h3>
+          <p class="mb-4"><%= t("doc_page.third_party_signin_description") %></p>
 
-          <h3 class="text-xl font-semibold mb-2">Timezone</h3>
-          <p class="mb-4">App will automatically set your local timezone during your account settings to ensure all tracking data is accurate.</p>
+          <h3 class="text-xl font-semibold mb-2"><%= t("doc_page.timezone_title") %></h3>
+          <p class="mb-4"><%= t("doc_page.timezone_description") %></p>
         </div>
         
         <%= image_tag('user_account.png', class: "border-2 border-slate-200 rounded-lg shadow-md w-full md:w-1/2 p-2") %>
@@ -46,21 +46,21 @@
     </div>
 
     <div class="container border-2 border-grayishBlue rounded-lg shadow-lg p-6">
-      <h2 id="pet_manage" class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2">Pet Management</h2>
-      <p class="mb-4">The "Pets" section allows you to create and manage profiles for each of your pets.</p>
+      <h2 id="pet_manage" class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2"><%= t("doc_page.pet_management_title") %></h2>
+      <p class="mb-4"><%= t("doc_page.pet_management_description") %></p>
       <div class="flex flex-col md:flex-row">
         <div class="flex flex-col my-auto p-2">
-          <h3 class="text-xl font-semibold mb-2">Adding a Pet</h3>
+          <h3 class="text-xl font-semibold mb-2"><%= t("doc_page.adding_pet_title") %></h3>
           <ol class="list-decimal list-inside mb-4">
-            <li><strong>Go to Pets:</strong> Navigate to the "User's Cats" section from the main menu.</li>
-            <li><strong>New Pet:</strong> Click the "Add A Cat" button.</li>
-            <li><strong>Enter Pet Details:</strong> Fill in your pet's name, species, and other relevant information.</li>
-            <li><strong>Save:</strong> Click "Add A Cat" to save the profile.</li>
+            <li><strong><%= t("doc_page.adding_pet_step_1") %></strong></li>
+            <li><strong><%= t("doc_page.adding_pet_step_2") %></strong></li>
+            <li><strong><%= t("doc_page.adding_pet_step_3") %></strong></li>
+            <li><strong><%= t("doc_page.adding_pet_step_4") %></strong></li>
           </ol>
 
-          <h3 class="text-xl font-semibold mb-2">Viewing and Editing Pets</h3>
-          <ul class="list-disc list-inside mb-4">Navigate to the "User's Cats" section from the main menu. The dropdown menu will show all the pets' name. Click on a pet's name to see their detailed profile.</li>
-            <li><strong>Edit:</strong> From the pet's profile page, click "Edit pet's name Porfile" to update their information.</li>
+          <h3 class="text-xl font-semibold mb-2"><%= t("doc_page.viewing_editing_pets_title") %></h3>
+          <ul class="list-disc list-inside mb-4"><%= t("doc_page.viewing_editing_pets_description") %></li>
+            <li><strong><%= t("doc_page.viewing_editing_pets_step_1") %></strong></li>
           </ul>
         </div>
         <%=image_tag("pet_management.png", class: "border-2 border-slate-200 rounded-lg shadow-md w-full md:w-1/2 p-2") %>
@@ -68,23 +68,23 @@
     </div>
 
     <div class="container border-2 border-grayishBlue rounded-lg shadow-lg p-6">
-      <h2 id="dry_food" class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2">Dry Food Storage</h2>
-      <p class="mb-4">The "Dry Food Storage" feature helps you keep track of your pet's dry food inventory.</p>
+      <h2 id="dry_food" class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2"><%= t("doc_page.dry_food_storage_title") %></h2>
+      <p class="mb-4"><%= t("doc_page.dry_food_storage_description") %></p>
 
       <div class="flex flex-col md:flex-row">
         <div class="flex flex-col my-auto p-2">
-          <h3 class="text-xl font-semibold mb-2">Adding Dry Food</h3>
+          <h3 class="text-xl font-semibold mb-2"><%= t("doc_page.adding_dry_food_title") %></h3>
           <ol class="list-decimal list-inside mb-4">
-            <li><strong>Go to Dry Foods:</strong> Navigate to the "DryFood Storage" section.</li>
-            <li><strong>New Dry Food:</strong> Click the "Add Dry Food" in the dropdown menu.</li>
-            <li><strong>Enter Food Details:</strong> Provide the brand, food type, description/brand, and quantity of the dry food.</li>
-            <li><strong>Save:</strong> Click "Add Dry Food" to add it to your inventory.</li>
+            <li><strong><%= t("doc_page.adding_dry_food_step_1") %></strong></li>
+            <li><strong><%= t("doc_page.adding_dry_food_step_2") %></strong></li>
+            <li><strong><%= t("doc_page.adding_dry_food_step_3") %></strong></li>
+            <li><strong><%= t("doc_page.adding_dry_food_step_4") %></strong></li>
           </ol>
 
-          <h3 class="text-xl font-semibold mb-2">Managing Inventory</h3>
+          <h3 class="text-xl font-semibold mb-2"><%= t("doc_page.managing_inventory_title") %></h3>
           <ul class="list-disc list-inside mb-4">
-            <li><strong>View:</strong> See a list of all your dry foods and their current quantities.</li>
-            <li><strong>Delete:</strong> Remove a dry food entry from your inventory.</li>
+            <li><strong><%= t("doc_page.managing_inventory_step_1") %></strong></li>
+            <li><strong><%= t("doc_page.managing_inventory_step_2") %></strong></li>
           </ul>
         </div>
         <%=image_tag('dry_food.png', class: "border-2 border-slate-200 rounded-lg shadow-md w-full md:w-1/2 p-2") %>
@@ -92,103 +92,103 @@
     </div>
 
     <div class="container border-2 border-grayishBlue rounded-lg shadow-lg p-6">
-      <h2 id="trackers" class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2">Trackers</h2>
-      <p class="mb-4">Trackers are used to log your pet's daily doetary, such as feeding times, amount, and health observations.</p>
+      <h2 id="trackers" class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2"><%= t("doc_page.trackers_title") %></h2>
+      <p class="mb-4"><%= t("doc_page.trackers_description") %></p>
 
       <div class="flex flex-col md:flex-row">
         <div class="flex flex-col p-2">
-          <h3 class="text-xl font-semibold mb-2">Creating a Tracker</h3>
+          <h3 class="text-xl font-semibold mb-2"><%= t("doc_page.creating_tracker_title") %></h3>
           <ol class="list-decimal list-inside mb-4">
-            <li><strong>Go to Trackers:</strong> Navigate to the "Trackers" section.</li>
-            <li><strong>New Tracker:</strong> In petname's tracker page, click on "New Tracker For Petname" button</li>
-            <li><strong>Select Pet:</strong> Choose the "Petname's Tracker" in the dropdown menu.</li>
-            <li><strong>Enter Details:</strong> Fill in the dietary details, such as the type of food, feeding time, and any notes.</li>
-            <li><strong>Save:</strong> Click "Add A Record For petname" to log the dietary information you want to create for.</li>
+            <li><strong><%= t("doc_page.creating_tracker_step_1") %></strong></li>
+            <li><strong><%= t("doc_page.creating_tracker_step_2") %></strong></li>
+            <li><strong><%= t("doc_page.creating_tracker_step_3") %></strong></li>
+            <li><strong><%= t("doc_page.creating_tracker_step_4") %></strong></li>
+            <li><strong><%= t("doc_page.creating_tracker_step_5") %></strong></li>
           </ol>
 
-          <h3 class="text-xl font-semibold mb-2">Importing Trackers from CSV</h3>
-          <p class="mb-4">For bulk data entry, you can import trackers from a CSV file.</p>
+          <h3 class="text-xl font-semibold mb-2"><%= t("doc_page.importing_trackers_title") %></h3>
+          <p class="mb-4"><%= t("doc_page.importing_trackers_description") %></p>
           <ol class="list-decimal list-inside mb-4">
-            <li><strong>Go to Trackers:</strong> Navigate to the "Trackers" section.</li>
-            <li><strong>Import CSV:</strong> Click the "Choose File" button.</li>
-            <li><strong>Choose File:</strong> Select the CSV file you want to import.</li>
-            <li><strong>Upload:</strong> Click "Import" to upload and process the file.</li>
+            <li><strong><%= t("doc_page.importing_trackers_step_1") %></strong></li>
+            <li><strong><%= t("doc_page.importing_trackers_step_2") %></strong></li>
+            <li><strong><%= t("doc_page.importing_trackers_step_3") %></strong></li>
+            <li><strong><%= t("doc_page.importing_trackers_step_4") %></strong></li>
           </ol>
         </div>
         <%=image_tag("trackers.png", class: "border-2 border-slate-200 rounded-lg shadow-md w-full md:w-1/2 p-2") %>
       </div>
 
-      <h3 id="import" class="text-xl font-semibold mb-2">📋 Import Guide Summary</h3>
-      <p class="mb-4">To successfully import your cat's diet records, please ensure your CSV file includes the following columns and follows these value conventions:</p>
+      <h3 id="import" class="text-xl font-semibold mb-2"><%= t("doc_page.import_guide_title") %></h3>
+      <p class="mb-4"><%= t("doc_page.import_guide_description") %></p>
       <div class="overflow-x-auto">
         <table class="min-w-full bg-white border border-gray-200 dark:bg-slate-700">
           <thead>
             <tr class="bg-gray-100 dark:bg-black">
-              <th class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">Column Name</th>
-              <th class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">Description</th>
-              <th class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">Example Value</th>
+              <th class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_column_name") %></th>
+              <th class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_column_description") %></th>
+              <th class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_column_example") %></th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">date</td>
-              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">The date of feeding</td>
-              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">2026-01-14</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_date_name") %></td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_date_description") %></td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_date_example") %></td>
             </tr>
             <tr>
-              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">feed_time</td>
-              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">The time food was served</td>
-              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">19:50</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_feed_time_name") %></td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_feed_time_description") %></td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_feed_time_example") %></td>
             </tr>
             <tr>
-              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">food_type</td>
-              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">Type of food (Wet/Dry)</td>
-              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">Wet</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_food_type_name") %></td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_food_type_description") %></td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_food_type_example") %></td>
             </tr>
             <tr>
-              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">brand</td>
-              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">Brand name</td>
-              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">ciao</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_brand_name") %></td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_brand_description") %></td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_brand_example") %></td>
             </tr>
             <tr>
-              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">description</td>
-              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">Product name or flavor</td>
-              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">IMC-222 Jelly Cup</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_description_name") %></td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_description_description") %></td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_description_example") %></td>
             </tr>
             <tr>
-              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">amount</td>
-              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">Total amount served (g)</td>
-              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">105</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_amount_name") %></td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_amount_description") %></td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_amount_example") %></td>
             </tr>
             <tr>
-              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">hungry</td>
-              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">Cat's appetite status</td>
-              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white">See below</td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_hungry_name") %></td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_hungry_description") %></td>
+              <td class="px-4 py-2 border-b border border-slate-300 text-center dark:text-white"><%= t("doc_page.table_hungry_example") %></td>
             </tr>
           </tbody>
         </table>
       </div>
-      <h4 class="text-lg font-semibold mt-4 mb-2">🥣 "Hungry" Column Options</h4>
-      <p class="mb-2">Please use one of these exact phrases (including the symbols) for the hungry column:</p>
+      <h4 class="text-lg font-semibold mt-4 mb-2"><%= t("doc_page.hungry_options_title") %></h4>
+      <p class="mb-2"><%= t("doc_page.hungry_options_description") %></p>
       <ul class="list-disc list-inside">
-        <li>💖 Yes, eat right away</li>
-        <li>❌ No, not interested</li>
-        <li>🔺 No, not really. Ate A Little</li>
+        <li><%= t("doc_page.hungry_option_1") %></li>
+        <li><%= t("doc_page.hungry_option_2") %></li>
+        <li><%= t("doc_page.hungry_option_3") %></li>
       </ul>
 
-      <h4 class="text-lg font-semibold mt-4 mb-2">💡 CSV Example Row</h4>
-      <p class="mb-2">You can use this format for your file to import:</p>
+      <h4 class="text-lg font-semibold mt-4 mb-2"><%= t("doc_page.csv_example_title") %></h4>
+      <p class="mb-2"><%= t("doc_page.csv_example_description") %></p>
       <div class="hidden lg:block overflow-x-auto">
         <table class="border-collapse border border-slate-200 mb-4 dark:bg-slate-700">
           <thead>
             <tr class="bg-sky-100 dark:bg-slate-900">
-              <th class="px-4 py-2 text-center border border-slate-300 dark:text-white">date</th>
-              <th class="px-4 py-2 text-center border border-slate-300 dark:text-white">feed_time</th>
-              <th class="px-4 py-2 text-center border border-slate-300 dark:text-white">food_type</th>
-              <th class="px-4 py-2 text-center border border-slate-300 dark:text-white">brand</th>
-              <th class="px-4 py-2 text-center border border-slate-300 dark:text-white">description</th>
-              <th class="px-4 py-2 text-center border border-slate-300 dark:text-white">amount</th>
-              <th class="px-4 py-2 text-center border border-slate-300 dark:text-white">hungry</th>
+              <th class="px-4 py-2 text-center border border-slate-300 dark:text-white"><%= t("doc_page.table_date_name") %></th>
+              <th class="px-4 py-2 text-center border border-slate-300 dark:text-white"><%= t("doc_page.table_feed_time_name") %></th>
+              <th class="px-4 py-2 text-center border border-slate-300 dark:text-white"><%= t("doc_page.table_food_type_name") %></th>
+              <th class="px-4 py-2 text-center border border-slate-300 dark:text-white"><%= t("doc_page.table_brand_name") %></th>
+              <th class="px-4 py-2 text-center border border-slate-300 dark:text-white"><%= t("doc_page.table_description_name") %></th>
+              <th class="px-4 py-2 text-center border border-slate-300 dark:text-white"><%= t("doc_page.table_amount_name") %></th>
+              <th class="px-4 py-2 text-center border border-slate-300 dark:text-white"><%= t("doc_page.table_hungry_name") %></th>
             </tr>
           </thead>
           <tbody>
@@ -211,31 +211,31 @@
         <table class="table-auto mb-4 px-2 w-full shadow-md border border-slate-400 dark:bg-slate-700">
           <tbody>
             <tr class="border-b">
-              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300 dark:bg-black dark:text-white">date</th>
+              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300 dark:bg-black dark:text-white"><%= t("doc_page.table_date_name") %></th>
                 <td class="text-sm text-center p-2 border border-slate-300 dark:text-white">2026-01-14</td>
              </tr>
              <tr class="border-b">
-              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300 dark:bg-black dark:text-white">feed_time</th>
+              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300 dark:bg-black dark:text-white"><%= t("doc_page.table_feed_time_name") %></th>
                 <td class="text-sm text-center p-2 border border-slate-300 dark:text-white">19:50, 21:46, </td>
              </tr>
              <tr class="border-b">
-              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300 dark:bg-black dark:text-white">food_type</th>
+              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300 dark:bg-black dark:text-white"><%= t("doc_page.table_food_type_name") %></th>
                 <td class="text-sm text-center p-2 border border-slate-300 dark:text-white">Wet</td>
              </tr>
              <tr class="border-b">
-              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300 dark:bg-black dark:text-white">brand</th>
+              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300 dark:bg-black dark:text-white"><%= t("doc_page.table_brand_name") %></th>
                 <td class="text-sm text-center p-2 border border-slate-300 dark:text-white">ciao</td>
              </tr>
              <tr class="border-b">
-              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300 dark:bg-black dark:text-white">description</th>
+              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300 dark:bg-black dark:text-white"><%= t("doc_page.table_description_name") %></th>
                 <td class="text-sm text-center p-2 border border-slate-300 dark:text-white">IMC-222 果凍杯 鮪魚+雞肉+干貝 x3</td>
              </tr>
              <tr class="border-b">
-              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300 dark:bg-black dark:text-white">amount</th>
+              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300 dark:bg-black dark:text-white"><%= t("doc_page.table_amount_name") %></th>
                 <td class="text-sm text-center p-2 border border-slate-300 dark:text-white">105</td>
              </tr>
              <tr class="border-b">
-              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300 dark:bg-black dark:text-white">hungry</th>
+              <th class="text-center text-sm text-left p-2 bg-sky-100 border-r-2 border-blue-200 border border-slate-300 dark:bg-black dark:text-white"><%= t("doc_page.table_hungry_name") %></th>
                 <td class="text-sm text-center p-2 border border-slate-300 dark:text-white">💖 Yes, eat right away</td>
              </tr>
           </tbody>

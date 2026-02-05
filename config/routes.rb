@@ -1,26 +1,28 @@
 Rails.application.routes.draw do
   # resources :trackers
-  resources :dry_foods, only: [ :new, :create, :index, :destroy, :show ]
-  resources :pets do
-    resources :trackers do
-      collection do
-        post :import
-        get "favorite_food"
+  root "pages#hero_section"
+  scope "(:locale)", locale: I18n.locale do
+    resources :dry_foods, only: [ :new, :create, :index, :destroy, :show ]
+    resources :pets do
+      resources :trackers do
+        collection do
+          post :import
+          get "favorite_food"
+        end
       end
     end
+    resource :session, except: [ :new ]
+    resource :registrations, only: [ :new, :create ]
+    resource :timezone, only: [ :create ]
+    resource :users, except: [ :new ]
+    # get '/signup', to: "registrations#new", as: :new_registrations
+    # post 'registration/create', to: "registrations#create", as: :registrations
+    get "/login", to: "sessions#new", as: :new_session
+    resources :passwords, only: [ :new, :create, :edit, :update ], param: :token
+    get "/home", to: "pages#hero_section"
+    get "/about", to: "pages#about"
+    get "/doc", to: "pages#doc"
   end
-  root "pages#hero_section"
-  resource :session, except: [ :new ]
-  resource :registrations, only: [ :new, :create ]
-  resource :timezone, only: [ :create ]
-  resource :users, except: [ :new ]
-  # get '/signup', to: "registrations#new", as: :new_registrations
-  # post 'registration/create', to: "registrations#create", as: :registrations
-  get "/login", to: "sessions#new", as: :new_session
-  resources :passwords, only: [ :new, :create, :edit, :update ], param: :token
-  get "/home", to: "pages#hero_section"
-  get "/about", to: "pages#about"
-  get "/doc", to: "pages#doc"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   get "auth/:provider/callback", to: "omni_auth/sessions#create"

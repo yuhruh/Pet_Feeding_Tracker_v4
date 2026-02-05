@@ -2,7 +2,7 @@
   "name": "pet-tracker-v4",
   "private": true,
   "devDependencies": {
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.19"
   },
   "dependencies": {
     "apexcharts": "^3.54.1"

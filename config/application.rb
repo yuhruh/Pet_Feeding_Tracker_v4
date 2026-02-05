@@ -28,5 +28,7 @@ module PetTrackerV4
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
     config.assets.paths << Rails.root.join("app", "assets", "images")
+    config.i18n.available_locales = %i[en zh-TW ja]
+    config.i18n.default_locale = :en
   end
 end

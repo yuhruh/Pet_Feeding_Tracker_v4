@@ -2,7 +2,7 @@
  
   <div class="flex flex-col justify-center space-y-8 lg:mt-8 lg:w-4/5 lg:gap-2">
     <h1 class="mx-auto py-4 text-2xl text-center font-bold underline underline-offset-4 lg:text-4xl lg:text-left md:text-lg">
-      The Story Behind Aji Tracker
+      <%= t("about_page.title") %>
     </h1>
 
     <div class="flex items-center justify-center w-full space-x-4 md:justify-start">
@@ -10,20 +10,20 @@
     </div>
 
     <p class="mx-auto text-base text-center text-gray-400 lg:text-2xl lg:text-left md:text-sm">
-      This app was inspired by my first cat, Aji, a ginger and white furball with a surprisingly particular taste. Unlike most ginger cats, Aji has his own unique preferences, and it took a lot of trial and error to discover that he loves chicken far more than tuna or salmon.
+      <%= t("about_page.paragraph_1") %>
     </p>
     <p class="mx-auto text-base text-center text-gray-400 lg:text-2xl lg:text-left md:text-sm">
-      At first, I used a simple Excel sheet to track Aji's meals, hoping to find a pattern. I quickly noticed that if I gave him something he didn't like, he would skip the meal entirely and walk away.
+      <%= t("about_page.paragraph_2") %>
     </p>
 
     <p class="mx-auto text-base text-center text-gray-400 lg:text-2xl lg:text-left md:text-sm">
-      But using Excel for daily manual entry was tedious, and visualizing trends was a challenge. That's why I created Aji Tracker: to easily visualize eating trends over time and organize Aji's favorite foods, ensuring he stays well-fed and happy every day.
+      <%= t("about_page.paragraph_3") %>
     </p>
     <p class="mx-auto text-base pb-4 text-center text-gray-400 lg:text-2xl lg:text-left md:text-sm">
-      ✨ Ready to give it a try? Sign up and see for yourself.
+      <%= t("about_page.paragraph_4") %>
 
-      If you're interested in learning more about cat eating habits, I highly recommend consulting a professional. I personally found great insights from 
-      <a href="https://www.petbuddytraining.com/" target="_blank" class="text-blue-400 underline decoration-2 decoration-blue-400">Pet Buddy Cat Behavior, LLC</a>.
+      <%= t("about_page.paragraph_5") %>
+      <a href="https://www.petbuddytraining.com/" target="_blank" class="text-blue-400 underline decoration-2 decoration-blue-400"><%= t("about_page.pet_buddy_link") %></a>.
     </p>
   </div>
 </div>

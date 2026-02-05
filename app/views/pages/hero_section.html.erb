@@ -2,11 +2,10 @@
   <div class="container flex flex-col-reverse mx-auto p-6 lg:flex-row lg:mb-0">
     <div class="flex flex-col space-y-10 lg:mt-16 lg:w-1/2">
       <h1 class="text-3xl font-semibold text-center capitalize lg:text-6xl lg:text-left">
-        A visual pet feeder tracker app 🐾
+        <%= t("hero_section.heading") %>
       </h1>
       <p class="max-w-md mx-auto text-lg text-center text-gray-400 lg:text-2xl lg:text-left lg:mt-0 lg:mx-0">
-        A clear and visualized interface to track feline's eating
-        favorite, amounts trends over time.
+        <%= t("hero_section.subheading") %>
       </p>
     </div>
     <div class="relative mx-auto lg:mx-0 lg:mb-0 lg:w-1/2">
@@ -17,10 +16,9 @@
 
 <section id="features">
   <div class="container mx-auto mt-16 px-6">
-    <h2 class="mb-6 text-4xl font-semibold text-center">Features</h2>
+    <h2 class="mb-6 text-4xl font-semibold text-center"><%= t("hero_section.features_title") %></h2>
     <p class="max-w-md mx-auto text-center text-gray-400">
-      Aim to make cat owners easily explore what their feline love and
-      quickly notice their body warning.
+      <%= t("hero_section.features_subtitle") %>
     </p>
   </div>
 </section>
@@ -31,20 +29,20 @@
     <div class="flex flex-col justify-center max-w-xl mx-auto mb-6 border-b md:space-x-6 md:flex-row">
       <div class="flex justify-center text-center text-gray-500 border-b md:border-b-0 hover:text-softRed md:w-1/3 tab" data-target="panel-1">
         <div class="py-5 border-b-4 border-softRed" data-target="panel-1">
-          Simple Pet Management 😼
+          <%= t("hero_section.tab_1") %>
         </div>
       </div>
 
 
       <div class="flex justify-center text-center text-gray-500 border-b md:border-b-0 hover:text-softRed md:w-1/3 tab" data-target="panel-2">
         <div class="py-5" data-target="panel-2">
-          Trackers Monitor 📊
+          <%= t("hero_section.tab_2") %>
         </div>
       </div>
 
       <div class="flex justify-center text-center text-gray-500 border-b md:border-b-0 hover:text-softRed md:w-1/3 tab" data-target="panel-3">
         <div class="py-5" data-target="panel-3">
-          Kibbles Inventory Management 🔎
+          <%= t("hero_section.tab_3") %>
         </div>
       </div>
     </div>
@@ -56,11 +54,10 @@
         </div>
         <div class="flex flex-col justify-center space-y-8 md:w-1/2">
           <h3 class="text-3xl font-semibold text-center md:text-left">
-            Simple Feline Management
+            <%= t("hero_section.panel_1_title") %>
           </h3>
           <p class="max-w-md text-center text-grayishBlue md:text-left">
-            Detailed feline profile with associated trackers. One Owner 
-            can log more than one feline profile.
+            <%= t("hero_section.panel_1_content") %>
           </p>
         </div>
       </div>
@@ -72,11 +69,10 @@
 
         <div class="flex flex-col justify-center space-y-8 md:w-1/2">
           <h3 class="text-3xl font-semibold text-center md:text-left">
-            Charts Visualization
+            <%= t("hero_section.panel_2_title") %>
           </h3>
           <p class="max-w-md text-center text-grayishBlue md:text-left">
-            Simplify your feline daily feeding. Our simple interactive
-            user interface help owner keep eye on their feline.
+            <%= t("hero_section.panel_2_content") %>
           </p>
         </div>
       </div>
@@ -89,11 +85,10 @@
 
         <div class="flex flex-col justify-center space-y-8 md:w-1/2">
           <h3 class="text-3xl font-semibold text-center md:text-left">
-            Kibbles Inventory Management
+            <%= t("hero_section.panel_3_title") %>
           </h3>
           <p class="max-w-md text-center text-grayishBlue md:text-left">
-            During owner input daily track, 
-            alert owner to get a new stock when the kibbles left 1/3. 
+            <%= t("hero_section.panel_3_content") %>
           </p>
         </div>
       </div>
