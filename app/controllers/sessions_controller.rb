@@ -34,7 +34,7 @@ class SessionsController < ApplicationController
       # @user = User.new(email_address: params[:email_address])
       # flash.now[:alert] = "This email has not been signed up yet. Please sign up first"
       # render "registrations/new", status: :unprocessable_entity
-      redirect_to new_registrations_path, alert: "This email has not been signed up yet. Please sign up first", status: :see_other, allow_other_host: true
+      redirect_to "/registrations/new", alert: "This email has not been signed up yet. Please sign up first", status: :see_other
     end
   end
 
