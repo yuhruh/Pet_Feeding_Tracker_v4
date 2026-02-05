@@ -1,10 +1,18 @@
 class AddKeyHashToSolidCacheEntries < ActiveRecord::Migration[8.0]
   def change
-    # Add key_hash only if it doesn't already exist (safety check for Render)
     unless column_exists?(:solid_cache_entries, :key_hash)
-      add_column :solid_cache_entries, :key_hash, :integer, limit: 8, null: false
+      # 1. Add the column (Allowing NULL temporarily to avoid build crashes)
+      add_column :solid_cache_entries, :key_hash, :integer, limit: 8
+      
+      # 2. Add the indexes (Corrected syntax)
       add_index :solid_cache_entries, :key_hash, unique: true
-      add_index :solid_cache_entries, :key_hash, :created_at
+      add_index :solid_cache_entries, [:key_hash, :created_at] # Array brackets are required here
+      
+      # 3. Clear existing cache (Safe since it's just cache)
+      execute("DELETE FROM solid_cache_entries")
+      
+      # 4. Now enforce the constraint
+      change_column_null :solid_cache_entries, :key_hash, false
     end
   end
 end
