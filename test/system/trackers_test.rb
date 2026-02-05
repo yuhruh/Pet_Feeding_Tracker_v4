@@ -1,6 +1,8 @@
 require "application_system_test_case"
 
 class TrackersTest < ApplicationSystemTestCase
+  include ActionView::RecordIdentifier
+  
   setup do
     @user = users(:one)
     @pet = pets(:one)
@@ -34,7 +36,9 @@ class TrackersTest < ApplicationSystemTestCase
   test "should update Tracker" do
     sign_in_as @user
     visit pet_trackers_url(@pet)
-    find("a[href='#{edit_pet_tracker_path(@pet, @tracker)}']").click
+    within "##{dom_id(@tracker)}" do
+      find("a[href*='edit']").click
+    end
 
     fill_in "tracker_come_back_to_eat", with: "10:00"
     fill_in "tracker_left_amount", with: 5
@@ -50,7 +54,9 @@ class TrackersTest < ApplicationSystemTestCase
     sign_in_as @user
     visit pet_trackers_url(@pet)
     accept_confirm do
-      find("a[href='#{pet_tracker_path(@pet, @tracker)}'][data-turbo-method='delete']").click
+      within "##{dom_id(@tracker)}" do
+        find("a[data-turbo-method='delete']").click
+      end
     end
 
     assert_text "Tracker was successfully destroyed"

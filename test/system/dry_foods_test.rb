@@ -51,7 +51,7 @@ class DryFoodsTest < ApplicationSystemTestCase
     sign_in_as @user
     visit dry_foods_url
     accept_confirm do
-      find("a[href='/dry_foods/#{@dry_food.id}']").click
+      find("#delete_dry_food_#{@dry_food.id}").click
     end
 
     assert_text "Dry food was successfully destroyed"
