@@ -23,7 +23,7 @@ class PetsControllerTest < ActionDispatch::IntegrationTest
       post pets_url, params: { pet: { birthday: @pet.birthday, breed: @pet.breed, gender: @pet.gender, petname: @pet.petname, user_id: @pet.user_id, weight: @pet.weight } }
     end
 
-    assert_redirected_to pet_url(Pet.last)
+    assert_redirected_to pet_url(Pet.last, locale: I18n.default_locale)
   end
 
   test "should show pet" do
@@ -38,7 +38,7 @@ class PetsControllerTest < ActionDispatch::IntegrationTest
 
   test "should update pet" do
     patch pet_url(@pet), params: { pet: { birthday: @pet.birthday, breed: @pet.breed, gender: @pet.gender, petname: @pet.petname, user_id: @pet.user_id, weight: @pet.weight } }
-    assert_redirected_to pet_url(@pet)
+    assert_redirected_to pet_url(@pet, locale: I18n.default_locale)
   end
 
   test "should destroy pet" do
