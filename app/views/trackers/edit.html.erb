@@ -17,7 +17,7 @@
         <%= form.label :date, class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize required md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.date_field :date, value: @tracker.date, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:date].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:date].any?}] %>
+        <%= form.date_field :date, value: @tracker.date, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:date].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:date].any?}] %>
       </div>
     </div>
 
@@ -26,7 +26,7 @@
         <%= form.label :feed_time, class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize required md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.time_field :feed_time, value: @tracker.feed_time.strftime("%H:%M"), class: ["block shadow-sm bg-gray-100 rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:feed_time].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:feed_time].any?}], readonly: true %>
+        <%= form.time_field :feed_time, value: @tracker.feed_time.strftime("%H:%M"), class: ["block shadow-sm bg-gray-100 rounded-md border px-3 py-2 mt-2 w-full dark:text-black", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:feed_time].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:feed_time].any?}], readonly: true %>
         <span class="mt-2 text-sm italic">Feed time is readonly, can not update on edit form</span>
       </div>
     </div>
@@ -36,7 +36,7 @@
         <%= form.label :come_back_to_eat, class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize required md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.text_field :come_back_to_eat, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:food_type].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:food_type].any?}] %>
+        <%= form.text_field :come_back_to_eat, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:food_type].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:food_type].any?}] %>
         <span class="mt-2 text-sm italic">Please use ',' as a separations. Ex: 07:45, 10:33,...</span>
         <span class="mt-2 text-sm italic">If <%=@pet.petname.capitalize%> did not come back to eat, please use '-' </span>
       </div>
@@ -47,7 +47,7 @@
         <%= form.label :brand, class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize required md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.text_field :brand, value: @tracker.brand, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:brand].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:brand].any?}] %>
+        <%= form.text_field :brand, value: @tracker.brand, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:brand].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:brand].any?}] %>
       </div>
     </div>
 
@@ -56,7 +56,7 @@
         <%= form.label :description, class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize required md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.text_field :description, value: @tracker.description, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:description].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:description].any?}] %>
+        <%= form.text_field :description, value: @tracker.description, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:description].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:description].any?}] %>
       </div>
     </div>
 
@@ -65,7 +65,7 @@
         <%= form.label "Left Amount(g)", class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize required md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.number_field :left_amount, step: :any, placeholder: "Please just enter number" , class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:amount].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:amount].any?}], required: true, min: 0, max: @tracker.amount, data: { left_amount_target: "leftAmount", action: "input->left-amount#validateLeftAmount" } %>
+        <%= form.number_field :left_amount, step: :any, placeholder: "Please just enter number" , class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:amount].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:amount].any?}], required: true, min: 0, max: @tracker.amount, data: { left_amount_target: "leftAmount", action: "input->left-amount#validateLeftAmount" } %>
         <div id="left-amount-alert" data-left-amount-target="leftAmountAlert" class="text-red-500 italic mt-1 hidden"></div>
       </div>
     </div>
@@ -75,7 +75,7 @@
         <%= form.label "Does #{@pet.petname.capitalize} love it?", class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize required md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.select :love, ["💕 Love it So Much", "🔺 So So", "❌ No!!!"], { prompt: "Please Select if #{@pet.petname.capitalize} love it..." }, required: true, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:love].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:love].any?}]%>
+        <%= form.select :love, ["💕 Love it So Much", "🔺 So So", "❌ No!!!"], { prompt: "Please Select if #{@pet.petname.capitalize} love it..." }, required: true, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:love].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:love].any?}]%>
       </div>
     </div>
 
@@ -84,7 +84,7 @@
         <%= form.label :weight, class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.number_field :weight, step: :any, placeholder: "Please enter a number of range 0~100" , class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:weight].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:weight].any?}], max: 100, min: 0.0 %>
+        <%= form.number_field :weight, step: :any, placeholder: "Please enter a number of range 0~100" , class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:weight].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:weight].any?}], max: 100, min: 0.0 %>
       </div>
     </div>
 
@@ -93,7 +93,7 @@
         <%= form.label :note, class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.text_field :note, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:note].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:note].any?}] %>
+        <%= form.text_field :note, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:note].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:note].any?}] %>
         <span>You can add whatever you want to note, such as when <%=@pet.petname.capitalize%> vomit 🤮</span>
       </div>
     </div>

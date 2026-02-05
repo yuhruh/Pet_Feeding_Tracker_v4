@@ -10,7 +10,7 @@
           <label for="" class="text-base font-medium text-gray-700 dark:text-gray-100 capitalize required">Userame</label>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.text_field :username, value: @user.username, class: "shadow-md rounded-md border border-gray-400 focus:outline-softBlue px-3 py-2 w-1/2", :required => true %>
+          <%= form.text_field :username, value: @user.username, class: "shadow-md rounded-md border border-gray-400 focus:outline-softBlue px-3 py-2 w-1/2 dark:text-black", :required => true %>
         </div>
       </div>
 
@@ -19,7 +19,7 @@
           <label for="" class="text-base font-medium text-gray-700 dark:text-gray-100 capitalize required">Email</label>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.email_field :email_address, required: true, value: @user.email_address, class: "shadow-md rounded-md border border-gray-400 focus:outline-blue-400 px-3 py-2 w-1/2 #{'border-red-500' if form.object.errors[:email_address].any?}" %>
+          <%= form.email_field :email_address, required: true, value: @user.email_address, class: "dark:text-black shadow-md rounded-md border border-gray-400 focus:outline-blue-400 px-3 py-2 w-1/2 #{'border-red-500' if form.object.errors[:email_address].any?}" %>
           <% form.object.errors.full_messages_for(:email_address).each do |message| %>
             <p class="text-red-500 text-sm italic mt-1">
               <%= message %>
@@ -33,7 +33,7 @@
           <label for="" class="text-base font-medium text-gray-700 dark:text-gray-100 capitalize required">Password</label>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.password_field :password, required: true, placeholder: "Enter new password", class: "shadow-md rounded-md border border-gray-400 focus:outline-blue-400 px-3 py-2 w-1/2 #{'border-red-500' if form.object.errors[:password].any?}" %>
+          <%= form.password_field :password, required: true, placeholder: "Enter new password", class: "dark:text-black shadow-md rounded-md border border-gray-400 focus:outline-blue-400 px-3 py-2 w-1/2 #{'border-red-500' if form.object.errors[:password].any?}" %>
           <% form.object.errors.full_messages_for(:password).each do |message| %>
             <p class="text-red-500 text-sm italic mt-1">
               <%= message %>
@@ -47,7 +47,7 @@
           <label for="" class="text-base font-medium text-gray-700 dark:text-gray-100 capitalize required">Password confirmation</label>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.password_field :password_confirmation, required: true, autocomplete: "current-password", placeholder: "Enter new password again", class: "shadow-md rounded-md border border-gray-400 focus:outline-blue-400 px-3 py-2 w-1/2 #{'border-red-500' if form.object.errors[:password_confirmation].any?}" %>
+          <%= form.password_field :password_confirmation, required: true, autocomplete: "current-password", placeholder: "Enter new password again", class: "dark:text-black shadow-md rounded-md border border-gray-400 focus:outline-blue-400 px-3 py-2 w-1/2 #{'border-red-500' if form.object.errors[:password_confirmation].any?}" %>
           <% form.object.errors.full_messages_for(:password_confirmation).each do |message| %>
             <p class="text-red-500 text-sm italic mt-1">
               <%= message %>
@@ -62,11 +62,11 @@
         </div>
         <% if @user.timezone.nil? %>
           <div class="flex flex-col items-center md:items-start md:w-5/6">
-            <%= form.text_field :timezone, data: {"time_zone_target" => "tz"}, class: "shadow-md rounded-md border border-gray-400 bg-gray-100 px-3 py-2 w-1/2 focus:outline-none", readonly: true %>
+            <%= form.text_field :timezone, data: {"time_zone_target" => "tz"}, class: "dark:text-black shadow-md rounded-md border border-gray-400 bg-gray-100 px-3 py-2 w-1/2 focus:outline-none", readonly: true %>
           </div>
         <% else %>
           <div class="flex flex-col items-center md:items-start md:w-5/6">
-            <%= form.text_field :timezone, value: @user.timezone, class: "shadow-md rounded-md border border-gray-400 bg-gray-100 px-3 py-2 w-1/2 focus:outline-none", readonly: true %>
+            <%= form.text_field :timezone, value: @user.timezone, class: "dark:text-black dark:bg-gray-300 shadow-md rounded-md border border-gray-400 bg-gray-100 px-3 py-2 w-1/2 focus:outline-none", readonly: true %>
             <span class="mt-2 text-sm italic">Timezone is readonly, can not edit</span>
           </div>
         <% end %>
