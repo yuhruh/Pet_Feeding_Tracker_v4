@@ -3,9 +3,9 @@
     <div class='flex flex-col justify-center text-center mb-3'>
       <div class="flex justify-center text-md space-x-3 mb-3 mt-3 md:text-xl">
         <% if pet.pet_avatar.attached? %>
-          <%= image_tag pet.pet_avatar.variant(resize_to_limit: [150, 150]).processed, class: "rounded-full shadow-md" %>
+          <%= image_tag pet.pet_avatar.variant(resize_to_limit: [150, 150]), class: "rounded-full shadow-md h-[150px] w-[150px] object-cove" %>
         <% else %>
-          <% if pet.gender_was.include?("Male") %>
+          <% if pet.gender.include?("Male") %>
             <div class="flex justify-center items-center w-[150px] h-[150px] bg-sky-100 rounded-full shadow-md text-sky-700 border-sky-500">
               <%= pet.petname.upcase %>
             </div>
