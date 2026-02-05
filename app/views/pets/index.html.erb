@@ -16,7 +16,7 @@
     </div>
   </div>
 
-  <div id="pets" class="flex flex-row justify-start items-center mt-4 overflow-x-scroll">
+  <div id="pets" class="flex flex-row flex-nowrap justify-center items-center mt-4 overflow-x-scroll">
     <% if @pets.any? %>
       <% @pets.each do |pet| %>
         <div class="flex flex-col justify-center items-center border-2 border-gray-200 gap-4 px-6 mb-4 mx-2 rounded-lg shadow-lg md:flex-row">
