@@ -2,7 +2,7 @@ require "application_system_test_case"
 
 class TrackersTest < ApplicationSystemTestCase
   include ActionView::RecordIdentifier
-  
+
   setup do
     @user = users(:one)
     @pet = pets(:one)
