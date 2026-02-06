@@ -2,13 +2,13 @@
   <div class="container flex flex-col items-center justify-between mx-auto space-y-16 px-6 md:flex-row md:space-y-0">
     <div class="flex flex-col items-center justify-between space-y-8 text-lg font-light md:flex-row md:space-y-0 md:space-x-14 text-grayishBlue">
       <%= image_tag('footer_aji_logo.png', width: "80px") %>
-      <a href="/home#features" class="uppercase hover:text-softRed">Features</a>
-      <%= link_to 'About', about_path, class: 'uppercase hover:text-softRed'%>
-      <%= link_to 'Docs', doc_path, class: 'uppercase hover:text-softRed'%>
+      <a href="/home#features" class="uppercase hover:text-softRed"><%= t('layouts.footer.features') %></a>
+      <%= link_to t('layouts.footer.about'), about_path, class: 'uppercase hover:text-softRed'%>
+      <%= link_to t('layouts.footer.docs'), doc_path, class: 'uppercase hover:text-softRed'%>
       <% if authenticated? %>
-        <%= button_to "Sign Out", session_path, class: "px-8 py-2 uppercase text-white bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white", method: :delete %>
+        <%= button_to t('layouts.footer.sign_out'), session_path, class: "px-8 py-2 uppercase text-white bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white", method: :delete %>
       <% else %>
-        <%= link_to 'Get Started', new_registrations_path, class: 'uppercase hover:text-softRed'%>
+        <%= link_to t('layouts.footer.get_started'), new_registrations_path, class: 'uppercase hover:text-softRed'%>
       <% end %>
     </div>
 
@@ -50,7 +50,7 @@
           </svg>
         </a>
       </div>
-      <div class="flex flex-col justify-center text-white font-bold">&copy; 2025 AjiTracker</div>
+      <div class="flex flex-col justify-center text-white font-bold"><%= t('layouts.footer.copyright') %></div>
     </div>
   </div>
 </footer>

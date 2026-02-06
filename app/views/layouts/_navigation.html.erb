@@ -5,23 +5,23 @@
     </div>
 
     <div class="hidden items-center space-x-3 uppercase text-grayishBlue lg:flex">
-      <a href="/home#features" class="tracking-wide hover:text-softRed">Features</a>
-      <%= link_to "About", about_path, class: "tracking-wide hover:text-softRed" %>
+      <a href="/home#features" class="tracking-wide hover:text-softRed"><%= t('layouts.navigation.features') %></a>
+      <%= link_to t('layouts.navigation.about'), about_path, class: "tracking-wide hover:text-softRed" %>
       <div class="relative">
         <div class="inline-flex w-full justify-center bg-white px-3 py-2 
             text-grayishBlue tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed dark:bg-darkBlue cursor-pointer" data-target="btn-doc">
-          <%= link_to "Docs", doc_path, class: "tracking-wide hover:text-softRed" %>
+          <%= link_to t('layouts.navigation.docs'), doc_path, class: "tracking-wide hover:text-softRed" %>
           <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400 btn" data-target="btn-doc">
             <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
           </svg>
         </div>
         <div id="btn-doc" class="absolute hidden w-max top-full mt-2 py-2 bg-white text-grayishBlue border border-gray-200 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out menu" data-target="menu-doc">
           <div class="py-1">
-            <%= link_to "User Account", "/doc#user_account", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-blue-100 focus:text-softRed focus:outline-hidden" %>
-            <%= link_to "Pet Management", "/doc#pet_manage", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-sky-100 hover:text-sky-600 focus:bg-sky-100 focus:text-softRed focus:outline-hidden" %>
-            <%= link_to "Dry Food Storage", "/doc#dry_food", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-indigo-100 hover:text-indigo-600 focus:bg-indigo-100 focus:text-softRed focus:outline-hidden" %>
-            <%= link_to "Trackers", "/doc#trackers", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-lime-100 hover:text-lime-600 focus:bg-lime-100 focus:text-softRed focus:outline-hidden" %>
-            <%= link_to "Import CSV", "/doc#import", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-orange-100 focus:text-softRed focus:outline-hidden" %>
+            <%= link_to t('layouts.navigation.user_account'), "/doc#user_account", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-blue-100 focus:text-softRed focus:outline-hidden" %>
+            <%= link_to t('layouts.navigation.pet_management'), "/doc#pet_manage", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-sky-100 hover:text-sky-600 focus:bg-sky-100 focus:text-softRed focus:outline-hidden" %>
+            <%= link_to t('layouts.navigation.dry_food_storage'), "/doc#dry_food", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-indigo-100 hover:text-indigo-600 focus:bg-indigo-100 focus:text-softRed focus:outline-hidden" %>
+            <%= link_to t('layouts.navigation.trackers'), "/doc#trackers", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-lime-100 hover:text-lime-600 focus:bg-lime-100 focus:text-softRed focus:outline-hidden" %>
+            <%= link_to t('layouts.navigation.import_csv'), "/doc#import", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-orange-100 focus:text-softRed focus:outline-hidden" %>
           </div>
         </div>
       </div>
@@ -29,7 +29,7 @@
         <div class="relative">
           <div class="inline-flex w-full justify-center bg-white px-3 py-2 
           text-grayishBlue tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed dark:bg-darkBlue cursor-pointer btn" data-target="btn-1">
-            My Account & Pets
+            <%= t('layouts.navigation.my_account_and_pets') %>
             <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400">
               <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
             </svg>
@@ -37,21 +37,21 @@
           <div id="btn-1" class="absolute hidden w-max top-full mt-2 py-2 bg-white text-grayishBlue border border-gray-200 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out menu" data-target="menu-1">
             <div class="py-1">
               <div class="px-4 py-2 text-sm text-gray-700 font-semibold border-b-2 border-gray-200">
-                My Profile
+                <%= t('layouts.navigation.my_profile') %>
               </div>
-                <%= link_to "View", users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-blue-100 focus:text-softRed focus:outline-hidden" %>
-                <%= link_to "Edit", edit_users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-green-100 hover:text-green-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
-                <%= link_to "cat list", pets_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
-                <%= link_to "Delete", users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-red-100 hover:text-softRed focus:bg-gray-100 focus:text-softRed focus:outline-hidden", 
-                data: {"turbo-confirm": "Are you sure to delete this user account? The user and associated trackers will all gone..", "turbo-method": "delete"} %>
+                <%= link_to t('layouts.navigation.view'), users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-blue-100 focus:text-softRed focus:outline-hidden" %>
+                <%= link_to t('layouts.navigation.edit'), edit_users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-green-100 hover:text-green-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+                <%= link_to t('layouts.navigation.cat_list'), pets_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+                <%= link_to t('layouts.navigation.delete'), users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-red-100 hover:text-softRed focus:bg-gray-100 focus:text-softRed focus:outline-hidden", 
+                data: {"turbo-confirm": t('layouts.navigation.delete_confirmation'), "turbo-method": "delete"} %>
               </div>
               <div class="px-4 py-2 text-sm text-gray-700 font-semibold border-b-2 border-gray-200">
-                My Cats List
+                <%= t('layouts.navigation.my_cats_list') %>
               </div>
               <div>
-                <%= link_to "Add a cat", new_pet_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+                <%= link_to t('layouts.navigation.add_a_cat'), new_pet_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
                 <% Current.user.pets.select(&:persisted?).each do |pet| %>
-                  <%= link_to "View #{pet.petname.split(" ").map(&:capitalize).join(" ")}'s Profile", pet_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+                  <%= link_to t('layouts.navigation.view_pet_profile', petname: pet.petname.split(" ").map(&:capitalize).join(" ")), pet_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
                 <% end %>
               </div>
             </div>
@@ -60,7 +60,7 @@
         <div class="relative">
           <div class="inline-flex w-full justify-center bg-white px-3 py-2 
           text-grayishBlue tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed dark:bg-darkBlue cursor-pointer btn" data-target="btn-2">
-            Trackers 
+            <%= t('layouts.navigation.trackers') %> 
             <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400">
               <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
             </svg>
@@ -72,8 +72,8 @@
                   <%= pet.petname %>
                 </div>
                 <div>
-                  <%= link_to "View #{pet.petname.split(" ").map(&:capitalize).join(" ")}'s Trackers", pet_trackers_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
-                  <%= link_to "#{pet.petname.split(" ").map(&:capitalize).join(" ")}'s Favorite List", favorite_food_pet_trackers_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-rose-100 hover:text-rose-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+                  <%= link_to t('layouts.navigation.view_pet_trackers', petname: pet.petname.split(" ").map(&:capitalize).join(" ")), pet_trackers_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+                  <%= link_to t('layouts.navigation.pet_favorite_list', petname: pet.petname.split(" ").map(&:capitalize).join(" ")), favorite_food_pet_trackers_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-rose-100 hover:text-rose-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
                 </div>
               <% end %>
             </div>
@@ -82,30 +82,30 @@
         <div class="relative">
           <div class="inline-flex w-full justify-center bg-white px-3 py-2 
             text-grayishBlue tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed dark:bg-darkBlue cursor-pointer btn" data-target="btn-3">
-              DryFood Storage 
+              <%= t('layouts.navigation.dry_food_storage') %> 
             <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400">
               <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
             </svg>
           </div>
           <div id="btn-3" class="absolute hidden w-max top-full mt-2 py-2 bg-white text-grayishBlue uppercase border border-gray-200 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out menu" data-target="menu-3">
             <div class="py-1">
-              <%= link_to "Add dry food", new_dry_food_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-cyan-100 hover:text-cyan-600 focus:bg-cyan-100 focus:text-softRed focus:outline-hidden" %>
-              <%= link_to "Storage list", dry_foods_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-cyan-100 hover:text-cyan-600 focus:bg-cyan-100 focus:text-softRed focus:outline-hidden" %>
+              <%= link_to t('layouts.navigation.add_dry_food'), new_dry_food_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-cyan-100 hover:text-cyan-600 focus:bg-cyan-100 focus:text-softRed focus:outline-hidden" %>
+              <%= link_to t('layouts.navigation.storage_list'), dry_foods_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-cyan-100 hover:text-cyan-600 focus:bg-cyan-100 focus:text-softRed focus:outline-hidden" %>
             </div>
           </div>
         </div>
-        <%= button_to "Sign Out", session_path, class: "px-8 py-2 text-white uppercase bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white", method: :delete %>
+        <%= button_to t('layouts.navigation.sign_out'), session_path, class: "px-8 py-2 text-white uppercase bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white", method: :delete %>
 
       <% else %>
-        <%= link_to "Get Started", new_registrations_path, class: "px-8 py-2 text-white bg-grayishBlue border-2 border-grayishBlue rounded-lg shadow-md tracking-wide hover:text-grayishBlue hover:bg-white" %>
-        <%= link_to "Sign In", new_session_path, class: "px-8 py-2 text-white bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white" %>
+        <%= link_to t('layouts.navigation.get_started'), new_registrations_path, class: "px-8 py-2 text-white bg-grayishBlue border-2 border-grayishBlue rounded-lg shadow-md tracking-wide hover:text-grayishBlue hover:bg-white" %>
+        <%= link_to t('layouts.navigation.sign_in'), new_session_path, class: "px-8 py-2 text-white bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white" %>
       <% end %>
       <div class="hidden lg:flex items-center space-x-2 my-6 uppercase text-grayishBlue">
         <%= image_tag('languages.png', width: '25px') %>
         <div class="relative">
           <div class="inline-flex w-full justify-center bg-white px-3 py-2 
             text-grayishBlue tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed dark:bg-darkBlue cursor-pointer btn" data-target="btn-4">
-              Languages 
+              <%= t('layouts.navigation.languages') %> 
             <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400">
               <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
             </svg>
