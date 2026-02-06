@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   # resources :trackers
   root "pages#hero_section"
-  scope "(:locale)", locale: I18n.locale do
+  scope "(:locale)", locale: /#{I18n.available_locales.join("|")}/ do
     resources :dry_foods, only: [ :new, :create, :index, :destroy, :show ]
     resources :pets do
       resources :trackers do
