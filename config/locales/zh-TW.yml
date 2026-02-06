@@ -147,7 +147,7 @@ zh-TW:
       expected_running_out: "預計用完"
       delete: "刪除"
       confirm: "您確定要刪除嗎？"
-      no_dry_food: "您沒有任何乾糧。現在就將一個新增至您的儲存清單如何？😺"
+      no_dry_food: "您沒有任何乾糧。現在就新增一個至您的庫存清單？😺"
     new:
       title: "新乾糧"
       header: "新增乾糧"
