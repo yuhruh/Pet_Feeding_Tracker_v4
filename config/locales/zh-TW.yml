@@ -196,3 +196,13 @@ zh-TW:
       edit_profile: "編輯個人資料"
       delete_profile: "刪除個人資料"
       my_cats: "我的寵物"
+  passwords:
+    edit:
+      title: "更新您的密碼"
+      new_password_placeholder: "輸入新密碼"
+      repeat_new_password_placeholder: "重複輸入新密碼"
+      save_button: "儲存"
+    new:
+      title: "忘記密碼了嗎？"
+      email_placeholder: "輸入您的電子郵件地址"
+      submit_button: "以電子郵件傳送重設說明"

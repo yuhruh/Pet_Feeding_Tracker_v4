@@ -196,3 +196,13 @@ ja:
       edit_profile: "プロフィールを編集"
       delete_profile: "プロフィールを削除"
       my_cats: "私の猫"
+  passwords:
+    edit:
+      title: "パスワードを更新"
+      new_password_placeholder: "新しいパスワードを入力"
+      repeat_new_password_placeholder: "新しいパスワードを再入力"
+      save_button: "保存"
+    new:
+      title: "パスワードをお忘れですか？"
+      email_placeholder: "メールアドレスを入力"
+      submit_button: "リセット手順をメールで送信"
