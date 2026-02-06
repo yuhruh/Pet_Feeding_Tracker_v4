@@ -127,6 +127,8 @@ zh-TW:
       food_type: "食物類型"
       description: "說明"
       amount: "份量（克）"
+      kibble: "乾飼料"
+      freeze_dried: "冷凍乾燥"
     edit:
       title: "編輯乾糧"
       show: "顯示此乾糧"

@@ -127,6 +127,8 @@ en:
       food_type: "Food type"
       description: "Description"
       amount: "Amount(g)"
+      kibble: "Kibble"
+      freeze_dried: "Freeze-Dried"
     edit:
       title: "Editing dry food"
       show: "Show this dry food"
