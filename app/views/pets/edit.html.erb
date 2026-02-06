@@ -1,19 +1,19 @@
-<% content_for :title, "Edit #{@pet.petname.split(" ").map(&:capitalize).join(" ")}'s Profile" %>
+<% content_for :title, t(".title", petname: @pet.petname.split(" ").map(&:capitalize).join(" ")) %>
 
 <div class="container mx-auto w-full md:w-1/2">
   <div class="flex flex-col justify-center mb-4 dark:bg-gray-800 border-2 border-gray-300 shadow-md rounded-lg p-4 sm:p-6">
-    <h1 class="text-center font-bold text-2xl mb-4 md:text-4xl capitalize">Edit <%= @pet.petname.split(" ").map(&:capitalize).join(" ") %>'s profile</h1>
+    <h1 class="text-center font-bold text-2xl mb-4 md:text-4xl capitalize"><%= t(".title", petname: @pet.petname.split(" ").map(&:capitalize).join(" ")) %></h1>
     <%= render "form", pet: @pet %>
 
     <div class="flex flex-col justify-center items-center gap-4 mb-4 pt-4 md:flex-row">
       <div class="flex justify-center">
-        <%= link_to "Show #{@pet.petname.split(" ").map(&:capitalize).join(" ") }'s profile", @pet, class: "w-full sm:w-auto text-center rounded-md px-3 py-2 text-orange-600 bg-orange-200 border-2 border-orange-200 transition duration-300 ease-in-out hover:scale-110 hover:bg-gray-100 hover:text-orange-600 hover:border-orange-600 inline-block font-medium capitalize cursor-pointer capitalize" %>
+        <%= link_to t(".show_profile", petname: @pet.petname.split(" ").map(&:capitalize).join(" ")), @pet, class: "w-full sm:w-auto text-center rounded-md px-3 py-2 text-orange-600 bg-orange-200 border-2 border-orange-200 transition duration-300 ease-in-out hover:scale-110 hover:bg-gray-100 hover:text-orange-600 hover:border-orange-600 inline-block font-medium capitalize cursor-pointer capitalize" %>
       </div>
       <div class="flex justify-center">
-        <%= button_tag("Update #{@pet.petname.capitalize}'s profile", type: "submit", form: "pet-form", class: "btn text-center rounded-md px-3.5 py-2.5 text-green-600 bg-green-200 border-2 border-green-200 transition duration-300 ease-in-out hover:scale-110 hover:bg-gray-100 hover:text-green-600 hover:border-green-600 inline-block font-medium capitalize cursor-pointer capitalize") %>
+        <%= button_tag(t(".update_profile", petname: @pet.petname.capitalize), type: "submit", form: "pet-form", class: "btn text-center rounded-md px-3.5 py-2.5 text-green-600 bg-green-200 border-2 border-green-200 transition duration-300 ease-in-out hover:scale-110 hover:bg-gray-100 hover:text-green-600 hover:border-green-600 inline-block font-medium capitalize cursor-pointer capitalize") %>
       </div>
       <div class="flex justify-center">
-        <%= link_to "Back to #{Current.user.username.split(' ').map(&:capitalize).join(" ")}'s cat list", pets_path, class: "w-full sm:w-auto text-center rounded-md px-3 py-2 text-blue-600 bg-blue-200 border-2 border-blue-200 transition duration-300 ease-in-out hover:scale-110 hover:bg-gray-100 hover:text-blue-600 hover:border-blue-600 inline-block font-medium capitalize cursor-pointer capitalize" %>
+        <%= link_to t(".back_to_cat_list", username: Current.user.username.split(' ').map(&:capitalize).join(" ")), pets_path, class: "w-full sm:w-auto text-center rounded-md px-3 py-2 text-blue-600 bg-blue-200 border-2 border-blue-200 transition duration-300 ease-in-out hover:scale-110 hover:bg-gray-100 hover:text-blue-600 hover:border-blue-600 inline-block font-medium capitalize cursor-pointer capitalize" %>
       </div>
     </div>
   </div>

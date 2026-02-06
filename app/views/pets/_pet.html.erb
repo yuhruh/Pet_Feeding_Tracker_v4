@@ -22,46 +22,46 @@
       </div>
 
       <div class="flex justify-center text-base space-x-3 mt-3 mb-3 md:text-xl">
-        <strong class="capitalize">name:</strong>
+        <strong class="capitalize"><%= t(".name") %>:</strong>
         <div class="flex">
           <%= pet.petname %>
         </div>
       </div>
 
       <div class="flex justify-center text-base space-x-3 mt-3 mb-3 md:text-xl">
-        <strong class="capitalize">Birthday:</strong>
+        <strong class="capitalize"><%= t(".birthday") %>:</strong>
         <div class="flex">
           <% if pet.birthday.present? %>
             <%= pet.birthday.strftime("%Y-%m-%d") %>
           <% else %>
-            <p>Unknown</p>
+            <p><%= t(".unknown") %></p>
           <% end %>
         </div>
       </div>
 
       <div class="flex justify-center text-base space-x-3 mt-3 mb-3 md:text-xl">
-        <strong class="capitalize">Weight (kg):</strong>
+        <strong class="capitalize"><%= t(".weight") %>:</strong>
         <div class="flex">
           <%= pet.weight %>
         </div>
       </div>
 
       <div class="flex justify-center text-base space-x-3 mt-3 mb-3 md:text-xl">
-        <strong class="capitalize">Gender:</strong>
+        <strong class="capitalize"><%= t(".gender") %>:</strong>
         <div class="flex">
           <%= pet.gender %>
         </div>
       </div>
 
       <div class="flex justify-center text-base space-x-3 mt-3 mb-3 md:text-xl">
-        <strong class="capitalize">Breed:</strong>
+        <strong class="capitalize"><%= t(".breed") %>:</strong>
         <div class="flex">
           <%= pet.breed %>
         </div>
       </div>
 
       <div class="flex justify-center text-base space-x-3 mt-3 mb-3 md:text-xl">
-        <strong class="capitalize">cat owner:</strong>
+        <strong class="capitalize"><%= t(".cat_owner") %>:</strong>
         <div class="flex">
           <%= Current.user.username.split(" ").map(&:capitalize).join(" ") %>
         </div>
