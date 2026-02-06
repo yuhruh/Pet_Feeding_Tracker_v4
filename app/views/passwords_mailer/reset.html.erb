@@ -1,5 +1,4 @@
 <p class="text-l font-semibold">
-  Hi, @user.username: 
-  You can reset your password within the next 15 minutes on
-  <%= link_to "this password reset page", edit_password_url(@user.password_reset_token) %>.
+  <%= t(".greeting", username: @user.username) %>
+  <%= t(".instruction_html", password_reset_link: link_to(t(".password_reset_link"), edit_password_url(@user.password_reset_token))) %>
 </p>
