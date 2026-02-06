@@ -109,5 +109,50 @@ en:
     paragraph_4: "✨ Ready to give it a try? Sign up and see for yourself."
     paragraph_5: "If you're interested in learning more about cat eating habits, I highly recommend consulting a professional. I personally found great insights from"
     pet_buddy_link: "Pet Buddy Cat Behavior, LLC"
+  dry_foods:
+    dry_food:
+      brand: "Brand"
+      food_type: "Food type"
+      description: "Description"
+      amount: "Amount(g)"
+      used_amount: "Used amount(g)"
+      average_used_amount: "Average used amount(g)"
+      total_ate_amount: "Total ate amount"
+      left_amount: "Left amount"
+      days_remaining: "Days remaining"
+      user: "User"
+    form:
+      prompt: "Please select type of dry food"
+    edit:
+      title: "Editing dry food"
+      show: "Show this dry food"
+      back: "Back to dry foods"
+    index:
+      title: "Dry Foods Storage"
+      header: "Dry foods Storage List"
+      add: "add dry food"
+      brand: "brand"
+      description: "description"
+      type: "type"
+      amount: "Amount(g)"
+      total_used_amount: "Total used amount(g)"
+      average_used_amount: "average used amount(g)/ day"
+      left_amount: "left amount(g)"
+      expected_running_out: "expected running out"
+      delete: "delete"
+      confirm: "Are you sure to delete it?"
+      no_dry_food: "You do not have any dry food. How about adding one to your storage list right now? 😺"
+    new:
+      title: "New Dry Food"
+      header: "Add dry food"
+      add: "Add dry food"
+      back: "Back to storage list"
+    show:
+      title: "Showing dry food"
+      header: "Showing dry food"
+      edit: "Edit this dry food"
+      back: "Back to dry foods"
+      destroy: "Destroy this dry food"
+      confirm: "Are you sure?"
 
 
