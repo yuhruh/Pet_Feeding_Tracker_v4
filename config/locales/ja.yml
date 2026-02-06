@@ -123,6 +123,10 @@ ja:
       user: "ユーザー"
     form:
       prompt: "ドライフードの種類を選択してください"
+      brand: "ブランド"
+      food_type: "食事の種類"
+      description: "説明"
+      amount: "量（g）"
     edit:
       title: "ドライフードの編集"
       show: "このドライフードを表示"

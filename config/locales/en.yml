@@ -123,6 +123,10 @@ en:
       user: "User"
     form:
       prompt: "Please select type of dry food"
+      brand: "Brand"
+      food_type: "Food type"
+      description: "Description"
+      amount: "Amount(g)"
     edit:
       title: "Editing dry food"
       show: "Show this dry food"

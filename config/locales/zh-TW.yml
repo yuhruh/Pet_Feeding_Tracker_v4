@@ -123,6 +123,10 @@ zh-TW:
       user: "使用者"
     form:
       prompt: "請選取乾糧類型"
+      brand: "品牌"
+      food_type: "食物類型"
+      description: "說明"
+      amount: "份量（克）"
     edit:
       title: "編輯乾糧"
       show: "顯示此乾糧"

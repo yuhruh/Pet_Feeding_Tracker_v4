@@ -5,7 +5,7 @@
 
   <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
     <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :brand, class: "text-base font-medium text-gray-700 dark:text-gray-100 capitalize required"%>
+      <%= form.label :brand, t(".brand"), class: "text-base font-medium text-gray-700 dark:text-gray-100 capitalize required"%>
     </div>
     <div class="flex flex-col items-center md:items-start md:w-5/6">
       <%= form.text_field :brand, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black", {"border-gray-400 focus:outline-blue-600": dry_food.errors[:brand].none?, "border-red-400 focus:outline-red-600": dry_food.errors[:brand].any?}] %>
@@ -14,7 +14,7 @@
 
   <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
     <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :food_type, class: "text-base font-medium text-gray-700 dark:text-gray-100 capitalize required" %>
+      <%= form.label :food_type, t(".food_type"), class: "text-base font-medium text-gray-700 dark:text-gray-100 capitalize required" %>
     </div>
     <div class="flex flex-col items-center md:items-start md:w-5/6">
       <%= form.select :food_type, ["Kibble", "Freeze-Dried"], { prompt: t('.prompt') }, required: true, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full capitalize dark:text-black", {"border-gray-400 focus:outline-blue-600": dry_food.errors[:food_type].none?, "border-red-400 focus:outline-red-600": dry_food.errors[:food_type].any?}] %>
@@ -23,7 +23,7 @@
 
   <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
     <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :description, class: "text-base font-medium text-gray-700 dark:text-gray-100 capitalize required" %>
+      <%= form.label :description, t(".description"), class: "text-base font-medium text-gray-700 dark:text-gray-100 capitalize required" %>
     </div>
     <div class="flex flex-col items-center md:items-start md:w-5/6">
       <%= form.text_field :description, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black", {"border-gray-400 focus:outline-blue-600": dry_food.errors[:description].none?, "border-red-400 focus:outline-red-600": dry_food.errors[:description].any?}] %>
@@ -32,7 +32,7 @@
 
   <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
     <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :amount, class: "text-base font-medium text-gray-700 dark:text-gray-100 capitalize required" %>
+      <%= form.label :amount, t(".amount"), class: "text-base font-medium text-gray-700 dark:text-gray-100 capitalize required" %>
     </div>
     <div class="flex flex-col items-center md:items-start md:w-5/6">
       <%= form.number_field :amount, step: :any, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black", {"border-gray-400 focus:outline-blue-600": dry_food.errors[:amount].none?, "border-red-400 focus:outline-red-600": dry_food.errors[:amount].any?}] %>
