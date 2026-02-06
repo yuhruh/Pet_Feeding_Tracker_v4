@@ -49,13 +49,13 @@
 
       <%= form_with url: "/auth/github", method: :post, data: { controller: "time-zone", action: "submit->time-zone#setAuthUrl", turbo: false } do |form| %>
         <button type="submit" class="btn flex items-center justify-center py-2 rounded-md text-sm cursor-pointer">
-          <%= image_tag "icons8-github-bgremove.gif", style: "width: 25px; height: 25px;" %>
+          <%= svg "github" %>
           <span class="ml-2 text-softBlue font-semibold underline decoration-2 decoration-softBlue"><%= t(".github_button") %></span>
         </button>
       <% end %>
     </div>
     <div class="mb-3 flex justify-center items-center gap-4">
-      <span id="HelpBlock" class="text-center text-gray-500 dark:text-gray-100"><%= t(".help_text_html", google_icon: image_tag("icons8-google-40.png", style: "width: 20px; height: 20px;", class: "inline-block align-middle"), chrome_icon: svg("chrome"), edge_icon: svg("edge"), firefox_icon: svg("firefox")) %></span>
+      <span id="HelpBlock" class="text-center text-gray-500 dark:text-gray-100"><%= t(".help_text_html", google_icon: image_tag("icons8-google-40.png", style: "width: 20px; height: 20px;", class: "inline-block align-middle"), chrome_icon: svg("chrome"), edge_icon: content_tag(:span, svg("edge"), class: "w-6 h-6 inline-block align-middle"), firefox_icon: content_tag(:span, svg("firefox"), class: "w-6 h-6 inline-block align-middle")) %></span>
     </div>
   </div>
 </div>
