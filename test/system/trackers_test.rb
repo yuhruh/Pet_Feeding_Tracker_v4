@@ -12,13 +12,13 @@ class TrackersTest < ApplicationSystemTestCase
 
   test "visiting the index" do
     sign_in_as @user
-    visit pet_trackers_url(@pet)
+    visit pet_trackers_url(locale: I18n.default_locale, pet_id: @pet.id)
     assert_selector "h1", text: "#{@pet.petname.capitalize}'s Trackers"
   end
 
   test "should create tracker" do
     sign_in_as @user
-    visit pet_trackers_url(@pet)
+    visit pet_trackers_url(locale: I18n.default_locale, pet_id: @pet.id)
     click_on "New tracker for #{@pet.petname.capitalize}"
 
     fill_in "tracker_amount", with: @tracker.amount
@@ -35,7 +35,7 @@ class TrackersTest < ApplicationSystemTestCase
 
   test "should update Tracker" do
     sign_in_as @user
-    visit pet_trackers_url(@pet)
+    visit pet_trackers_url(locale: I18n.default_locale, pet_id: @pet.id)
     within "##{dom_id(@tracker)}" do
       find("a[href*='edit']").click
     end
@@ -52,7 +52,7 @@ class TrackersTest < ApplicationSystemTestCase
 
   test "should destroy Tracker" do
     sign_in_as @user
-    visit pet_trackers_url(@pet)
+    visit pet_trackers_url(locale: I18n.default_locale, pet_id: @pet.id)
     accept_confirm do
       within "##{dom_id(@tracker)}" do
         find("a[data-turbo-method='delete']").click

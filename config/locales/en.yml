@@ -196,3 +196,13 @@ en:
       edit_profile: "Edit Profile"
       delete_profile: "Delete Profile"
       my_cats: "My Cats"
+  passwords:
+    edit:
+      title: "Update your password"
+      new_password_placeholder: "Enter new password"
+      repeat_new_password_placeholder: "Repeat new password"
+      save_button: "Save"
+    new:
+      title: "Forgot your password?"
+      email_placeholder: "Enter your email address"
+      submit_button: "Email reset instructions"

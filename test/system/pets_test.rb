@@ -30,7 +30,7 @@ class PetsTest < ApplicationSystemTestCase
 
   test "should update Pet" do
     sign_in_as @user
-    visit pet_url(@pet)
+    visit pet_url(locale: I18n.default_locale, id: @pet.id)
     click_on "Edit #{@pet.petname.capitalize}'s Profile"
 
     fill_in "Birthday", with: @pet.birthday
@@ -46,7 +46,7 @@ class PetsTest < ApplicationSystemTestCase
 
   test "should destroy Pet" do
     sign_in_as @user
-    visit pet_url(@pet)
+    visit pet_url(locale: I18n.default_locale, id: @pet.id)
     accept_confirm { click_on "Destroy #{@pet.petname}'s profile and records" }
 
     assert_text "Cat #{@pet.petname} was successfully destroyed."
