@@ -223,6 +223,9 @@ zh-TW:
       gender: "性別"
       select_gender: "請選取寵物的性別"
       breed: "品種"
+      male: "♂️ 男"
+      female: "♀️ 女"
+      not_to_answer: "🙊 不方便透露"
     pet:
       name: "姓名"
       birthday: "生日"

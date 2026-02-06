@@ -223,6 +223,9 @@ en:
       gender: "Gender"
       select_gender: "Please Select Cat's Gender"
       breed: "Breed"
+      male: "♂️ Male"
+      female: "♀️ Female"
+      not_to_answer: "🙊 Rather Not to Answer"
     pet:
       name: "Name"
       birthday: "Birthday"
