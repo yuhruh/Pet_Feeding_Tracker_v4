@@ -1,30 +1,30 @@
-<% content_for :title, "#{@pet.petname.capitalize}'s Trackers" %>
+<% content_for :title, t('trackers.index.title', petname: @pet.petname.capitalize) %>
 
   <details class="container mx-auto border-2 border-garyishBlue rounded-md shadow-md w-full lg:w-1/2">
-    <summary class="text-center font-bold text-lg cursor-pointer p-2 md:text-base">Import CSV File</summary>
+    <summary class="text-center font-bold text-lg cursor-pointer p-2 md:text-base"><%= t('trackers.index.import_csv') %></summary>
     <div class="flex flex-col justify-center items-center mb-4">
       <%= form_with url: import_pet_trackers_path(@pet), method: :post do |form| %>
         <%= form.file_field :file, accept: ".csv" %>
-        <%= form.button "Import", class: "p-2 mt-4 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700 hover:scale-110" %>
+        <%= form.button t('trackers.index.import_button'), class: "p-2 mt-4 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700 hover:scale-110" %>
         <div class="flex text-sm italic font-semibold text-gray-500">
-          <span class="dark:text-grayishBlue">Only CSV file can be imported</span>
+          <span class="dark:text-grayishBlue"><%= t('trackers.index.import_hint') %></span>
         </div>
       <% end %>
     </div>
   </details>
   
   <div class="flex flex-col justify-center items-center mb-3">
-    <h1 class="font-bold text-center text-2xl mt-5 md:text-4xl"><%=@pet.petname.capitalize%>'s Trackers</h1>
+    <h1 class="font-bold text-center text-2xl mt-5 md:text-4xl"><%= t('trackers.index.title', petname: @pet.petname.capitalize) %></h1>
   </div>
 
   <div class="flex flex-row justify-center space-x-3">
     <%= image_tag('add_tracker_removebg.png', width:'40px', height: '40px') %>
-    <%= link_to "New tracker for #{@pet.petname.capitalize}", new_pet_tracker_path(@pet), class: "text-purple-500 text-lg underline decoration-2 decoration-purple-500 font-bold transition duration-300 ease-in-out hover:scale-110 capitalize md:text-xl" %>
+    <%= link_to t('trackers.index.new_tracker_link', petname: @pet.petname.capitalize), new_pet_tracker_path(@pet), class: "text-purple-500 text-lg underline decoration-2 decoration-purple-500 font-bold transition duration-300 ease-in-out hover:scale-110 capitalize md:text-xl" %>
   </div>
 
   <fieldset class="flex flex-row gap-3 justify-center mb-3">
     <%= image_tag('download.png', width: '25px', height: '25px') %>
-    <%= link_to "Export to CSV", pet_trackers_path(@pet, format: :csv), class: "text-base font-bold text-sky-500 transition duration-300 ease-in-out hover:scale-110 capitalize md:text-lg dark:text-white" %>
+    <%= link_to t('trackers.index.export_csv'), pet_trackers_path(@pet, format: :csv), class: "text-base font-bold text-sky-500 transition duration-300 ease-in-out hover:scale-110 capitalize md:text-lg dark:text-white" %>
   </fieldset>
 
   <div class="flex flex-col digg_pagination justify-center italic mt-4">
@@ -37,7 +37,7 @@
     </div>
     <div class="flex justify-end items-start mx-8">
       <%= form_with url: pet_trackers_path(@pet), method: :get, class: "flex items-center" do |form| %>
-        <span class="mr-2">Items per page:</span>
+        <span class="mr-2"><%= t('trackers.index.items_per_page') %></span>
         <%= form.select :per_page, options_for_select([5, 10, 20, 50], params[:per_page] || 10), {}, { onchange: 'this.form.submit()', class: "p-1 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700" } %>
       <% end %>
     </div>
@@ -47,14 +47,14 @@
   <div class="flex flex-col mt-5 mb-4 justify-center items-center mx-auto w-full">
     <div class="flex justify-end items-end pr-8 pt-4 mb-4 w-full">
       <%= form_with url: pet_trackers_path(@pet), method: :get, class: "flex items-center" do |form| %>
-        <span class="mr-2">Chart Range:</span>
-        <%= form.select :range, options_for_select([["All time", "all"], ["Last 7 days", "7"], ["Last 30 days", "30"]], params[:range] || "all"), {}, { onchange: 'this.form.submit()', class: "p-1 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700" } %>
+        <span class="mr-2"><%= t('trackers.index.chart_range') %></span>
+        <%= form.select :range, options_for_select([[t('trackers.index.all_time'), "all"], [t('trackers.index.last_7_days'), "7"], [t('trackers.index.last_30_days'), "30"]], params[:range] || "all"), {}, { onchange: 'this.form.submit()', class: "p-1 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700" } %>
       <% end %>
     </div>
 
     <% if @dry_properties.present? || @wet_properties.present? %>
       <%= column_chart @data, adapter: "google", height: "300px", library: {
-        title: "Amount & Weight Over Time",
+        title: t('trackers.index.chart_title'),
         isStacked: true,
         interpolateNulls: true, 
         series: {
@@ -65,19 +65,19 @@
         colors: ['#C1D7EC', '#FFDAB9', '#6B4AB9'],
         chartArea: {left: 100, right: 100},
         hAxis: {
-          title: 'Date',
+          title: t('trackers.index.chart_h_axis_title'),
           titleTextStyle: {italic: true}
         },
         vAxes: {
-          0 => {title: 'Amount (g)'},
-          1 => {title: 'Weight (kg)', viewWindow: {min: 0, max: 15}, gridlines: {color: 'transparent'}}
+          0 => {title: t('trackers.index.chart_v_axis_amount')},
+          1 => {title: t('trackers.index.chart_v_axis_weight'), viewWindow: {min: 0, max: 15}, gridlines: {color: 'transparent'}}
         },
         legend: {position: 'top'},
         titleTextStyle: {bold: true, fontSize: 20}
       } %>
     <% else %>
       <div class="text-center p-8 my-4 bg-gray-100 rounded-lg shadow-lg">
-        <p class="font-semibold text-gray-700">No tracking data available to display the chart.</p>
+        <p class="font-semibold text-gray-700"><%= t('trackers.index.no_data_for_chart') %></p>
       </div>
     <% end %>
   </div>

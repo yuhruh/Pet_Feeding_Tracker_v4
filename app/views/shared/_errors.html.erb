@@ -8,7 +8,7 @@
         </button>
       </div>
       <div class="flex justify-start">
-        <h2 class="font-semibold"><%= pluralize(obj.errors.count, "error") %> prohibited this <%= obj.class.name.downcase %> from being saved:</h2>
+        <h2 class="font-semibold"><%= pluralize(obj.errors.count, "error") %> <%= t('shared.errors.prohibited_this_html', model: obj.class.name.downcase) %></h2>
       </div>
       <div class="flex justify-start">
         <ul class="list-disc list-inside">

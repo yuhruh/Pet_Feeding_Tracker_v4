@@ -1,19 +1,19 @@
-<% content_for :title, "New Tracker" %>
+<% content_for :title, t('trackers.new.title') %>
 
 <div class="container mx-auto md:w-2/3 w-full" data-controller="tracker-form" data-tracker-form-pet-id-value="<%= @pet.id %>">
   <div class="flex flex-row justify-center gap-4 mb-4 dark:bg-gray-800 p-4 sm:p-6">
     <%= image_tag('tracker_removebg.png', width: '48px', height: '40px') %>
-    <h1 class="text-center font-bold text-2xl mt-4 capitalize lg:text-4xl">New tracker</h1>
+    <h1 class="text-center font-bold text-2xl mt-4 capitalize lg:text-4xl"><%= t('trackers.new.header') %></h1>
   </div>
 
   <%= render "form", tracker: @tracker %>
 
   <div class="flex flex-col justify-center items-center gap-4 mb-4 pt-4 md:flex-row">
     <div class="flex justify-center">
-      <%= button_tag("Add a record for #{@pet.petname.capitalize}", type: "submit", form: "tracker-form", class: "btn text-center rounded-md px-3.5 py-2.5 text-white bg-softBlue hover:bg-white hover:text-softBlue hover:border-2 hover:border-softBlue inline-block font-medium cursor-pointer capitalize", data: { tracker_form_target: "submitButton" }) %>
+      <%= button_tag(t('trackers.new.add_button', petname: @pet.petname.capitalize), type: "submit", form: "tracker-form", class: "btn text-center rounded-md px-3.5 py-2.5 text-white bg-softBlue hover:bg-white hover:text-softBlue hover:border-2 hover:border-softBlue inline-block font-medium cursor-pointer capitalize", data: { tracker_form_target: "submitButton" }) %>
     </div>
     <div class="flex justify-center">
-      <%= link_to "Back to #{@pet.petname}'s record", pet_trackers_path, class: "text-center rounded-md px-3.5 py-2.5 text-white bg-gray-500 hover:bg-white hover:text-gray-500 hover:border-2 hover:border-gray-500 inline-block font-medium cursor-pointer capitalize" %>
+      <%= link_to t('trackers.new.back_button', petname: @pet.petname), pet_trackers_path, class: "text-center rounded-md px-3.5 py-2.5 text-white bg-gray-500 hover:bg-white hover:text-gray-500 hover:border-2 hover:border-gray-500 inline-block font-medium cursor-pointer capitalize" %>
     </div>
   </div>
 
