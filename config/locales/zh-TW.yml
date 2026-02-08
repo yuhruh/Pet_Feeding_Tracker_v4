@@ -498,3 +498,10 @@ zh-TW:
       notice: "帳戶已成功更新。"
     destroy:
       alert: "%{name}及其所有相關紀錄已成功刪除。"
+  mailers:
+    passwords_mailer:
+      reset:
+        subject: "重設您的密碼 😺"
+    user_mailer:
+      welcome:
+        subject: "歡迎使用寵物飲食紀錄 App！"

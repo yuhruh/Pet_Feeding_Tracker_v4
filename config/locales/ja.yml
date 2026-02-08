@@ -498,3 +498,10 @@ ja:
       notice: "アカウントは正常に更新されました。"
     destroy:
       alert: "%{name}および関連するすべての記録は正常に削除されました。"
+  mailers:
+    passwords_mailer:
+      reset:
+        subject: "パスワードをリセットしてください 😺"
+    user_mailer:
+      welcome:
+        subject: "猫トラッカーアプリへようこそ！"

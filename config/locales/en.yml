@@ -498,3 +498,10 @@ en:
       notice: "Account was successfully updated."
     destroy:
       alert: "%{name} and all associated records were successfully deleted."
+  mailers:
+    passwords_mailer:
+      reset:
+        subject: "Reset your password 😺"
+    user_mailer:
+      welcome:
+        subject: "Welcome to Cat Trackers App!"
