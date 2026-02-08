@@ -159,13 +159,13 @@
     <div class="w-full py-3 text-center">
       <div class="flex flex-row justify-center gap-3">
         <%= image_tag('icons8-features-64.png', width: "25px", height: "25px") %>
-        <a href="/home#features" class="block hover:text-softRed">Features</a>
+        <%= link_to t('layouts.navigation.mobile.features'), home_path(anchor: "features"), class: "tracking-wide hover:text-softRed" %>
       </div>
     </div>
     <div class="w-full py-3 text-center">
       <div class="flex flex-row justify-center gap-3">
         <%= image_tag('icons8-about-100.png', width: "25px", height: "25px") %>
-        <%= link_to "About", about_path, class: "block hover:text-softRed"%>
+        <%= link_to t('layouts.navigation.mobile.about'), about_path, class: "block hover:text-softRed"%>
       </div>
     </div>
     <div class="w-full py-3 text-center">
@@ -185,7 +185,7 @@
             </clipPath>
           </defs>
         </svg>
-        <%= link_to "Doc", doc_path, class: "block hover:text-softRed"%>
+        <%= link_to t('layouts.navigation.mobile.docs'), doc_path, class: "block hover:text-softRed"%>
       </div>
     </div>
     <div class="w-full py-3 text-center">
@@ -198,7 +198,7 @@
             fill="#fff"
           />
         </svg>
-        <%= link_to "Get Started", new_registrations_path, class: "block hover:text-softRed"%>
+        <%= link_to t('layouts.navigation.mobile.get_started'), new_registrations_path, class: "block hover:text-softRed"%>
       </div>
     </div>
     <% if authenticated? %>
@@ -210,14 +210,14 @@
             <path d="M25 80C25 65 35 58 50 58C65 58 75 65 75 80" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
           </svg>
           <div class="font-bold">
-            My Profile
+            <%= t('layouts.navigation.mobile.my_profile') %>
           </div>
         </div>
-        <%= link_to "View Profile", users_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
-        <%= link_to "Edit Profile", edit_users_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-green-100 hover:text-green-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
-        <%= link_to "Delete Profile", users_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-red-100 hover:text-softRed focus:bg-gray-100 focus:text-softRed focus:outline-hidden", 
-        data: {"turbo-confirm": "Are you sure to delete this user account? The user and associated trackers will all gone..", "turbo-method": "delete"} %>
-        <%= link_to "Cats List", pets_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+        <%= link_to t('layouts.navigation.mobile.view_profile'), users_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+        <%= link_to t('layouts.navigation.mobile.edit_profile'), edit_users_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-green-100 hover:text-green-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+        <%= link_to t('layouts.navigation.mobile.delete_profile'), users_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-red-100 hover:text-softRed focus:bg-gray-100 focus:text-softRed focus:outline-hidden", 
+        data: {"turbo-confirm": t('layouts.navigation.mobile.delete_confirmation'), "turbo-method": "delete"} %>
+        <%= link_to t('layouts.navigation.mobile.cats_list'), pets_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
       </div>
       <div class="w-full py-3 text-center">
         <div class="flex flex-row justify-center gap-3">
@@ -229,12 +229,12 @@
             <ellipse cx="80" cy="40" rx="10" ry="12" fill="#fff" />
           </svg>
           <div class="font-bold">
-            My Cats
+            <%= t('layouts.navigation.mobile.my_cats') %>
           </div>
         </div>
-        <%= link_to "Add a cat", new_pet_path, class: "block px-2 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+        <%= link_to t('layouts.navigation.mobile.add_a_cat'), new_pet_path, class: "block px-2 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
           <% Current.user.pets.select(&:persisted?).each do |pet| %>
-            <%= link_to "View #{pet.petname.split(" ").map(&:capitalize).join(" ")}'s Profile", pet_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+            <%= link_to t('layouts.navigation.mobile.view_pet_profile', petname: pet.petname.split(" ").map(&:capitalize).join(" ")), pet_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
           <% end %>
       </div>
       <div class="w-full py-3 text-center">
@@ -272,11 +272,11 @@
             </g>
           </svg>
           <div class="font-bold">
-            Dry Food Storage
+            <%= t('layouts.navigation.mobile.dry_food_storage') %>
           </div>
         </div>
-        <%= link_to "Add dry food", new_dry_food_path, class: "block px-2 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
-        <%= link_to "storage list", dry_foods_path, class: "block px-2 py-2 text-sm text-gray-300 hover:bg-violet-100 hover:text-violet-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+        <%= link_to t('layouts.navigation.mobile.add_dry_food'), new_dry_food_path, class: "block px-2 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+        <%= link_to t('layouts.navigation.mobile.storage_list'), dry_foods_path, class: "block px-2 py-2 text-sm text-gray-300 hover:bg-violet-100 hover:text-violet-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
       </div>
       <div class="w-full py-3 text-center">
         <div class="flex flex-row justify-center gap-3">
@@ -309,7 +309,7 @@
             </g>
           </svg>
           <div class="font-bold">
-            Trackers
+            <%= t('layouts.navigation.mobile.trackers') %>
           </div>
         </div>
         <% Current.user.pets.select(&:persisted?).each do |pet| %>
@@ -334,8 +334,8 @@
               </div>
             </div>
             <div class="flex items-center justify-center">
-              <%= link_to "View #{pet.petname.split(" ").map(&:capitalize).join(" ")}'s Trackers", pet_trackers_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 hover:scale-90 hover:rounded-lg focus:bg-gray-100 focus:text-softRed underline underline-offset-4 focus:outline-hidden" %>
-              <%= link_to "#{pet.petname.split(" ").map(&:capitalize).join(" ")}'s Favorite List", favorite_food_pet_trackers_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-emerald-100 hover:text-emerald-600 hover:scale-90 hover:rounded-lg focus:bg-gray-100 underline underline-offset-4 focus:text-softRed focus:outline-hidden" %>
+              <%= link_to t('layouts.navigation.mobile.view_pet_trackers', petname: pet.petname.split(" ").map(&:capitalize).join(" ")), pet_trackers_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 hover:scale-90 hover:rounded-lg focus:bg-gray-100 focus:text-softRed underline underline-offset-4 focus:outline-hidden" %>
+              <%= link_to t('layouts.navigation.mobile.pet_favorite_list', petname: pet.petname.split(" ").map(&:capitalize).join(" ")), favorite_food_pet_trackers_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-emerald-100 hover:text-emerald-600 hover:scale-90 hover:rounded-lg focus:bg-gray-100 underline underline-offset-4 focus:text-softRed focus:outline-hidden" %>
             </div>
           </div>
         <% end %>
@@ -345,7 +345,7 @@
           <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M21.593 10.943c.584.585.584 1.53 0 2.116L18.71 15.95c-.39.39-1.03.39-1.42 0a.996.996 0 0 1 0-1.41 9.552 9.552 0 0 1 1.689-1.345l.387-.242-.207-.206a10 10 0 0 1-2.24.254H8.998a1 1 0 1 1 0-2h7.921a10 10 0 0 1 2.24.254l.207-.206-.386-.241a9.562 9.562 0 0 1-1.69-1.348.996.996 0 0 1 0-1.41c.39-.39 1.03-.39 1.42 0l2.883 2.893zM14 16a1 1 0 0 0-1 1v1.5a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1.505a1 1 0 1 0 2 0V5.5A2.5 2.5 0 0 0 12.5 3h-7A2.5 2.5 0 0 0 3 5.5v13A2.5 2.5 0 0 0 5.5 21h7a2.5 2.5 0 0 0 2.5-2.5V17a1 1 0 0 0-1-1z" fill="#fff"/>
           </svg>
-          <%= button_to "Sign Out", session_path, class: "block uppercase mx-auto hover:text-softRed", method: :delete %>
+          <%= button_to t('layouts.navigation.mobile.sign_out'), session_path, class: "block uppercase mx-auto hover:text-softRed", method: :delete %>
         </div>
       </div>
     <% else %>
@@ -354,7 +354,7 @@
           <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M6 8a1 1 0 0 0 1-1V5.923c0-.459.022-.57.082-.684a.364.364 0 0 1 .157-.157c.113-.06.225-.082.684-.082h10.154c.459 0 .57.022.684.082.07.038.12.087.157.157.06.113.082.225.082.684v12.154c0 .459-.022.57-.082.684a.363.363 0 0 1-.157.157c-.113.06-.225.082-.684.082H7.923c-.459 0-.57-.022-.684-.082a.363.363 0 0 1-.157-.157c-.06-.113-.082-.225-.082-.684V17a1 1 0 1 0-2 0v1.077c0 .76.082 1.185.319 1.627.223.419.558.753.977.977.442.237.866.319 1.627.319h10.154c.76 0 1.185-.082 1.627-.319.419-.224.753-.558.977-.977.237-.442.319-.866.319-1.627V5.923c0-.76-.082-1.185-.319-1.627a2.363 2.363 0 0 0-.977-.977C19.262 3.082 18.838 3 18.077 3H7.923c-.76 0-1.185.082-1.627.319a2.363 2.363 0 0 0-.978.977C5.083 4.738 5 5.162 5 5.923V7a1 1 0 0 0 1 1zm9.593 2.943c.584.585.584 1.53 0 2.116L12.71 15.95c-.39.39-1.03.39-1.42 0a.996.996 0 0 1 0-1.41 9.552 9.552 0 0 1 1.689-1.345l.387-.242-.207-.206a10 10 0 0 1-2.24.254H2.998a1 1 0 1 1 0-2h7.921a10 10 0 0 1 2.24.254l.207-.206-.386-.241a9.562 9.562 0 0 1-1.69-1.348.996.996 0 0 1 0-1.41c.39-.39 1.03-.39 1.42 0l2.883 2.893z" fill="#fff"/>
           </svg>
-          <%= link_to "Sign In", new_session_path, class: "block hover:text-softRed"%>
+          <%= link_to t('layouts.navigation.mobile.sign_in'), new_session_path, class: "block hover:text-softRed"%>
         </div>
       </div>
     <% end %>
@@ -378,7 +378,7 @@
           <path d="M22 22l-5-10-5 10" />
           <path d="M14 18h6" />
         </svg>
-        <div class="font-bold">Languages</div>
+        <div class="font-bold"><%= t('layouts.navigation.mobile.languages') %></div>
       </div>
       <% I18n.available_locales.each do |locale| %>
         <%= link_to locale_to_word_flag(locale), url_for(locale: locale), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
