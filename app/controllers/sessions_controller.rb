@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
   allow_unauthenticated_access only: %i[ new create ]
-  rate_limit to: 10, within: 5.minutes, only: :create, with: -> { redirect_to new_session_url, alert: "Too many sign-in attempts. Please wait a moment and try again later." }
+  rate_limit to: 10, within: 5.minutes, only: :create, with: -> { redirect_to new_session_url, alert: t("sessions.create.alert_rate_limit") }
 
   def new
   end
@@ -18,15 +18,15 @@ class SessionsController < ApplicationController
         )
 
         if @user.new_user?
-          redirect_to new_pet_path, notice: "Hello, #{Current.user.username.capitalize} 👋. This is your first time to sign in, please add a new cat first for further tracker."
+          redirect_to new_pet_path, notice: t(".notice_new_user", username: Current.user.username.capitalize)
         else
-          redirect_to pets_path, notice: "Welcome back to Cat Feeding Tracker, #{Current.user.username.capitalize}"
+          redirect_to pets_path, notice: t(".notice_welcome_back", username: Current.user.username.capitalize)
         end
       else
         msg = if @user.connected_services.any?
-                "You've previously signed in using your #{connected_services_string(@user)} account. Please use that to sign in."
+                t(".alert_with_connected_services", services: connected_services_string(@user))
         else
-                "The password is not correct"
+                t(".alert_wrong_password")
         end
         redirect_to new_session_path, alert: msg, status: :see_other
       end
@@ -34,13 +34,13 @@ class SessionsController < ApplicationController
       # @user = User.new(email_address: params[:email_address])
       # flash.now[:alert] = "This email has not been signed up yet. Please sign up first"
       # render "registrations/new", status: :unprocessable_entity
-      redirect_to "/registrations/new", alert: "This email has not been signed up yet. Please sign up first", status: :see_other
+      redirect_to "/registrations/new", alert: t(".alert_unregistered_email"), status: :see_other
     end
   end
 
   def destroy
     terminate_session
-    redirect_to new_session_path, alert: "You have been signed out.", status: :see_other
+    redirect_to new_session_path, alert: t(".alert"), status: :see_other
   end
 
   private

@@ -160,6 +160,11 @@ ja:
       back: "ドライフードに戻る"
       destroy: "このドライフードを破棄"
       confirm: "よろしいですか？"
+    create:
+      notice: "ドライフードは正常に作成されました。"
+    destroy:
+      notice: "ドライフードは正常に破棄されました。"
+    not_found: "ドライフードが見つかりません。"
 
   layouts:
     footer:
@@ -235,6 +240,13 @@ ja:
       title: "パスワードをお忘れですか？"
       email_placeholder: "メールアドレスを入力"
       submit_button: "リセット手順をメールで送信"
+    create:
+      notice: "パスワードのリセット手順が送信されました（そのメールアドレスのユーザーが存在する場合）。"
+    update:
+      notice: "パスワードがリセットされました。"
+      alert: "パスワードが一致しませんでした。"
+    set_user_by_token:
+      alert: "パスワードリセットリンクが無効か、有効期限が切れています。"
   pets:
     form:
       pet_avatar: "ペットのアバター"
@@ -281,6 +293,12 @@ ja:
       back_to_cat_list: "%{username}の猫リストに移動"
       destroy_profile: "%{petname}のプロフィールと記録を破棄"
       confirm: "よろしいですか？"
+    create:
+      notice: "猫は正常に作成されました。"
+    update:
+      notice: "猫%{petname}は正常に更新されました。"
+    destroy:
+      notice: "猫%{name}は正常に破棄されました。"
   passwords_mailer:
     reset:
       greeting: "こんにちは、 %{username} さん："
@@ -288,6 +306,8 @@ ja:
       instruction_text: "次の15分以内にこのパスワードリセットページでパスワードをリセットできます："
       password_reset_link: "このパスワードリセットページ"
   registrations:
+    create:
+      notice: "こんにちは、%{username}さん 👋。猫の給餌トラッカーアプリへのサインアップが完了しました。初めてのサインインですので、今後のトラッカーのためにまず新しい猫を追加してください。ようこそ、%{username}さん！"
     new:
       title: "🐾 猫トラッカーアプリにサインアップ 🐾"
       username: "ユーザー名"
@@ -309,6 +329,15 @@ ja:
       github_button: "GitHub"
       help_text_html: "%{google_icon} を使用してサインアップする場合は、%{chrome_icon} Chrome / %{edge_icon} Edge / %{firefox_icon} FireFox を使用してリンクを開いてください"
   sessions:
+    create:
+      alert_rate_limit: "サインインの試行回数が多すぎます。しばらく待ってからもう一度お試しください。"
+      notice_new_user: "こんにちは、%{username}さん 👋。初めてのサインインです。今後のトラッカーのために、まず新しい猫を追加してください。"
+      notice_welcome_back: "猫の給餌トラッカーへようこそ、%{username}さん"
+      alert_with_connected_services: "以前に%{services}アカウントを使用してサインインしています。そちらを使用してサインインしてください。"
+      alert_wrong_password: "パスワードが正しくありません"
+      alert_unregistered_email: "このメールアドレスはまだサインアップされていません。まずサインアップしてください"
+    destroy:
+      alert: "サインアウトしました。"
     new:
       title: "🐾 猫トラッカーアプリにサインイン 🐾"
       email: "メールアドレス"

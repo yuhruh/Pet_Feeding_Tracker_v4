@@ -29,7 +29,7 @@ class DryFoodsController < ApplicationController
 
     respond_to do |format|
       if @dry_food.save
-        format.html { redirect_to dry_foods_path, notice: "Dry food was successfully created." }
+        format.html { redirect_to dry_foods_path, notice: t(".notice") }
         format.json { render :show, status: :created, location: dry_foods_path }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -43,7 +43,7 @@ class DryFoodsController < ApplicationController
     @dry_food.destroy!
 
     respond_to do |format|
-      format.html { redirect_to dry_foods_path, notice: "Dry food was successfully destroyed.", status: :see_other }
+      format.html { redirect_to dry_foods_path, notice: t(".notice"), status: :see_other }
       format.json { head :no_content }
     end
   end
@@ -55,10 +55,10 @@ class DryFoodsController < ApplicationController
     rescue ActiveRecord::RecordNotFound
       respond_to do |format|
         format.html do
-          flash[:alert] = "Dry food not found."
+          flash[:alert] = t("dry_foods.not_found")
           redirect_to dry_foods_path
         end
-        format.json { render json: { error: "Dry food not found" }, status: :not_found }
+        format.json { render json: { error: t("dry_foods.not_found") }, status: :not_found }
       end
     end
 

@@ -160,6 +160,11 @@ zh-TW:
       back: "返回乾糧"
       destroy: "刪除此乾糧"
       confirm: "您確定嗎？"
+    create:
+      notice: "乾糧已成功建立。"
+    destroy:
+      notice: "乾糧已成功刪除。"
+    not_found: "找不到乾糧。"
 
   layouts:
     footer:
@@ -235,6 +240,13 @@ zh-TW:
       title: "忘記密碼了嗎？"
       email_placeholder: "輸入您的電子郵件地址"
       submit_button: "以電子郵件傳送重設說明"
+    create:
+      notice: "密碼重設說明已傳送（如果存在使用該電子郵件地址的使用者）。"
+    update:
+      notice: "密碼已重設。"
+      alert: "密碼不符。"
+    set_user_by_token:
+      alert: "密碼重設連結無效或已過期。"
   pets:
     form:
       pet_avatar: "寵物頭像"
@@ -281,6 +293,12 @@ zh-TW:
       back_to_cat_list: "前往 %{username} 的寵物清單"
       destroy_profile: "刪除 %{petname} 的個人資料和記錄"
       confirm: "您確定嗎？"
+    create:
+      notice: "貓已成功建立。"
+    update:
+      notice: "貓 %{petname} 已成功更新。"
+    destroy:
+      notice: "貓 %{name} 已成功刪除。"
   passwords_mailer:
     reset:
       greeting: "嗨， %{username}："
@@ -288,6 +306,8 @@ zh-TW:
       instruction_text: "您可以在接下來的 15 分鐘內，透過此密碼重設頁面重設您的密碼："
       password_reset_link: "密碼重設頁面"
   registrations:
+    create:
+      notice: "您好，%{username} 👋。您已成功註冊到寵物餵食追踪應用程式，這是您第一次登入，請先新增一隻貓以便進一步追踪。歡迎您，%{username}！"
     new:
       title: "🐾 註冊寵物飲食紀錄應用程式 🐾"
       username: "使用者名稱"
@@ -309,6 +329,15 @@ zh-TW:
       github_button: "GitHub"
       help_text_html: "如果您使用 %{google_icon} 註冊，請使用 %{chrome_icon} Chrome / %{edge_icon} Edge / %{firefox_icon} FireFox 開啟連結"
   sessions:
+    create:
+      alert_rate_limit: "登入嘗試次數過多。請稍候再試。"
+      notice_new_user: "您好，%{username} 👋。這是您第一次登入，請先新增一隻貓以便進一步追踪。"
+      notice_welcome_back: "歡迎回到寵物餵食追踪應用程式，%{username}"
+      alert_with_connected_services: "您之前曾使用您的 %{services} 帳戶登入。請使用該帳戶登入。"
+      alert_wrong_password: "密碼不正確"
+      alert_unregistered_email: "此電子郵件尚未註冊。請先註冊"
+    destroy:
+      alert: "您已登出。"
     new:
       title: "🐾 登入寵物飲食紀錄應用程式 🐾"
       email: "電子郵件"

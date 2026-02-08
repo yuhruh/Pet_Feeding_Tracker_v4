@@ -160,6 +160,11 @@ en:
       back: "Back to dry foods"
       destroy: "Destroy this dry food"
       confirm: "Are you sure?"
+    create:
+      notice: "Dry food was successfully created."
+    destroy:
+      notice: "Dry food was successfully destroyed."
+    not_found: "Dry food not found."
 
   layouts:
     footer:
@@ -235,6 +240,13 @@ en:
       title: "Forgot your password?"
       email_placeholder: "Enter your email address"
       submit_button: "Email reset instructions"
+    create:
+      notice: "Password reset instructions sent (if user with that email address exists)."
+    update:
+      notice: "Password has been reset."
+      alert: "Passwords did not match."
+    set_user_by_token:
+      alert: "Password reset link is invalid or has expired."
   pets:
     form:
       pet_avatar: "Pet avatar"
@@ -281,6 +293,12 @@ en:
       back_to_cat_list: "Go to %{username}'s cats list"
       destroy_profile: "Destroy %{petname}'s profile and records"
       confirm: "Are you sure?"
+    create:
+      notice: "Cat was successfully created."
+    update:
+      notice: "Cat %{petname} was successfully updated."
+    destroy:
+      notice: "Cat %{name} was successfully destroyed."
   passwords_mailer:
     reset:
       greeting: "Hi, %{username}:"
@@ -288,6 +306,8 @@ en:
       instruction_text: "You can reset your password within the next 15 minutes on this password reset page:"
       password_reset_link: "this password reset page"
   registrations:
+    create:
+      notice: "Hello, %{username} 👋. You've successfully signed up to Cat Feeding Tracker App and this is your first time to sign in, please add a new cat first for further tracker. Welcome %{username}!"
     new:
       title: "🐾 Sign up Cat Trackers App 🐾"
       username: "Username"
@@ -309,6 +329,15 @@ en:
       github_button: "GitHub"
       help_text_html: "If you are using %{google_icon} to sign up, please use %{chrome_icon} Chrome / %{edge_icon} Edge / %{firefox_icon} FireFox to open the link"
   sessions:
+    create:
+      alert_rate_limit: "Too many sign-in attempts. Please wait a moment and try again later."
+      notice_new_user: "Hello, %{username} 👋. This is your first time to sign in, please add a new cat first for further tracker."
+      notice_welcome_back: "Welcome back to Cat Feeding Tracker, %{username}"
+      alert_with_connected_services: "You've previously signed in using your %{services} account. Please use that to sign in."
+      alert_wrong_password: "The password is not correct"
+      alert_unregistered_email: "This email has not been signed up yet. Please sign up first"
+    destroy:
+      alert: "You have been signed out."
     new:
       title: "🐾 Sign In Cat Trackers App 🐾"
       email: "Email"
