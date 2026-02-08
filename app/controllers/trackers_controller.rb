@@ -7,11 +7,11 @@ class TrackersController < ApplicationController
 
   def import
     file = params[:file]
-    return redirect_to pet_trackers_path, alert: "Only CSV please" unless file.content_type == "text/csv"
+    return redirect_to pet_trackers_path, alert: t(".import.alert") unless file.content_type == "text/csv"
 
     CsvImportTrackersService.new(@pet).call(file)
 
-    redirect_to pet_trackers_path, notice: "#{@pet.petname.capitalize}'s trackers imported!"
+    redirect_to pet_trackers_path, notice: t(".import.notice", petname: @pet.petname.capitalize)
   end
 
   # GET /trackers or /trackers.json
@@ -47,9 +47,9 @@ class TrackersController < ApplicationController
     # @weight = weights_by_date.sort_by { |date, _weight| date }.map { |date, weight| [date.strftime("%b %d"), weight.to_f] }
 
     @data = [
-      { name: "Wet Food (g)", data: @wet_properties },
-      { name: "Dry Food (g)", data: @dry_properties },
-      { name: "Weight (kg)", data: @weight, type: "line" }
+      { name: t(".chart.wet_food"), data: @wet_properties },
+      { name: t(".chart.dry_food"), data: @dry_properties },
+      { name: t(".chart.weight"), data: @weight, type: "line" }
     ]
   end
 
@@ -79,7 +79,7 @@ class TrackersController < ApplicationController
 
     respond_to do |format|
       if @tracker.save
-        format.html { redirect_to pet_trackers_path, notice: "Tracker was successfully created." }
+        format.html { redirect_to pet_trackers_path, notice: t(".create.notice") }
         format.json { render :show, status: :created, location: pet_trackers_path }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -102,7 +102,7 @@ class TrackersController < ApplicationController
 
     respond_to do |format|
       if @tracker.save
-        format.html { redirect_to [ @pet, :trackers ], notice: "Tracker was successfully updated.", status: :see_other }
+        format.html { redirect_to [ @pet, :trackers ], notice: t(".update.notice"), status: :see_other }
         format.json { render :show, status: :ok, location: [ @pet, :trackers ] }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -116,7 +116,7 @@ class TrackersController < ApplicationController
     @tracker.destroy!
 
     respond_to do |format|
-      format.html { redirect_to [ @pet, :trackers ], notice: "Tracker was successfully destroyed.", status: :see_other }
+      format.html { redirect_to [ @pet, :trackers ], notice: t(".destroy.notice"), status: :see_other }
       format.json { head :no_content }
     end
   end
@@ -138,7 +138,7 @@ class TrackersController < ApplicationController
       # @tracker = Tracker.find(params.expect(:id))
       @tracker = @pet.trackers.find(params[:id])
       rescue ActiveRecord::RecordNotFound
-        flash[:alert] = "Tracker not found."
+        flash[:alert] = t(".set_tracker.alert")
         redirect_to pet_tracker_path
     end
 

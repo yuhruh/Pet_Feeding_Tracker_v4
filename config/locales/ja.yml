@@ -438,6 +438,21 @@ ja:
       chart_v_axis_amount: "量 (g)"
       chart_v_axis_weight: "体重 (kg)"
       no_data_for_chart: "チャートを表示するための追跡データがありません。"
+    import:
+      alert: "CSVファイルのみお願いします"
+      notice: "%{petname}のトラッカーがインポートされました！"
+    create:
+      notice: "トラッカーは正常に作成されました。"
+    update:
+      notice: "トラッカーは正常に更新されました。"
+    destroy:
+      notice: "トラッカーは正常に削除されました。"
+    set_tracker:
+      alert: "トラッカーが見つかりません。"
+    chart:
+      wet_food: "ウェットフード (g)"
+      dry_food: "ドライフード (g)"
+      weight: "体重 (kg)"
     new:
       title: "新しいトラッカー"
       header: "新しいトラッカー"
@@ -474,3 +489,7 @@ ja:
       edit_profile_button: "プロフィールを編集"
       delete_profile_button: "プロフィールを削除"
       delete_confirm: "このユーザーアカウントを削除してもよろしいですか？ユーザーと関連するトラッカーはすべて削除されます。"
+    update:
+      notice: "アカウントは正常に更新されました。"
+    destroy:
+      alert: "%{name}および関連するすべての記録は正常に削除されました。"

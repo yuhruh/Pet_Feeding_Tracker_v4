@@ -438,6 +438,21 @@ en:
       chart_v_axis_amount: "Amount (g)"
       chart_v_axis_weight: "Weight (kg)"
       no_data_for_chart: "No tracking data available to display the chart."
+    import:
+      alert: "Only CSV please"
+      notice: "%{petname}'s trackers imported!"
+    create:
+      notice: "Tracker was successfully created."
+    update:
+      notice: "Tracker was successfully updated."
+    destroy:
+      notice: "Tracker was successfully destroyed."
+    set_tracker:
+      alert: "Tracker not found."
+    chart:
+      wet_food: "Wet Food (g)"
+      dry_food: "Dry Food (g)"
+      weight: "Weight (kg)"
     new:
       title: "New Tracker"
       header: "New tracker"
@@ -474,3 +489,7 @@ en:
       edit_profile_button: "Edit Profile"
       delete_profile_button: "Delete Profile"
       delete_confirm: "Are you sure to delete this user account? The user and associated trackers will all gone.."
+    update:
+      notice: "Account was successfully updated."
+    destroy:
+      alert: "%{name} and all associated records were successfully deleted."

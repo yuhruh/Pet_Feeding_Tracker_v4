@@ -108,7 +108,7 @@ zh-TW:
     paragraph_3: "但是每天手動輸入 Excel 很繁瑣，而且很難將趨勢可視化。這就是我建立 Aji 飲食紀錄的原因：為了輕鬆地將飲食趨勢可視化，並整理 Aji 最喜歡的食物，確保他每天都吃得飽飽的，開開心心的。"
     paragraph_4: "✨ 準備好試試了嗎？註冊並親自體驗一下。"
     paragraph_5: "如果您有興趣了解更多關於貓的飲食習慣，我強烈建議您諮詢專業人士。我個人從中獲得了極大的啟發"
-    pet_buddy_link: "Pet Buddy 貓行為有限責任公司"
+    pet_buddy_link: "貼心毛寶 - 貓行為諮商與訓練"
   dry_foods:
     dry_food:
       brand: "品牌"
@@ -294,11 +294,11 @@ zh-TW:
       destroy_profile: "刪除 %{petname} 的個人資料和記錄"
       confirm: "您確定嗎？"
     create:
-      notice: "貓已成功建立。"
+      notice: "寵物已成功建立。"
     update:
-      notice: "貓 %{petname} 已成功更新。"
+      notice: "寵物 %{petname} 已成功更新。"
     destroy:
-      notice: "貓 %{name} 已成功刪除。"
+      notice: "寵物 %{name} 已成功刪除。"
   passwords_mailer:
     reset:
       greeting: "嗨， %{username}："
@@ -307,7 +307,7 @@ zh-TW:
       password_reset_link: "密碼重設頁面"
   registrations:
     create:
-      notice: "您好，%{username} 👋。您已成功註冊到寵物餵食追踪應用程式，這是您第一次登入，請先新增一隻貓以便進一步追踪。歡迎您，%{username}！"
+      notice: "您好，%{username} 👋。您已成功註冊寵物飲食紀錄應用程式，這是您第一次登入，請先新增一隻寵物以便進一步紀錄。歡迎您，%{username}！"
     new:
       title: "🐾 註冊寵物飲食紀錄應用程式 🐾"
       username: "使用者名稱"
@@ -331,8 +331,8 @@ zh-TW:
   sessions:
     create:
       alert_rate_limit: "登入嘗試次數過多。請稍候再試。"
-      notice_new_user: "您好，%{username} 👋。這是您第一次登入，請先新增一隻貓以便進一步追踪。"
-      notice_welcome_back: "歡迎回到寵物餵食追踪應用程式，%{username}"
+      notice_new_user: "您好，%{username} 👋。這是您第一次登入，請先新增一隻寵物以便進一步紀錄。"
+      notice_welcome_back: "歡迎回到寵物餵食紀錄應用程式，%{username}"
       alert_with_connected_services: "您之前曾使用您的 %{services} 帳戶登入。請使用該帳戶登入。"
       alert_wrong_password: "密碼不正確"
       alert_unregistered_email: "此電子郵件尚未註冊。請先註冊"
@@ -438,6 +438,21 @@ zh-TW:
       chart_v_axis_amount: "進食量 (克)"
       chart_v_axis_weight: "體重 (公斤)"
       no_data_for_chart: "沒有可用的數據來顯示圖表。"
+    import:
+      alert: "只能使用CSV檔案"
+      notice: "%{petname}的飲食紀錄已匯入！"
+    create:
+      notice: "飲食紀錄已成功建立。"
+    update:
+      notice: "飲食紀錄已成功更新。"
+    destroy:
+      notice: "飲食紀錄已成功刪除。"
+    set_tracker:
+      alert: "找不到飲食紀錄。"
+    chart:
+      wet_food: "濕食 (克)"
+      dry_food: "乾糧 (克)"
+      weight: "體重 (公斤)"
     new:
       title: "新增紀錄"
       header: "新增紀錄"
@@ -474,3 +489,7 @@ zh-TW:
       edit_profile_button: "編輯個人資料"
       delete_profile_button: "刪除個人資料"
       delete_confirm: "您確定要刪除此使用者帳戶嗎？使用者和相關的飲食紀錄將全部被刪除.."
+    update:
+      notice: "帳戶已成功更新。"
+    destroy:
+      alert: "%{name}及其所有相關紀錄已成功刪除。"
