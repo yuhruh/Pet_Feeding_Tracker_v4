@@ -453,6 +453,11 @@ zh-TW:
       wet_food: "濕食 (克)"
       dry_food: "乾糧 (克)"
       weight: "體重 (公斤)"
+    food_types:
+      kibble: "乾飼料"
+      freeze_dried: "凍乾"
+      wet: "濕食"
+      other: "其他"
     new:
       title: "新增紀錄"
       header: "新增紀錄"

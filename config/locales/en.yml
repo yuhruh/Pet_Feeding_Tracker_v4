@@ -453,6 +453,11 @@ en:
       wet_food: "Wet Food (g)"
       dry_food: "Dry Food (g)"
       weight: "Weight (kg)"
+    food_types:
+      kibble: "Kibble"
+      freeze_dried: "Freeze-Dried"
+      wet: "Wet"
+      other: "Other"
     new:
       title: "New Tracker"
       header: "New tracker"

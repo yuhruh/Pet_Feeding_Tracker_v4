@@ -453,6 +453,11 @@ ja:
       wet_food: "ウェットフード (g)"
       dry_food: "ドライフード (g)"
       weight: "体重 (kg)"
+    food_types:
+      kibble: "ドライフード"
+      freeze_dried: "フリーズドライ"
+      wet: "ウェット"
+      other: "その他"
     new:
       title: "新しいトラッカー"
       header: "新しいトラッカー"

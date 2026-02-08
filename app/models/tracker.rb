@@ -3,6 +3,9 @@ class Tracker < ApplicationRecord
   belongs_to :dry_food, optional: true
   before_save { self.brand = brand.downcase }
   before_save { self.description = description.downcase }
+
+  enum food_type: { kibble: "Kibble", freeze_dried: "Freeze-Dried", wet: "Wet", other: "Other" }
+
   validates :food_type, presence: true
   validates :brand, presence: true, length: { minimum: 1, maximum: 50 }
   validates :description, presence: true, length: { minimum: 2, maximum: 100 }
@@ -15,7 +18,7 @@ class Tracker < ApplicationRecord
   private
 
   def dry_food?
-    (food_type == "Kibble" || food_type == "Freeze-Dried") && dry_food.present?
+    (kibble? || freeze_dried?) && dry_food.present?
   end
 
   def amount_less_than_dry_food_left_amount

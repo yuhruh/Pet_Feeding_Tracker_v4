@@ -27,7 +27,7 @@
       <%= form.label :food_type, t('trackers.form.food_type'), class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize required md:text-base" %>
     </div>
     <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.select :food_type, [[t('trackers.form.kibble'), "Kibble"], [t('trackers.form.freeze_dried'), "Freeze-Dried"], [t('trackers.form.wet'), "Wet"], [t('trackers.form.other'), "Other"]], { prompt: t('trackers.form.prompt') }, required: true, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black", {"border-gray-400 focus:outline-blue-600": tracker.errors[:food_type].none?, "border-red-400 focus:outline-red-600": tracker.errors[:food_type].any?}], data: { action: "change->tracker-form#toggleDryFoodOptions", tracker_form_target: "foodType" } %>
+      <%= form.select :food_type, Tracker.food_types.keys.map { |ft| [t("trackers.food_types.#{ft}"), ft] }, { prompt: t('trackers.form.prompt') }, required: true, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black", {"border-gray-400 focus:outline-blue-600": tracker.errors[:food_type].none?, "border-red-400 focus:outline-red-600": tracker.errors[:food_type].any?}], data: { action: "change->tracker-form#toggleDryFoodOptions", tracker_form_target: "foodType" } %>
     </div>
   </div>
 
