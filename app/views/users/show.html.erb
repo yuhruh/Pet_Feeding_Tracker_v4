@@ -2,35 +2,35 @@
   <div class="flex flex-col px-6 py-4 border border-2 border-slate-300 rounded-lg shadow-sm divide-y-2 divide-slate-200">
     <div class="flex flex-col justify-center">
       <div class='flex flex-col justify-center text-center mb-3'>
-        <h1 class="text-2xl text-center font-bold underline underline-offset-4 mt-4 mb-4 md:text-4xl"><%= Current.user.username.split(' ').map(&:capitalize).join(' ') %>'s Profile</h1>
+        <h1 class="text-2xl text-center font-bold underline underline-offset-4 mt-4 mb-4 md:text-4xl"><%= t(".title", username: Current.user.username.split(' ').map(&:capitalize).join(' ')) %></h1>
       </div>
 
       <div class='flex flex-col justify-center text-center mb-3'>
         <div class="flex justify-center text-lg space-x-3 mb-2 md:text-2xl">
-          <strong class="capitalize">user name:</strong>
+          <strong class="capitalize"><%= t(".username") %></strong>
           <div class="flex">
             <%= Current.user.username.split(' ').map(&:capitalize).join(' ') %>
           </div>
         </div>
 
         <div class="flex justify-center text-lg space-x-3 mb-2 md:text-2xl">
-          <strong class="capitalize">email:</strong>
+          <strong class="capitalize"><%= t(".email") %></strong>
           <div class="flex">
             <%= Current.user.email_address %>
           </div>
         </div>
 
         <div class="flex justify-center text-lg space-x-3 mb-2 md:text-2xl">
-          <strong class="capitalize">time zone:</strong>
+          <strong class="capitalize"><%= t(".timezone") %></strong>
           <div class="flex">
             <%= Current.user.timezone %>
           </div>
         </div>
 
         <div class="flex justify-center text-lg space-x-3 mb-2 md:text-2xl">
-          <strong class="capitalize">pets count:</strong>
+          <strong class="capitalize"><%= t(".pets_count") %></strong>
           <div class="flex flex-col">
-            <%= Current.user.pets.count %> Pets
+            <%= Current.user.pets.count %> <%= t(".pets") %>
           </div>
         </div>
         <div class="flex justify-center text-lg space-x-3 mb-2 md:text-2xl">
@@ -43,9 +43,9 @@
     </div>
 
     <div class="flex justify-center text-center space-x-4 mt-3">
-      <%= link_to "go to #{Current.user.username.split(" ").map(&:capitalize).join(" ")}'s cats list", pets_path, class: "p-4 mt-4 text-sm font-semibold text-orange-600 bg-orange-200 rounded shadow-md border-2 border-orange-200 transition duration-300 ease-in-out hover:scale-110 md:text-base hover:bg-white hover:text-orange-500 capitalize" %>
-      <%= link_to "Edit Profile", edit_users_path(Current.user), class: "p-4 mt-4 text-sm font-semibold text-green-600 bg-green-200 rounded shadow-md border-2 border-green-200 transition duration-300 ease-in-out hover:scale-110 md:text-base hover:bg-white hover:text-green-500 capitalize" %>
-      <%= link_to "Delete Profile", users_path, class: "p-4 mt-4 text-sm font-semibold text-red-600 bg-red-200 rounded shadow-md border-2 border-red-200 transition duration-300 ease-in-out hover:scale-110 md:text-base hover:bg-white hover:text-red-500 capitalize", data: {"turbo-confirm":  "Are you sure to delete this user account? The user and associated trackers will all gone..", "turbo-method": "delete"} %>
+      <%= link_to t(".go_to_cats_list", username: Current.user.username.split(" ").map(&:capitalize).join(" ")), pets_path, class: "p-4 mt-4 text-sm font-semibold text-orange-600 bg-orange-200 rounded shadow-md border-2 border-orange-200 transition duration-300 ease-in-out hover:scale-110 md:text-base hover:bg-white hover:text-orange-500 capitalize" %>
+      <%= link_to t(".edit_profile_button"), edit_users_path(Current.user), class: "p-4 mt-4 text-sm font-semibold text-green-600 bg-green-200 rounded shadow-md border-2 border-green-200 transition duration-300 ease-in-out hover:scale-110 md:text-base hover:bg-white hover:text-green-500 capitalize" %>
+      <%= link_to t(".delete_profile_button"), users_path, class: "p-4 mt-4 text-sm font-semibold text-red-600 bg-red-200 rounded shadow-md border-2 border-red-200 transition duration-300 ease-in-out hover:scale-110 md:text-base hover:bg-white hover:text-red-500 capitalize", data: {"turbo-confirm":  t(".delete_confirm"), "turbo-method": "delete"} %>
     </div>
   </div>
 </div>
