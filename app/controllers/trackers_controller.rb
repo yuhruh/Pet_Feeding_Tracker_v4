@@ -38,7 +38,7 @@ class TrackersController < ApplicationController
       end
     end
 
-    @dry_properties = @all_trackers.where(food_type: "Dry").where.not(total_ate_amount: nil).group(:date).order(:date).sum(:total_ate_amount).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
+    @dry_properties = @all_trackers.where(food_type: [ "Kibble", "Freeze-Dried" ]).where.not(total_ate_amount: nil).group(:date).order(:date).sum(:total_ate_amount).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
     @wet_properties = @all_trackers.where(food_type: "Wet").where.not(total_ate_amount: nil).group(:date).order(:date).sum(:total_ate_amount).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
 
     # Using average for weight is safer than sum, in case multiple entries exist for one day.

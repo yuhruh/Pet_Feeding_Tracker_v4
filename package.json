@@ -5,6 +5,7 @@
     "tailwindcss": "^3.4.19"
   },
   "dependencies": {
-    "apexcharts": "^3.54.1"
+    "apexcharts": "^3.54.1",
+    "i18n-js": "^4.5.2"
   }
 }

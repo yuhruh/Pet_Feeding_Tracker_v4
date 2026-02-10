@@ -377,6 +377,7 @@ ja:
       amount: "量(g)"
       amount_placeholder: "数値を入力してください"
       amount_hint: "単位なしで数値/浮動小数点数を入力してください"
+      no_storage_message: "ドライフードに「%{type}」の保管場所がありません。先に追加してください。"
     tracker:
       number: "#"
       date: "日付"

@@ -1,0 +1,5 @@
+translations:
+  - file: "app/javascript/translations.js"
+    patterns:
+      - "*.trackers.*"
+      - "*.javascript.tracker_form_controller.*"

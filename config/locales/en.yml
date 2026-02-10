@@ -377,6 +377,7 @@ en:
       amount: "Amount(g)"
       amount_placeholder: "Please just enter number"
       amount_hint: "Only input number/float number without unit"
+      no_storage_message: "There is no \"%{type}\" storage in dry food. Please add it first."
     tracker:
       number: "#"
       date: "Date"
@@ -505,3 +506,13 @@ en:
     user_mailer:
       welcome:
         subject: "Welcome to Cat Trackers App!"
+  javascript:
+    left_amount_controller:
+      greater_than_alert: "Should not greater than %{amount}g."
+      valid_amount: "%{amount}g is valid."
+    tracker_form_controller:
+      left_in_storage: "Left %{amount} g"
+      should_restock: "should restock"
+      only_left_in_storage: "⚠️ Only %{amount}g left in storage."
+      is_valid_amount: "%{amount}g is valid."
+      select_wet_food: "Select a favorite or enter manually"
