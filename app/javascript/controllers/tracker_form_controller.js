@@ -16,7 +16,8 @@ export default class extends Controller {
     const i18n = new I18n(translations);
     this.i18n = i18n;
     // set the locale
-    this.i18n.locale = document.documentElement.lang || "en";
+    this.i18n.locale = document.documentElement.lang || "en";    
+
     this.selectedFoodLeftAmount = null; // Initialize storage state
     this.toggleDryFoodOptions()
   }
