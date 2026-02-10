@@ -174,8 +174,6 @@ zh-TW:
       sign_out: "登出"
       get_started: "開始使用"
       copyright: "© 2025 AjiTracker"
-    messages:
-      close: "關閉"
     navigation:
       features: "功能"
       about: "關於"

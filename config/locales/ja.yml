@@ -174,8 +174,6 @@ ja:
       sign_out: "サインアウト"
       get_started: "はじめに"
       copyright: "© 2025 アジトラッカー"
-    messages:
-      close: "閉じる"
     navigation:
       features: "特徴"
       about: "概要"
