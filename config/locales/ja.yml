@@ -506,3 +506,13 @@ ja:
     user_mailer:
       welcome:
         subject: "猫トラッカーアプリへようこそ！"
+  javascript:
+    left_amount_controller:
+      greater_than_alert: "%{amount}g を超えることはできません。"
+      valid_amount: "%{amount}g は有効です。"
+    tracker_form_controller:
+      left_in_storage: "残り %{amount} g"
+      should_restock: "補充が必要です"
+      only_left_in_storage: "⚠️ 在庫は残り %{amount}g です。"
+      is_valid_amount: "%{amount}g は有効な量です。"
+      select_wet_food: "お気に入りを選択するか、手動で入力してください"

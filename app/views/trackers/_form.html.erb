@@ -2,8 +2,7 @@
   data: {
     tracker_form_favorite_food_url_value: favorite_food_pet_trackers_url(@pet, locale: I18n.locale, format: :json),
     tracker_form_tracker_url_value: pet_tracker_url(@pet, ":id", locale: I18n.locale, format: :json),
-    tracker_form_new_dry_food_url_value: new_dry_food_url(locale: I18n.locale),
-    tracker_form_no_storage_message_value: t('trackers.form.no_storage_message')
+    tracker_form_new_dry_food_url_value: new_dry_food_url(locale: I18n.locale)
   }) do |form| %>
   <div class="flex flex-col justify-center mb-4 md:flex-row">
     <%= render 'shared/errors', obj: @tracker %>

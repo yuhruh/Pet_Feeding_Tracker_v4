@@ -10,7 +10,6 @@ export default class extends Controller {
     const i18n = new I18n(translations);
     this.i18n = i18n;
     this.i18n.locale = document.documentElement.lang || "en";
-    console.log("Translations loaded:", translations);
   }
 
   validateLeftAmount() {

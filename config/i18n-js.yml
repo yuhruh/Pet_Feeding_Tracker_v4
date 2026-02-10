@@ -1,5 +1,5 @@
 translations:
-  - file: "app/javascript/translations.js"
+  - file: "app/javascript/translations.json"
     patterns:
       - "*.trackers.*"
       - "*.javascript.tracker_form_controller.*"

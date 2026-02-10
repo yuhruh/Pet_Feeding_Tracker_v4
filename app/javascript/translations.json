@@ -141,6 +141,15 @@
     }
   },
   "ja": {
+    "javascript": {
+      "tracker_form_controller": {
+        "is_valid_amount": "%{amount}g は有効な量です。",
+        "left_in_storage": "残り %{amount} g",
+        "only_left_in_storage": "⚠️ 在庫は残り %{amount}g です。",
+        "select_wet_food": "お気に入りを選択するか、手動で入力してください",
+        "should_restock": "補充が必要です"
+      }
+    },
     "trackers": {
       "chart": {
         "dry_food": "ドライフード (g)",
@@ -273,6 +282,15 @@
     }
   },
   "zh-TW": {
+    "javascript": {
+      "tracker_form_controller": {
+        "is_valid_amount": "%{amount} 克是有效數量。",
+        "left_in_storage": "剩下 %{amount} 克",
+        "only_left_in_storage": "⚠️ 庫存僅剩 %{amount} 克。",
+        "select_wet_food": "選擇一個最愛或手動輸入",
+        "should_restock": "應該補貨了"
+      }
+    },
     "trackers": {
       "chart": {
         "dry_food": "乾糧 (克)",
@@ -331,6 +349,7 @@
         "hungry": "飢餓程度",
         "hungry_prompt": "%{petname}餓了嗎？請選擇...",
         "kibble": "🧆 乾飼料",
+        "no_storage_message": "乾糧中沒有「%{type}」的庫存。請先新增。",
         "other": "🌯 其他",
         "prompt": "請選擇食物類型",
         "select_dry_food": "選擇乾糧",

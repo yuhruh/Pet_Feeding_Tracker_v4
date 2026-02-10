@@ -7,8 +7,7 @@ export default class extends Controller {
   static values = {
     dryFoods: Array,
     trackerUrl: String,
-    newDryFoodUrl: String,
-    noStorageMessage: String
+    newDryFoodUrl: String
   }
 
   connect() {
@@ -37,23 +36,19 @@ export default class extends Controller {
         }
       });
       const data = await response.json();
-      console.log("Fetched dry foods data:", data);
 
       const filteredFoods = data.filter(dry => {
         return dry.food_type === type;
       });
-      console.log("Filtered dry foods:", filteredFoods);
 
       if (filteredFoods.length === 0) {
-        console.log("No dry food in storage, redirecting...");
         const selectedText = this.foodTypeTarget.options[this.foodTypeTarget.selectedIndex].text;
-        const message = this.noStorageMessageValue || `There is no "${selectedText}" storage in dry food. Please add it first.`;
-        alert(message.replace('%{type}', selectedText));
+        const message = this.i18n.t('trackers.form.no_storage_message', { type: selectedText });
+        alert(message);
         const locale = window.location.pathname.split('/')[1] || 'en';
         const newDryFoodUrl = `/${locale}/dry_foods/new`;
         window.location.href = newDryFoodUrl;
       } else {
-        console.log("Dry food found, updating options.");
         this.updateDryFoodOptions(filteredFoods);
       }
     } else if (type === "wet") {
@@ -62,7 +57,6 @@ export default class extends Controller {
 
       const petId = window.location.pathname.split('/')[3];
       const favoriteFoodsUrl = `/${locale}/pets/${petId}/trackers/favorite_food.json`
-      console.log(favoriteFoodsUrl);
 
       const response = await fetch(favoriteFoodsUrl, {
         headers: {
@@ -71,7 +65,6 @@ export default class extends Controller {
         }
       });
       const data = await response.json();
-      console.log(data);
       this.updateWetFoodOptions(data);
     } else {
       this.dryFoodOptionsTarget.classList.add("hidden");

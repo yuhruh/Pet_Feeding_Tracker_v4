@@ -377,6 +377,7 @@ zh-TW:
       amount: "份量(克)"
       amount_placeholder: "僅需輸入數字"
       amount_hint: "僅輸入數字/浮點數，不含單位"
+      no_storage_message: "乾糧中沒有「%{type}」的庫存。請先新增。"
     tracker:
       number: "#"
       date: "日期"
@@ -505,3 +506,13 @@ zh-TW:
     user_mailer:
       welcome:
         subject: "歡迎使用寵物飲食紀錄 App！"
+  javascript:
+    left_amount_controller:
+      greater_than_alert: "不應超過 %{amount} 克。"
+      valid_amount: "%{amount} 克是有效數量。"
+    tracker_form_controller:
+      left_in_storage: "剩下 %{amount} 克"
+      should_restock: "應該補貨了"
+      only_left_in_storage: "⚠️ 庫存僅剩 %{amount} 克。"
+      is_valid_amount: "%{amount} 克是有效數量。"
+      select_wet_food: "選擇一個最愛或手動輸入"
