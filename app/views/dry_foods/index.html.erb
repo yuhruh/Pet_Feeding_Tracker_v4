@@ -56,64 +56,64 @@
 
       <!-- Transposed Table for Small Screens -->
       <div class="block lg:hidden overflow-x-auto">
-        <table class="table-auto mb-2 px-2 w-full">
+        <table class="table-auto mb-2 px-2 w-full dark:bg-slate-200">
           <tbody>
-            <tr class="border-b">
-              <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4">#</th>
+            <tr class="dark:text-white">
+              <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4 dark:bg-black">#</th>
               <% @dry_foods.select(&:persisted?).each_with_index do |food, idx| %>
                 <td class="capitalize text-sky-700 text-sm text-center font-semibold p-2"><%= idx+1 %></td>
               <% end %>
             </tr>
-            <tr class="border-b">
-              <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4"><%= t('.brand') %></th>
+            <tr class="dark:text-white">
+              <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4 dark:bg-black"><%= t('.brand') %></th>
               <% @dry_foods.select(&:persisted?).each do |food| %>
                 <td class="capitalize text-sky-700 text-sm text-center p-2"><%= food.brand %></td>
               <% end %>
             </tr>
-            <tr class="border-b">
-              <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4"><%= t('.description') %></th>
+            <tr class="dark:text-white">
+              <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4 dark:bg-black"><%= t('.description') %></th>
               <% @dry_foods.select(&:persisted?).each do |food| %>
                 <td class="capitalize text-sky-700 text-sm text-center p-2"><%= food.description %></td>
               <% end %>
             </tr>
-            <tr class="border-b">
-              <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4"><%= t('.type') %></th>
+            <tr class="dark:text-white">
+              <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4 dark:bg-black"><%= t('.type') %></th>
               <% @dry_foods.select(&:persisted?).each do |food| %>
                 <td class="capitalize text-sky-700 text-sm text-center p-2"><%= food.food_type %></td>
               <% end %>
             </tr>
-            <tr class="border-b">
-              <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4"><%= t('.amount') %></th>
+            <tr class="dark:text-white">
+              <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4 dark:bg-black"><%= t('.amount') %></th>
               <% @dry_foods.select(&:persisted?).each do |food| %>
                 <td class="capitalize text-sky-700 text-sm text-center p-2"><%= food.amount %></td>
               <% end %>
             </tr>
-            <tr class="border-b">
-              <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4"><%= t('.total_used_amount') %></th>
+            <tr class="dark:text-white">
+              <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4 dark:bg-black"><%= t('.total_used_amount') %></th>
               <% @dry_foods.select(&:persisted?).each do |food| %>
                 <td class="capitalize text-sky-700 text-sm text-center p-2"><%= food.total_ate_amount %></td>
               <% end %>
             </tr>
-            <tr class="border-b">
-              <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4"><%= t('.average_used_amount') %></th>
+            <tr class="dark:text-white">
+              <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4 dark:bg-black"><%= t('.average_used_amount') %></th>
               <% @dry_foods.select(&:persisted?).each do |food| %>
                 <td class="capitalize text-sky-700 text-sm text-center p-2"><%= food.average_used_amount %></td>
               <% end %>
             </tr>
-            <tr class="border-b">
-              <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4"><%= t('.left_amount') %></th>
+            <tr class="dark:text-white">
+              <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4 dark:bg-black"><%= t('.left_amount') %></th>
               <% @dry_foods.select(&:persisted?).each do |food| %>
                 <td class="capitalize text-sky-700 text-sm text-center p-2"><%= food.left_amount %></td>
               <% end %>
             </tr>
-            <tr class="border-b">
-              <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4"><%= t('.expected_running_out') %></th>
+            <tr class="dark:text-white">
+              <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4 dark:bg-black"><%= t('.expected_running_out') %></th>
               <% @dry_foods.select(&:persisted?).each do |food| %>
                 <td class="capitalize text-sky-700 text-sm text-center p-2"><%= food.days_remaining %></td>
               <% end %>
             </tr>
-            <tr class="border-b">
-              <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4"><%= t('.delete') %></th>
+            <tr class="dark:text-white">
+              <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4 dark:bg-black"><%= t('.delete') %></th>
               <% @dry_foods.select(&:persisted?).each do |food| %>
                 <td class="capitalize text-sky-700 text-sm text-center p-2">
                   <%= link_to(dry_food_path(food), data: { turbo_method: :delete, turbo_confirm: t('.confirm') }, id: "delete_dry_food_#{food.id}", class: "inline-block transition-transform text-red-400 hover:text-red-600 hover:scale-110") do %>
