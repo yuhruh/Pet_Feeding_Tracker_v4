@@ -6,8 +6,6 @@ export default class extends Controller {
   static targets = ["foodType", "dryFoodOptions", "dryFoodSelect", "wetFoodOptions", "wetFoodSelect", "brand", "description", "amount", "amountAlert", "submitButton"]
   static values = {
     dryFoods: Array,
-    petId: Number,
-    favoriteFoodUrl: String,
     trackerUrl: String,
     newDryFoodUrl: String,
     noStorageMessage: String
@@ -42,7 +40,7 @@ export default class extends Controller {
       console.log("Fetched dry foods data:", data);
 
       const filteredFoods = data.filter(dry => {
-        return dry.food_type === "kibble" || dry.food_type === "freeze-Dried";
+        return dry.food_type === type;
       });
       console.log("Filtered dry foods:", filteredFoods);
 
@@ -62,13 +60,18 @@ export default class extends Controller {
       this.wetFoodOptionsTarget.classList.remove("hidden");
       this.dryFoodOptionsTarget.classList.add("hidden");
 
-      const response = await fetch(this.favoriteFoodUrlValue, {
+      const petId = window.location.pathname.split('/')[3];
+      const favoriteFoodsUrl = `/${locale}/pets/${petId}/trackers/favorite_food.json`
+      console.log(favoriteFoodsUrl);
+
+      const response = await fetch(favoriteFoodsUrl, {
         headers: {
           "X-CSRF-Token": this.csrfToken,
           "Accept": "application/json"
         }
       });
       const data = await response.json();
+      console.log(data);
       this.updateWetFoodOptions(data);
     } else {
       this.dryFoodOptionsTarget.classList.add("hidden");
@@ -94,8 +97,8 @@ export default class extends Controller {
   }
 
   updateWetFoodOptions(foods) {
-    this.wetFoodSelectTarget.innerHTML = `<option value="">${this.i18n.t('javascript.tracker_form_controller.select_wet_food')}</option>`;
-    const filteredFood = foods.filter(food => food.food_type === "Wet")
+    this.wetFoodSelectTarget.innerHTML = `<option value="">${this.i18n.t('trackers.form.select_favorite_or_enter_manually')}</option>`;
+    const filteredFood = foods.filter(food => food.food_type === "wet")
     filteredFood.forEach(food => {
       const option = document.createElement('option');
       option.value = food.id;
@@ -151,7 +154,9 @@ export default class extends Controller {
 
     if (foodId) {
       try {
-        const url = this.trackerUrlValue.replace(":id", foodId);
+        const locale = window.location.pathname.split('/')[1] || 'en';
+        const petId = window.location.pathname.split('/')[3];
+        const url = `/${locale}/pets/${petId}/trackers/${foodId}.json`
         const response = await fetch(url, {
           headers: {
             "X-CSRF-Token": this.csrfToken,

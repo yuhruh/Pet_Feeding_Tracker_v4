@@ -23,7 +23,7 @@ export default {
       },
       "edit": {
         "cancel_button": "Cancel...Go back to %{petname}'s trackers",
-        "come_back_to_eat_hint_html": "Please use ',' as a separations. Ex: 07:45, 10:33,...<br>If %{petname} did not come back to eat, please use '-'",
+        "come_back_to_eat_hint_html": "Please use ',' as a separations. Ex: 07:45, 10:33,...<br>If %{petname} did not come back to eat, please use '- '",
         "feed_time_readonly": "Feed time is readonly, can not update on edit form",
         "header": "Edit %{petname}'s tracker",
         "left_amount": "Left Amount(g)",
@@ -141,6 +141,15 @@ export default {
     }
   },
   "ja": {
+    "javascript": {
+      "tracker_form_controller": {
+        "is_valid_amount": "%{amount}gは有効です。",
+        "left_in_storage": "残り %{amount} g",
+        "only_left_in_storage": "⚠️ ストレージには残り %{amount}gしかありません。",
+        "select_wet_food": "お気に入りを選択するか、手動で入力してください",
+        "should_restock": "補充する必要があります"
+      }
+    },
     "trackers": {
       "chart": {
         "dry_food": "ドライフード (g)",
@@ -273,6 +282,15 @@ export default {
     }
   },
   "zh-TW": {
+    "javascript": {
+      "tracker_form_controller": {
+        "is_valid_amount": "%{amount}g 是有效的。",
+        "left_in_storage": "剩下 %{amount} 克",
+        "only_left_in_storage": "⚠️ 庫存只剩下 %{amount}g。",
+        "select_wet_food": "選擇最愛的罐罐或手動輸入",
+        "should_restock": "需要補貨"
+      }
+    },
     "trackers": {
       "chart": {
         "dry_food": "乾糧 (克)",
@@ -331,6 +349,7 @@ export default {
         "hungry": "飢餓程度",
         "hungry_prompt": "%{petname}餓了嗎？請選擇...",
         "kibble": "🧆 乾飼料",
+        "no_storage_message": "乾糧中沒有 “%{type}” 的庫存。請先新增。",
         "other": "🌯 其他",
         "prompt": "請選擇食物類型",
         "select_dry_food": "選擇乾糧",
