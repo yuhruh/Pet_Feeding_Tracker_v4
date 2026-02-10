@@ -24,7 +24,7 @@ class DryFoodsTest < ApplicationSystemTestCase
     select "Freeze-Dried", from: "Food type"
     click_on "Add dry food"
 
-    assert_text "Dry food was successfully created"
+    assert_selector "#alert-message", text: "Dry food was successfully created"
   end
 
   # test "should update Dry food" do
