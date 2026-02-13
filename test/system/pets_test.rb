@@ -23,7 +23,7 @@ class PetsTest < ApplicationSystemTestCase
     fill_in "pet_weight", with: @pet.weight
     click_on "Add a cat"
 
-    assert_text "Cat was successfully created"
+    assert_selector "#alert-message", text: "Cat was successfully created"
     visit pets_path
     assert_selector "h1", text: /#{@user.username}'s cat list/i
   end
@@ -40,7 +40,7 @@ class PetsTest < ApplicationSystemTestCase
     fill_in "pet_weight", with: @pet.weight
     click_on "Update #{@pet.petname.capitalize}'s profile"
 
-    assert_text "Cat #{@pet.petname.capitalize} was successfully updated"
+    assert_selector "#alert-message", text: "Cat #{@pet.petname.capitalize} was successfully updated"
     click_on "Go to #{@user.username.capitalize}'s cats list"
   end
 
@@ -49,6 +49,6 @@ class PetsTest < ApplicationSystemTestCase
     visit pet_url(locale: I18n.default_locale, id: @pet.id)
     accept_confirm { click_on "Destroy #{@pet.petname}'s profile and records" }
 
-    assert_text "Cat #{@pet.petname} was successfully destroyed."
+    assert_selector "#alert-message", text: "Cat #{@pet.petname} was successfully destroyed."
   end
 end
