@@ -65,7 +65,7 @@
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
         <%= form.number_field :left_amount, step: :any, placeholder: t('trackers.form.amount_placeholder'), class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:amount].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:amount].any?}], min: 0, max: @tracker.amount, data: { left_amount_target: "leftAmount", action: "input->left-amount#validateLeftAmount" } %>
-        <span class="mt-2 text-sm italic">Feeding Amount: <%= @tracker.amount %>(g)</span>
+        <span class="mt-2 text-sm italic"><%= t('trackers.edit.feeding_amount') %> <%= @tracker.amount %>(g)</span>
         <div id="left-amount-alert" data-left-amount-target="leftAmountAlert" class="text-red-500 italic mt-1 hidden"></div>
       </div>
     </div>

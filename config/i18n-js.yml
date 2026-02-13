@@ -3,3 +3,4 @@ translations:
     patterns:
       - "*.trackers.*"
       - "*.javascript.tracker_form_controller.*"
+      - "*.javascript.left_amount_controller.*"

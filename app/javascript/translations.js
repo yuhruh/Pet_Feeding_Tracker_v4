@@ -1,6 +1,10 @@
 export default {
   "en": {
     "javascript": {
+      "left_amount_controller": {
+        "greater_than_alert": "Should not greater than %{amount}g.",
+        "valid_amount": "%{amount}g is valid."
+      },
       "tracker_form_controller": {
         "is_valid_amount": "%{amount}g is valid.",
         "left_in_storage": "Left %{amount} g",
@@ -142,6 +146,10 @@ export default {
   },
   "ja": {
     "javascript": {
+      "left_amount_controller": {
+        "greater_than_alert": "%{amount}g を超えることはできません。",
+        "valid_amount": "%{amount}g は有効です。"
+      },
       "tracker_form_controller": {
         "is_valid_amount": "%{amount}g は有効な量です。",
         "left_in_storage": "残り %{amount} g",
@@ -283,6 +291,10 @@ export default {
   },
   "zh-TW": {
     "javascript": {
+      "left_amount_controller": {
+        "greater_than_alert": "不應超過 %{amount} 克。",
+        "valid_amount": "%{amount} 克是有效數量。"
+      },
       "tracker_form_controller": {
         "is_valid_amount": "%{amount} 克是有效數量。",
         "left_in_storage": "剩下 %{amount} 克",
