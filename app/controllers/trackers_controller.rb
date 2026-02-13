@@ -122,7 +122,7 @@ class TrackersController < ApplicationController
   end
 
   def favorite_food
-    @favorite_foods = @pet.trackers.order(favorite_score: :desc)
+    @favorite_foods = @pet.trackers.order(favorite_score: :desc).paginate(page: params[:page], per_page: params[:per_page] || 10)
     respond_to do |format|
       format.html
       format.json { render json: @favorite_foods }
