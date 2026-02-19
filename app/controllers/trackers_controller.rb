@@ -7,11 +7,16 @@ class TrackersController < ApplicationController
 
   def import
     file = params[:file]
-    return redirect_to pet_trackers_path, alert: t(".import.alert") unless file.content_type == "text/csv"
-
-    CsvImportTrackersService.new(@pet).call(file)
-
-    redirect_to pet_trackers_path, notice: t(".import.notice", petname: @pet.petname.capitalize)
+    if file.nil? || file.content_type != "text/csv"
+      return redirect_to pet_trackers_path, alert: t(".import.alert")
+    end
+  
+    importer = CsvImportTrackersService.new(@pet)
+    if importer.call(file)
+      redirect_to pet_trackers_path, notice: t(".import.notice", petname: @pet.petname.capitalize)
+    else
+      redirect_to pet_trackers_path, alert: importer.errors.join(", ")
+    end
   end
 
   # GET /trackers or /trackers.json
