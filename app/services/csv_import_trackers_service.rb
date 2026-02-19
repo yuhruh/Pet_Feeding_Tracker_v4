@@ -14,7 +14,7 @@ class CsvImportTrackersService
         csv = CSV.parse(file, headers: true)
         csv.each_with_index do |row, i|
           tracker_hash = {}
-          
+
           # Validate and convert data types
           validate_and_convert(row, i, tracker_hash)
 
@@ -34,7 +34,7 @@ class CsvImportTrackersService
           eat_frequency = calculate_frequency(row["come_back_to_eat"]) if row["come_back_to_eat"].present?
           tracker_hash[:frequency] = eat_frequency.to_i
           tracker_hash[:favorite_score] = calculate_favorite([ row["hungry"].to_s.first, row["love"].to_s.first ], tracker_hash[:left_amount].to_f, tracker_hash[:amount].to_f, eat_frequency.to_i) if eat_frequency.present?
-          
+
           begin
             @pet.trackers.create!(tracker_hash)
           rescue ArgumentError => e

@@ -10,7 +10,7 @@ class TrackersController < ApplicationController
     if file.nil? || file.content_type != "text/csv"
       return redirect_to pet_trackers_path, alert: t(".import.alert")
     end
-  
+
     importer = CsvImportTrackersService.new(@pet)
     if importer.call(file)
       redirect_to pet_trackers_path, notice: t(".import.notice", petname: @pet.petname.capitalize)
