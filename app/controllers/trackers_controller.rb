@@ -43,8 +43,8 @@ class TrackersController < ApplicationController
       end
     end
 
-    hotel_keywords = ["hotel", "旅館", "貓旅", "boarding", "resort"]
-    
+    hotel_keywords = [ "hotel", "旅館", "貓旅", "boarding", "resort" ]
+
     # Sanitize hotel keywords for LIKE query
     formatted_keywords = hotel_keywords.map { |k| "%#{k}%" }
 
