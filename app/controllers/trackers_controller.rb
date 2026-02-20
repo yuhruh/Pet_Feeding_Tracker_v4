@@ -43,15 +43,24 @@ class TrackersController < ApplicationController
       end
     end
 
-    hotel_keywords = [ "hotel", "旅館", "貓旅", "boarding", "resort" ]
+    hotel_keywords = ["hotel", "旅館", "貓旅", "boarding", "resort"]
+    
+    # Sanitize hotel keywords for LIKE query
     formatted_keywords = hotel_keywords.map { |k| "%#{k}%" }
-    conditions = hotel_keywords.map { |k| "note LIKE ?" }.join(" OR ")
-    normal_conditions = "note IS NULL OR NOT (#{conditions})"
 
-    dry_raw = @all_trackers.where(food_type: [ "Kibble", "Freeze-Dried" ]).where(normal_conditions, *formatted_keywords).where.not(total_ate_amount: nil).group(:date).sum(:total_ate_amount)
-    dry_hotel_raw = @all_trackers.where(food_type: [ "Kibble", "Freeze-Dried" ]).where(conditions, *formatted_keywords).where.not(total_ate_amount: nil).group(:date).sum(:total_ate_amount)
-    wet_raw = @all_trackers.where(food_type: "Wet").where(normal_conditions, *formatted_keywords).where.not(total_ate_amount: nil).group(:date).sum(:total_ate_amount)
-    wet_hotel_raw = @all_trackers.where(food_type: "Wet").where(conditions, *formatted_keywords).where.not(total_ate_amount: nil).group(:date).sum(:total_ate_amount)
+    # Use Arel to safely construct the query for hotel stays
+    trackers_table = Tracker.arel_table
+    hotel_conditions = formatted_keywords.map do |keyword|
+      trackers_table[:note].matches(keyword)
+    end.reduce(:or)
+
+    # Use Arel to safely construct the query for normal stays (not in a hotel)
+    normal_conditions = trackers_table[:note].eq(nil).or(hotel_conditions.not)
+
+    dry_raw = @all_trackers.where(food_type: [ "Kibble", "Freeze-Dried" ]).where(normal_conditions).where.not(total_ate_amount: nil).group(:date).sum(:total_ate_amount)
+    dry_hotel_raw = @all_trackers.where(food_type: [ "Kibble", "Freeze-Dried" ]).where(hotel_conditions).where.not(total_ate_amount: nil).group(:date).sum(:total_ate_amount)
+    wet_raw = @all_trackers.where(food_type: "Wet").where(normal_conditions).where.not(total_ate_amount: nil).group(:date).sum(:total_ate_amount)
+    wet_hotel_raw = @all_trackers.where(food_type: "Wet").where(hotel_conditions).where.not(total_ate_amount: nil).group(:date).sum(:total_ate_amount)
 
     all_dates = (dry_raw.keys + dry_hotel_raw.keys + wet_raw.keys + wet_hotel_raw.keys).uniq.sort
 
