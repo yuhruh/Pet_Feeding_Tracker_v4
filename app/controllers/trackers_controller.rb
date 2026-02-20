@@ -43,17 +43,35 @@ class TrackersController < ApplicationController
       end
     end
 
-    @dry_properties = @all_trackers.where(food_type: [ "Kibble", "Freeze-Dried" ]).where.not(total_ate_amount: nil).group(:date).order(:date).sum(:total_ate_amount).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
-    @wet_properties = @all_trackers.where(food_type: "Wet").where.not(total_ate_amount: nil).group(:date).order(:date).sum(:total_ate_amount).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
+    hotel_keywords = [ "hotel", "旅館", "貓旅", "boarding", "resort" ]
+    formatted_keywords = hotel_keywords.map { |k| "%#{k}%" }
+    conditions = hotel_keywords.map { |k| "note LIKE ?" }.join(" OR ")
+    normal_conditions = "note IS NULL OR NOT (#{conditions})"
 
+    dry_raw = @all_trackers.where(food_type: [ "Kibble", "Freeze-Dried" ]).where(normal_conditions, *formatted_keywords).where.not(total_ate_amount: nil).group(:date).sum(:total_ate_amount)
+    dry_hotel_raw = @all_trackers.where(food_type: [ "Kibble", "Freeze-Dried" ]).where(conditions, *formatted_keywords).where.not(total_ate_amount: nil).group(:date).sum(:total_ate_amount)
+    wet_raw = @all_trackers.where(food_type: "Wet").where(normal_conditions, *formatted_keywords).where.not(total_ate_amount: nil).group(:date).sum(:total_ate_amount)
+    wet_hotel_raw = @all_trackers.where(food_type: "Wet").where(conditions, *formatted_keywords).where.not(total_ate_amount: nil).group(:date).sum(:total_ate_amount)
+
+    all_dates = (dry_raw.keys + dry_hotel_raw.keys + wet_raw.keys + wet_hotel_raw.keys).uniq.sort
+
+    format_chart_data = ->(hash, all_dates) {
+      data = all_dates.map { |date| [ date.strftime("%b %d"), hash[date].to_f ] }
+      data.to_h
+    }
+
+    @dry_properties = format_chart_data.call(dry_raw, all_dates)
+    @dry_hotel_properties = format_chart_data.call(dry_hotel_raw, all_dates)
+    @wet_properties = format_chart_data.call(wet_raw, all_dates)
+    @wet_hotel_properties = format_chart_data.call(wet_hotel_raw, all_dates)
     # Using average for weight is safer than sum, in case multiple entries exist for one day.
     @weight = @all_trackers.where.not(weight: nil).group(:date).order(:date).average(:weight).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
-    # weights_by_date = @trackers.where.not(weight: nil).group(:date).average(:weight)
-    # @weight = weights_by_date.sort_by { |date, _weight| date }.map { |date, weight| [date.strftime("%b %d"), weight.to_f] }
 
     @data = [
       { name: t(".chart.wet_food"), data: @wet_properties },
+      { name: "Wet (Hotel)", data: @wet_hotel_properties },
       { name: t(".chart.dry_food"), data: @dry_properties },
+      { name: "Dry (Hotel)", data: @dry_hotel_properties },
       { name: t(".chart.weight"), data: @weight, type: "line" }
     ]
   end

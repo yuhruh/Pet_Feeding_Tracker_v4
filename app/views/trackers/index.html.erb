@@ -56,13 +56,15 @@
       <%= column_chart @data, adapter: "google", height: "300px", library: {
         title: t('trackers.index.chart_title'),
         isStacked: true,
-        interpolateNulls: true, 
+        interpolateNulls: true,
         series: {
           0 => {type: 'bar', targetAxisIndex: 0},
           1 => {type: 'bar', targetAxisIndex: 0},
-          2 => {type: 'line', targetAxisIndex: 1, pointSize: 5}
+          2 => {type: 'bar', targetAxisIndex: 0},
+          3 => {type: 'bar', targetAxisIndex: 0},
+          4 => {type: 'line', targetAxisIndex: 1, pointSize: 5}
         },
-        colors: ['#C1D7EC', '#FFDAB9', '#6B4AB9'],
+        colors: ['#C1D7EC', '#2563EB', '#FFDAB9','#F97316', '#6B4AB9'],
         chartArea: {left: 100, right: 100},
         hAxis: {
           title: t('trackers.index.chart_h_axis_title'),
@@ -73,7 +75,7 @@
           1 => {title: t('trackers.index.chart_v_axis_weight'), viewWindow: {min: 0, max: 15}, gridlines: {color: 'transparent'}}
         },
         legend: {position: 'top'},
-        titleTextStyle: {bold: true, fontSize: 20}
+        titleTextStyle: {bold: true, fontSize: 20},
       } %>
     <% else %>
       <div class="text-center p-8 my-4 bg-gray-100 rounded-lg shadow-lg">
