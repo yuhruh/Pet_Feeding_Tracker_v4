@@ -27,7 +27,7 @@ class TrackersTest < ApplicationSystemTestCase
     fill_in "tracker_description", with: @tracker.description
     fill_in "tracker_feed_time", with: @tracker.feed_time
     select @tracker.food_type.capitalize, from: "tracker_food_type"
-    select @tracker.hungry, from: "tracker_hungry"
+    select I18n.t("trackers.hungry_options.#{@tracker.hungry}"), from: "tracker_hungry"
     click_on "Add a record for #{@pet.petname.capitalize}"
 
     assert_text "Tracker was successfully created"
