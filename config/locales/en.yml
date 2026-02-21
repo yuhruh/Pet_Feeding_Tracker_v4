@@ -449,6 +449,10 @@ en:
       notice: "Tracker was successfully destroyed."
     set_tracker:
       alert: "Tracker not found."
+    hungry_options:
+      "eat_right_away": "💖 Yes, eat right away"
+      "ate_a_little": "🔺 No, not really. Ate A Little"
+      "not_interested": "❌ No, not interested"
     chart:
       wet_food: "Wet Food (g)"
       dry_food: "Dry Food (g)"

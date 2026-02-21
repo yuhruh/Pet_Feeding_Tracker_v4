@@ -5,6 +5,11 @@ class Tracker < ApplicationRecord
   before_save { self.description = description.downcase }
 
   enum :food_type, { kibble: "Kibble", freeze_dried: "Freeze-Dried", wet: "Wet", other: "Other" }
+  enum :hungry, {
+    eat_right_away: "💖 Yes, eat right away",
+    ate_a_little: "🔺 No, not really. Ate A Little",
+    not_interested: "❌ No, not interested."
+  }
 
   validates :food_type, presence: true
   validates :brand, presence: true, length: { minimum: 1, maximum: 50 }

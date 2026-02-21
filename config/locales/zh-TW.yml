@@ -449,6 +449,10 @@ zh-TW:
       notice: "飲食紀錄已成功刪除。"
     set_tracker:
       alert: "找不到飲食紀錄。"
+    hungry_options:
+      "eat_right_away": "💖 是，很餓，馬上吃"
+      "ate_a_little": "🔺 不太餓，但吃了一點"
+      "not_interested": "❌ 不太餓，沒興趣"
     chart:
       wet_food: "濕食 (克)"
       dry_food: "乾糧 (克)"

@@ -80,6 +80,11 @@ export default {
         "wet": "🍲 Wet",
         "wet_food_list": "Wet food list"
       },
+      "hungry_options": {
+        "ate_a_little": "🔺 No, not really. Ate A Little",
+        "eat_right_away": "💖 Yes, eat right away",
+        "not_interested": "❌ No, not interested"
+      },
       "import": {
         "alert": "Only CSV please",
         "notice": "%{petname}'s trackers imported!"
@@ -226,6 +231,11 @@ export default {
         "wet": "🍲 ウェット",
         "wet_food_list": "ウェットフードリスト"
       },
+      "hungry_options": {
+        "ate_a_little": "🔺 あまり食べませんでしたが、少し食べました",
+        "eat_right_away": "💖 はい、すぐに食べます",
+        "not_interested": "❌ いいえ、興味ありません"
+      },
       "import": {
         "alert": "CSVファイルのみお願いします",
         "notice": "%{petname}のトラッカーがインポートされました！"
@@ -371,6 +381,11 @@ export default {
         "select_favorite_or_enter_manually": "選擇最愛的罐罐或手動輸入",
         "wet": "🍲 濕食",
         "wet_food_list": "濕食清單"
+      },
+      "hungry_options": {
+        "ate_a_little": "🔺 不太餓，但吃了一點",
+        "eat_right_away": "💖 是，很餓，馬上吃",
+        "not_interested": "❌ 不太餓，沒興趣"
       },
       "import": {
         "alert": "只能使用CSV檔案",

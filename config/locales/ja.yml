@@ -449,6 +449,10 @@ ja:
       notice: "トラッカーは正常に削除されました。"
     set_tracker:
       alert: "トラッカーが見つかりません。"
+    hungry_options:
+      "eat_right_away": "💖 はい、すぐに食べます"
+      "ate_a_little": "🔺 あまり食べませんでしたが、少し食べました"
+      "not_interested": "❌ いいえ、興味ありません"
     chart:
       wet_food: "ウェットフード (g)"
       dry_food: "ドライフード (g)"
