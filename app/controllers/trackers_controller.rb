@@ -203,7 +203,8 @@ class TrackersController < ApplicationController
 
       hungry_score = hungry[arr[0].to_sym]
       love_score = arr[1] ? love[arr[1].to_sym] : 0
-      left_amount_score = @tracker.left_amount < (@tracker.amount)/4 ? 15 : 8
+      left_amount = @tracker.left_amount || 0
+      left_amount_score = left_amount < (@tracker.amount) / 4 ? 15 : 8
       frequent_score = @tracker.frequency * 2
 
       hungry_score.to_i + love_score.to_i + left_amount_score + frequent_score
