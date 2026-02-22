@@ -202,7 +202,7 @@ class TrackersController < ApplicationController
       love = { "💕": 15,  "🔺": 5, "❌": 0 }
 
       hungry_score = hungry[arr[0].to_sym]
-      love_score = love[arr[1].to_sym]
+      love_score = arr[1] ? love[arr[1].to_sym] : 0
       left_amount_score = @tracker.left_amount < (@tracker.amount)/4 ? 15 : 8
       frequent_score = @tracker.frequency * 2
 
