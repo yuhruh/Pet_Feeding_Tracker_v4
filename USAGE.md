@@ -2,6 +2,26 @@
 
 This guide provides detailed instructions on how to use the key features of Pet Tracker v4.
 
+## Table of Contents
+
+- [User Account](#user-account)
+  - [Creating an Account](#creating-an-account)
+  - [Signing In](#signing-in)
+  - [Third-Party Sign-In](#third-party-sign-in)
+  - [Timezone](#timezone)
+- [Pet Management](#pet-management)
+  - [Adding a Pet](#adding-a-pet)
+  - [Viewing and Editing Pets](#viewing-and-editing-pets)
+  - [Deleting a Pet](#deleting-a-pet)
+- [Dry Food Management](#dry-food-management)
+  - [Adding Dry Food](#adding-dry-food)
+  - [Managing Inventory](#managing-inventory)
+- [Trackers](#trackers)
+  - [Creating a Tracker](#creating-a-tracker)
+  - [Favorite Food](#favorite-food)
+  - [Importing Trackers from CSV](#importing-trackers-from-csv)
+- [Progressive Web App (PWA)](#progressive-web-app-pwa)
+
 ## User Account
 
 Your user account is the central hub for managing your pets and tracking their activities.
@@ -20,11 +40,11 @@ Your user account is the central hub for managing your pets and tracking their a
 
 ### Third-Party Sign-In
 
-You can also sign in using a third-party provider for a more streamlined experience.
+You can also sign in using a third-party provider (such as Google, Facebook, etc.) for a more streamlined experience.
 
 ### Timezone
 
-App will automatically detect where your local timezone when seeting your accounts to ensure all tracking data is accurate.
+The app will automatically detect your local timezone when setting up your account to ensure all tracking data is accurate. You can also manually update your timezone in your user settings.
 
 ## Pet Management
 
@@ -39,12 +59,16 @@ The "Pets" section allows you to create and manage profiles for each of your pet
 
 ### Viewing and Editing Pets
 
-*   **View:** Click on a pet's name to see their detailed profile.
-*   **Edit:** From the pet's profile page, click "Edit" to update their information.
+-   **View:** Click on a pet's name to see their detailed profile.
+-   **Edit:** From the pet's profile page, click "Edit" to update their information.
 
-## Dry Food Storage
+### Deleting a Pet
 
-The "Dry Food Storage" feature helps you keep track of your pet's dry food inventory.
+-   **Delete:** From the pet's profile page, click "Delete" to remove their profile.
+
+## Dry Food Management
+
+The "Dry Food Management" feature helps you keep track of your pet's dry food inventory.
 
 ### Adding Dry Food
 
@@ -55,9 +79,10 @@ The "Dry Food Storage" feature helps you keep track of your pet's dry food inven
 
 ### Managing Inventory
 
-*   **View:** See a list of all your dry foods and their current quantities.
-*   **Edit:** Update the details or quantity of a dry food entry.
-*   **Delete:** Remove a dry food entry from your inventory.
+-   **View:** See a list of all your dry foods and their current quantities.
+-   **Show:** Click on a dry food item to see more details.
+-   **Edit:** Update the details or quantity of a dry food entry.
+-   **Delete:** Remove a dry food entry from your inventory.
 
 ## Trackers
 
@@ -65,24 +90,37 @@ Trackers are used to log your pet's daily activities, such as feeding times, wal
 
 ### Creating a Tracker
 
-1.  **Go to Trackers:** Navigate to the "Trackers" section.
+1.  **Go to Trackers:** Navigate to the "Trackers" section for a specific pet.
 2.  **New Tracker:** Click the "New Tracker" button.
-3.  **Select Pet:** Choose the pet you want to create a tracker for.
-4.  **Enter Details:** Fill in the activity details, such as the type of activity, time, and any notes.
-5.  **Save:** Click "Create Tracker" to log the activity.
+3.  **Enter Details:** Fill in the activity details, such as the type of activity, time, and any notes.
+4.  **Save:** Click "Create Tracker" to log the activity.
+
+### Favorite Food
+
+The "Favorite Food" feature allows you to see which dry food your pet consumes the most.
+
+1.  **Go to Trackers:** Navigate to the "Trackers" section for a specific pet.
+2.  **Favorite Food:** Click the "Favorite Food" button to see the analysis.
 
 ### Importing Trackers from CSV
 
 For bulk data entry, you can import trackers from a CSV file.
 
-1.  **Go to Trackers:** Navigate to the "Trackers" section.
+1.  **Go to Trackers:** Navigate to the "Trackers" section for a specific pet.
 2.  **Import CSV:** Click the "Import CSV" button.
 3.  **Choose File:** Select the CSV file you want to import.
 4.  **Upload:** Click "Import" to upload and process the file.
 
 The CSV file should have the following columns:
 
-*   `pet_name`
-*   `activity_type`
-*   `activity_time`
-*   `notes`
+-   `activity_type`
+-   `activity_time`
+-   `notes`
+
+## Progressive Web App (PWA)
+
+You can install Pet Tracker v4 on your mobile device for easy access.
+
+1.  **Open in Browser:** Open the application in a supported browser on your mobile device.
+2.  **Add to Home Screen:** Follow the browser's prompts to "Add to Home Screen" or "Install."
+3.  **Launch:** Launch the app from your home screen like a native app.
