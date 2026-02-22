@@ -4,6 +4,7 @@
     tracker_form_tracker_url_value: pet_tracker_url(@pet, ":id", locale: I18n.locale, format: :json),
     tracker_form_new_dry_food_url_value: new_dry_food_url(locale: I18n.locale)
   }) do |form| %>
+  <%= form.hidden_field :page, value: params[:page] %>
   <div class="flex flex-col justify-center mb-4 md:flex-row">
     <%= render 'shared/errors', obj: @tracker %>
   </div>

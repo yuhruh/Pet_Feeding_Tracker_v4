@@ -111,7 +111,10 @@ class TrackersController < ApplicationController
 
     respond_to do |format|
       if @tracker.save
-        format.html { redirect_to pet_trackers_path, notice: t(".create.notice") }
+                per_page = params[:per_page] || 10
+        total_trackers = @pet.trackers.count
+        page = (total_trackers.to_f / per_page.to_i).ceil
+        format.html { redirect_to pet_trackers_path(@pet, page: page), notice: t(".create.notice") }
         format.json { render :show, status: :created, location: pet_trackers_path }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -138,7 +141,7 @@ class TrackersController < ApplicationController
 
     respond_to do |format|
       if @tracker.save
-        format.html { redirect_to [ @pet, :trackers ], notice: t(".update.notice"), status: :see_other }
+        format.html { redirect_to pet_trackers_path(@pet, page: params[:tracker][:page]), notice: t(".update.notice"), status: :see_other }
         format.json { render :show, status: :ok, location: [ @pet, :trackers ] }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -152,7 +155,7 @@ class TrackersController < ApplicationController
     @tracker.destroy!
 
     respond_to do |format|
-      format.html { redirect_to [ @pet, :trackers ], notice: t(".destroy.notice"), status: :see_other }
+      format.html { redirect_to pet_trackers_path(@pet, page: params[:page]), notice: t(".destroy.notice"), status: :see_other }
       format.json { head :no_content }
     end
   end

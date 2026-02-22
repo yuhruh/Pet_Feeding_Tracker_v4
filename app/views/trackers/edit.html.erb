@@ -10,7 +10,7 @@
     <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
       <%= render 'shared/errors', obj: @tracker %>
     </div>
-
+    <%= form.hidden_field :page, value: params[:page] %>
     
     <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
       <div class="flex justify-center md:justify-end md:w-1/3">
@@ -103,7 +103,7 @@
         <%= form.submit t('trackers.edit.update_button'), class: "text-center rounded-md px-3.5 py-2.5 text-white bg-softBlue hover:bg-white hover:text-softBlue hover:border-2 hover:border-softBlue inline-block font-medium cursor-pointer", data: { left_amount_target: "submitButton" } %>
       </div>
       <div class="mb-4">
-        <%= link_to t('trackers.edit.cancel_button', petname: @pet.petname.capitalize), pet_trackers_path(@pet), class: "text-center rounded-md px-3.5 py-2.5 text-white bg-grayishBlue hover:bg-white hover:text-grayishBlue hover:border-2 hover:border-grayishBlue inline-block font-medium cursor-pointer" %>
+        <%= link_to t('trackers.edit.cancel_button', petname: @pet.petname.capitalize), pet_trackers_path(@pet, page: params[:page]), class: "text-center rounded-md px-3.5 py-2.5 text-white bg-grayishBlue hover:bg-white hover:text-grayishBlue hover:border-2 hover:border-grayishBlue inline-block font-medium cursor-pointer" %>
       </div>
     </div>
   <% end %>
