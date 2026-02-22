@@ -128,7 +128,7 @@ class TrackersController < ApplicationController
     @tracker.total_ate_amount = @tracker.amount.to_f - @tracker.left_amount.to_f
     @tracker.frequency = calculate_frequency(@tracker.come_back_to_eat)
     if @tracker.hungry.present?
-      result_parts = [Tracker.hungries[@tracker.hungry.to_sym][0]]
+      result_parts = [ Tracker.hungries[@tracker.hungry.to_sym][0] ]
       if @tracker.love.present?
         result_parts << @tracker.love[0]
       end
