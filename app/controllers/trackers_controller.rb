@@ -34,7 +34,8 @@ class TrackersController < ApplicationController
     end
 
     # @trackers = @all_trackers.paginate(page: params[:page], per_page: params[:per_page] || 10)
-    @trackers = @all_trackers.order(date: :asc, feed_time: :asc).paginate(page: params[:page], per_page: params[:per_page] || 10)
+    page = params[:page].blank? ? 1 : params[:page]
+    @trackers = @all_trackers.order(date: :asc, feed_time: :asc).paginate(page: page, per_page: params[:per_page].to_i > 0 ? params[:per_page] : 10)
 
     respond_to do |format|
       format.html

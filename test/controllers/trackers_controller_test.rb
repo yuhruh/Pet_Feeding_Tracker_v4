@@ -25,7 +25,10 @@ class TrackersControllerTest < ActionDispatch::IntegrationTest
       post pet_trackers_url(@pet), params: { tracker: { amount: @tracker.amount, brand: @tracker.brand, date: @tracker.date, description: @tracker.description, dry_food_id: @tracker.dry_food_id, favorite_score: @tracker.favorite_score, feed_time: @tracker.feed_time, food_type: @tracker.food_type, frequency: @tracker.frequency, hungry: @tracker.hungry, left_amount: @tracker.left_amount, love: @tracker.love, note: @tracker.note, pet_id: @tracker.pet_id, result: @tracker.result, total_ate_amount: @tracker.total_ate_amount, weight: @tracker.weight } }
     end
 
-    assert_redirected_to pet_trackers_url(@pet, locale: I18n.default_locale)
+    per_page = 10 # Default per_page
+    total_trackers = @pet.trackers.count
+    expected_page = (total_trackers.to_f / per_page).ceil
+    assert_redirected_to pet_trackers_url(@pet, page: expected_page, locale: I18n.default_locale)
   end
 
   # test "should show tracker" do
@@ -39,15 +42,15 @@ class TrackersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update tracker" do
-    patch pet_tracker_url(@pet, @tracker), params: { tracker: { come_back_to_eat: @tracker.come_back_to_eat, date: @tracker.date, description: @tracker.description, dry_food_id: @tracker.dry_food_id, favorite_score: @tracker.favorite_score, feed_time: @tracker.feed_time, food_type: @tracker.food_type, frequency: @tracker.frequency, hungry: @tracker.hungry, left_amount: @tracker.left_amount, love: @tracker.love, note: @tracker.note, pet_id: @tracker.pet_id, result: @tracker.result, total_ate_amount: @tracker.total_ate_amount, weight: @tracker.weight } }
-    assert_redirected_to pet_trackers_url(@pet, locale: I18n.default_locale)
+    patch pet_tracker_url(@pet, @tracker), params: { tracker: { come_back_to_eat: @tracker.come_back_to_eat, date: @tracker.date, description: @tracker.description, dry_food_id: @tracker.dry_food_id, favorite_score: @tracker.favorite_score, feed_time: @tracker.feed_time, food_type: @tracker.food_type, frequency: @tracker.frequency, hungry: @tracker.hungry, left_amount: @tracker.left_amount, love: @tracker.love, note: @tracker.note, pet_id: @tracker.pet_id, result: @tracker.result, total_ate_amount: @tracker.total_ate_amount, weight: @tracker.weight, page: 1 } }
+    assert_redirected_to pet_trackers_url(@pet, page: 1, locale: I18n.default_locale)
   end
 
   test "should destroy tracker" do
     assert_difference("Tracker.count", -1) do
-      delete pet_tracker_url(@pet, @tracker)
+      delete pet_tracker_url(@pet, @tracker, page: 1)
     end
 
-    assert_redirected_to pet_trackers_url(@pet, locale: I18n.default_locale)
+    assert_redirected_to pet_trackers_url(@pet, page: "1", locale: I18n.default_locale)
   end
 end
