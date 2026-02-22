@@ -30,7 +30,7 @@
                 <td class="capitalize text-sky-700 text-sm text-center p-2 font-semibold p-2"><%= idx+1 %></td>
                 <td class="capitalize text-sky-700 text-sm text-center p-2"><%= record.date.strftime("%Y-%m-%d") %></td>
                 <td class="capitalize text-sky-700 text-sm text-center p-2"><%= record.feed_time.strftime("%H:%M") %></td>
-                <td class="capitalize text-sky-700 text-sm text-center p-2"><%= record.hungry.present? ? t("trackers.hungry_options.#{record.hungry.parameterize.underscore}") : "" %></td>
+                <td class="capitalize text-sky-700 text-sm text-center p-2"><%= record.hungry.present? ? t("trackers.hungry_options.#{record.hungry}") : "" %></td>
                 <td class="capitalize text-sky-700 text-sm text-center p-2"><%= record.come_back_to_eat %></td>
                 <td class="capitalize text-sky-700 text-sm text-center p-2"><%= t("trackers.food_types.#{record.food_type.downcase}") %></td>
                 <td class="capitalize text-sky-700 text-sm text-center p-2"><%= record.brand %></td>
@@ -88,7 +88,7 @@
             <tr class="border-b">
               <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4"><%= t('trackers.tracker.hungry') %></th>
               <% @trackers.select(&:persisted?).each do |record| %>
-                <td class="<%= tracker_row_class(record) %> capitalize text-sky-700 text-sm text-center p-2"><%= record.hungry %></td>
+                <td class="<%= tracker_row_class(record) %> capitalize text-sky-700 text-sm text-center p-2"><%= record.hungry.present? ? t("trackers.hungry_options.#{record.hungry}") : "" %></td>
               <% end %>
             </tr>
             <tr class="border-b">

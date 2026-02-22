@@ -127,9 +127,13 @@ class TrackersController < ApplicationController
     @tracker.dry_food_id = nil if params[:tracker][:dry_food_id].blank?
     @tracker.total_ate_amount = @tracker.amount.to_f - @tracker.left_amount.to_f
     @tracker.frequency = calculate_frequency(@tracker.come_back_to_eat)
-    if @tracker.hungry.present? && @tracker.love.present?
-      @tracker.result = [ @tracker.hungry[0], @tracker.love[0] ].join(" - ")
-      @tracker.favorite_score = calculate_favorite([ @tracker.hungry[0], @tracker.love[0] ])
+    if @tracker.hungry.present?
+      result_parts = [Tracker.hungries[@tracker.hungry.to_sym][0]]
+      if @tracker.love.present?
+        result_parts << @tracker.love[0]
+      end
+      @tracker.result = result_parts.join(" - ")
+      @tracker.favorite_score = calculate_favorite(result_parts)
     end
 
     respond_to do |format|
