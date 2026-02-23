@@ -85,7 +85,12 @@
   </div>
 
   <div id="trackers" class="flex flex-col mx-auto w-full divide-y divide-gray-200 space-y-5">
-    <%= render 'tracker' %>
+    <%= form_with url: bulk_delete_pet_trackers_path(@pet), method: :delete, data: { confirm: t('trackers.index.confirm_delete') } do |form| %>
+      <div class="flex justify-center mt-4">
+        <%= form.submit t('trackers.index.delete_selected'), class: "p-2 rounded-md shadow-lg font-semibold border-2 border-red-300 text-gray-700 bg-red-200 hover:bg-gray-100 hover:border-gray-300 hover:text-red-700 hover:scale-110" %>
+      </div>
+      <%= render 'tracker' %>
+    <% end %>
   </div>
 
   <div class="flex digg_pagination justify-center mb-4 mt-4">

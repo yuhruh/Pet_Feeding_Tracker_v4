@@ -438,6 +438,8 @@ ja:
       chart_v_axis_amount: "量 (g)"
       chart_v_axis_weight: "体重 (kg)"
       no_data_for_chart: "チャートを表示するための追跡データがありません。"
+      confirm_delete: "選択したトラッカーを削除してもよろしいですか？"
+      delete_selected: "選択した項目を削除"
     import:
       alert: "CSVファイルのみお願いします"
       notice: "%{petname}のトラッカーがインポートされました！"
@@ -447,6 +449,8 @@ ja:
       notice: "トラッカーは正常に更新されました。"
     destroy:
       notice: "トラッカーは正常に削除されました。"
+    bulk_delete:
+      notice: "選択したトラッカーは正常に削除されました。"
     set_tracker:
       alert: "トラッカーが見つかりません。"
     hungry_options:

@@ -25,7 +25,7 @@ class CsvImportTrackersService
           tracker_hash[:food_type] = row["food_type"]
           tracker_hash[:brand] = row["brand"]
           tracker_hash[:description] = row["description"]
-          tracker_hash[:hungry] = row["hungry"]
+          tracker_hash[:hungry] = Tracker::HUNGRY_MAP.key(row["hungry"])
           tracker_hash[:love] = row["love"]
           tracker_hash[:note] = row["note"]
 

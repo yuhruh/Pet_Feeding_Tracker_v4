@@ -438,6 +438,8 @@ en:
       chart_v_axis_amount: "Amount (g)"
       chart_v_axis_weight: "Weight (kg)"
       no_data_for_chart: "No tracking data available to display the chart."
+      confirm_delete: "Are you sure you want to delete the selected trackers?"
+      delete_selected: "Delete Selected"
     import:
       alert: "Only CSV please"
       notice: "%{petname}'s trackers imported!"
@@ -447,6 +449,8 @@ en:
       notice: "Tracker was successfully updated."
     destroy:
       notice: "Tracker was successfully destroyed."
+    bulk_delete:
+      notice: "Selected trackers were successfully deleted."
     set_tracker:
       alert: "Tracker not found."
     hungry_options:

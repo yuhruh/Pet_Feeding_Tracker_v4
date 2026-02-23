@@ -169,6 +169,14 @@ class TrackersController < ApplicationController
     end
   end
 
+  def bulk_delete
+    @pet.trackers.where(id: params[:tracker_ids]).destroy_all
+    respond_to do |format|
+      format.html { redirect_to pet_trackers_path(@pet), notice: t(".bulk_delete.notice") }
+      format.json { head :no_content }
+    end
+  end
+
   private
     def set_pet
       @pet = Pet.find(params[:pet_id])

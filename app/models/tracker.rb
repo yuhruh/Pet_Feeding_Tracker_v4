@@ -5,11 +5,12 @@ class Tracker < ApplicationRecord
   before_save { self.description = description.downcase }
 
   enum :food_type, { kibble: "Kibble", freeze_dried: "Freeze-Dried", wet: "Wet", other: "Other" }
-  enum :hungry, {
+  HUNGRY_MAP = {
     eat_right_away: "💖 Yes, eat right away",
     ate_a_little: "🔺 No, not really. Ate A Little",
-    not_interested: "❌ No, not interested."
+    not_interested: "❌ No, not interested"
   }
+  enum :hungry, HUNGRY_MAP
 
   validates :food_type, presence: true
   validates :brand, presence: true, length: { minimum: 1, maximum: 50 }
@@ -63,7 +64,7 @@ class Tracker < ApplicationRecord
   def self.to_csv
     require "csv"
     CSV.generate(headers: true, col_sep: ";") do |csv|
-      csv << [ "date", "feed_time", "come_back_to_eat", "food_type", "brand", "description", "amount", "left_amount", "total_ate_amount", "hungry", "result", "note", "weight" ]
+      csv << [ "date", "feed_time", "come_back_to_eat", "food_type", "brand", "description", "amount", "left_amount", "total_ate_amount", "hungry", "love", "result", "note", "weight" ]
       all.each do |tracker|
         csv << [
           tracker.date,
@@ -75,7 +76,8 @@ class Tracker < ApplicationRecord
           tracker.amount,
           tracker.left_amount,
           tracker.total_ate_amount,
-          tracker.hungry,
+          HUNGRY_MAP[tracker.hungry.to_sym],
+          tracker.love,
           tracker.result,
           tracker.note,
           tracker.weight

@@ -8,6 +8,7 @@ Rails.application.routes.draw do
         collection do
           post :import
           get "favorite_food"
+          delete :bulk_delete
         end
       end
     end

@@ -14,6 +14,9 @@
       }
     },
     "trackers": {
+      "bulk_delete": {
+        "notice": "Selected trackers were successfully deleted."
+      },
       "chart": {
         "dry_food": "Dry Food (g)",
         "weight": "Weight (kg)",
@@ -96,6 +99,8 @@
         "chart_title": "Amount & Weight Over Time",
         "chart_v_axis_amount": "Amount (g)",
         "chart_v_axis_weight": "Weight (kg)",
+        "confirm_delete": "Are you sure you want to delete the selected trackers?",
+        "delete_selected": "Delete Selected",
         "export_csv": "Export to CSV",
         "import_button": "Import",
         "import_csv": "Import CSV File",

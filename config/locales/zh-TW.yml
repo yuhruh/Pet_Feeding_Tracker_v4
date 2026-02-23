@@ -438,6 +438,8 @@ zh-TW:
       chart_v_axis_amount: "進食量 (克)"
       chart_v_axis_weight: "體重 (公斤)"
       no_data_for_chart: "沒有可用的數據來顯示圖表。"
+      confirm_delete: "您確定要刪除所選的飲食紀錄嗎？"
+      delete_selected: "刪除所選項目"
     import:
       alert: "只能使用CSV檔案"
       notice: "%{petname}的飲食紀錄已匯入！"
@@ -447,6 +449,8 @@ zh-TW:
       notice: "飲食紀錄已成功更新。"
     destroy:
       notice: "飲食紀錄已成功刪除。"
+    bulk_delete:
+      notice: "已成功刪除所選的飲食紀錄。"
     set_tracker:
       alert: "找不到飲食紀錄。"
     hungry_options:
@@ -518,4 +522,4 @@ zh-TW:
       should_restock: "應該補貨了"
       only_left_in_storage: "⚠️ 庫存僅剩 %{amount} 克。"
       is_valid_amount: "%{amount} 克是有效數量。"
-      select_wet_food: "選擇一個最愛或手動輸入"
+      select_wet_food: "選擇一個最愛或手動輸入""
