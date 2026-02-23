@@ -522,4 +522,4 @@ zh-TW:
       should_restock: "應該補貨了"
       only_left_in_storage: "⚠️ 庫存僅剩 %{amount} 克。"
       is_valid_amount: "%{amount} 克是有效數量。"
-      select_wet_food: "選擇一個最愛或手動輸入""
+      select_wet_food: "選擇一個最愛或手動輸入"
