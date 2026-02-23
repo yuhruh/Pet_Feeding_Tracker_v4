@@ -170,6 +170,9 @@
       }
     },
     "trackers": {
+      "bulk_delete": {
+        "notice": "選択したトラッカーは正常に削除されました。"
+      },
       "chart": {
         "dry_food": "ドライフード (g)",
         "weight": "体重 (kg)",
@@ -252,6 +255,8 @@
         "chart_title": "量と体重の経時変化",
         "chart_v_axis_amount": "量 (g)",
         "chart_v_axis_weight": "体重 (kg)",
+        "confirm_delete": "選択したトラッカーを削除してもよろしいですか？",
+        "delete_selected": "選択した項目を削除",
         "export_csv": "CSVにエクスポート",
         "import_button": "インポート",
         "import_csv": "CSVファイルをインポート",
@@ -321,6 +326,9 @@
       }
     },
     "trackers": {
+      "bulk_delete": {
+        "notice": "已成功刪除所選的飲食紀錄。"
+      },
       "chart": {
         "dry_food": "乾糧 (克)",
         "weight": "體重 (公斤)",
@@ -403,6 +411,8 @@
         "chart_title": "總進食量與體重變化",
         "chart_v_axis_amount": "進食量 (克)",
         "chart_v_axis_weight": "體重 (公斤)",
+        "confirm_delete": "您確定要刪除所選的飲食紀錄嗎？",
+        "delete_selected": "刪除所選項目",
         "export_csv": "下載為CSV",
         "import_button": "上傳",
         "import_csv": "上傳CSV檔案",
