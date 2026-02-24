@@ -1,0 +1,11 @@
+<div class="container mx-auto w-2/3 bg-gray-100 shadow-lg rounded-xl mb-4 p-4">
+  <h1 class="font-semibold text-2xl mb-2 text-gray-800">Welcome to Cat Tracker App, <%=@user.username.split(" ").map(&:capitalize).join(" ")%></h1>
+
+  <p class="mb-4 text-gray-600">Thanks for joining us. Let's explore what our pet love 😽 and track his/her feeding trend 📊</p>
+  <p class="mb-4 text-gray-600">To start tracking your pet's feeding, log in here: <%= link_to "Sign In", new_session_url, class: "underline underline-offset-4 text-sky-700 italic" %></p>
+  
+  <div class="flex flex-row justify-start text-grayishBlue font-bold gap-4">
+    <div class="flex z-30"><%= image_tag(image_url('aji_icon_512.png'), width: "80px") %></div>
+    <div class="flex items-center">© 2025 AjiTracker</div>
+  </div>
+</div>

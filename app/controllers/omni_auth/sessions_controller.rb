@@ -70,7 +70,7 @@ class OmniAuth::SessionsController < ApplicationController
         redirect_to new_registrations_path and return
       else
         @user = create_user
-        UserMailer.with(user: @user).welcome.deliver_later
+        UserMailer.with(user: @user).welcome_email.deliver_later
       end
     end
   end
