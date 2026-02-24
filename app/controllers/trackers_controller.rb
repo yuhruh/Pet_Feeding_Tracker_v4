@@ -66,7 +66,7 @@ class TrackersController < ApplicationController
     all_dates = (dry_raw.keys + dry_hotel_raw.keys + wet_raw.keys + wet_hotel_raw.keys).uniq.sort
 
     format_chart_data = ->(hash, all_dates) {
-      data = all_dates.map { |date| [ date.strftime("%b %d"), hash[date].to_f ] }
+      data = all_dates.map { |date| [ date.strftime("%y/%m/%d"), hash[date].to_f ] }
       data.to_h
     }
 
@@ -75,7 +75,7 @@ class TrackersController < ApplicationController
     @wet_properties = format_chart_data.call(wet_raw, all_dates)
     @wet_hotel_properties = format_chart_data.call(wet_hotel_raw, all_dates)
     # Using average for weight is safer than sum, in case multiple entries exist for one day.
-    @weight = @all_trackers.where.not(weight: nil).group(:date).order(:date).average(:weight).transform_keys { |key| key.strftime("%b %d") }.transform_values(&:to_f)
+    @weight = @all_trackers.where.not(weight: nil).group(:date).order(:date).average(:weight).transform_keys { |key| key.strftime("%y/%m/%d") }.transform_values(&:to_f)
 
     @data = [
       { name: t(".chart.wet_food"), data: @wet_properties },
