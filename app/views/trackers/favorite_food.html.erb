@@ -10,17 +10,28 @@
           <%= page_entries_info @favorite_foods %>
         </div>
 
-        <div class="flex digg_pagination justify-center mt-4">
+        <div class="flex digg_pagination justify-center mt-4 mb-4">
           <%= will_paginate @favorite_foods, :container => true %>
         </div>
-        <div class="flex justify-end items-start mx-8 mb-4">
-          <%= form_with url: favorite_food_pet_trackers_path(@pet), method: :get, class: "flex items-center" do |form| %>
-            <span class="mr-2"><%= t('trackers.index.items_per_page') %></span>
-            <%= form.select :per_page, options_for_select([5, 10, 20, 50], params[:per_page] || 10), {}, { onchange: 'this.form.submit()', class: "p-1 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700" } %>
-          <% end %>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex flex-col justify-start items-start">
+            <%= form_with url: favorite_food_pet_trackers_path(@pet), method: :get, class: "flex flex-row items-center gap-2" do |form| %>
+              <% if @favorite_foods.any? %>
+                <%= form.label :food_type, "Food Type", class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize md:text-base whitespace-nowrap" %>
+                <%= form.text_field :food_type, value: params[:food_type], class: "block shadow-sm rounded-md border px-3 py-2 w-full dark:text-black" %>
+                <%= form.submit "Search", class: "p-1.5 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700" %>
+              <% end %>
+            <% end %>
+          </div>
+          <div class="flex flex-col justify-end items-end">
+            <%= form_with url: favorite_food_pet_trackers_path(@pet), method: :get, class: "flex items-center" do |form| %>
+              <span class="mr-2 text-sm font-medium text-gray-700 dark:text-gray-100 capitalize md:text-base whitespace-nowrap"><%= t('trackers.index.items_per_page') %></span>
+              <%= form.select :per_page, options_for_select([5, 10, 20, 50], params[:per_page] || 10), {}, { onchange: 'this.form.submit()', class: "block w-full px-3 py-2 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700" } %>
+            <% end %>
+          </div>
         </div>
       </div>
-      <div class="container mx-auto w-full shadow-lg rounded-xl mb-4">
+      <div class="container mx-auto w-full shadow-lg rounded-xl mb-4 mt-4">
         <div class="flex flex-col justify-center">
           <table class="table-auto mb-2 px-2 w-full dark:bg-slate-100">
             <thead>

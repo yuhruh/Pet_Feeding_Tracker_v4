@@ -174,7 +174,14 @@ class TrackersController < ApplicationController
   end
 
   def favorite_food
-    trackers = @pet.trackers.where.not(favorite_score: nil).order(favorite_score: :desc)
+    trackers = @pet.trackers.where.not(favorite_score: nil)
+
+    if params[:food_type].present?
+      trackers_table = Tracker.arel_table
+      trackers = trackers.where(trackers_table[:food_type].matches("%#{params[:food_type]}%"))
+    end
+
+    trackers = trackers.order(favorite_score: :desc)
 
     unique_foods = trackers.each_with_object({}) do |tracker, hash|
       normalized_description = tracker.description.to_s.gsub(/\s*[xX]\d+\z/, "").strip
