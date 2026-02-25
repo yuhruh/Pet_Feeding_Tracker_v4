@@ -20,29 +20,31 @@
           <% end %>
         </div>
       </div>
-      <div class="flex flex-col justify-center">
-        <table class="border-collapse border border-slate-200 mb-4 dark:bg-slate-100">
-          <thead>
-            <tr class="bg-sky-100 dark:bg-slate-900">
-              <th class="px-4 py-2 text-center capitalize border border-slate-300 dark:text-white"><%= t('trackers.favorite_food.food_type') %></th>
-              <th class="px-4 py-2 text-center capitalize border border-slate-300 dark:text-white"><%= t('trackers.favorite_food.brand') %></th>
-              <th class="px-4 py-2 text-center capitalize border border-slate-300 dark:text-white"><%= t('trackers.favorite_food.description') %></th>
-              <th class="px-4 py-2 text-center capitalize border border-slate-300 dark:text-white"><%= t('trackers.favorite_food.favorite_score') %></th>
-              <th class="px-4 py-2 text-center capitalize border border-slate-300 dark:text-white"><%= t('trackers.favorite_food.last_fed_date') %></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @favorite_foods.each do |tracker| %>
-              <tr>
-                <td class="px-4 py-2 text-center border border-slate-300 dark:text-white"><%= tracker.food_type %></td>
-                <td class="px-4 py-2 text-center border border-slate-300 dark:text-white"><%= tracker.brand %></td>
-                <td class="px-4 py-2 text-center border border-slate-300 dark:text-white"><%= tracker.description %></td>
-                <td class="px-4 py-2 text-center border border-slate-300 dark:text-white"><%= tracker.favorite_score %></td>
-                <td class="px-4 py-2 text-center border border-slate-300 dark:text-white"><%= tracker.date %></td>
+      <div class="container mx-auto w-full shadow-lg rounded-xl mb-4">
+        <div class="flex flex-col justify-center">
+          <table class="table-auto mb-2 px-2 w-full dark:bg-slate-100">
+            <thead>
+              <tr class="border-b-4 bg-gray-100 dark:bg-black">
+                <th class="text-center test-sm capitalize p-2 dark:text-white"><%= t('trackers.favorite_food.food_type') %></th>
+                <th class="text-center test-sm capitalize p-2 dark:text-white"><%= t('trackers.favorite_food.brand') %></th>
+                <th class="text-center test-sm capitalize p-2 dark:text-white"><%= t('trackers.favorite_food.description') %></th>
+                <th class="text-center test-sm capitalize p-2 dark:text-white"><%= t('trackers.favorite_food.favorite_score') %></th>
+                <th class="text-center test-sm capitalize p-2 dark:text-white"><%= t('trackers.favorite_food.last_fed_date') %></th>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <% @favorite_foods.each do |tracker| %>
+                <tr id="<%= dom_id(tracker) %>" class="<%= tracker_row_class(tracker) %>">
+                  <td class="capitalize text-sky-700 text-center text-sm p-2"><%= tracker.food_type %></td>
+                  <td class="capitalize text-sky-700 text-center text-sm p-2"><%= tracker.brand %></td>
+                  <td class="capitalize text-sky-700 text-center text-sm p-2"><%= tracker.description %></td>
+                  <td class="capitalize text-sky-700 text-center text-sm p-2"><%= tracker.favorite_score %></td>
+                  <td class="capitalize text-sky-700 text-center text-sm p-2"><%= tracker.date %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div class="flex digg_pagination justify-center mb-4 mt-4">
         <div class="page_info italic">

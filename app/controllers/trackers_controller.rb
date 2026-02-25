@@ -162,7 +162,17 @@ class TrackersController < ApplicationController
   end
 
   def favorite_food
-    @favorite_foods = @pet.trackers.order(favorite_score: :desc).paginate(page: params[:page], per_page: params[:per_page] || 10)
+    trackers = @pet.trackers.where.not(favorite_score: nil).order(favorite_score: :desc)
+
+    unique_foods = trackers.each_with_object({}) do |tracker, hash|
+      normalized_description = tracker.description.to_s.gsub(/\s*[xX]\d+\z/, "").strip
+      key = [ tracker.brand, normalized_description ]
+      hash[key] ||= tracker
+    end.values
+
+    require "will_paginate/array"
+    @favorite_foods = unique_foods.paginate(page: params[:page], per_page: params[:per_page] || 10)
+
     respond_to do |format|
       format.html
       format.json { render json: @favorite_foods }
@@ -176,6 +186,8 @@ class TrackersController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+
 
   private
     def set_pet
