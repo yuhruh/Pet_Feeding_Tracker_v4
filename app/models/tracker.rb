@@ -35,24 +35,25 @@ class Tracker < ApplicationRecord
 
   def update_dry_food_used_amount
     if dry_food
-      used_amount = dry_food.trackers.sum(:amount)
-      left_amount = dry_food.amount - used_amount
+      total_used_amount = dry_food.trackers.sum(:amount)
+      left_amount = dry_food.amount - total_used_amount
       trackers_count = dry_food.trackers.count.to_i
 
       if trackers_count > 0
-        average_used_amount = used_amount / trackers_count.to_f
+        average_used_amount = total_used_amount / trackers_count.to_f
         days_remaining = (left_amount / average_used_amount).to_i rescue nil
         expected_running_out = days_remaining ? dry_food.created_at + days_remaining : nil
 
         dry_food.update_columns(
-          used_amount: used_amount,
+          total_ate_amount: total_used_amount,
+          used_amount: amount,
           left_amount: left_amount,
           average_used_amount: average_used_amount.round(2),
           days_remaining: expected_running_out
         )
       else
         dry_food.update_columns(
-          used_amount: used_amount,
+          used_amount: total_used_amount,
           left_amount: left_amount,
           average_used_amount: 0,
           days_remaining: nil

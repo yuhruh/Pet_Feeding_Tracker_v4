@@ -86,10 +86,14 @@
 
   <div id="trackers" class="container mx-auto flex flex-col divide-y divide-gray-200 space-y-5">
     <%= form_with url: bulk_delete_pet_trackers_path(@pet), method: :delete, data: { confirm: t('trackers.index.confirm_delete') } do |form| %>
-      <div class="flex justify-start mt-4">
-        <%= form.submit t('trackers.index.delete_selected'), class: "p-2 rounded-md shadow-lg font-semibold border-2 border-red-300 text-gray-700 bg-red-200 hover:bg-gray-100 hover:border-gray-300 hover:text-red-700 hover:scale-110" %>
-      </div>
-      <%= render 'tracker' %>
+      <% if @trackers.any?%>
+        <div class="flex justify-start mt-4">
+          <%= form.submit t('trackers.index.delete_selected'), class: "p-2 rounded-md shadow-lg font-semibold border-2 border-red-300 text-gray-700 bg-red-200 hover:bg-gray-100 hover:border-gray-300 hover:text-red-700 hover:scale-110" %>
+        </div>
+        <%= render 'tracker' %>
+      <% else %>
+        <p class="text-lg text-center my-10"><%= t('trackers.tracker.no_trackers_found', petname: @pet.petname) %></p>
+      <% end %>
     <% end %>
   </div>
 
