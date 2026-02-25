@@ -85,6 +85,28 @@
   </div>
 
   <div id="trackers" class="container mx-auto flex flex-col divide-y divide-gray-200 space-y-5">
+    <%= form_with url: pet_trackers_path(@pet), method: :get do |form| %>
+      <% if @trackers.any? %>
+        <div class="flex flex-row gap-4">
+          <div class="flex items-center mt-4">
+            <%= form.label :food_type, "Food Type", class: "text-sm font-medium text-gray-700 p-4 dark:text-gray-100 capitalize md:text-base whitespace-nowrap" %>
+            <%= form.text_field :food_type, value: params[:food_type], class: "block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black" %>
+          </div>
+          <div class="flex items-center mt-4">
+            <%= form.label :brand, "Brand", class: "text-sm font-medium text-gray-700 p-4 dark:text-gray-100 capitalize md:text-base" %>
+            <%= form.text_field :brand, value: params[:brand], class: "block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black" %>
+          </div>
+          <div class="flex items-center mt-4">
+            <%= form.label :description, "Description", class: "text-sm font-medium text-gray-700 p-4 dark:text-gray-100 capitalize md:text-base" %>
+            <%= form.text_field :description, value: params[:description], class: "block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black" %>
+          </div>
+          <div class="flex items-center mt-6 ml-4">
+            <%= form.submit "Search", class: "p-1.5 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700" %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+
     <%= form_with url: bulk_delete_pet_trackers_path(@pet), method: :delete, data: { confirm: t('trackers.index.confirm_delete') } do |form| %>
       <% if @trackers.any?%>
         <div class="flex justify-start mt-4">

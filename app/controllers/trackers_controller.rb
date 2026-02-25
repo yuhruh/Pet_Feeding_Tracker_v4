@@ -24,6 +24,7 @@ class TrackersController < ApplicationController
     # @trackers = Tracker.all
     # @all_trackers = @pet.trackers.order(date: :asc, feed_time: :asc)
     @all_trackers = @pet.trackers
+    trackers_table = Tracker.arel_table
 
     # Add the following lines to filter the trackers based on the selected range
     case params[:range]
@@ -31,6 +32,18 @@ class TrackersController < ApplicationController
       @all_trackers = @all_trackers.where("date >= ?", 7.days.ago.to_date)
     when "30"
       @all_trackers = @all_trackers.where("date >= ?", 30.days.ago.to_date)
+    end
+
+    if params[:food_type].present?
+      @all_trackers = @all_trackers.where(trackers_table[:food_type].matches("%#{params[:food_type]}%"))
+    end
+
+    if params[:brand].present?
+      @all_trackers = @all_trackers.where(trackers_table[:brand].matches("%#{params[:brand]}%"))
+    end
+
+    if params[:description].present?
+      @all_trackers = @all_trackers.where(trackers_table[:description].matches("%#{params[:description]}%"))
     end
 
     # @trackers = @all_trackers.paginate(page: params[:page], per_page: params[:per_page] || 10)
@@ -50,7 +63,6 @@ class TrackersController < ApplicationController
     formatted_keywords = hotel_keywords.map { |k| "%#{k}%" }
 
     # Use Arel to safely construct the query for hotel stays
-    trackers_table = Tracker.arel_table
     hotel_conditions = formatted_keywords.map do |keyword|
       trackers_table[:note].matches(keyword)
     end.reduce(:or)
@@ -187,7 +199,10 @@ class TrackersController < ApplicationController
     end
   end
 
-
+  def search_food
+    @search_results = @pet.trackers.where("brand ILIKE ? OR description ILIKE ?", "%#{params[:query]}%", "%#{params[:query]}%")
+    render json: @search_results.to_json, status: :ok
+  end
 
   private
     def set_pet
