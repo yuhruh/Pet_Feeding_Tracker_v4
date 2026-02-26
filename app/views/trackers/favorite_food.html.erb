@@ -45,12 +45,15 @@
             </thead>
             <tbody>
               <% @favorite_foods.each do |tracker| %>
-                <tr id="<%= dom_id(tracker) %>" class="<%= tracker_row_class(tracker) %>">
-                  <td class="capitalize text-sky-700 text-center text-sm p-2"><%= tracker.food_type %></td>
-                  <td class="capitalize text-sky-700 text-center text-sm p-2"><%= tracker.brand %></td>
-                  <td class="capitalize text-sky-700 text-center text-sm p-2"><%= tracker.description %></td>
-                  <td class="capitalize text-sky-700 text-center text-sm p-2"><%= tracker.favorite_score %></td>
-                  <td class="capitalize text-sky-700 text-center text-sm p-2"><%= tracker.date %></td>
+                <tr class="border-b-2">
+                  <td class="capitalize text-sky-700 text-center text-sm p-2"><%= tracker[:food_type] %></td>
+                  <td class="capitalize text-sky-700 text-center text-sm p-2"><%= tracker[:brand] %></td>
+                  <td class="capitalize text-sky-700 text-center text-sm p-2"><%= tracker[:description] %></td>
+                  <td class="capitalize text-sky-700 text-center text-sm p-2">
+                    <% tracker[:results].each do |result| %>
+                      <%= result[:date]%>: <%= result[:result]%> (Score: <%= result[:favorite_score] %>)<br>
+                    <%end %>
+                  </td>
                 </tr>
               <% end %>
             </tbody>

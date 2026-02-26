@@ -174,23 +174,46 @@ class TrackersController < ApplicationController
   end
 
   def favorite_food
-    trackers = @pet.trackers.where.not(favorite_score: nil)
+    trackers = @pet.trackers.where.not(hungry: [ nil, "" ], love: [ nil, "" ]).order(date: :desc)
 
     if params[:food_type].present?
       trackers_table = Tracker.arel_table
       trackers = trackers.where(trackers_table[:food_type].matches("%#{params[:food_type]}%"))
     end
 
-    trackers = trackers.order(favorite_score: :desc)
-
-    unique_foods = trackers.each_with_object({}) do |tracker, hash|
-      normalized_description = tracker.description.to_s.gsub(/\s*[xX]\d+\z/, "").strip
-      key = [ tracker.brand, normalized_description ]
-      hash[key] ||= tracker
-    end.values
+    @favorite_foods = trackers.group_by do |tracker|
+      clean_description = tracker.description.to_s.gsub(/\s*[xX]\d+\z/, "").strip
+      [ tracker.food_type, tracker.brand, clean_description ]
+    end.map do |(food_type, brand, description), group_trackers|
+      {
+        food_type: food_type,
+        brand: brand,
+        description: description,
+        count: group_trackers.size,
+        results: group_trackers.first(5).map do |t|
+          {
+            date: t.date.strftime("%y/%m/%d"),
+            result: t.result,
+            favorite_score: t.favorite_score
+          }
+        end
+      }
+    end
 
     require "will_paginate/array"
-    @favorite_foods = unique_foods.paginate(page: params[:page], per_page: params[:per_page] || 10)
+    @favorite_foods = @favorite_foods.sort_by { |f| f[:results].first[:favorite_score] }.reverse.paginate(page: params[:page], per_page: params[:per_page] || 10)
+
+
+    # trackers = trackers.order(favorite_score: :desc)
+
+    # unique_foods = trackers.each_with_object({}) do |tracker, hash|
+    #   normalized_description = tracker.description.to_s.gsub(/\s*[xX]\d+\z/, "").strip
+    #   key = [ tracker.brand, normalized_description ]
+    #   hash[key] ||= tracker
+    # end.values
+
+    # require "will_paginate/array"
+    # @favorite_foods = unique_foods.paginate(page: params[:page], per_page: params[:per_page] || 10)
 
     respond_to do |format|
       format.html
