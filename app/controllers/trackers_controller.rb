@@ -206,11 +206,6 @@ class TrackersController < ApplicationController
     end
   end
 
-  def search_food
-    @search_results = @pet.trackers.where("brand ILIKE ? OR description ILIKE ?", "%#{params[:query]}%", "%#{params[:query]}%")
-    render json: @search_results.to_json, status: :ok
-  end
-
   private
     def set_pet
       @pet = Pet.find(params[:pet_id])
