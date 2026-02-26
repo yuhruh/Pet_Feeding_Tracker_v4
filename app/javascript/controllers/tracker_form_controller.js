@@ -96,7 +96,7 @@ export default class extends Controller {
     filteredFood.forEach(food => {
       const option = document.createElement('option');
       option.value = food.id;
-      option.text = `${food.brand} ${food.description}: Favorite Score: ${food.favorite_score} - Last Feed Date: ${food.date}`;
+      option.text = `${food.brand} ${food.description}: Favorite Score: ${food.results[0].favorite_score} - Last Feed Date: ${food.results[0].date}`;
       this.wetFoodSelectTarget.add(option);
     })
 
