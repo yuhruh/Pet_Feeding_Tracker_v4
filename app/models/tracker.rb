@@ -34,31 +34,30 @@ class Tracker < ApplicationRecord
   end
 
   def update_dry_food_used_amount
-    if dry_food
-      total_used_amount = dry_food.trackers.sum(:amount)
-      left_amount = dry_food.amount - total_used_amount
-      trackers_count = dry_food.trackers.count.to_i
+    return unless dry_food
 
-      if trackers_count > 0
-        average_used_amount = total_used_amount / trackers_count.to_f
-        days_remaining = (left_amount / average_used_amount).to_i rescue nil
-        expected_running_out = days_remaining ? dry_food.created_at + days_remaining : nil
+    dry_food.with_lock do
+      total_consumed = dry_food.trackers.sum(:amount)
+      remaining_food = dry_food.amount - total_consumed
+      
+      daily_sums = dry_food.trackers.group(:date).sum(:amount).values
 
-        dry_food.update_columns(
-          total_ate_amount: total_used_amount,
-          used_amount: amount,
-          left_amount: left_amount,
-          average_used_amount: average_used_amount.round(2),
-          days_remaining: expected_running_out
-        )
-      else
-        dry_food.update_columns(
-          used_amount: total_used_amount,
-          left_amount: left_amount,
-          average_used_amount: 0,
-          days_remaining: nil
-        )
+      if daily_sums.any?
+        avg_daily_consumption = daily_sums.sum / daily_sums.size.to_f
+
+        days_left = (remaining_food / avg_daily_consumption).to_i rescue 0
+        expected_end_date = Time.current + days_left.days
+      else 
+        avg_daily_consumption = 0
+        expected_end_date = nil
       end
+
+      dry_food.update_columns(
+        total_ate_amount: total_consumed,
+        left_amount: [remaining_food, 0].max, # ensure don't show negative food
+        average_used_amount: avg_daily_consumption.round(2),
+        days_remaining: expected_end_date
+      )
     end
   end
 
