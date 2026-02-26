@@ -39,7 +39,7 @@ class Tracker < ApplicationRecord
     dry_food.with_lock do
       total_consumed = dry_food.trackers.sum(:amount)
       remaining_food = dry_food.amount - total_consumed
-      
+
       daily_sums = dry_food.trackers.group(:date).sum(:amount).values
 
       if daily_sums.any?
@@ -47,14 +47,14 @@ class Tracker < ApplicationRecord
 
         days_left = (remaining_food / avg_daily_consumption).to_i rescue 0
         expected_end_date = Time.current + days_left.days
-      else 
+      else
         avg_daily_consumption = 0
         expected_end_date = nil
       end
 
       dry_food.update_columns(
         total_ate_amount: total_consumed,
-        left_amount: [remaining_food, 0].max, # ensure don't show negative food
+        left_amount: [ remaining_food, 0 ].max, # ensure don't show negative food
         average_used_amount: avg_daily_consumption.round(2),
         days_remaining: expected_end_date
       )
