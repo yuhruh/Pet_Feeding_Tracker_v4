@@ -517,6 +517,7 @@ en:
     left_amount_controller:
       greater_than_alert: "Should not greater than %{amount}g."
       valid_amount: "%{amount}g is valid."
+      total_ate: "Total Ate: %{amount}(g)"
     tracker_form_controller:
       left_in_storage: "Left %{amount} g"
       should_restock: "should restock"

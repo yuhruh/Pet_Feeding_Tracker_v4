@@ -3,6 +3,7 @@ export default {
     "javascript": {
       "left_amount_controller": {
         "greater_than_alert": "Should not greater than %{amount}g.",
+        "total_ate": "Total Ate: %{amount}(g)",
         "valid_amount": "%{amount}g is valid."
       },
       "tracker_form_controller": {
