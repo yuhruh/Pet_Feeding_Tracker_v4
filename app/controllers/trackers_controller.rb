@@ -185,12 +185,14 @@ class TrackersController < ApplicationController
       clean_description = tracker.description.to_s.gsub(/\s*[xX]\d+\z/, "").strip
       [ tracker.food_type, tracker.brand, clean_description ]
     end.map do |(food_type, brand, description), group_trackers|
+      unique_daily_results = group_trackers.sort_by { |t| t.favorite_score }.reverse
+                                          .uniq { |t| t.date }
       {
         food_type: food_type,
         brand: brand,
         description: description,
         count: group_trackers.size,
-        results: group_trackers.first(5).map do |t|
+        results: unique_daily_results.first(5).sort_by { |t| t.date }.reverse.map do |t|
           {
             date: t.date.strftime("%y/%m/%d"),
             result: t.result,
