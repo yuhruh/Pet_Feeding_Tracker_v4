@@ -517,6 +517,7 @@ zh-TW:
     left_amount_controller:
       greater_than_alert: "不應超過 %{amount} 克。"
       valid_amount: "%{amount} 克是有效數量。"
+      total_ate: "總共吃: %{amount}(克)"
     tracker_form_controller:
       left_in_storage: "剩下 %{amount} 克"
       should_restock: "應該補貨了"

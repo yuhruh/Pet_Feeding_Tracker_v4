@@ -160,6 +160,7 @@
     "javascript": {
       "left_amount_controller": {
         "greater_than_alert": "%{amount}g を超えることはできません。",
+        "total_ate": "完食：%{amount}(g)",
         "valid_amount": "%{amount}g は有効です。"
       },
       "tracker_form_controller": {
@@ -316,6 +317,7 @@
     "javascript": {
       "left_amount_controller": {
         "greater_than_alert": "不應超過 %{amount} 克。",
+        "total_ate": "總共吃: %{amount}(克)",
         "valid_amount": "%{amount} 克是有效數量。"
       },
       "tracker_form_controller": {

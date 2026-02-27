@@ -517,6 +517,7 @@ ja:
     left_amount_controller:
       greater_than_alert: "%{amount}g を超えることはできません。"
       valid_amount: "%{amount}g は有効です。"
+      total_ate: "完食：%{amount}(g)"
     tracker_form_controller:
       left_in_storage: "残り %{amount} g"
       should_restock: "補充が必要です"
