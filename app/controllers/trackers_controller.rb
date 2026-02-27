@@ -182,8 +182,9 @@ class TrackersController < ApplicationController
     end
 
     @favorite_foods = trackers.group_by do |tracker|
-      clean_description = tracker.description.to_s.gsub(/\s*[xX]\d+\z/, "").strip
-      [ tracker.food_type, tracker.brand, clean_description ]
+      clean_description = tracker.description.to_s.gsub(/\s*[xX]\d+\z/, "").squish.downcase
+
+      [ tracker.food_type.to_s.downcase, tracker.brand.to_s.downcase, clean_description ]
     end.map do |(food_type, brand, description), group_trackers|
       unique_daily_results = group_trackers.sort_by { |t| t.favorite_score }.reverse
                                           .uniq { |t| t.date }
