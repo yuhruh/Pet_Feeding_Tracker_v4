@@ -93,9 +93,12 @@ export default class extends Controller {
   updateWetFoodOptions(foods) {
     this.wetFoodSelectTarget.innerHTML = `<option value="">${this.i18n.t('trackers.form.select_favorite_or_enter_manually')}</option>`;
     const filteredFood = foods.filter(food => food.food_type === "wet")
+
     filteredFood.forEach(food => {
       const option = document.createElement('option');
-      option.value = food.id;
+      
+
+      option.value = food.results[0].id
       option.text = `${food.brand} ${food.description}: Favorite Score: ${food.results[0].favorite_score} - Last Feed Date: ${food.results[0].date}`;
       this.wetFoodSelectTarget.add(option);
     })

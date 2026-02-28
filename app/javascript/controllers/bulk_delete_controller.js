@@ -1,12 +1,23 @@
-document.addEventListener("DOMContentLoaded", function() {
-  const selectAllCheckbox = document.getElementById("select-all");
-  const trackerCheckboxes = document.querySelectorAll(".tracker-checkbox");
+import { Controller } from "@hotwired/stimulus"
 
-  if (selectAllCheckbox) {
-    selectAllCheckbox.addEventListener("change", function() {
-      trackerCheckboxes.forEach(function(checkbox) {
-        checkbox.checked = selectAllCheckbox.checked;
-      });
-    });
+export default class extends Controller {
+  static targets = [ "selectAll", "checkbox" ]
+
+  connect() {
+    this.updateSelectAll()
   }
-});
+
+  toggleAll() {
+    this.checkboxTargets.forEach(checkbox => {
+      checkbox.checked = this.selectAllTarget.checked
+    })
+  }
+
+  updateSelectAll() {
+    const allChecked = this.checkboxTargets.every(checkbox => checkbox.checked)
+    const someChecked = this.checkboxTargets.some(checkbox => checkbox.checked)
+
+    this.selectAllTarget.checked = allChecked
+    this.selectAllTarget.indeterminate = !allChecked && someChecked
+  }
+}

@@ -19,7 +19,7 @@ class Tracker < ApplicationRecord
   validates :left_amount, numericality: true, comparison: { less_than_or_equal_to: :amount }, on: :update, allow_nil: true
   validate :amount_less_than_dry_food_left_amount, if: :dry_food?
 
-  after_commit :update_dry_food_used_amount, on: [ :create, :update, :destroy ]
+
 
   private
 
@@ -36,27 +36,42 @@ class Tracker < ApplicationRecord
     end
   end
 
-  def update_dry_food_used_amount
-    return unless dry_food
+  after_commit :update_dry_food_on_create, on: :create
+  after_commit :update_dry_food_on_update, on: :update
+  after_commit :update_dry_food_on_destroy, on: :destroy
 
-    dry_food.with_lock do
-      stats = dry_food.trackers.select("SUM(amount) as total, AVG(amount) as avg").take
-      total_consumed = stats.total || 0
+  private
 
-      daily_sums = dry_food.trackers.group(:date).sum(:amount).values
-      avg_daily = daily_sums.any? ? (daily_sums.sum / daily_sums.size.to_f).round(2) : 0
+  def dry_food?
+    (kibble? || freeze_dried?) && dry_food.present?
+  end
 
-      remaining = [ dry_food.amount - total_consumed, 0 ].max
-      days_left = avg_daily > 0 ? (remaining / avg_daily).to_i : 0
-      end_date = avg_daily > 0 ? Time.current + days_left.days : nil
+  def amount_less_than_dry_food_left_amount
+    return unless amount.present? && dry_food
 
-      dry_food.update_columns(
-        total_ate_amount: total_consumed,
-        left_amount: remaining,
-        average_used_amount: avg_daily,
-        days_remaining: end_date
-      )
+    dry_food.reload(lock: true)
+    if dry_food.left_amount < amount
+      errors.add(:amount, :greater_than_left_amount, left_amount: dry_food.left_amount)
     end
+  end
+
+  def update_dry_food_on_create
+    dry_food&.update_used_amount!
+  end
+
+  def update_dry_food_on_update
+    # If the dry_food association changed, update the old one
+    if dry_food_id_previously_changed?
+      old_dry_food_id = dry_food_id_previous_value
+      DryFood.find_by(id: old_dry_food_id)&.update_used_amount!
+    end
+    # Always update the new one (or the current one if it didn't change but other tracker attributes did)
+    dry_food&.update_used_amount!
+  end
+
+  def update_dry_food_on_destroy
+    # On destroy, the association is still available in memory
+    dry_food&.update_used_amount!
   end
 
   def self.to_csv

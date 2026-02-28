@@ -1,10 +1,12 @@
-<div class="container mx-auto w-full shadow-lg rounded-xl mb-4">
+<div class="container mx-auto w-full shadow-lg rounded-xl mb-4" data-controller="bulk-delete">
   <div class="flex flex-col gap-8 justify-center mt-4 lg:flex-row lg:items-center">
     <div class="hidden lg:block overflow-x-auto">
       <table class="table-auto mb-2 px-2 w-full dark:bg-slate-100">
         <thead>
           <tr class="border-b-4 bg-gray-100 dark:bg-black">
-            <th class="capitalize text-sm text-center p-2 dark:text-white"><input type="checkbox" id="select-all"></th>
+            <th class="capitalize text-sm text-center p-2 dark:text-white">
+              <input type="checkbox" data-bulk-delete-target="selectAll" data-action="bulk-delete#toggleAll">
+            </th>
             <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.number') %></th>
             <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.date') %></th>
             <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.time') %></th>
@@ -28,7 +30,7 @@
           <% @trackers.select(&:persisted?).each_with_index do |record, idx| %>
             <tr id="<%= dom_id(record) %>" class="<%= tracker_row_class(record) %>">
               <td class="capitalize text-sky-700 text-sm text-center p-2">
-                <%= check_box_tag "tracker_ids[]", record.id, false, class: "tracker-checkbox" %>
+                <%= check_box_tag "tracker_ids[]", record.id, false, class: "tracker-checkbox", "data-bulk-delete-target": "checkbox", "data-action": "bulk-delete#updateSelectAll" %>
               </td>
               <td class="capitalize text-sky-700 text-sm text-center p-2 font-semibold p-2"><%= idx+1 %></td>
               <td class="capitalize text-sky-700 text-sm text-center p-2"><%= record.date.strftime("%Y-%m-%d") %></td>
@@ -71,9 +73,13 @@
       <table class="table-auto mb-2">
         <tbody>
           <tr class="border-b bg-gray-100">
-            <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap"><input type="checkbox" id="select-all"></th>
+            <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">
+              <input type="checkbox" data-bulk-delete-target="selectAll" data-action="bulk-delete#toggleAll">
+            </th>
             <% @trackers.select(&:persisted?).each do |record| %>
-              <td class="<%= tracker_row_class(record) %> capitalize text-sky-700 text-sm text-center font-semibold p-2"><%= check_box_tag "tracker_ids[]", record.id, false, class: "tracker-checkbox" %></td>
+              <td class="<%= tracker_row_class(record) %> capitalize text-sky-700 text-sm text-center font-semibold p-2">
+                <%= check_box_tag "tracker_ids[]", record.id, false, class: "tracker-checkbox", "data-bulk-delete-target": "checkbox", "data-action": "bulk-delete#updateSelectAll" %>
+              </td>
             <% end %>
           </tr>
           <tr class="border-b bg-gray-100">
