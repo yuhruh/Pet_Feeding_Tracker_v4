@@ -61,8 +61,8 @@ class Tracker < ApplicationRecord
 
   def update_dry_food_on_update
     # If the dry_food association changed, update the old one
-    if dry_food_id_previously_changed?
-      old_dry_food_id = dry_food_id_previous_value
+    if previous_changes.key?(:dry_food_id)
+      old_dry_food_id = previous_changes[:dry_food_id].first
       DryFood.find_by(id: old_dry_food_id)&.update_used_amount!
     end
     # Always update the new one (or the current one if it didn't change but other tracker attributes did)
