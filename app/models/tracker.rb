@@ -28,7 +28,10 @@ class Tracker < ApplicationRecord
   end
 
   def amount_less_than_dry_food_left_amount
-    if amount.present? && dry_food.left_amount < amount
+    return unless amount.present? && dry_food
+
+    dry_food.reload(lock: true)
+    if dry_food.left_amount < amount
       errors.add(:amount, :greater_than_left_amount, left_amount: dry_food.left_amount)
     end
   end
@@ -37,26 +40,21 @@ class Tracker < ApplicationRecord
     return unless dry_food
 
     dry_food.with_lock do
-      total_consumed = dry_food.trackers.sum(:amount)
-      remaining_food = dry_food.amount - total_consumed
+      stats = dry_food.trackers.select("SUM(amount) as total, AVG(amount) as avg").take
+      total_consumed = stats.total || 0
 
       daily_sums = dry_food.trackers.group(:date).sum(:amount).values
+      avg_daily = daily_sums.any? ? (daily_sums.sum / daily_sums.size.to_f).round(2) : 0
 
-      if daily_sums.any?
-        avg_daily_consumption = daily_sums.sum / daily_sums.size.to_f
-
-        days_left = (remaining_food / avg_daily_consumption).to_i rescue 0
-        expected_end_date = Time.current + days_left.days
-      else
-        avg_daily_consumption = 0
-        expected_end_date = nil
-      end
+      remaining = [dry_food.amount - total_consumed, 0].max
+      days_left = avg_daily > 0 ? (remaining / avg_daily).to_i : 0
+      end_date = avg_daily > 0 ? Time.current + days_left.days : nil
 
       dry_food.update_columns(
         total_ate_amount: total_consumed,
-        left_amount: [ remaining_food, 0 ].max, # ensure don't show negative food
-        average_used_amount: avg_daily_consumption.round(2),
-        days_remaining: expected_end_date
+        left_amount: remaining,
+        average_used_amount: avg_daily,
+        days_remaining: end_date
       )
     end
   end
@@ -65,7 +63,7 @@ class Tracker < ApplicationRecord
     require "csv"
     CSV.generate(headers: true, col_sep: ";") do |csv|
       csv << [ "date", "feed_time", "come_back_to_eat", "food_type", "brand", "description", "amount", "left_amount", "total_ate_amount", "hungry", "love", "result", "note", "weight" ]
-      all.each do |tracker|
+      find_each do |tracker|
         csv << [
           tracker.date,
           tracker.feed_time&.strftime("%H:%M"),
