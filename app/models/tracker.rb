@@ -46,7 +46,7 @@ class Tracker < ApplicationRecord
       daily_sums = dry_food.trackers.group(:date).sum(:amount).values
       avg_daily = daily_sums.any? ? (daily_sums.sum / daily_sums.size.to_f).round(2) : 0
 
-      remaining = [dry_food.amount - total_consumed, 0].max
+      remaining = [ dry_food.amount - total_consumed, 0 ].max
       days_left = avg_daily > 0 ? (remaining / avg_daily).to_i : 0
       end_date = avg_daily > 0 ? Time.current + days_left.days : nil
 
