@@ -85,23 +85,23 @@
   </div>
 
   <div id="trackers" class="container mx-auto flex flex-col divide-y divide-gray-200 space-y-5">
-    <%= form_with url: pet_trackers_path(@pet), method: :get do |form| %>
+    <%= form_with url: pet_trackers_path(@pet), method: :get, data: { controller: "filter-form" } do |form| %>
       <% if @trackers.any? %>
         <div class="flex flex-row gap-4">
           <div class="flex items-center mt-4">
             <%= form.label :food_type, "Food Type", class: "text-sm font-medium text-gray-700 p-4 dark:text-gray-100 capitalize md:text-base whitespace-nowrap" %>
-            <%= form.text_field :food_type, value: params[:food_type], class: "block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black" %>
+            <%= form.text_field :food_type, value: params[:food_type], class: "block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black", data: { action: "input->filter-form#submit" } %>
           </div>
           <div class="flex items-center mt-4">
             <%= form.label :brand, "Brand", class: "text-sm font-medium text-gray-700 p-4 dark:text-gray-100 capitalize md:text-base" %>
-            <%= form.text_field :brand, value: params[:brand], class: "block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black" %>
+            <%= form.text_field :brand, value: params[:brand], class: "block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black", data: { action: "input->filter-form#submit" } %>
           </div>
           <div class="flex items-center mt-4">
             <%= form.label :description, "Description", class: "text-sm font-medium text-gray-700 p-4 dark:text-gray-100 capitalize md:text-base" %>
-            <%= form.text_field :description, value: params[:description], class: "block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black" %>
+            <%= form.text_field :description, value: params[:description], class: "block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black", data: { action: "input->filter-form#submit" } %>
           </div>
-          <div class="flex items-center mt-6 ml-4">
-            <%= form.submit "Search", class: "p-1.5 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700" %>
+          <div class="flex items-center mt-4">
+            <%= link_to "Clear", pet_trackers_path(@pet), class: "py-2 px-3 mt-2 rounded-md shadow-lg font-semibold border-2 border-gray-300 text-gray-700 bg-gray-200 hover:bg-gray-300 hover:border-gray-400 hover:text-gray-600 hover:bg-gray-100 hover:scale-110" %>
           </div>
         </div>
       <% end %>
@@ -115,6 +115,9 @@
         <%= render 'tracker' %>
       <% else %>
         <p class="text-lg text-center my-10"><%= t('trackers.tracker.no_trackers_found', petname: @pet.petname) %></p>
+        <div class="flex justify-center mb-4 items-center">
+          <%= link_to "Back to #{@pet.petname.capitalize}'s Trackers", pet_trackers_path(@pet, page: params[:page]), class: "text-center rounded-md px-3.5 py-2.5 text-white bg-grayishBlue shadow-md hover:bg-white hover:text-grayishBlue hover:border-2 hover:border-grayishBlue hover:scale-110 inline-block font-medium cursor-pointer" %>
+        </div>
       <% end %>
     <% end %>
   </div>
