@@ -37,7 +37,6 @@ class Tracker < ApplicationRecord
   end
 
   after_commit :update_dry_food_on_create, on: :create
-  after_commit :update_dry_food_on_update, on: :update
   after_commit :update_dry_food_on_destroy, on: :destroy
 
   private
@@ -56,16 +55,6 @@ class Tracker < ApplicationRecord
   end
 
   def update_dry_food_on_create
-    dry_food&.update_used_amount!
-  end
-
-  def update_dry_food_on_update
-    # If the dry_food association changed, update the old one
-    if previous_changes.key?(:dry_food_id)
-      old_dry_food_id = previous_changes[:dry_food_id].first
-      DryFood.find_by(id: old_dry_food_id)&.update_used_amount!
-    end
-    # Always update the new one (or the current one if it didn't change but other tracker attributes did)
     dry_food&.update_used_amount!
   end
 
