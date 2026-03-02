@@ -60,7 +60,7 @@ class Tracker < ApplicationRecord
 
     if saved_change_to_dry_food_id?
       previous_bag_id = saved_changes[:dry_food_id].first
-      
+
       if previous_bag_id.present?
         DryFood.find_by(id: previous_bag_id)&.update_used_amount!
       end
