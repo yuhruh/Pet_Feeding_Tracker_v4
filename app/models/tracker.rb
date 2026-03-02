@@ -36,8 +36,9 @@ class Tracker < ApplicationRecord
     end
   end
 
-  after_commit :update_dry_food_on_create, on: :create
-  after_commit :update_dry_food_on_destroy, on: :destroy
+  # after_commit :update_dry_food_on_create, on: :create
+  # after_commit :update_dry_food_on_destroy, on: :destroy
+  after_commit :sync_dry_food_inventory
 
   private
 
@@ -54,14 +55,27 @@ class Tracker < ApplicationRecord
     end
   end
 
-  def update_dry_food_on_create
+  def sync_dry_food_inventory
     dry_food&.update_used_amount!
+
+    if saved_change_to_dry_food_id?
+      previous_bag_id = saved_changes[:dry_food_id].first
+      
+      if previous_bag_id.present?
+        DryFood.find_by(id: previous_bag_id)&.update_used_amount!
+      end
+    end
   end
 
-  def update_dry_food_on_destroy
-    # On destroy, the association is still available in memory
-    dry_food&.update_used_amount!
-  end
+
+  # def update_dry_food_on_create
+  #   dry_food&.update_used_amount!
+  # end
+
+  # def update_dry_food_on_destroy
+  #   # On destroy, the association is still available in memory
+  #   dry_food&.update_used_amount!
+  # end
 
   def self.to_csv
     require "csv"

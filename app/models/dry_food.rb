@@ -12,15 +12,16 @@ class DryFood < ApplicationRecord
 
   def update_used_amount!
     with_lock do
-      total_consumed = trackers.sum(:amount)
+      total_poured = trackers.sum(:amount)
       daily_sums = trackers.group(:date).sum(:amount).values
       avg_daily = daily_sums.any? ? (daily_sums.sum.to_f / daily_sums.size).round(2) : 0
-      remaining = [ amount - total_consumed, 0 ].max
+      remaining = [ amount - total_poured, 0 ].max
+
       days_left = avg_daily > 0 ? (remaining / avg_daily).to_i : 0
-      end_date = avg_daily > 0 ? Time.current + days_left.days : nil
+      end_date = avg_daily > 0 ? Date.current + days_left.days : nil
+
       update_columns(
-        total_ate_amount: total_consumed,
-        used_amount: amount,
+        total_ate_amount: total_poured,
         left_amount: remaining,
         average_used_amount: avg_daily,
         days_remaining: end_date
