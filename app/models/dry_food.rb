@@ -14,10 +14,13 @@ class DryFood < ApplicationRecord
     with_lock do
       current_trackers = trackers.reload
       total_poured = current_trackers.sum(:amount)
+      total_poured_find = current_trackers.where(dry_food_id: id).sum(:amount)
 
       Rails.logger.info "[DryFood Inventory] Bag ID: #{id} | Total Trackers: #{current_trackers.count}"
       Rails.logger.info "[DryFood Inventory] Individual Amounts: #{current_trackers.pluck(:amount)}"
       Rails.logger.info "[DryFood Inventory] Calculated Sum: #{total_poured}"
+      Rails.logger.info "[DryFood Inventory] Calculated Sum: #{total_poured_find}"
+
 
       daily_sums = trackers.group(:date).sum(:amount).values
       avg_daily = daily_sums.any? ? (daily_sums.sum.to_f / daily_sums.size).round(2) : 0
