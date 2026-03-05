@@ -12,10 +12,11 @@ class DryFood < ApplicationRecord
 
   def update_used_amount!
     with_lock do
-      total_poured = trackers.reload.unscoped.where(dry_food_id: id).sum(:amount)
+      current_trackers = trackers.reload
+      total_poured = current_trackers.unscoped.where(dry_food_id: id).sum(:amount)
 
-      Rails.logger.info "[DryFood Inventory] Bag ID: #{id} | Total Trackers: #{trackers.reload.unscoped.count}"
-      Rails.logger.info "[DryFood Inventory] Individual Amounts: #{trackers.reload.unscoped.pluck(:amount)}"
+      Rails.logger.info "[DryFood Inventory] Bag ID: #{id} | Total Trackers: #{current_trackers.count}"
+      Rails.logger.info "[DryFood Inventory] Individual Amounts: #{current_trackers.pluck(:amount)}"
       Rails.logger.info "[DryFood Inventory] Calculated Sum: #{total_poured}"
 
       daily_sums = trackers.group(:date).sum(:amount).values
