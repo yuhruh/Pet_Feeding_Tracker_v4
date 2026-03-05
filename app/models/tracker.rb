@@ -38,7 +38,7 @@ class Tracker < ApplicationRecord
 
   # after_commit :update_dry_food_on_create, on: :create
   # after_commit :update_dry_food_on_destroy, on: :destroy
-  after_commit :sync_dry_food_inventory, on: [ :create, :destroy, :update ]
+  after_commit :sync_dry_food_inventory, on: [ :create, :destroy ]
 
   private
 
