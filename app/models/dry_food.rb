@@ -18,7 +18,7 @@ class DryFood < ApplicationRecord
       Rails.logger.info "[DryFood Inventory] Bag ID: #{id} | Total Trackers: #{relevant_trackers.count}"
       Rails.logger.info "[DryFood Inventory] Individual Amounts: #{relevant_trackers.pluck(:amount)}"
       Rails.logger.info "[DryFood Inventory] Calculated Sum: #{total_poured}"
-      Rails.logger.info "current_date: #{set_current_date}"
+      Rails.logger.info "current_date: #{Date.current}"
 
       daily_sums = relevant_trackers.group(:date).sum(:amount).values
       avg_daily = daily_sums.any? ? (daily_sums.sum.to_f / daily_sums.size).round(2) : 0
