@@ -46,9 +46,14 @@ class TrackersController < ApplicationController
       @all_trackers = @all_trackers.where(trackers_table[:description].matches("%#{params[:description]}%"))
     end
 
-    # @trackers = @all_trackers.paginate(page: params[:page], per_page: params[:per_page] || 10)
     page = params[:page].blank? ? 1 : params[:page]
-    @trackers = @all_trackers.reorder("date DESC, feed_time DESC").paginate(page: page, per_page: params[:per_page].to_i > 0 ? params[:per_page] : 10)
+    adapter_type = Rails.configuration.database_configuration[Rails.env]["adapter"]
+    order_sql = if adapter_type == "sqlite3"
+      "date DESC, feed_time DESC"
+    else
+      "date DESC, (feed_time AT TIME ZONE 'UTC' AT TIME ZONE '#{Current.user.timezone}') DESC"
+    end
+    @trackers = @all_trackers.reorder(Arel.sql(order_sql)).paginate(page: page, per_page: params[:per_page].to_i > 0 ? params[:per_page] : 10)
 
     respond_to do |format|
       format.html
