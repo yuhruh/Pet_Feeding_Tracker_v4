@@ -48,7 +48,7 @@ class TrackersController < ApplicationController
 
     # @trackers = @all_trackers.paginate(page: params[:page], per_page: params[:per_page] || 10)
     page = params[:page].blank? ? 1 : params[:page]
-    @trackers = @all_trackers.reorder("date DESC, feed_time DESC").paginate(page: page, per_page: params[:per_page].to_i > 0 ? params[:per_page] : 10)
+    @trackers = @all_trackers.reorder(Arel.sql("date DESC, (feed_time AT TIME ZONE 'UTC' AT TIME ZONE '#{Current.user.timezone}') DESC")).paginate(page: page, per_page: params[:per_page].to_i > 0 ? params[:per_page] : 10)
 
     respond_to do |format|
       format.html
