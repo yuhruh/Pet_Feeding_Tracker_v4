@@ -129,10 +129,7 @@ class TrackersController < ApplicationController
 
     respond_to do |format|
       if @tracker.save
-        per_page = params[:per_page] || 10
-        total_trackers = @pet.trackers.count
-        page = (total_trackers.to_f / per_page.to_i).ceil
-        format.html { redirect_to pet_trackers_path(@pet, page: page), notice: t(".create.notice") }
+        format.html { redirect_to pet_trackers_path(@pet, page: params[:tracker][:page]), notice: t(".create.notice") }
         format.json { render :show, status: :created, location: pet_trackers_path }
       else
         format.html { render :new, status: :unprocessable_entity }
