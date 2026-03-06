@@ -28,7 +28,7 @@ class TrackersControllerTest < ActionDispatch::IntegrationTest
     per_page = 10 # Default per_page
     total_trackers = @pet.trackers.count
     expected_page = (total_trackers.to_f / per_page).ceil
-    assert_redirected_to pet_trackers_url(@pet, page: expected_page, locale: I18n.default_locale)
+    assert_redirected_to pet_trackers_url(@pet, page: expected_page > 1 ? expected_page : nil, locale: I18n.default_locale)
   end
 
   # test "should show tracker" do
