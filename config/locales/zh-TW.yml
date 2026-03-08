@@ -440,6 +440,12 @@ zh-TW:
       no_data_for_chart: "沒有可用的數據來顯示圖表。"
       confirm_delete: "您確定要刪除所選的飲食紀錄嗎？"
       delete_selected: "刪除所選項目"
+      food_type: "食物類型"
+      brand: "品牌"
+      description: "描述"
+      note: "備註"
+      clear: "清除"
+      no_trackers_found: "找不到%{petname}的紀錄。"
     import:
       alert: "只能使用CSV檔案"
       notice: "%{petname}的飲食紀錄已匯入！"

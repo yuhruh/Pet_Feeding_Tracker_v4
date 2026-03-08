@@ -440,6 +440,12 @@ en:
       no_data_for_chart: "No tracking data available to display the chart."
       confirm_delete: "Are you sure you want to delete the selected trackers?"
       delete_selected: "Delete Selected"
+      food_type: "Food Type"
+      brand: "Brand"
+      description: "Description"
+      note: "Note"
+      clear: "Clear"
+      no_trackers_found: "No %{petname}'s trackers found."
     import:
       alert: "Only CSV please"
       notice: "%{petname}'s trackers imported!"
