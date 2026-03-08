@@ -57,7 +57,7 @@
         <%= form.label :brand, t('trackers.form.brand'), class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.text_field :brand, value: @tracker.brand, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full dark:text-black", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:brand].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:brand].any?}], readonly: true %>
+        <%= form.text_field :brand, value: @tracker.brand, class: ["block shadow-sm bg-gray-100 rounded-md border px-3 py-2 mt-2 w-full dark:text-black", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:brand].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:brand].any?}] %>
         <span class="mt-2 text-sm italic">Brand is readonly, can not update on edit form</span>
       </div>
     </div>
@@ -67,7 +67,7 @@
         <%= form.label :description, t('trackers.form.description'), class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.text_field :description, value: @tracker.description, class: ["block shadow-sm bg-gray-100 rounded-md border px-3 py-2 mt-2 w-full dark:text-black", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:description].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:description].any?}], readonly: true %>
+        <%= form.text_field :description, value: @tracker.description, class: ["block shadow-sm bg-gray-100 rounded-md border px-3 py-2 mt-2 w-full dark:text-black", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:description].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:description].any?}] %>
         <span class="mt-2 text-sm italic">Description is readonly, can not update on edit form</span>
       </div>
     </div>
