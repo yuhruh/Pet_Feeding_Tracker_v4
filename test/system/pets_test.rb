@@ -49,6 +49,7 @@ class PetsTest < ApplicationSystemTestCase
     visit pet_url(locale: I18n.default_locale, id: @pet.id)
     accept_confirm { click_on "Destroy #{@pet.petname}'s profile and records" }
 
+    assert_selector "h1", text: /#{@user.username}'s cat list/i
     assert_selector ".alert-message", text: "Cat #{@pet.petname} was successfully destroyed."
   end
 end
