@@ -17,7 +17,7 @@ class Tracker < ApplicationRecord
   validates :description, presence: true, length: { minimum: 2, maximum: 100 }
   validates :amount, numericality: true, comparison: { greater_than: 0 }
   validates :left_amount, numericality: true, comparison: { less_than_or_equal_to: :amount }, on: :update, allow_nil: true
-  validate :amount_less_than_dry_food_left_amount, if: :dry_food?
+  # validate :amount_less_than_dry_food_left_amount, if: :dry_food?
 
 
 
@@ -27,14 +27,14 @@ class Tracker < ApplicationRecord
     (kibble? || freeze_dried?) && dry_food.present?
   end
 
-  def amount_less_than_dry_food_left_amount
-    return unless amount.present? && dry_food
+  # def amount_less_than_dry_food_left_amount
+  #   return unless amount.present? && dry_food
 
-    dry_food.reload(lock: true)
-    if dry_food.left_amount > amount
-      errors.add(:amount, :greater_than_left_amount, left_amount: dry_food.left_amount)
-    end
-  end
+  #   dry_food.reload(lock: true)
+  #   if dry_food.left_amount > amount
+  #     errors.add(:amount, :greater_than_left_amount, left_amount: dry_food.left_amount)
+  #   end
+  # end
 
   # after_commit :update_dry_food_on_create, on: :create
   # after_commit :update_dry_food_on_destroy, on: :destroy
