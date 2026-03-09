@@ -530,3 +530,10 @@ en:
       only_left_in_storage: "⚠️ Only %{amount}g left in storage."
       is_valid_amount: "%{amount}g is valid."
       select_wet_food: "Select a favorite or enter manually"
+  activerecord:
+    errors:
+      models:
+        tracker:
+          attributes:
+            amount:
+              greater_than_left_amount: "must be less than or equal to the amount left in storage, which is %{left_amount}g."

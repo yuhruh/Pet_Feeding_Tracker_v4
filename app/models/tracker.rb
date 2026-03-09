@@ -31,7 +31,7 @@ class Tracker < ApplicationRecord
     return unless amount.present? && dry_food
 
     dry_food.reload(lock: true)
-    if dry_food.left_amount < amount
+    if dry_food.left_amount > amount
       errors.add(:amount, :greater_than_left_amount, left_amount: dry_food.left_amount)
     end
   end

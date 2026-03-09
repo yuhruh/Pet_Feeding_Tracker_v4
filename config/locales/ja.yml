@@ -530,3 +530,10 @@ ja:
       only_left_in_storage: "⚠️ 在庫は残り %{amount}g です。"
       is_valid_amount: "%{amount}g は有効な量です。"
       select_wet_food: "お気に入りを選択するか、手動で入力してください"
+  activerecord:
+    errors:
+      models:
+        tracker:
+          attributes:
+            amount:
+              greater_than_left_amount: "在庫の残量（%{left_amount}g）以下で入力してください。"

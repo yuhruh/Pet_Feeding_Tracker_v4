@@ -530,3 +530,10 @@ zh-TW:
       only_left_in_storage: "⚠️ 庫存僅剩 %{amount} 克。"
       is_valid_amount: "%{amount} 克是有效數量。"
       select_wet_food: "選擇一個最愛或手動輸入"
+  activerecord:
+    errors:
+      models:
+        tracker:
+          attributes:
+            amount:
+              greater_than_left_amount: "必須小於或等於庫存剩餘量，目前庫存剩餘 %{left_amount}g。"
