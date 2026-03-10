@@ -8,14 +8,14 @@ class TrackersController < ApplicationController
   def import
     file = params[:file]
     if file.nil? || file.content_type != "text/csv"
-      return redirect_to pet_trackers_path, alert: t(".import.alert")
+      return redirect_to pet_trackers_path(@pet, page: params[:page], per_page: params[:per_page]), alert: t(".import.alert")
     end
 
     importer = CsvImportTrackersService.new(@pet)
     if importer.call(file)
-      redirect_to pet_trackers_path, notice: t(".import.notice", petname: @pet.petname.capitalize)
+      redirect_to pet_trackers_path(@pet, page: params[:page], per_page: params[:per_page]), notice: t(".import.notice", petname: @pet.petname.capitalize)
     else
-      redirect_to pet_trackers_path, alert: importer.errors.join(", ")
+      redirect_to pet_trackers_path(@pet, page: params[:page], per_page: params[:per_page]), alert: importer.errors.join(", ")
     end
   end
 
@@ -51,13 +51,15 @@ class TrackersController < ApplicationController
     end
 
     page = params[:page].blank? ? 1 : params[:page]
+    session[:per_page] = params[:per_page] if params[:per_page].present?
+    per_page = session[:per_page] || 10
     adapter_type = Rails.configuration.database_configuration[Rails.env]["adapter"]
     order_sql = if adapter_type == "sqlite3"
       "date DESC, feed_time DESC"
     else
       "date DESC, (feed_time AT TIME ZONE 'UTC' AT TIME ZONE '#{Current.user.timezone}') DESC"
     end
-    @trackers = @all_trackers.reorder(Arel.sql(order_sql)).paginate(page: page, per_page: params[:per_page].to_i > 0 ? params[:per_page] : 10)
+    @trackers = @all_trackers.reorder(Arel.sql(order_sql)).paginate(page: page, per_page: per_page)
 
     respond_to do |format|
       format.html
@@ -211,7 +213,9 @@ class TrackersController < ApplicationController
     end
 
     require "will_paginate/array"
-    @favorite_foods = @favorite_foods.sort_by { |f| f[:results].first[:favorite_score] }.reverse.paginate(page: params[:page], per_page: params[:per_page] || 10)
+    session[:per_page] = params[:per_page] if params[:per_page].present?
+    per_page = session[:per_page] || 10
+    @favorite_foods = @favorite_foods.sort_by { |f| f[:results].first[:favorite_score] }.reverse.paginate(page: params[:page], per_page: per_page)
 
 
     # trackers = trackers.order(favorite_score: :desc)
@@ -234,7 +238,7 @@ class TrackersController < ApplicationController
   def bulk_delete
     @pet.trackers.where(id: params[:tracker_ids]).destroy_all
     respond_to do |format|
-      format.html { redirect_to pet_trackers_path(@pet), notice: t(".bulk_delete.notice") }
+      format.html { redirect_to pet_trackers_path(@pet, page: params[:page], per_page: params[:per_page]), notice: t(".bulk_delete.notice") }
       format.json { head :no_content }
     end
   end
