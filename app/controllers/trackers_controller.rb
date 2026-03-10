@@ -160,7 +160,7 @@ class TrackersController < ApplicationController
 
     respond_to do |format|
       if @tracker.save
-        format.html { redirect_to pet_trackers_path(@pet, page: params[:tracker][:page]), notice: t(".update.notice"), status: :see_other }
+        format.html { redirect_to pet_trackers_path(@pet, page: params[:page]), notice: t(".update.notice"), status: :see_other }
         format.json { render :show, status: :ok, location: [ @pet, :trackers ] }
       else
         format.html { render :edit, status: :unprocessable_entity }
