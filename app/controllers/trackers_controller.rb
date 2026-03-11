@@ -100,6 +100,17 @@ class TrackersController < ApplicationController
     # Using average for weight is safer than sum, in case multiple entries exist for one day.
     @weight = @all_trackers.where.not(weight: nil).group(:date).order(:date).average(:weight).transform_keys { |key| key.strftime("%y/%m/%d") }.transform_values(&:to_f)
 
+    weight_values = @weight.values
+    if weight_values.present?
+      min_val = weight_values.min
+      max_val = weight_values.max
+      @min_weight = [ 0, (min_val - 2) ].max.floor
+      @max_weight = (max_val + 2).ceil
+    else
+      @min_weight = 0
+      @max_weight = 15 # A default value
+    end
+
     @data = [
       { name: t(".chart.wet_food"), data: @wet_properties },
       { name: "Wet (Hotel)", data: @wet_hotel_properties },

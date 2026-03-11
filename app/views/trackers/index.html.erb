@@ -72,10 +72,10 @@
         },
         vAxes: {
           0 => {title: t('trackers.index.chart_v_axis_amount')},
-          1 => {title: t('trackers.index.chart_v_axis_weight'), viewWindow: {min: 0, max: 15}, gridlines: {color: 'transparent'}}
+          1 => {title: t('trackers.index.chart_v_axis_weight'), viewWindow: {min: @min_weight, max: @max_weight}, gridlines: {color: 'transparent'}}
         },
         legend: {position: 'top'},
-        titleTextStyle: {bold: true, fontSize: 20},
+        titleTextStyle: {bold: true, fontSize: 20} 
       } %>
     <% else %>
       <div class="text-center p-8 my-4 bg-gray-100 rounded-lg shadow-lg">
