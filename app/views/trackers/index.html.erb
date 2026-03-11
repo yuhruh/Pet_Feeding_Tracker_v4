@@ -38,7 +38,7 @@
     <div class="flex justify-end items-start mx-8">
       <%= form_with url: pet_trackers_path(@pet), method: :get, class: "flex items-center" do |form| %>
         <span class="mr-2"><%= t('trackers.index.items_per_page') %></span>
-        <%= form.select :per_page, options_for_select([5, 10, 20, 50], params[:per_page] || 10), {}, { onchange: 'this.form.submit()', class: "p-1 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700" } %>
+        <%= form.select :per_page, options_for_select([5, 10, 20, 50], (params[:per_page] || 10).to_i), {}, { onchange: 'this.form.submit()', class: "p-1 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700" } %>
       <% end %>
     </div>
   </div>
