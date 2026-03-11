@@ -47,7 +47,7 @@ class TrackersTest < ApplicationSystemTestCase
     fill_in "tracker_weight", with: 5.5
     click_on "Update Record"
 
-    assert_text "Tracker was successfully updated"
+    assert_selector ".alert-message", text: "Tracker was successfully updated"
   end
 
   test "should destroy Tracker" do
