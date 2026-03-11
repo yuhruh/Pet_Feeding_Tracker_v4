@@ -81,7 +81,7 @@ class Tracker < ApplicationRecord
     require "csv"
     CSV.generate(headers: true, col_sep: ";") do |csv|
       csv << [ "date", "feed_time", "come_back_to_eat", "food_type", "brand", "description", "amount", "left_amount", "total_ate_amount", "hungry", "love", "result", "note", "weight" ]
-      find_each do |tracker|
+      all.each do |tracker|
         csv << [
           tracker.date,
           tracker.feed_time&.strftime("%H:%M"),

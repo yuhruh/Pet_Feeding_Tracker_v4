@@ -64,7 +64,7 @@ class TrackersController < ApplicationController
     respond_to do |format|
       format.html
       format.csv do
-        send_data Tracker.to_csv, filename: "#{@pet.petname.capitalize}-trackers-#{Date.today}.csv", type: "text/csv"
+        send_data @all_trackers.reorder(Arel.sql(order_sql)).to_csv, filename: "#{@pet.petname.capitalize}-trackers-#{Date.today}.csv", type: "text/csv"
       end
     end
 
