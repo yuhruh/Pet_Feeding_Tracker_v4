@@ -11,7 +11,7 @@ class TrackersController < ApplicationController
       return redirect_to pet_trackers_path(@pet, page: params[:page], per_page: params[:per_page]), alert: t(".import.alert")
     end
 
-    importer = CsvImportTrackersService.new(@pet)
+    importer = CsvImportTrackersService.new(@pet, Current.user)
     if importer.call(file)
       redirect_to pet_trackers_path(@pet, page: params[:page], per_page: params[:per_page]), notice: t(".import.notice", petname: @pet.petname.capitalize)
     else

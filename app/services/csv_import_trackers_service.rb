@@ -2,8 +2,9 @@ class CsvImportTrackersService
   require "csv"
   attr_reader :errors
 
-  def initialize(pet)
+  def initialize(pet, user)
     @pet = pet
+    @user = user
     @errors = []
   end
 
@@ -64,7 +65,11 @@ class CsvImportTrackersService
       end
 
       begin
-        tracker_hash[:feed_time] = Time.parse(row["feed_time"]) if row["feed_time"].present?
+        Time.use_zone(@user.timezone) do
+          if row["date"].present? && row["feed_time"].present?
+            tracker_hash[:feed_time] = Time.zone.parse("#{row["date"]} #{row["feed_time"]}")
+          end
+        end
       rescue ArgumentError
         @errors << "Row #{row_index + 2}: Invalid format for 'feed_time' column."
       end

@@ -53,4 +53,16 @@ class TrackersControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to pet_trackers_url(@pet, page: "1", locale: I18n.default_locale)
   end
+
+  test "should import trackers from csv" do
+    file = fixture_file_upload(Rails.root.join("test/fixtures/files/trackers.csv"), "text/csv")
+    assert_difference("Tracker.count", 1) do
+      post import_pet_trackers_url(@pet), params: { file: file }
+    end
+    assert_redirected_to pet_trackers_path(@pet)
+    assert_equal I18n.t("trackers.import.notice", petname: @pet.petname.capitalize), flash[:notice]
+
+    tracker = Tracker.last
+    assert_equal Time.zone.parse("10:00").utc, tracker.feed_time.utc.strftime("%H:%M")
+  end
 end
