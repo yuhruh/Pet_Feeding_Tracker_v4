@@ -162,6 +162,8 @@ zh-TW:
       confirm: "您確定嗎？"
     create:
       notice: "乾糧已成功建立。"
+    restock:
+      notice: "乾糧已成功補貨。"
     destroy:
       notice: "乾糧已成功刪除。"
     not_found: "找不到乾糧。"

@@ -162,6 +162,8 @@ en:
       confirm: "Are you sure?"
     create:
       notice: "Dry food was successfully created."
+    restock:
+      notice: "Dry food was successfully restocked."
     destroy:
       notice: "Dry food was successfully destroyed."
     not_found: "Dry food not found."

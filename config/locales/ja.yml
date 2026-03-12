@@ -162,6 +162,8 @@ ja:
       confirm: "よろしいですか？"
     create:
       notice: "ドライフードは正常に作成されました。"
+    restock:
+      notice: "ドライフードは正常に補充されました。"
     destroy:
       notice: "ドライフードは正常に破棄されました。"
     not_found: "ドライフードが見つかりません。"

@@ -26,6 +26,7 @@
               <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('.average_used_amount') %></th>
               <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('.left_amount') %></th>
               <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('.expected_running_out') %></th>
+              <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('.restock') %></th>
               <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('.delete') %></th>
             </tr>
           </thead>
@@ -41,6 +42,9 @@
                 <td class="capitalize text-sky-700 text-sm text-center p-2"><%= food.average_used_amount %></td>
                 <td class="capitalize text-sky-700 text-sm text-center p-2"><%= food.left_amount %></td>
                 <td class="capitalize text-sky-700 text-sm text-center p-2"><%= food.days_remaining %></td>
+                <td class="capitalize text-sky-700 text-sm text-center p-2">
+                  <%= link_to(t('.restock'), restock_dry_food_path(food), class: "text-sky-500 text-lg underline decoration-2 decoration-sky-500 font-bold transition duration-300 ease-in-out hover:scale-110 capitalize md:text-xl") %>
+                </td>
                 <td class="capitalize text-sky-700 text-sm text-center p-2">
                   <%= link_to(dry_food_path(food), data: { turbo_method: :delete, turbo_confirm: t('.confirm') }, id: "delete_dry_food_#{food.id}", class: "inline-block transition-transform text-red-400 hover:text-red-600 hover:scale-110") do %>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -110,6 +114,14 @@
               <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4 dark:bg-black"><%= t('.expected_running_out') %></th>
               <% @dry_foods.select(&:persisted?).each do |food| %>
                 <td class="capitalize text-sky-700 text-sm text-center p-2"><%= food.days_remaining %></td>
+              <% end %>
+            </tr>
+            <tr class="dark:text-white">
+              <th class="capitalize text-sm text-left p-2 bg-gray-100 border-r-4 dark:bg-black"><%= t('.restock') %></th>
+              <% @dry_foods.select(&:persisted?).each do |food| %>
+                <td class="capitalize text-sky-700 text-sm text-center p-2">
+                  <%= link_to(t('.restock'), restock_dry_food_path(food), class: "text-sky-500 text-lg underline decoration-2 decoration-sky-500 font-bold transition duration-300 ease-in-out hover:scale-110 capitalize md:text-xl") %>
+                </td>
               <% end %>
             </tr>
             <tr class="dark:text-white">

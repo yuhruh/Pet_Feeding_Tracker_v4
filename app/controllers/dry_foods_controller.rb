@@ -1,5 +1,5 @@
 class DryFoodsController < ApplicationController
-  before_action :set_dry_food, only: %i[ show destroy ]
+  before_action :set_dry_food, only: %i[ show destroy restock ]
 
   # GET /dry_foods or /dry_foods.json
   def index
@@ -45,6 +45,17 @@ class DryFoodsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to dry_foods_path, notice: t(".notice"), status: :see_other }
       format.json { head :no_content }
+    end
+  end
+
+  def restock
+    if request.patch?
+      if @dry_food.update(dry_food_params)
+        @dry_food.update_used_amount!
+        redirect_to dry_foods_path, notice: t(".notice")
+      else
+        render :restock, status: :unprocessable_entity
+      end
     end
   end
 
