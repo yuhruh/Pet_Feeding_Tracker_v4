@@ -26,14 +26,25 @@ class TrackersController < ApplicationController
     @all_trackers = @pet.trackers
     trackers_table = Tracker.arel_table
 
-    # Add the following lines to filter the trackers based on the selected range
-    case params[:range]
-    when "7"
-      @all_trackers = @all_trackers.where("date >= ?", 7.days.ago.to_date)
-    when "30"
-      @all_trackers = @all_trackers.where("date >= ?", 30.days.ago.to_date)
-    when "120"
-      @all_trackers = @all_trackers.where("date >= ?", 120.days.ago.to_date)
+    @min_date = @pet.trackers.minimum(:date)
+    @max_date = @pet.trackers.maximum(:date)
+
+    if params[:start_date].present? && params[:end_date].present?
+      @start_date = Date.parse(params[:start_date])
+      @end_date = Date.parse(params[:end_date])
+      @all_trackers = @all_trackers.where(date: @start_date..@end_date)
+    else
+      # Default filtering logic
+      case params[:range]
+      when "7"
+        @all_trackers = @all_trackers.where("date >= ?", 7.days.ago.to_date)
+      when "30"
+        @all_trackers = @all_trackers.where("date >= ?", 30.days.ago.to_date)
+      when "120"
+        @all_trackers = @all_trackers.where("date >= ?", 120.days.ago.to_date)
+      when "Custom"
+        @all_trackers = @all_trackers.where(date: @min_date..@max_date)
+      end
     end
 
     if params[:food_type].present?

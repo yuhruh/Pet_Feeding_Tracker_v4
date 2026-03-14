@@ -48,7 +48,10 @@
     <div class="flex justify-end items-end pr-8 pt-4 mb-4 w-full">
       <%= form_with url: pet_trackers_path(@pet), method: :get, class: "flex items-center" do |form| %>
         <span class="mr-2"><%= t('trackers.index.chart_range') %></span>
-        <%= form.select :range, options_for_select([[t('trackers.index.all_time'), "all"], [t('trackers.index.last_7_days'), "7"], [t('trackers.index.last_30_days'), "30"], ["Last 120 days", "120"]], params[:range] || "all"), {}, { onchange: 'this.form.submit()', class: "p-1 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700" } %>
+        <%= form.select :range, options_for_select([[t('trackers.index.all_time'), "all"], [t('trackers.index.last_7_days'), "7"], 
+        [t('trackers.index.last_30_days'), "30"], ["Last 120 days", "120"], ["Custom", "Custom"]], params[:range] || "all"), {}, 
+        { onchange:'this.form.submit()', class: "p-1 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 
+        hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700" } %>
       <% end %>
     </div>
 
