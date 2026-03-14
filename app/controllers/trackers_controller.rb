@@ -118,7 +118,7 @@ class TrackersController < ApplicationController
       min_val = total_ate_quantity_values.min
       max_val = total_ate_quantity_values.max
       @min_total_ate = [ 0, (min_val - 25) ].max.floor
-      @max_total_ate = (max_val + 25).ceil
+      @max_total_ate = (max_val + 50).ceil
     else
       @min_total_ate = 0
       @max_total_ate = 100 # A default value
