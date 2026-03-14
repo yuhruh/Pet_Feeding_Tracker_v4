@@ -32,6 +32,8 @@ class TrackersController < ApplicationController
       @all_trackers = @all_trackers.where("date >= ?", 7.days.ago.to_date)
     when "30"
       @all_trackers = @all_trackers.where("date >= ?", 30.days.ago.to_date)
+    when "120"
+      @all_trackers = @all_trackers.where("date >= ?", 120.days.ago.to_date)
     end
 
     if params[:food_type].present?
