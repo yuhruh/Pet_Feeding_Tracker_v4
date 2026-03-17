@@ -52,7 +52,7 @@ class DryFoodsController < ApplicationController
     if request.patch?
       if @dry_food.update(dry_food_params)
         # When restocking, the left amount is the new total amount,
-        
+
         @dry_food.update_columns(
           left_amount: @dry_food.amount,
           total_ate_amount: 0,
