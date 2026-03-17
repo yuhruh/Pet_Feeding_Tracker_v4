@@ -32,7 +32,7 @@ export default {
       "edit": {
         "cancel_button": "Cancel...Go back to %{petname}'s trackers",
         "come_back_to_eat_hint_html": "Please use ',' as a separations. Ex: 07:45, 10:33,...<br>If %{petname} did not come back to eat, please use '-'",
-        "feed_time_readonly": "Feed time is readonly, can not update on edit form",
+        "feed_time_readonly": "Feed time is readonly, can not edit",
         "feeding_amount": "Feeding Amount:",
         "header": "Edit %{petname}'s tracker",
         "left_amount": "Left Amount(g)",

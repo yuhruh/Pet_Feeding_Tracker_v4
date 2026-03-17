@@ -43,7 +43,7 @@ class TrackersController < ApplicationController
       when "120"
         @all_trackers = @all_trackers.where("date >= ?", 120.days.ago.to_date)
       when "Custom"
-        @all_trackers = @all_trackers.where(date: @min_date..@max_date)
+        @all_trackers = @all_trackers.where(date: @start_date..@end_date)
       end
     end
 

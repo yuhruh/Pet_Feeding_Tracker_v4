@@ -51,7 +51,14 @@ class DryFoodsController < ApplicationController
   def restock
     if request.patch?
       if @dry_food.update(dry_food_params)
-        @dry_food.update_used_amount!
+        # When restocking, the left amount is the new total amount,
+        
+        @dry_food.update_columns(
+          left_amount: @dry_food.amount,
+          total_ate_amount: 0,
+          average_used_amount: 0,
+          days_remaining: nil
+        )
         redirect_to dry_foods_path, notice: t(".notice")
       else
         render :restock, status: :unprocessable_entity
