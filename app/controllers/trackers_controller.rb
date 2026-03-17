@@ -22,7 +22,7 @@ class TrackersController < ApplicationController
   # GET /trackers or /trackers.json
   def index
     # @trackers = Tracker.all
-    @all_trackers = @pet.trackers.order(date: :asc, feed_time: :asc)
+    @all_trackers = @pet.trackers
     trackers_table = Tracker.arel_table
 
     @min_date = @pet.trackers.minimum(:date)
