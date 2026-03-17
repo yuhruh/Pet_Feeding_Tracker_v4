@@ -12,7 +12,7 @@ class DryFood < ApplicationRecord
 
   def update_used_amount!
     with_lock do
-      relevant_trackers = Tracker.where(dry_food_id: id)
+      relevant_trackers = Tracker.where(dry_food_id: id, archived_dry_food: false)
       total_poured = relevant_trackers.sum(:amount)
 
       Rails.logger.info "[DryFood Inventory] Bag ID: #{id} | Total Trackers: #{relevant_trackers.count}"
