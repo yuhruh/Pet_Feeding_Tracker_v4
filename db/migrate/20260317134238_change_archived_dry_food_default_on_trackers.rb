@@ -1,7 +1,7 @@
 class ChangeArchivedDryFoodDefaultOnTrackers < ActiveRecord::Migration[8.0]
   def change
     change_column_default :trackers, :archived_dry_food, from: nil, to: false
-    
+
     # Optional: Update existing nil records to false
     # Tracker.where(archived_dry_food: nil).update_all(archived_dry_food: false)
     reversible do |dir|
