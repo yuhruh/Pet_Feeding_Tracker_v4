@@ -28,9 +28,16 @@ class TrackersController < ApplicationController
     @min_date = @pet.trackers.minimum(:date)
     @max_date = @pet.trackers.maximum(:date)
 
-    if params[:start_date].present? && params[:end_date].present?
+    if params[:range] == "custom" && params[:start_date].present? && params[:end_date].present?
       @start_date = Date.parse(params[:start_date])
       @end_date = Date.parse(params[:end_date])
+
+      if @start_date > @end_date
+        flash.now[:alert] = t(".index.invalid_date_range")
+      elsif @end_date < @min_date || @start_date > @max_date
+        flash.now[:notice] = t(".index.no_data_in_range")
+      end
+
       @all_trackers = @all_trackers.where(date: @start_date..@end_date)
     else
       # Default filtering logic
@@ -41,8 +48,6 @@ class TrackersController < ApplicationController
         @all_trackers = @all_trackers.where("date >= ?", 30.days.ago.to_date)
       when "120"
         @all_trackers = @all_trackers.where("date >= ?", 120.days.ago.to_date)
-      when "Custom"
-        @all_trackers = @all_trackers.where(date: @start_date..@end_date)
       end
     end
 

@@ -110,11 +110,13 @@ export default {
         "import_button": "Import",
         "import_csv": "Import CSV File",
         "import_hint": "Only CSV file can be imported",
+        "invalid_date_range": "Invalid date range: start date cannot be after end date.",
         "items_per_page": "Items per page:",
         "last_30_days": "Last 30 days",
         "last_7_days": "Last 7 days",
         "new_tracker_link": "New tracker for %{petname}",
         "no_data_for_chart": "No tracking data available to display the chart.",
+        "no_data_in_range": "No data available in the selected date range.",
         "no_trackers_found": "No %{petname}'s trackers found.",
         "note": "Note",
         "title": "%{petname}'s Trackers"
