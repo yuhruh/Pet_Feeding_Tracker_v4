@@ -435,6 +435,8 @@ zh-TW:
       all_time: "所有時間"
       last_7_days: "最近7天"
       last_30_days: "最近30天"
+      invalid_date_range: "無效的日期範圍：開始日期不能晚於結束日期。"
+      no_data_in_range: "所選日期範圍內沒有可用資料。"
       chart_title: "總進食量與體重變化"
       chart_h_axis_title: "日期"
       chart_v_axis_amount: "進食量 (克)"

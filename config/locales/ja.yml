@@ -435,6 +435,8 @@ ja:
       all_time: "全期間"
       last_7_days: "過去7日間"
       last_30_days: "過去30日間"
+      invalid_date_range: "無効な日付範囲：開始日を終了日より後にすることはできません。"
+      no_data_in_range: "選択した日付範囲に利用できるデータがありません。"
       chart_title: "量と体重の経時変化"
       chart_h_axis_title: "日付"
       chart_v_axis_amount: "量 (g)"
