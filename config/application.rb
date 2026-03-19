@@ -30,6 +30,5 @@ module PetTrackerV4
     config.assets.paths << Rails.root.join("app", "assets", "images")
     config.i18n.available_locales = %i[en zh-TW ja]
     config.i18n.default_locale = :en
-    config.assets.initialize_on_precompile = false
   end
 end
