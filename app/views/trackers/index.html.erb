@@ -62,11 +62,11 @@
                 <div class="flex flex-col items-center gap-4">
                   <div class="flex items-center">
                     <span class="mr-2"><%= t('trackers.index.start_date') %></span>
-                    <%= form.date_field :start_date, value: params[:start_date], class: "p-1 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200" %>
+                    <%= form.date_field :start_date, value: params[:start_date], class: "p-1 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200", min: @min_date, max: @max_date %>
                   </div>
                   <div class="flex items-center">
                     <span class="mr-2"><%= t('trackers.index.end_date') %></span>
-                    <%= form.date_field :end_date, value: params[:end_date], class: "p-1 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200" %>
+                    <%= form.date_field :end_date, value: params[:end_date], class: "p-1 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200", min: @min_date, max: @max_date %>
                   </div>
                   <div class="flex items-center">
                     <%= form.submit "Apply Custom Range", class: "p-2 ml-4 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700" %>
