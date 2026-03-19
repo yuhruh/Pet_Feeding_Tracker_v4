@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'line/bot'
+require "line/bot"
 
 def line_bot_client
   Line::Bot::Client.new do |config|

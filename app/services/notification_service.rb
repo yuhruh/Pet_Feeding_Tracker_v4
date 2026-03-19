@@ -16,13 +16,13 @@ class NotificationService
   private
 
   def line_user?
-    @user.connected_services.exists?(provider: 'line')
+    @user.connected_services.exists?(provider: "line")
   end
 
   def send_line_notification
-    line_uid = @user.connected_services.find_by(provider: 'line').uid
+    line_uid = @user.connected_services.find_by(provider: "line").uid
     message = {
-      type: 'text',
+      type: "text",
       text: "It's time to weigh your pet's weight!"
     }
     line_bot_client.push_message(line_uid, message)
