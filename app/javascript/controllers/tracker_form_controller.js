@@ -66,6 +66,19 @@ export default class extends Controller {
         }
       });
       const data = await response.json();
+
+      const recentDate = new Date();
+      recentDate.setDate(recentDate.getDate() - 120);
+      const recentFavorites = data.map(foodGroup => {
+        const recentResults = foodGroup.results.filter(result => {
+          const [yy, mm, dd] = result.data.split('/');
+          const fullYear = parseInt(yy) + 2000;
+          const resultDate = new Date(fullYear, mm - 1, dd);
+          return resultDate >= recentDate;
+        });
+        return { ...foodGroup, results: recentResults };
+      }).filter(foodGroup => foodGroup.results.length > 0);
+      
       this.updateWetFoodOptions(data);
     } else {
       this.dryFoodOptionsTarget.classList.add("hidden");
@@ -96,7 +109,6 @@ export default class extends Controller {
 
     filteredFood.forEach(food => {
       const option = document.createElement('option');
-      
 
       option.value = food.results[0].id
       option.text = `${food.brand} ${food.description}: Favorite Score: ${food.results[0].favorite_score} - Last Feed Date: ${food.results[0].date}`;

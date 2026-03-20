@@ -19,6 +19,7 @@ class Tracker < ApplicationRecord
   validates :left_amount, numericality: true, comparison: { less_than_or_equal_to: :amount }, on: :update, allow_nil: true
 
 
+
   private
 
   def dry_food?

@@ -79,7 +79,7 @@
         "no_storage_message": "There is no \"%{type}\" storage in dry food. Please add it first.",
         "other": "🌯 Other",
         "prompt": "Please Select Food Type",
-        "select_dry_food": "Select a dry food",
+        "select_dry_food": "Select a dry food or enter manually",
         "select_favorite_or_enter_manually": "Select a favorite or enter manually",
         "wet": "🍲 Wet",
         "wet_food_list": "Wet food list"
@@ -244,7 +244,7 @@
         "no_storage_message": "ドライフードに「%{type}」の保管場所がありません。先に追加してください。",
         "other": "🌯 その他",
         "prompt": "食事の種類を選択してください",
-        "select_dry_food": "ドライフードを選択",
+        "select_dry_food": "ドライフードを選択するか、手動で入力してください",
         "select_favorite_or_enter_manually": "お気に入りを選択するか、手動で入力してください",
         "wet": "🍲 ウェット",
         "wet_food_list": "ウェットフードリスト"
@@ -409,7 +409,7 @@
         "no_storage_message": "乾糧中沒有「%{type}」的庫存。請先新增。",
         "other": "🌯 其他",
         "prompt": "請選擇食物類型",
-        "select_dry_food": "選擇乾糧",
+        "select_dry_food": "選擇乾糧或手動輸入",
         "select_favorite_or_enter_manually": "選擇最愛的罐罐或手動輸入",
         "wet": "🍲 濕食",
         "wet_food_list": "濕食清單"

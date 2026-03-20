@@ -367,7 +367,7 @@ en:
       other: "🌯 Other"
       prompt: "Please Select Food Type"
       dry_food_list: "Dry Food List"
-      select_dry_food: "Select a dry food"
+      select_dry_food: "Select a dry food or enter manually"
       wet_food_list: "Wet food list"
       select_favorite_or_enter_manually: "Select a favorite or enter manually"
       brand: "Brand"

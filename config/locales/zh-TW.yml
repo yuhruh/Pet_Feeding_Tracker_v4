@@ -367,7 +367,7 @@ zh-TW:
       other: "🌯 其他"
       prompt: "請選擇食物類型"
       dry_food_list: "乾糧清單"
-      select_dry_food: "選擇乾糧"
+      select_dry_food: "選擇乾糧或手動輸入"
       wet_food_list: "濕食清單"
       select_favorite_or_enter_manually: "選擇最愛的罐罐或手動輸入"
       brand: "品牌"
