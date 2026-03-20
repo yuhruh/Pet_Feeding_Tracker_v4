@@ -59,14 +59,21 @@ class CsvImportTrackersService
 
     def validate_and_convert(row, row_index, tracker_hash)
       begin
-        tracker_hash[:date] = Date.parse(row["date"]) if row["date"].present?
+        if row["date"].present?
+          parsed_date = Date.parse(row["date"])
+          if parsed_date < @pet.birthday
+            @errors << "Row #{row_index + 2}: Date cannot be earlier than pet's birthday."
+          else
+            tracker_hash[:date] = parsed_date
+          end
+        end
       rescue ArgumentError
         @errors << "Row #{row_index + 2}: Invalid format for 'date' column."
       end
 
       begin
         Time.use_zone(@user.timezone) do
-          if row["date"].present? && row["feed_time"].present?
+          if row["date"].present? && row["feed_time"].present? && tracker_hash[:date]
             tracker_hash[:feed_time] = Time.zone.parse("#{row["date"]} #{row["feed_time"]}")
           end
         end
