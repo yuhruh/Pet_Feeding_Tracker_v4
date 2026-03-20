@@ -147,4 +147,10 @@ document.addEventListener('turbo:load', () => {
       }
     });
   }
+
+  // make the scrolls the cahrt of the right side
+  const container = document.getElementById('chart-container');
+  if (container) {
+    container.scrollLeft = container.scrollWidth;
+  }
 });
