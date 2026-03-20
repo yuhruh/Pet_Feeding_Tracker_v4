@@ -78,36 +78,44 @@
       </div>
     </div>
 
-    <% if @dry_properties.present? || @wet_properties.present? %>
-      <%= column_chart @data, adapter: "google", height: "300px", library: {
-        title: t('trackers.index.chart_title'),
-        isStacked: true,
-        interpolateNulls: true,
-        series: {
-          0 => {type: 'bar', targetAxisIndex: 0},
-          1 => {type: 'bar', targetAxisIndex: 0},
-          2 => {type: 'bar', targetAxisIndex: 0},
-          3 => {type: 'bar', targetAxisIndex: 0},
-          4 => {type: 'line', targetAxisIndex: 1, pointSize: 5}
-        },
-        colors: ['#C1D7EC', '#2563EB', '#FFDAB9','#F97316', '#6B4AB9'],
-        chartArea: {left: 100, right: 100},
-        hAxis: {
-          title: t('trackers.index.chart_h_axis_title'),
-          titleTextStyle: {italic: true}
-        },
-        vAxes: {
-          0 => {title: t('trackers.index.chart_v_axis_amount')},
-          1 => {title: t('trackers.index.chart_v_axis_weight'), viewWindow: {min: @min_weight, max: @max_weight}, gridlines: {color: 'transparent'}}
-        },
-        legend: {position: 'top'},
-        titleTextStyle: {bold: true, fontSize: 20} 
-      } %>
-    <% else %>
-      <div class="text-center p-8 my-4 bg-gray-100 rounded-lg shadow-lg">
-        <p class="font-semibold text-gray-700"><%= t('trackers.index.no_data_for_chart') %></p>
+    <div class="w-full overflow-x-auto">
+      <div style="min-width: 1200px;">
+        <% if @dry_properties.present? || @wet_properties.present? %>
+          <%= column_chart @data, adapter: "google", height: "400px", library: {
+            title: t('trackers.index.chart_title'),
+            isStacked: true,
+            interpolateNulls: true,
+            series: {
+              0 => {type: 'bar', targetAxisIndex: 0},
+              1 => {type: 'bar', targetAxisIndex: 0},
+              2 => {type: 'bar', targetAxisIndex: 0},
+              3 => {type: 'bar', targetAxisIndex: 0},
+              4 => {type: 'line', targetAxisIndex: 1, pointSize: 5}
+            },
+            colors: ['#C1D7EC', '#2563EB', '#FFDAB9','#F97316', '#6B4AB9'],
+            chartArea: {left: 60, right: 60, bottom: 80, top: 50},
+            hAxis: {
+              title: t('trackers.index.chart_h_axis_title'),
+              showTextEvery: @chart_interval,
+              slantedText: true,
+              slantedTextAngle: 30,
+              format: 'yyyy/MM/dd',
+              textStyle: {fontSize: 12}
+            },
+            vAxes: {
+              0 => {title: t('trackers.index.chart_v_axis_amount')},
+              1 => {title: t('trackers.index.chart_v_axis_weight'), viewWindow: {min: @min_weight, max: @max_weight}, gridlines: {color: 'transparent'}}
+            },
+            legend: {position: 'top'},
+            titleTextStyle: {bold: true, fontSize: 20} 
+          } %>
+        <% else %>
+          <div class="text-center p-8 my-4 bg-gray-100 rounded-lg shadow-lg">
+            <p class="font-semibold text-gray-700"><%= t('trackers.index.no_data_for_chart') %></p>
+          </div>
+        <% end %>
       </div>
-    <% end %>
+    </div>
   </div>
 
   <div id="trackers" class="container mx-auto flex flex-col divide-y divide-gray-200 space-y-5">

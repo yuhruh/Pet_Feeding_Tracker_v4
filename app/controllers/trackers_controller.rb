@@ -105,6 +105,16 @@ class TrackersController < ApplicationController
 
     all_dates = (dry_raw.keys + dry_hotel_raw.keys + wet_raw.keys + wet_hotel_raw.keys).uniq.sort
 
+     data_points_count = all_dates.size
+
+     @chart_interval = case data_points_count
+     when 0..30 then 1
+     when 31..60 then 2
+     when 61..120 then 3
+     else 6
+     end
+
+
     format_chart_data = ->(hash, all_dates) {
       data = all_dates.map { |date| [ date.strftime("%y/%m/%d"), hash[date].to_f ] }
       data.to_h
