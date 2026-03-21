@@ -24,7 +24,8 @@ export default class extends Controller {
 
   async toggleDryFoodOptions() {
     const type = this.foodTypeTarget.value;
-    const locale = window.location.pathname.split('/')[1] || 'en';
+    const pathParts = window.location.pathname.split('/');
+    const locale = pathParts[1] || 'en';
     const dryFoodsUrl = `/${locale}/dry_foods.json`;
 
     if (type === "kibble" || type === "freeze_dried") {
@@ -46,7 +47,6 @@ export default class extends Controller {
         const selectedText = this.foodTypeTarget.options[this.foodTypeTarget.selectedIndex].text;
         const message = this.i18n.t('trackers.form.no_storage_message', { type: selectedText });
         alert(message);
-        const locale = window.location.pathname.split('/')[1] || 'en';
         const newDryFoodUrl = `/${locale}/dry_foods/new`;
         window.location.href = newDryFoodUrl;
       } else {
@@ -56,30 +56,20 @@ export default class extends Controller {
       this.wetFoodOptionsTarget.classList.remove("hidden");
       this.dryFoodOptionsTarget.classList.add("hidden");
 
-      const petId = window.location.pathname.split('/')[3];
-      const favoriteFoodsUrl = `/${locale}/pets/${petId}/trackers/favorite_food.json`
+      if (pathParts.length > 3) {
+        const petId = pathParts[3];
+        const favoriteFoodsUrl = `/${locale}/pets/${petId}/trackers/favorite_food.json`
 
-      const response = await fetch(favoriteFoodsUrl, {
-        headers: {
-          "X-CSRF-Token": this.csrfToken,
-          "Accept": "application/json"
-        }
-      });
-      const data = await response.json();
-
-      const recentDate = new Date();
-      recentDate.setDate(recentDate.getDate() - 120);
-      const recentFavorites = data.map(foodGroup => {
-        const recentResults = foodGroup.results.filter(result => {
-          const [yy, mm, dd] = result.data.split('/');
-          const fullYear = parseInt(yy) + 2000;
-          const resultDate = new Date(fullYear, mm - 1, dd);
-          return resultDate >= recentDate;
+        const response = await fetch(favoriteFoodsUrl, {
+          headers: {
+            "X-CSRF-Token": this.csrfToken,
+            "Accept": "application/json"
+          }
         });
-        return { ...foodGroup, results: recentResults };
-      }).filter(foodGroup => foodGroup.results.length > 0);
-      
-      this.updateWetFoodOptions(data);
+        const data = await response.json();
+        
+        this.updateWetFoodOptions(data);
+      }
     } else {
       this.dryFoodOptionsTarget.classList.add("hidden");
       this.wetFoodOptionsTarget.classList.add("hidden");
@@ -105,16 +95,38 @@ export default class extends Controller {
 
   updateWetFoodOptions(foods) {
     this.wetFoodSelectTarget.innerHTML = `<option value="">${this.i18n.t('trackers.form.select_favorite_or_enter_manually')}</option>`;
-    const filteredFood = foods.filter(food => food.food_type === "wet")
+    if (!Array.isArray(foods)) {
+      return;
+    }
+
+    const today = new Date();
+    let ninetyDaysAgo = new Date();
+    ninetyDaysAgo.setDate(today.getDate() - 90);
+
+    const filteredFood = foods.filter(food => {
+      if (!food || food.food_type !== "wet" || !food.results || food.results.length === 0) {
+        return false;
+      }
+
+      const dateParts = food.results[0].date.split('/');
+      if (dateParts.length !== 3) {
+        return false;
+      }
+
+      const year = parseInt(dateParts[0], 10) + 2000;
+      const month = parseInt(dateParts[1], 10) - 1;
+      const day = parseInt(dateParts[2], 10);
+      const foodDate = new Date(year, month, day);
+    
+      return foodDate >= ninetyDaysAgo && foodDate <= today;
+    });
 
     filteredFood.forEach(food => {
       const option = document.createElement('option');
-
-      option.value = food.results[0].id
+      option.value = food.results[0].id;
       option.text = `${food.brand} ${food.description}: Favorite Score: ${food.results[0].favorite_score} - Last Feed Date: ${food.results[0].date}`;
       this.wetFoodSelectTarget.add(option);
-    })
-
+    });
   }
 
   async fillDryFoodFields() {
