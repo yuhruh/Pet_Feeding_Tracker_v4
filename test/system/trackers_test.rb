@@ -59,6 +59,7 @@ class TrackersTest < ApplicationSystemTestCase
       end
     end
 
+    assert_no_selector "##{dom_id(@tracker)}"
     assert_text "Tracker was successfully destroyed"
   end
 end

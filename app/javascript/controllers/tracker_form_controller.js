@@ -100,8 +100,8 @@ export default class extends Controller {
     }
 
     const today = new Date();
-    let ninetyDaysAgo = new Date();
-    ninetyDaysAgo.setDate(today.getDate() - 90);
+    let oneTwentyDaysAgo = new Date();
+    oneTwentyDaysAgo.setDate(today.getDate() - 120);
 
     const filteredFood = foods.filter(food => {
       if (!food || food.food_type !== "wet" || !food.results || food.results.length === 0) {
@@ -118,7 +118,7 @@ export default class extends Controller {
       const day = parseInt(dateParts[2], 10);
       const foodDate = new Date(year, month, day);
     
-      return foodDate >= ninetyDaysAgo && foodDate <= today;
+      return foodDate >= oneTwentyDaysAgo && foodDate <= today;
     });
 
     filteredFood.forEach(food => {
