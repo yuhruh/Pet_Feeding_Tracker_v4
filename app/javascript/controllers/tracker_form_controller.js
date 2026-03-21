@@ -119,7 +119,10 @@ export default class extends Controller {
       const foodDate = new Date(year, month, day);
     
       return foodDate >= oneTwentyDaysAgo && foodDate <= today;
+
     });
+
+    console.log(filteredFood)
 
     filteredFood.forEach(food => {
       const option = document.createElement('option');
