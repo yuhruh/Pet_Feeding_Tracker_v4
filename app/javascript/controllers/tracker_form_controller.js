@@ -131,14 +131,21 @@ export default class extends Controller {
     console.log(filteredFood)
 
     filteredFood.forEach(food => {
-      const bestResult = food.results.reduce((max, current) => {
-        return current.favorite_score > max.favorite_score ? current : max;
-      }, food.results[0]);
+      // const bestResult = food.results.reduce((max, current) => {
+      //   return current.favorite_score > max.favorite_score ? current : max;
+      // }, food.results[0]);
 
-      if (bestResult.favorite_score >= 30) {
-        const option = document.createElement('option');
-        option.value = food.results[0].id;
-        option.text = `${food.brand} ${food.description}: Favorite Score: ${bestResult.favorite_score} - Last Feed Date: ${bestResult.date}`;
+      // if (bestResult.favorite_score >= 30) {
+      //   const option = document.createElement('option');
+      //   option.value = food.results[0].id;
+      //   option.text = `${food.brand} ${food.description}: Favorite Score: ${bestResult.favorite_score} - Last Feed Date: ${bestResult.date}`;
+      //   this.wetFoodSelectTarget.add(option);
+      // }
+
+      const option = document.createElement('option');
+      option.value = food.results[0].id;
+      if (food.results[0].favorite_score >= 30) {
+        option.text = `${food.brand} ${food.description}: Favorite Score: ${food.results[0].favorite_score} - Last Feed Date: ${food.results[0].date}`;
         this.wetFoodSelectTarget.add(option);
       }
     });
