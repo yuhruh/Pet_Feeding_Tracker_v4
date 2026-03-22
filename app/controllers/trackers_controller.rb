@@ -281,8 +281,12 @@ class TrackersController < ApplicationController
     # @favorite_foods = unique_foods.paginate(page: params[:page], per_page: params[:per_page] || 10)
 
     respond_to do |format|
-      format.html
-      format.json { render json: @favorite_foods }
+      format.html do
+        @favorite_foods = @favorite_foods.paginate(page: params[:page], per_page: params[:per_page] || 10)
+      end
+      format.json do
+       render json: @favorite_foods
+      end
     end
   end
 
