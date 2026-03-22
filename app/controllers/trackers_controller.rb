@@ -263,10 +263,12 @@ class TrackersController < ApplicationController
       }
     end
 
+    all_favorite_foods = @favorite_foods.sort_by { |f| f[:results].first[:favorite_score] }.reverse
+
     require "will_paginate/array"
     session[:per_page] = params[:per_page] if params[:per_page].present?
     per_page = session[:per_page] || 10
-    @favorite_foods = @favorite_foods.sort_by { |f| f[:results].first[:favorite_score] }.reverse.paginate(page: params[:page], per_page: per_page)
+    @favorite_foods = all_favorite_foods.paginate(page: params[:page], per_page: per_page)
 
 
     # trackers = trackers.order(favorite_score: :desc)
@@ -281,11 +283,9 @@ class TrackersController < ApplicationController
     # @favorite_foods = unique_foods.paginate(page: params[:page], per_page: params[:per_page] || 10)
 
     respond_to do |format|
-      format.html do
-        @favorite_foods = @favorite_foods.paginate(page: params[:page], per_page: params[:per_page] || 10)
-      end
+      format.html
       format.json do
-       render json: @favorite_foods
+       render json: all_favorite_foods
       end
     end
   end
