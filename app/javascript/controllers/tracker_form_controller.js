@@ -100,8 +100,8 @@ export default class extends Controller {
     }
 
     const today = new Date();
-    let oneTwentyDaysAgo = new Date();
-    oneTwentyDaysAgo.setDate(today.getDate() - 120);
+    let thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(today.getDate() - 30);
 
     const filteredFood = foods.map(food => {
       if (!food || food.food_type !== "wet" || !food.results || food.results.length === 0) {
@@ -119,7 +119,7 @@ export default class extends Controller {
         const day = parseInt(dateParts[2], 10);
         const foodDate = new Date(year, month, day);
       
-        return foodDate >= oneTwentyDaysAgo && foodDate <= today;
+        return foodDate >= thirtyDaysAgo && foodDate <= today;
       });
 
       if (filteredResults.length > 0) {
@@ -131,12 +131,12 @@ export default class extends Controller {
     console.log(filteredFood)
 
     filteredFood.forEach(food => {
-      const bestResult = food.results.reduce((max, current) => {
-        return current.favorite_score > max.favorite_score ? current : max;
-      }, food.results[0]);
+      // const bestResult = food.results.reduce((max, current) => {
+      //   return current.favorite_score > max.favorite_score ? current : max;
+      // }, food.results[0]);
 
       const option = document.createElement('option');
-      option.value = bestResult.id;
+      option.value = food.results[0].id;
       option.text = `${food.brand} ${food.description}: Favorite Score: ${bestResult.favorite_score} - Last Feed Date: ${bestResult.date}`;
       this.wetFoodSelectTarget.add(option);
     });
