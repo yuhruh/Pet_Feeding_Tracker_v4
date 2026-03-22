@@ -51,9 +51,8 @@
       "favorite_food": {
         "brand": "brand",
         "description": "description",
-        "favorite_score": "favorite score",
+        "favorite_score": "favorite score & Last Fed Date",
         "food_type": "food type",
-        "last_fed_date": "Last Fed Date",
         "no_record": "%{petname} does not have any eating record yet 😿"
       },
       "food_types": {
@@ -216,9 +215,8 @@
       "favorite_food": {
         "brand": "ブランド",
         "description": "説明",
-        "favorite_score": "お気に入りスコア",
+        "favorite_score": "お気に入りスコア & 最終給餌日",
         "food_type": "食事の種類",
-        "last_fed_date": "最終給餌日",
         "no_record": "%{petname}にはまだ食事の記録がありません 😿"
       },
       "food_types": {
@@ -381,9 +379,8 @@
       "favorite_food": {
         "brand": "品牌",
         "description": "描述",
-        "favorite_score": "喜好分數",
+        "favorite_score": "喜好分數 & 上次餵食日期",
         "food_type": "食物類型",
-        "last_fed_date": "上次餵食日期",
         "no_record": "%{petname}還沒有任何飲食記錄 😿"
       },
       "food_types": {

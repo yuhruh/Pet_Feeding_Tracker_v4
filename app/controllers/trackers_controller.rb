@@ -255,7 +255,7 @@ class TrackersController < ApplicationController
         results: unique_daily_results.first(5).sort_by { |t| t.date }.reverse.map do |t|
           {
             id: t.id,
-            date: t.date.strftime("%y/%m/%d"),
+            date: t.date.strftime("%Y/%m/%d"),
             result: t.result,
             favorite_score: t.favorite_score
           }

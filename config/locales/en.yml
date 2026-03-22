@@ -421,8 +421,7 @@ en:
       food_type: "food type"
       brand: "brand"
       description: "description"
-      favorite_score: "favorite score"
-      last_fed_date: "Last Fed Date"
+      favorite_score: "favorite score & Last Fed Date"
     index:
       import_csv: "Import CSV File"
       import_button: "Import"

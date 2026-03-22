@@ -421,8 +421,7 @@ zh-TW:
       food_type: "食物類型"
       brand: "品牌"
       description: "描述"
-      favorite_score: "喜好分數"
-      last_fed_date: "上次餵食日期"
+      favorite_score: "喜好分數 & 上次餵食日期"
     index:
       import_csv: "上傳CSV檔案"
       import_button: "上傳"

@@ -421,8 +421,7 @@ ja:
       food_type: "食事の種類"
       brand: "ブランド"
       description: "説明"
-      favorite_score: "お気に入りスコア"
-      last_fed_date: "最終給餌日"
+      favorite_score: "お気に入りスコア & 最終給餌日"
     index:
       import_csv: "CSVファイルをインポート"
       import_button: "インポート"
