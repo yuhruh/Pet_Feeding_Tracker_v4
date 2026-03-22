@@ -132,7 +132,7 @@ export default class extends Controller {
 
     filteredFood.forEach(food => {
       const bestResult = food.results.reduce((max, current) => {
-        return current.favorite_score > max.favorite_score ? current : max;
+        return (current.favorite_score >= 30 && current.favorite_score > max.favorite_score) ? current : max;
       }, food.results[0]);
       
       const option = document.createElement('option');
