@@ -72,9 +72,9 @@ class TrackersController < ApplicationController
     per_page = session[:per_page] || 10
     adapter_type = Rails.configuration.database_configuration[Rails.env]["adapter"]
     order_sql = if adapter_type == "sqlite3"
-      "date DESC, feed_time DESC"
+      "CASE WHEN come_back_to_eat = '' OR left_amount IS NULL THEN 0 ELSE 1 END ASC, date DESC, feed_time DESC"
     else
-      "date DESC, (feed_time AT TIME ZONE 'UTC' AT TIME ZONE '#{Current.user.timezone}') DESC"
+      "CASE WHEN come_back_to_eat = '' OR left_amount IS NULL THEN 0 ELSE 1 END ASC, date DESC, feed_time DESC, (feed_time AT TIME ZONE 'UTC' AT TIME ZONE '#{Current.user.timezone}') DESC"
     end
     @trackers = @all_trackers.reorder(Arel.sql(order_sql)).paginate(page: page, per_page: per_page)
 
