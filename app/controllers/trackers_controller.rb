@@ -48,6 +48,10 @@ class TrackersController < ApplicationController
         @all_trackers = @all_trackers.where("date >= ?", 30.days.ago.to_date)
       when "120"
         @all_trackers = @all_trackers.where("date >= ?", 120.days.ago.to_date)
+      when "180"
+        @all_trackers = @all_trackers.where("date >= ?", 180.days.ago.to_date)
+      when "YTD"
+        @all_trackers = @all_trackers.where("date >= ?", Date.today.beginning_of_year)
       end
     end
 
