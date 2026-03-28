@@ -88,15 +88,15 @@
               <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
             </svg>
           </div>
-          <div id="btn-3" class="absolute hidden w-max top-full mt-2 py-2 bg-white text-grayishBlue uppercase border border-gray-200 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out menu" data-target="menu-3">
+          <div id="btn-3" class="absolute hidden w-max top-full mt-2 py-2 bg-white text-grayishBlue border border-gray-200 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out menu" data-target="menu-3">
             <div class="py-1">
               <%= link_to t('layouts.navigation.add_dry_food'), new_dry_food_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-cyan-100 hover:text-cyan-600 focus:bg-cyan-100 focus:text-softRed focus:outline-hidden" %>
               <%= link_to t('layouts.navigation.storage_list'), dry_foods_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-cyan-100 hover:text-cyan-600 focus:bg-cyan-100 focus:text-softRed focus:outline-hidden" %>
             </div>
           </div>
         </div>
+        <%= link_to "Health Checkup", root_path, class: "tracking-wide hover:text-softRed" %>
         <%= button_to t('layouts.navigation.sign_out'), session_path, class: "px-8 py-2 text-white uppercase bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white", method: :delete %>
-
       <% else %>
         <%= link_to t('layouts.navigation.get_started'), new_registrations_path, class: "px-8 py-2 text-white bg-grayishBlue border-2 border-grayishBlue rounded-lg shadow-md tracking-wide hover:text-grayishBlue hover:bg-white" %>
         <%= link_to t('layouts.navigation.sign_in'), new_session_path, class: "px-8 py-2 text-white bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white" %>
@@ -104,8 +104,7 @@
       <div class="hidden lg:flex items-center space-x-2 my-6 uppercase text-grayishBlue">
         <%= image_tag('languages.png', width: '25px') %>
         <div class="relative">
-          <div class="inline-flex w-full justify-center bg-white px-3 py-2 
-            text-grayishBlue tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed dark:bg-darkBlue cursor-pointer btn" data-target="btn-4">
+          <div class="inline-flex w-full justify-center bg-white px-3 py-2 text-grayishBlue tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed dark:bg-darkBlue cursor-pointer btn" data-target="btn-4">
               <%= t('layouts.navigation.languages') %> 
             <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400">
               <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
