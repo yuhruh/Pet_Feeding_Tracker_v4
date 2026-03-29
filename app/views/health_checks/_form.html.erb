@@ -1,0 +1,195 @@
+<%= form_with(model: [@pet, @health_check], class: "contents") do |form| %>
+  <%= form.hidden_field :page, value: params[:page] %>
+  <div class="flex flex-col justify-center mb-4 md:flex-row">
+    <%= render 'shared/errors', obj: @health_check %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :crea %>
+    <%= form.text_field :crea, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:crea].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:crea].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :bun %>
+    <%= form.text_field :bun, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:bun].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:bun].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :phos %>
+    <%= form.text_field :phos, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:phos].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:phos].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :ca %>
+    <%= form.text_field :ca, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:ca].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:ca].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :alb %>
+    <%= form.text_field :alb, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:alb].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:alb].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :chol %>
+    <%= form.text_field :chol, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:chol].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:chol].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :tp %>
+    <%= form.text_field :tp, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:tp].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:tp].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :alt %>
+    <%= form.text_field :alt, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:alt].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:alt].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :alkp %>
+    <%= form.text_field :alkp, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:alkp].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:alkp].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :ggt %>
+    <%= form.text_field :ggt, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:ggt].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:ggt].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :glu %>
+    <%= form.text_field :glu, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:glu].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:glu].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :tbil %>
+    <%= form.text_field :tbil, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:tbil].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:tbil].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :amyl %>
+    <%= form.text_field :amyl, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:amyl].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:amyl].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :lipa %>
+    <%= form.number_field :lipa, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:lipa].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:lipa].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :na %>
+    <%= form.text_field :na, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:na].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:na].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :k %>
+    <%= form.text_field :k, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:k].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:k].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :cl %>
+    <%= form.text_field :cl, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:cl].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:cl].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :rbc %>
+    <%= form.text_field :rbc, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:rbc].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:rbc].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :hct %>
+    <%= form.text_field :hct, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:hct].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:hct].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :hgb %>
+    <%= form.text_field :hgb, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:hgb].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:hgb].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :mcv %>
+    <%= form.text_field :mcv, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:mcv].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:mcv].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :mch %>
+    <%= form.text_field :mch, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:mch].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:mch].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :mchc %>
+    <%= form.text_field :mchc, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:mchc].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:mchc].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :rdw %>
+    <%= form.text_field :rdw, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:rdw].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:rdw].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :retic %>
+    <%= form.text_field :retic, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:retic].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:retic].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label "retic-hgb" %>
+    <%= form.text_field "retic-hgb", class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:"retic-hgb"].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:"retic-hgb"].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :wbc %>
+    <%= form.text_field :wbc, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:wbc].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:wbc].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :neu %>
+    <%= form.text_field :neu, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:neu].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:neu].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :lym %>
+    <%= form.text_field :lym, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:lym].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:lym].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :mono %>
+    <%= form.text_field :mono, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:mono].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:mono].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :eos %>
+    <%= form.text_field :eos, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:eos].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:eos].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :baso %>
+    <%= form.text_field :baso, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:baso].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:baso].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :plt %>
+    <%= form.number_field :plt, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:plt].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:plt].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :mpv %>
+    <%= form.text_field :mpv, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:mpv].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:mpv].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :pct %>
+    <%= form.text_field :pct, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:pct].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:pct].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label "osm-cal" %>
+    <%= form.number_field "osm-cal", class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:"osm-cal"].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:"osm-cal"].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :pet_id %>
+    <%= form.text_field :pet_id, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:pet_id].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:pet_id].any?}] %>
+  </div>
+
+  <div class="inline">
+    <%= form.submit class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>

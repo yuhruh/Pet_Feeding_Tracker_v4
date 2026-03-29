@@ -95,7 +95,7 @@
             </div>
           </div>
         </div>
-        <%= link_to "Health Checkup", work_path, class: "tracking-wide hover:text-softRed whitespace-nowrap" %>
+        <%= link_to "Health Checkup", health_path, class: "tracking-wide hover:text-softRed whitespace-nowrap" %>
         <%= button_to t('layouts.navigation.sign_out'), session_path, class: "px-8 py-2 text-white uppercase bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white", method: :delete %>
       <% else %>
         <%= link_to t('layouts.navigation.get_started'), new_registrations_path, class: "px-8 py-2 text-white bg-grayishBlue border-2 border-grayishBlue rounded-lg shadow-md tracking-wide hover:text-grayishBlue hover:bg-white" %>
@@ -280,7 +280,7 @@
       </div>
       <div class="w-full py-3 text-center">
         <div class="font-bold">Health Checkup</div>
-        <%= link_to "Report", work_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-red-100 hover:text-red-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+        <%= link_to "Report", health_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-red-100 hover:text-red-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
       </div>
       <div class="w-full py-3 text-center">
         <div class="flex flex-row justify-center gap-3">

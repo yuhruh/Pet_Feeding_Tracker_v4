@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       end
     end
     resources :pets do
+      resources :health_checks
       resources :trackers do
         collection do
           post :import
@@ -28,7 +29,7 @@ Rails.application.routes.draw do
     get "/home", to: "pages#hero_section"
     get "/about", to: "pages#about"
     get "/doc", to: "pages#doc"
-    get "/work", to: "pages#workon"
+    get "/health", to: "pages#health"
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

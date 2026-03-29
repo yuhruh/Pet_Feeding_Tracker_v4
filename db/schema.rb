@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_17_134238) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_29_140714) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -62,6 +62,49 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_17_134238) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_dry_foods_on_user_id"
+  end
+
+  create_table "health_checks", force: :cascade do |t|
+    t.decimal "crea"
+    t.decimal "bun"
+    t.decimal "phos"
+    t.decimal "ca"
+    t.decimal "alb"
+    t.decimal "chol"
+    t.decimal "tp"
+    t.decimal "alt"
+    t.decimal "alkp"
+    t.decimal "ggt"
+    t.decimal "glu"
+    t.decimal "tbil"
+    t.decimal "amyl"
+    t.integer "lipa"
+    t.decimal "na"
+    t.decimal "k"
+    t.decimal "cl"
+    t.decimal "rbc"
+    t.decimal "hct"
+    t.decimal "hgb"
+    t.decimal "mcv"
+    t.decimal "mch"
+    t.decimal "mchc"
+    t.decimal "rdw"
+    t.decimal "retic"
+    t.decimal "retic_hgb"
+    t.decimal "wbc"
+    t.decimal "neu"
+    t.decimal "lym"
+    t.decimal "mono"
+    t.decimal "eos"
+    t.decimal "baso"
+    t.integer "plt"
+    t.decimal "mpv"
+    t.decimal "pct"
+    t.integer "osm_cal"
+    t.integer "pet_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pet_id"], name: "index_health_checks_on_pet_id"
   end
 
   create_table "pets", force: :cascade do |t|
@@ -138,6 +181,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_17_134238) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "connected_services", "users"
   add_foreign_key "dry_foods", "Users", column: "user_id"
+  add_foreign_key "health_checks", "pets"
   add_foreign_key "pets", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "trackers", "dry_foods"
