@@ -1,7 +1,9 @@
 <div class="container mx-auto py-8 border-4 border-amber-600 rounded-lg shadow-lg mb-6 w-2/3 md:w-full">
   <div class="flex flex-col justify-center items_center">
     <h1 class="text-center font-bold text-xl text-amber-800 mb-4 underline underline-offset-8 decoration-amber-800 md:text-3xl">Annual Health Check-up Report</h1>
-    <%= image_tag "aji_health_remove.png" %>
+    <div class="flex justify-center">
+      <%= image_tag "aji_health_checkup.png", class: "rounded-xl shadow-lg w-full md:w-1/2 mb-4" %>
+    </div>
   </div>
   <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4 space-y-2 md:space-y-0 mb-4 text-amber-600 font-bold">
     <%= link_to "Liver", root_path, class: "hover:underline hover:scale-110 transition-all duration-300" %>
