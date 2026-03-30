@@ -2,6 +2,7 @@ class HealthChecksController < ApplicationController
   before_action :set_pet
   before_action :set_health_check, only: %i[ show edit update destroy ]
   before_action :require_authentication
+  before_action :set_current_date
 
 
   # GET /health_checks or /health_checks.json
@@ -79,6 +80,11 @@ class HealthChecksController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def health_check_params
-      params.require(:health_check).permit(:crea, :bun, :phos, :ca, :alb, :chol, :tp, :alt, :alkp, :ggt, :glu, :tbil, :amyl, :lipa, :na, :k, :cl, :rbc, :hct, :hgb, :mcv, :mch, :mchc, :rdw, :retic, :retic_hgb, :wbc, :neu, :lym, :mono, :eos, :baso, :plt, :mpv, :pct, "osm-cal", :pet_id)
+      params.require(:health_check).permit(:exam_date, :crea, :bun, :phos, :ca, :alb, :chol, :tp, :alt, :alkp, :ggt, :glu, :tbil, :amyl, :lipa, :na, :k, :cl, :rbc, :hct, :hgb, :mcv, :mch, :mchc, :rdw, :retic, :retic_hgb, :wbc, :neu, :lym, :mono, :eos, :baso, :plt, :mpv, :pct, :osm_cal, :pet_id)
+    end
+
+    def set_current_date
+      Time.zone = Current.user.timezone
+      Date.current.strftime("%Y-%m-%d")
     end
 end

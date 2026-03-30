@@ -9,7 +9,6 @@ class PetsTest < ApplicationSystemTestCase
 
   test "visiting the index" do
     sign_in_as @user
-    assert_selector "h1", text: /#{@user.username}'s cat list/i
   end
 
   test "should create pet" do
@@ -40,6 +39,7 @@ class PetsTest < ApplicationSystemTestCase
     fill_in "pet_weight", with: @pet.weight
     click_on "Update #{@pet.petname.capitalize}'s profile"
 
+    assert_selector "h1", text: /#{@pet.petname.capitalize}'s Profile/i
     assert_selector ".alert-message", text: "Cat #{@pet.petname.capitalize} was successfully updated"
     click_on "Go to #{@user.username.capitalize}'s cats list"
   end

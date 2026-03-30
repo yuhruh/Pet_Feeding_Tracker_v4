@@ -7,4 +7,7 @@
 
   <%= link_to "Show this health check", pet_health_check_path, class: "ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
   <%= link_to "Back to health checks", pet_health_checks_path, class: "ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+  <div class="flex justify-center">
+    <%= button_tag "Update Health check", type: "submit", form: "health-form", class: "btn text-center rounded-md px-3.5 py-2.5 text-white bg-softBlue hover:bg-white hover:text-softBlue hover:border-2 hover:border-softBlue inline-block font-medium cursor-pointer capitalize" %>
+  </div>
 </div>
