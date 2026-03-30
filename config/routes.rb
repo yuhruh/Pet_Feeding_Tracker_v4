@@ -9,7 +9,11 @@ Rails.application.routes.draw do
       end
     end
     resources :pets do
-      resources :health_checks
+      resources :health_checks do
+        collection do
+          delete :bulk_delete
+        end
+      end
       resources :trackers do
         collection do
           post :import

@@ -12,7 +12,7 @@ class CsvImportTrackersService
     ActiveRecord::Base.transaction do
       begin
         file = File.open(file)
-        csv = CSV.parse(file, headers: true)
+        csv = CSV.parse(file, headers: true, col_sep: ";")
         csv.each_with_index do |row, i|
           tracker_hash = {}
 

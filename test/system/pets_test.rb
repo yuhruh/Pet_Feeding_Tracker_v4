@@ -22,7 +22,9 @@ class PetsTest < ApplicationSystemTestCase
     fill_in "pet_weight", with: @pet.weight
     click_on "Add a cat"
 
-    assert_selector ".alert-message", text: "Cat was successfully created"
+    using_wait_time(5) do
+      assert_selector ".alert-message", text: "Cat was successfully created"
+    end
     visit pets_path
     assert_selector "h1", text: /#{@user.username}'s cat list/i
   end

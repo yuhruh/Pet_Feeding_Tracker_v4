@@ -33,7 +33,7 @@ class HealthChecksTest < ApplicationSystemTestCase
     fill_in "GLU(mg/dL)", with: @health_check.glu
     fill_in "HCT(%)", with: @health_check.hct
     fill_in "HGB(g/dL)", with: @health_check.hgb
-    fill_in "K (mmol/L)", with: @health_check.k
+    fill_in "K(mmol/L)", with: @health_check.k
     fill_in "LIPA(U/L)", with: @health_check.lipa
     fill_in "LYM(K/µL)", with: @health_check.lym
     fill_in "MCH(pg)", with: @health_check.mch
@@ -81,7 +81,7 @@ class HealthChecksTest < ApplicationSystemTestCase
     fill_in "GLU(mg/dL)", with: @health_check.glu
     fill_in "HCT(%)", with: @health_check.hct
     fill_in "HGB(g/dL)", with: @health_check.hgb
-    fill_in "K (mmol/L)", with: @health_check.k
+    fill_in "K(mmol/L)", with: @health_check.k
     fill_in "LIPA(U/L)", with: @health_check.lipa
     fill_in "LYM(K/µL)", with: @health_check.lym
     fill_in "MCH(pg)", with: @health_check.mch

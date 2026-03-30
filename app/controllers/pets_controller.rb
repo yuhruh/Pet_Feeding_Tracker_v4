@@ -26,7 +26,7 @@ class PetsController < ApplicationController
 
     respond_to do |format|
       if @pet.save
-        format.html { redirect_to @pet, notice: t(".notice") }
+        format.html { redirect_to pet_url(@pet), notice: t(".notice") }
         format.json { render :show, status: :created, location: @pet }
       else
         format.html { render :new, status: :unprocessable_entity }

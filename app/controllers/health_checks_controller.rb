@@ -13,6 +13,7 @@ class HealthChecksController < ApplicationController
 
   # GET /health_checks/1 or /health_checks/1.json
   def show
+    @health_checks = @pet.health_checks
   end
 
   # GET /health_checks/new
@@ -32,8 +33,8 @@ class HealthChecksController < ApplicationController
 
     respond_to do |format|
       if @health_check.save
-        format.html { redirect_to pet_health_check_path(@pet, @health_check), notice: "Health check was successfully created." }
-        format.json { render :show, status: :created, location: pet_health_check_path(@pet, @health_check) }
+        format.html { redirect_to pet_health_checks_path(@pet), notice: "Health check was successfully created." }
+        format.json { render :show, status: :created, location: pet_health_checks_path(@pet) }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @health_check.errors, status: :unprocessable_entity }
@@ -61,6 +62,14 @@ class HealthChecksController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to pet_health_checks_url(@pet), notice: "Health check was successfully destroyed.", status: :see_other }
+      format.json { head :no_content }
+    end
+  end
+
+  def bulk_delete
+    @pet.health_checks.where(id: params[:health_check_ids]).destroy_all
+    respond_to do |format|
+      format.html { redirect_to pet_health_checks_path(@pet), notice: "Selected health checks were successfully deleted." }
       format.json { head :no_content }
     end
   end
