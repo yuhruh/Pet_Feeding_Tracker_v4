@@ -63,6 +63,6 @@ class TrackersControllerTest < ActionDispatch::IntegrationTest
     assert_equal I18n.t("trackers.import.notice", petname: @pet.petname.capitalize), flash[:notice]
 
     tracker = Tracker.last
-    assert_equal Time.zone.parse("10:00").utc, tracker.feed_time.utc.strftime("%H:%M")
+    assert_equal Time.zone.parse("10:00").utc.strftime("%H:%M"), tracker.feed_time.utc.strftime("%H:%M")
   end
 end
