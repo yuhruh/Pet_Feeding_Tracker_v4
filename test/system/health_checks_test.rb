@@ -45,7 +45,7 @@ class HealthChecksTest < ApplicationSystemTestCase
     fill_in "NEU(%)", with: @health_check.neu
     fill_in "Osm Calc(mmol/kg)", with: @health_check.osm_cal
     fill_in "PCT(%)", with: @health_check.pct
-    
+
     fill_in "PHOS(mg/dL)", with: @health_check.phos
     fill_in "PLT(K/µL)", with: @health_check.plt
     fill_in "RBC(M/µl)", with: @health_check.rbc
@@ -93,7 +93,7 @@ class HealthChecksTest < ApplicationSystemTestCase
     fill_in "NEU(%)", with: @health_check.neu
     fill_in "Osm Calc(mmol/kg)", with: @health_check.osm_cal
     fill_in "PCT(%)", with: @health_check.pct
-    
+
     fill_in "PHOS(mg/dL)", with: @health_check.phos
     fill_in "PLT(K/µL)", with: @health_check.plt
     fill_in "RBC(M/µl)", with: @health_check.rbc
