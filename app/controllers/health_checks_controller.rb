@@ -8,7 +8,14 @@ class HealthChecksController < ApplicationController
   # GET /health_checks or /health_checks.json
   def index
     # @health_checks = HealthCheck.all
-    @health_checks = @pet.health_checks
+    health_checks = @pet.health_checks
+    adapter_type = Rails.configuration.database_configuration[Rails.env]["adapter"]
+    order_sql = if adapter_type == "sqlite3"
+      "exam_date DESC"
+    else
+      "exam_date DESC"
+    end
+    @health_checks = health_checks.order(order_sql)
   end
 
   # GET /health_checks/1 or /health_checks/1.json
