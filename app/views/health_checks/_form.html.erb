@@ -15,159 +15,6 @@
 
   <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
     <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :crea, "CREA(mg/dL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
-    </div>
-    <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.number_field :crea, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:crea].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:crea].any?}] %>
-    </div>
-  </div>
-
-  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
-    <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :bun, "BUN(mg/dL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
-    </div>
-    <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.number_field :bun, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:bun].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:bun].any?}] %>
-    </div>
-  </div>
-
-  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
-    <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :phos, "PHOS(mg/dL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
-    </div>
-    <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.number_field :phos, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:phos].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:phos].any?}] %>
-    </div>
-  </div>
-
-  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
-    <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :ca, "CA(mg/dL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
-    </div>
-    <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.number_field :ca, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:ca].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:ca].any?}] %>
-    </div>
-  </div>
-
-  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
-    <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :alb, "ALB(g/dL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
-    </div>
-    <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.number_field :alb, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:alb].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:alb].any?}] %>
-    </div>
-  </div>
-
-  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
-    <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :chol, "CHOL(mg/dL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
-    </div>
-    <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.number_field :chol, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:chol].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:chol].any?}] %>
-    </div>
-  </div>
-
-  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
-    <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :tp, "TP(g/dL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
-    </div>
-    <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.number_field :tp, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:tp].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:tp].any?}] %>
-    </div>
-  </div>
-
-  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
-    <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :alt, "ALT(U/L)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
-    </div>
-    <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.number_field :alt, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:alt].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:alt].any?}] %>
-    </div>
-  </div>
-
-  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
-    <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :alkp, "ALKP(U/L)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
-    </div>
-    <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.number_field :alkp, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:alkp].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:alkp].any?}] %>
-    </div>
-  </div>
-
-  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
-    <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :ggt, "GGT(U/L)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
-    </div>
-    <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.number_field :ggt, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:ggt].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:ggt].any?}] %>
-    </div>
-  </div>
-
-  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
-    <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :glu, "GLU(mg/dL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
-    </div>
-    <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.number_field :glu, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:glu].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:glu].any?}] %>
-    </div>
-  </div>
-
-  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
-    <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :tbil, "TBIL(mg/dL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
-    </div>
-    <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.number_field :tbil, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:tbil].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:tbil].any?}] %>
-    </div>
-  </div>
-
-  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
-    <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :amyl, "AMYL(U/L)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
-    </div>
-    <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.number_field :amyl, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:amyl].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:amyl].any?}] %>
-    </div>
-  </div>
-
-  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
-    <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :lipa, "LIPA(U/L)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
-    </div>
-    <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.number_field :lipa, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:lipa].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:lipa].any?}] %>
-    </div>
-  </div>
-
-  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
-    <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :na, "Na(mmol/L)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
-    </div>
-    <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.number_field :na, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:na].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:na].any?}] %>
-    </div>
-  </div>
-
-  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
-    <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :k, "K(mmol/L)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
-    </div>
-    <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.number_field :k, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:k].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:k].any?}] %>
-    </div>
-  </div>
-
-  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
-    <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :cl, "Cl(mmol/L)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 capitalize md:text-base" %>
-    </div>
-    <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.number_field :cl, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:cl].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:cl].any?}] %>
-    </div>
-  </div>
-
-  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
-    <div class="flex justify-center md:justify-end md:w-1/3">
       <%= form.label :rbc, "RBC(M/µl)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
     </div>
     <div class="flex flex-col items-center md:items-start md:w-5/6">
@@ -258,7 +105,7 @@
 
   <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
     <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :neu, "NEU(%)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
+      <%= form.label :neu, "NEU(K/µL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
     </div>
     <div class="flex flex-col items-center md:items-start md:w-5/6">
       <%= form.number_field :neu, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:neu].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:neu].any?}] %>
@@ -276,7 +123,7 @@
 
   <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
     <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :mono, "MONO(%)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
+      <%= form.label :mono, "MONO(K/µL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
     </div>
     <div class="flex flex-col items-center md:items-start md:w-5/6">
       <%= form.number_field :mono, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:mono].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:mono].any?}] %>
@@ -285,7 +132,7 @@
 
   <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
     <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :eos, "EOS(%)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
+      <%= form.label :eos, "EOS(K/µL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
     </div>
     <div class="flex flex-col items-center md:items-start md:w-5/6">
       <%= form.number_field :eos, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:eos].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:eos].any?}] %>
@@ -294,7 +141,7 @@
 
   <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
     <div class="flex justify-center md:justify-end md:w-1/3">
-      <%= form.label :baso, "BASO(%)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
+      <%= form.label :baso, "BASO(K/µL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
     </div>
     <div class="flex flex-col items-center md:items-start md:w-5/6">
       <%= form.number_field :baso, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:baso].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:baso].any?}] %>
@@ -325,6 +172,160 @@
     </div>
     <div class="flex flex-col items-center md:items-start md:w-5/6">
       <%= form.number_field :pct, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:pct].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:pct].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :glu, "GLU(mg/dL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.number_field :glu, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:glu].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:glu].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :crea, "CREA(mg/dL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.number_field :crea, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:crea].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:crea].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :bun, "BUN(mg/dL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.number_field :bun, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:bun].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:bun].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :phos, "PHOS(mg/dL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.number_field :phos, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:phos].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:phos].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :tp, "TP(g/dL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.number_field :tp, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:tp].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:tp].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :alb, "ALB(g/dL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.number_field :alb, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:alb].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:alb].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :alt, "ALT(U/L)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.number_field :alt, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:alt].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:alt].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :alkp, "ALKP(U/L)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.number_field :alkp, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:alkp].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:alkp].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :na, "Na(mmol/L)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.number_field :na, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:na].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:na].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :k, "K(mmol/L)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.number_field :k, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:k].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:k].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :cl, "Cl(mmol/L)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 capitalize md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.number_field :cl, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:cl].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:cl].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :ca, "CA(mg/dL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.number_field :ca, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:ca].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:ca].any?}] %>
+    </div>
+  </div>
+
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :chol, "CHOL(mg/dL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.number_field :chol, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:chol].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:chol].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :ggt, "GGT(U/L)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.number_field :ggt, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:ggt].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:ggt].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :tbil, "TBIL(mg/dL)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.number_field :tbil, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:tbil].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:tbil].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :amyl, "AMYL(U/L)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.number_field :amyl, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:amyl].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:amyl].any?}] %>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+    <div class="flex justify-center md:justify-end md:w-1/3">
+      <%= form.label :lipa, "LIPA(U/L)", class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
+    </div>
+    <div class="flex flex-col items-center md:items-start md:w-5/6">
+      <%= form.number_field :lipa, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:lipa].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:lipa].any?}] %>
     </div>
   </div>
 

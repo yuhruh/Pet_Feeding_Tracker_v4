@@ -50,7 +50,6 @@
               </svg>
               Add new report
             <% end %>
-            <%= link_to "Go Back to Home", root_path, class: "text-center rounded-md px-3.5 py-2.5 text-white bg-amber-600 hover:bg-white hover:text-amber-600 hover:border-2 hover:border-amber-600 inline-block font-medium cursor-pointer" %>
           </div>
         <% else %>
           <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4 space-y-2 md:space-y-0 mb-4 font-bold"> 
@@ -82,10 +81,12 @@
                     h130.43c7.087,0,12.829-5.744,12.829-12.829C280.804,416.543,275.06,410.8,267.975,410.8z"/>
                 </g>
               </svg>
-              <%= link_to "Go Back to Home", root_path, class: "text-center rounded-md px-3.5 py-2.5 text-white bg-amber-600 hover:bg-white hover:text-amber-600 hover:border-2 hover:border-amber-600 inline-block font-medium cursor-pointer" %>
             <% end %>
           </div>
         <% end %>
+        <div class="flex flex-row justify-center items-center gap-2 mt-2">
+          <%= link_to "Go Back to Home", root_path, class: "text-center rounded-md px-3.5 py-2.5 text-white bg-amber-600 hover:bg-white hover:text-amber-600 hover:border-2 hover:border-amber-600 inline-block font-medium cursor-pointer" %>
+        </div>
       <% end %>
     </div>
   </div>

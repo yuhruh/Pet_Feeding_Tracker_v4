@@ -22,13 +22,13 @@ class HealthChecksTest < ApplicationSystemTestCase
     fill_in "ALKP(U/L)", with: @health_check.alkp
     fill_in "ALT(U/L)", with: @health_check.alt
     fill_in "AMYL(U/L)", with: @health_check.amyl
-    fill_in "BASO(%)", with: @health_check.baso
+    fill_in "BASO(K/µL)", with: @health_check.baso
     fill_in "BUN(mg/dL)", with: @health_check.bun
     fill_in "CA(mg/dL)", with: @health_check.ca
     fill_in "CHOL(mg/dL)", with: @health_check.chol
     fill_in "Cl(mmol/L)", with: @health_check.cl
     fill_in "CREA(mg/dL)", with: @health_check.crea
-    fill_in "EOS(%)", with: @health_check.eos
+    fill_in "EOS(K/µL)", with: @health_check.eos
     fill_in "GGT(U/L)", with: @health_check.ggt
     fill_in "GLU(mg/dL)", with: @health_check.glu
     fill_in "HCT(%)", with: @health_check.hct
@@ -39,10 +39,10 @@ class HealthChecksTest < ApplicationSystemTestCase
     fill_in "MCH(pg)", with: @health_check.mch
     fill_in "MCHC(g/dL)", with: @health_check.mchc
     fill_in "MCV(fL)", with: @health_check.mcv
-    fill_in "MONO(%)", with: @health_check.mono
+    fill_in "MONO(K/µL)", with: @health_check.mono
     fill_in "MPV(fL)", with: @health_check.mpv
     fill_in "Na(mmol/L)", with: @health_check.na
-    fill_in "NEU(%)", with: @health_check.neu
+    fill_in "NEU(K/µL)", with: @health_check.neu
     fill_in "Osm Calc(mmol/kg)", with: @health_check.osm_cal
     fill_in "PCT(%)", with: @health_check.pct
 
@@ -70,13 +70,13 @@ class HealthChecksTest < ApplicationSystemTestCase
     fill_in "ALKP(U/L)", with: @health_check.alkp
     fill_in "ALT(U/L)", with: @health_check.alt
     fill_in "AMYL(U/L)", with: @health_check.amyl
-    fill_in "BASO(%)", with: @health_check.baso
+    fill_in "BASO(K/µL)", with: @health_check.baso
     fill_in "BUN(mg/dL)", with: @health_check.bun
     fill_in "CA(mg/dL)", with: @health_check.ca
     fill_in "CHOL(mg/dL)", with: @health_check.chol
     fill_in "Cl(mmol/L)", with: @health_check.cl
     fill_in "CREA(mg/dL)", with: @health_check.crea
-    fill_in "EOS(%)", with: @health_check.eos
+    fill_in "EOS(K/µL)", with: @health_check.eos
     fill_in "GGT(U/L)", with: @health_check.ggt
     fill_in "GLU(mg/dL)", with: @health_check.glu
     fill_in "HCT(%)", with: @health_check.hct
@@ -87,10 +87,10 @@ class HealthChecksTest < ApplicationSystemTestCase
     fill_in "MCH(pg)", with: @health_check.mch
     fill_in "MCHC(g/dL)", with: @health_check.mchc
     fill_in "MCV(fL)", with: @health_check.mcv
-    fill_in "MONO(%)", with: @health_check.mono
+    fill_in "MONO(K/µL)", with: @health_check.mono
     fill_in "MPV(fL)", with: @health_check.mpv
     fill_in "Na(mmol/L)", with: @health_check.na
-    fill_in "NEU(%)", with: @health_check.neu
+    fill_in "NEU(K/µL)", with: @health_check.neu
     fill_in "Osm Calc(mmol/kg)", with: @health_check.osm_cal
     fill_in "PCT(%)", with: @health_check.pct
 
