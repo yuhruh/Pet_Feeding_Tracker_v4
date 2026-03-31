@@ -81,6 +81,48 @@ class HealthChecksController < ApplicationController
     end
   end
 
+  def liver
+    health_checks = @pet.health_checks
+    adapter_type = Rails.configuration.database_configuration[Rails.env]["adapter"]
+    order_sql = if adapter_type == "sqlite3"
+      "exam_date DESC"
+    else
+      "exam_date DESC"
+    end
+    # ranges = {
+    #   glu: [74, 159],
+    #   tp: [5.7, 8.9],
+    #   alb: [2.2, 4.0],
+    #   alt: [12, 130],
+    #   alkp: [14, 111],
+    #   bun: [16, 36]
+    # }
+    @health_checks = health_checks.order(order_sql)
+    @glu_checks = @health_checks.where.not(glu: nil).order(:exam_date)
+    # @glu_properties = @health_checks.where.not(glu: nil).group(:exam_date).order(:exam_date).average(:glu).transform_keys { |date| date.strftime("%Y-%m-%d") }.transform_values(&:to_f)
+    # @glu_chart_data = @glu_properties.map { |year, avg| [year, avg, *ranges[:glu]] }
+    glu_low_val = 74
+    glu_high_val = 159
+
+    glu_reading_data = @glu_checks.map { |health_check| [ health_check.exam_date.to_s, health_check.glu.to_f ] }
+    glu_low_val = @glu_checks.map { |health_check| [ health_check.exam_date.to_s, glu_low_val ] }
+    glu_high_val = @glu_checks.map { |health_check| [ health_check.exam_date.to_s, glu_high_val ] }
+
+
+    @glu_chart_data = [
+      { name: "GLU(mg/dL)", data: glu_reading_data },
+      { name: "Lower Limit (74)", data: glu_low_val },
+      { name: "Upper Limit (159)", data: glu_high_val }
+    ]
+
+
+    @tp_properties = @health_checks.where.not(tp: nil).group(:exam_date).order(:exam_date).average(:tp).transform_keys { |date| date.strftime("%Y") }.transform_values(&:to_f)
+    @alb_properties = @health_checks.where.not(alb: nil).group(:exam_date).order(:exam_date).average(:alb).transform_keys { |date| date.strftime("%Y") }.transform_values(&:to_f)
+    @alt_properties = @health_checks.where.not(alt: nil).group(:exam_date).order(:exam_date).average(:alt).transform_keys { |date| date.strftime("%Y") }.transform_values(&:to_f)
+    @alkp_properties = @health_checks.where.not(alkp: nil).group(:exam_date).order(:exam_date).average(:alkp).transform_keys { |date| date.strftime("%Y") }.transform_values(&:to_f)
+    @bun_properties = @health_checks.where.not(bun: nil).group(:exam_date).order(:exam_date).average(:bun).transform_keys { |date| date.strftime("%Y") }.transform_values(&:to_f)
+  end
+
   private
     def set_pet
       @pet = Pet.find(params[:pet_id])

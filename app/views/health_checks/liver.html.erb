@@ -1,0 +1,87 @@
+<% if @health_checks.empty? %>
+  <p class="text-amber-700 text-center font-bold my-10">No <%= @pet.petname.capitalize %>'s liver health checks report</p>
+  <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4">
+    <%= link_to "Go Back to Report Index", pet_health_checks_path, class: "mb-4 items-center text-center rounded-md px-3.5 py-2.5 text-white bg-amber-600 hover:bg-white hover:text-amber-600 hover:border-2 hover:border-amber-600 inline-block font-medium cursor-pointer" %>
+  </div>
+<% else %>
+  <div class="container w-1/2">
+    <%= line_chart @glu_chart_data, adapter: "google", library: {
+        title: "GLU Trends with Reference Range ( 74 - 159 )",
+        hAxis: { type: 'category', title: 'Exam Date', slantedText: true, slantedTextAngle: 45 },
+        vAxis: { title: 'GLU(mg/dL)', viewWindow: { min: 0, max: 200 } },
+        series: { 
+          0 => {
+            type: 'scatter',
+            pointSize: 12,
+            pointShape: 'square',
+            color: '#1E40AF'},
+          1 => {
+            type: 'line',
+            color: '#DC2626',
+            lineWidth: 2,
+            lineDashStyle: [],
+            pointsVisible: false, 
+            visibleInLegend: true },
+          2 => {
+            type: 'line',
+            color: '#DC2626',
+            lineWidth: 2,
+            lineDashStyle: [],
+            pointsVisible: false, 
+            visibleInLegend: true
+          }
+        },
+        chartArea: { left: 100, right: 100, bottom: 100, top: 40 },
+      } 
+    %>
+  </div>
+  <div class="container mx-auto w-full shadow-lg rounded-xl p-2 mb-4" data-controller="bulk-delete">
+    <div class="flex flex-col gap-8 justify-center mt-4 lg:flex-row lg:items-center">
+      <div class="hidden overflow-x-auto w-full md:block">
+        <table class="table-auto mb-2 px-2 w-full dark:bg-slate-100">
+          <thead>
+            <tr class="border-b-4 bg-gray-100 dark:bg-black">
+              <th class="capitalize text-sm text-center p-2 dark:text-white">
+                <input type="checkbox" data-bulk-delete-target="selectAll" data-action="bulk-delete#toggleAll">
+              </th>
+              <th class="text-sm text-center p-2 dark:text-white">#</th>
+              <th class="text-sm text-center p-2 dark:text-white">Exam Date</th>
+              <th class="text-sm text-center p-2 dark:text-white">GLU(mg/dL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">TP(g/dL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">ALB(g/dL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">ALT(U/L)</th>
+              <th class="text-sm text-center p-2 dark:text-white">ALKP(U/L)</th>
+              <th class="text-sm text-center p-2 dark:text-white">CHOL(mg/dL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">GGT(U/L)</th>
+              <th class="text-sm text-center p-2 dark:text-white">BUN(mg/dL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">TBIL(mg/dL)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+              <tr id="<%= dom_id(health_check) %>" class="border-b bg-gray-100">
+                <td class="capitalize text-sky-700 text-sm text-center p-2">
+                  <%= check_box_tag "health_check_ids[]", health_check.id, false, class: "health-check-checkbox", "data-bulk-delete-target": "checkbox", "data-action": "bulk-delete#updateSelectAll" %>
+                </td>
+                <td class="text-sky-700 text-sm text-center p-2 font-semibold"><%= idx+1 %></td>
+                <td class="text-sky-700 text-sm text-center p-2"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
+                <td class="text-sky-700 text-sm text-center p-2"><%= health_check.glu %></td>
+                <td class="text-sky-700 text-sm text-center p-2"><%= health_check.tp %></td>
+                <td class="text-sky-700 text-sm text-center p-2"><%= health_check.alb %></td>
+                <td class="text-sky-700 text-sm text-center p-2"><%= health_check.alt %></td>
+                <td class="text-sky-700 text-sm text-center p-2"><%= health_check.alkp %></td>
+                <td class="text-sky-700 text-sm text-center p-2"><%= health_check.chol %></td>
+                <td class="text-sky-700 text-sm text-center p-2"><%= health_check.ggt %></td>
+                <td class="text-sky-700 text-sm text-center p-2"><%= health_check.bun %></td>
+                <td class="text-sky-700 text-sm text-center p-2"><%= health_check.tbil %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Transposed Table for Small Screens -->
+      
+    </div>
+  </div>
+<% end %>

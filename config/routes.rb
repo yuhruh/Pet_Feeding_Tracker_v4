@@ -11,6 +11,8 @@ Rails.application.routes.draw do
     resources :pets do
       resources :health_checks do
         collection do
+          get "liver"
+          get "kidney"
           delete :bulk_delete
         end
       end
