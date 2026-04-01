@@ -54,8 +54,8 @@ class HealthChecksController < ApplicationController
     @health_check.assign_attributes(health_check_params)
     respond_to do |format|
       if @health_check.update(health_check_params)
-        format.html { redirect_to pet_health_check_path(@pet, @health_check), notice: "Health check was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: pet_health_check_path(@pet, @health_check) }
+        format.html { redirect_to pet_health_checks_path(@pet), notice: "Health check was successfully updated.", status: :see_other }
+        format.json { render :show, status: :ok, location: pet_health_checks_path(@pet) }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @health_check.errors, status: :unprocessable_entity }
@@ -82,6 +82,18 @@ class HealthChecksController < ApplicationController
   end
 
   def liver
+    health_checks = @pet.health_checks
+    adapter_type = Rails.configuration.database_configuration[Rails.env]["adapter"]
+    order_sql = if adapter_type == "sqlite3"
+      "exam_date DESC"
+    else
+      "exam_date DESC"
+    end
+
+    @health_checks = health_checks.order(order_sql)
+  end
+
+  def kidney
     health_checks = @pet.health_checks
     adapter_type = Rails.configuration.database_configuration[Rails.env]["adapter"]
     order_sql = if adapter_type == "sqlite3"
