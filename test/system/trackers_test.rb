@@ -13,6 +13,7 @@ class TrackersTest < ApplicationSystemTestCase
   test "visiting the index" do
     sign_in_as @user
     visit pet_trackers_url(locale: I18n.default_locale, pet_id: @pet.id)
+
     assert_selector "h1", text: "#{@pet.petname.capitalize}'s Trackers"
   end
 
