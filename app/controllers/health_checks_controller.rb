@@ -105,6 +105,54 @@ class HealthChecksController < ApplicationController
     @health_checks = health_checks.order(order_sql)
   end
 
+  def pancreas
+    health_checks = @pet.health_checks
+    adapter_type = Rails.configuration.database_configuration[Rails.env]["adapter"]
+    order_sql = if adapter_type == "sqlite3"
+      "exam_date DESC"
+    else
+      "exam_date DESC"
+    end
+
+    @health_checks = health_checks.order(order_sql)
+  end
+
+  def stomach
+    health_checks = @pet.health_checks
+    adapter_type = Rails.configuration.database_configuration[Rails.env]["adapter"]
+    order_sql = if adapter_type == "sqlite3"
+      "exam_date DESC"
+    else
+      "exam_date DESC"
+    end
+
+    @health_checks = health_checks.order(order_sql)
+  end
+
+  def blood
+    health_checks = @pet.health_checks
+    adapter_type = Rails.configuration.database_configuration[Rails.env]["adapter"]
+    order_sql = if adapter_type == "sqlite3"
+      "exam_date DESC"
+    else
+      "exam_date DESC"
+    end
+
+    @health_checks = health_checks.order(order_sql)
+  end
+
+  def all_test
+    health_checks = @pet.health_checks
+    adapter_type = Rails.configuration.database_configuration[Rails.env]["adapter"]
+    order_sql = if adapter_type == "sqlite3"
+      "exam_date DESC"
+    else
+      "exam_date DESC"
+    end
+
+    @health_checks = health_checks.order(order_sql)
+  end
+
   private
     def set_pet
       @pet = Pet.find(params[:pet_id])

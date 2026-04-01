@@ -13,6 +13,11 @@ Rails.application.routes.draw do
         collection do
           get "liver"
           get "kidney"
+          get "pancreas"
+          get "stomach"
+          get "others"
+          get "blood"
+          get "all_test"
           delete :bulk_delete
         end
       end

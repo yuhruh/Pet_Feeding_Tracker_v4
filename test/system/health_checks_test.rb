@@ -15,7 +15,7 @@ class HealthChecksTest < ApplicationSystemTestCase
 
   test "should create health check" do
     sign_in_as @user
-    visit pet_health_checks_url(locale: I18n.default_locale, pet_id: @pet.id)
+    visit all_test_pet_health_checks_url(locale: I18n.default_locale, pet_id: @pet.id)
     click_on "Add new report"
 
     fill_in "ALB(g/dL)", with: @health_check.alb
@@ -58,13 +58,12 @@ class HealthChecksTest < ApplicationSystemTestCase
     click_on "Add new report"
 
     assert_text "Health check was successfully created"
-    click_on "Back"
   end
 
   test "should update Health check" do
     sign_in_as @user
-    visit pet_health_checks_url(locale: I18n.default_locale, pet_id: @pet.id)
-    click_on "Edit this health check", match: :first
+    visit all_test_pet_health_checks_url(locale: I18n.default_locale, pet_id: @pet.id)
+    click_on "Edit this health check"
 
     fill_in "ALB(g/dL)", with: @health_check.alb
     fill_in "ALKP(U/L)", with: @health_check.alkp
@@ -106,7 +105,6 @@ class HealthChecksTest < ApplicationSystemTestCase
     click_on "Update Health check"
 
     assert_text "Health check was successfully updated"
-    click_on "Back"
   end
 
   # test "should destroy Health check" do

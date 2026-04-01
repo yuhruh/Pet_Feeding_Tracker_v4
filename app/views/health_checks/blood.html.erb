@@ -1,0 +1,182 @@
+<div class="flex flex-col justify-center items-center">
+  <div class="flex justify-center">
+    <h1 class="text-center font-bold text-xl text-amber-700 mb-4 mt-2 p-4 underline underline-offset-8 decoration-amber-700 dark:text-amber-600 dark:decoration-amber-600 md:text-3xl">Blood Health Report</h1>
+    <div class="flex flex-row justify-center items-center gap-4 mt-2">
+      <div class="relative group">
+        <span class="absolute -top-8 left-1/2 -transition-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+          Go Back to Report Index
+        </span>
+        <%= link_to pet_health_checks_path, class: "hover:opacity-80 transition-opacity cursor-pointer" do %>
+        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          class="transition-transform duration-200 group-hover:scale-110 group-hover:rotate-45 origin-center"
+          width="50px" height="50px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+          <path style="fill:#9FD25A;" d="M336.642,0H158.381c-4.395,0-7.958,3.562-7.958,7.958v190.995c0,4.278,3.666,7.958,7.957,7.958
+            c2.212,0,4.378-0.924,5.917-2.634l35.827-39.81h136.519c4.395,0,7.958-3.562,7.958-7.958V7.958C344.601,3.562,341.037,0,336.642,0z"
+            />
+          <path style="fill:#6EAD32;" d="M161.564,198.953V7.958c0-4.396,3.563-7.958,7.958-7.958h-11.141c-4.395,0-7.958,3.562-7.958,7.958
+            v190.995c0,4.278,3.666,7.958,7.957,7.958c2.057,0,4.067-0.809,5.577-2.295C162.465,203.15,161.564,201.132,161.564,198.953z"/>
+          <path style="fill:#FFFFFF;" d="M237.962,119.372c-2.716,0-5.432-1.037-7.503-3.108l-35.016-35.016
+            c-4.144-4.144-4.144-10.862,0-15.007c4.144-4.142,10.862-4.142,15.007,0l27.569,27.57l62.529-61.582
+            c4.175-4.111,10.895-4.06,15.006,0.115c4.112,4.175,4.061,10.893-0.115,15.006l-70.031,68.97
+            C243.341,118.355,240.652,119.372,237.962,119.372z"/>
+          <path style="fill:#E0DDDF;" d="M213.026,220.175H102.674c-4.396,0-7.958,3.562-7.958,7.958V450.96
+            c0,33.643,27.37,61.012,61.012,61.012h4.244c33.643,0,61.012-27.37,61.012-61.012V228.133
+            C220.984,223.737,217.422,220.175,213.026,220.175z"/>
+          <path style="fill:#FF675C;" d="M94.716,313.197V450.96c0,33.643,27.37,61.012,61.012,61.012h4.244
+            c33.643,0,61.012-27.37,61.012-61.012V313.197H94.716z"/>
+          <path style="fill:#C1BCBF;" d="M220.984,248.293v-20.161c0-4.395-3.563-7.958-7.958-7.958H102.674c-4.395,0-7.958,3.563-7.958,7.958
+            V450.96c0,33.696,27.317,61.012,61.012,61.012h4.244c3.341,0,6.618-0.281,9.815-0.8c-28.991-4.709-51.197-29.911-51.197-60.212
+            V253.599c0-2.93,2.376-5.305,5.305-5.305H220.984z"/>
+          <path style="fill:#DB3D5A;" d="M163.979,511.826c1.945-0.126,3.884-0.35,5.808-0.655c-28.991-4.709-51.197-29.911-51.197-60.212
+            V313.197H94.716V450.96c0,33.643,27.37,61.012,61.012,61.012C158.461,512.029,161.243,512.01,163.979,511.826
+            C164.469,511.794,163.577,511.854,163.979,511.826z"/>
+          <path style="fill:#E0DDDF;" d="M234.248,236.091H81.452c-4.396,0-7.958-3.562-7.958-7.958s3.562-7.958,7.958-7.958h152.796
+            c4.396,0,7.958,3.562,7.958,7.958S238.644,236.091,234.248,236.091z"/>
+          <rect x="165.805" y="220.175" style="fill:#F9F8F9;" width="24.758" height="15.916"/>
+          <g>
+            <path style="fill:#736770;" d="M144.586,300.286c0-4.396-3.562-7.958-7.958-7.958H94.716v15.916h41.913
+              C141.024,308.245,144.586,304.682,144.586,300.286z"/>
+            <path style="fill:#736770;" d="M144.586,338.485c0-4.396-3.562-7.958-7.958-7.958H94.716v15.916h41.913
+              C141.024,346.444,144.586,342.881,144.586,338.485z"/>
+            <path style="fill:#736770;" d="M144.586,376.684c0-4.396-3.562-7.958-7.958-7.958H94.716v15.916h41.913
+              C141.024,384.642,144.586,381.08,144.586,376.684z"/>
+            <path style="fill:#736770;" d="M144.586,414.883c0-4.396-3.562-7.958-7.958-7.958H94.716v15.916h41.913
+              C141.024,422.841,144.586,419.279,144.586,414.883z"/>
+          </g>
+          <g>
+            <circle style="fill:#DB3D5A;" cx="170.58" cy="344.852" r="10.08"/>
+            <circle style="fill:#DB3D5A;" cx="201.351" cy="381.99" r="10.08"/>
+            <circle style="fill:#DB3D5A;" cx="170.58" cy="410.639" r="10.08"/>
+            <circle style="fill:#DB3D5A;" cx="170.58" cy="470.06" r="10.08"/>
+            <circle style="fill:#DB3D5A;" cx="201.351" cy="439.288" r="10.08"/>
+          </g>
+          <path style="fill:#E0DDDF;" d="M409.327,220.175H298.974c-4.396,0-7.958,3.562-7.958,7.958V450.96
+            c0,33.643,27.37,61.012,61.012,61.012h4.244c33.643,0,61.012-27.37,61.012-61.012V228.133
+            C417.285,223.737,413.723,220.175,409.327,220.175z"/>
+          <path style="fill:#FAEC8E;" d="M291.016,273.582V450.96c0,33.643,27.37,61.012,61.012,61.012h4.244
+            c33.643,0,61.012-27.37,61.012-61.012V273.582H291.016z"/>
+          <path style="fill:#C1BCBF;" d="M417.285,248.293v-20.161c0-4.395-3.563-7.958-7.958-7.958H298.974c-4.395,0-7.958,3.563-7.958,7.958
+            V450.96c0,33.696,27.316,61.012,61.012,61.012h4.244c3.341,0,6.618-0.281,9.815-0.8c-28.991-4.709-51.197-29.911-51.197-60.212
+            V253.599c0-2.93,2.376-5.305,5.305-5.305H417.285z"/>
+          <path style="fill:#FBC96C;" d="M360.279,511.826c1.945-0.126,3.884-0.35,5.808-0.655c-28.991-4.709-51.197-29.911-51.197-60.212
+            V273.582h-23.874V450.96c0,33.643,27.37,61.012,61.012,61.012C354.762,512.029,357.544,512.01,360.279,511.826
+            C360.769,511.794,359.877,511.854,360.279,511.826z"/>
+          <path style="fill:#E0DDDF;" d="M430.548,236.091H277.752c-4.396,0-7.958-3.562-7.958-7.958s3.562-7.958,7.958-7.958h152.796
+            c4.396,0,7.958,3.562,7.958,7.958S434.944,236.091,430.548,236.091z"/>
+          <rect x="365.999" y="220.175" style="fill:#F9F8F9;" width="25.466" height="15.916"/>
+          <g>
+            <path style="fill:#736770;" d="M340.887,300.286c0-4.396-3.562-7.958-7.958-7.958h-41.913v15.916h41.913
+              C337.325,308.245,340.887,304.682,340.887,300.286z"/>
+            <path style="fill:#736770;" d="M340.887,338.485c0-4.396-3.562-7.958-7.958-7.958h-41.913v15.916h41.913
+              C337.325,346.444,340.887,342.881,340.887,338.485z"/>
+            <path style="fill:#736770;" d="M340.887,376.684c0-4.396-3.562-7.958-7.958-7.958h-41.913v15.916h41.913
+              C337.325,384.642,340.887,381.08,340.887,376.684z"/>
+            <path style="fill:#736770;" d="M340.887,414.883c0-4.396-3.562-7.958-7.958-7.958h-41.913v15.916h41.913
+              C337.325,422.841,340.887,419.279,340.887,414.883z"/>
+          </g>
+          <g>
+            <circle style="fill:#FBC96C;" cx="363.697" cy="303.47" r="10.08"/>
+            <circle style="fill:#FBC96C;" cx="394.468" cy="340.608" r="10.08"/>
+            <circle style="fill:#FBC96C;" cx="363.697" cy="369.257" r="10.08"/>
+            <circle style="fill:#FBC96C;" cx="363.697" cy="428.677" r="10.08"/>
+            <circle style="fill:#FBC96C;" cx="394.468" cy="397.906" r="10.08"/>
+            <circle style="fill:#FBC96C;" cx="394.468" cy="463.693" r="10.08"/>
+          </g>          
+        </svg>
+      <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<% if @health_checks.empty? %>
+  <p class="text-amber-700 text-center font-bold my-10">No <%= @pet.petname.capitalize %>'s liver health checks report</p>
+  <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4">
+    <%= link_to "Go Back to Report Index", pet_health_checks_path, class: "mb-4 items-center text-center rounded-md px-3.5 py-2.5 text-white bg-amber-600 hover:bg-white hover:text-amber-600 hover:border-2 hover:border-amber-600 inline-block font-medium cursor-pointer" %>
+  </div>
+<% else %>
+  <div class="container mx-auto w-full shadow-lg rounded-xl p-2 mb-4" data-controller="bulk-delete">
+    <div class="flex flex-col gap-8 justify-center mt-4 lg:flex-row lg:items-center">
+      <div class="hidden overflow-x-auto w-full md:block">
+        <table class="table-auto mb-2 px-2 w-full dark:bg-slate-100">
+          <thead>
+            <tr class="bg-gray-100 dark:bg-black">
+              <th class="text-sm text-center p-2 dark:text-white">#</th>
+              <th class="text-sm text-center p-2 dark:text-white">Exam Date</th>
+              <th class="text-sm text-center p-2 dark:text-white">RBC(M/µl)</th>
+              <th class="text-sm text-center p-2 dark:text-white">HCT(%)</th>
+              <th class="text-sm text-center p-2 dark:text-white">HGB(g/dL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">MCV(fL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">MCH(pg)</th>
+              <th class="text-sm text-center p-2 dark:text-white">MCHC(g/dL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">RDW(%)</th>
+              <th class="text-sm text-center p-2 dark:text-white">RETIC(K/µL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">RETIC-HGB(pg)</th>
+              <th class="text-sm text-center p-2 dark:text-white">WBC(K/µL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">NEU(K/µL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">LYM(K/µL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">MONO(K/µL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">EOS(K/µL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">BASO(K/µL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">PLT(K/µL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">MPV(fL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">PCT(%)</th>
+            </tr>
+          </thead>
+          <thead>
+            <tr class="border-b-4 bg-gray-100 dark:bg-black">
+              <th class="text-sm text-center p-2 dark:text-white"></th>
+              <th class="text-sm text-center p-2 dark:text-white">Reference Range</th>
+              <th class="text-sm text-center p-2 dark:text-white">6.54 - 12.20 (M/µl)</th>
+              <th class="text-sm text-center p-2 dark:text-white">30.3 - 52.3 (%)</th>
+              <th class="text-sm text-center p-2 dark:text-white">9.8 - 16.2 (g/dL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">35.9 - 53.1 (fL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">11.8 - 17.3 (pg)</th>
+              <th class="text-sm text-center p-2 dark:text-white">28.1 - 35.8 (g/dL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">15.0 - 27.0 (%)</th>
+              <th class="text-sm text-center p-2 dark:text-white">3.0 - 50.0 (K/µL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">13.2 - 20.8 (pg)</th>
+              <th class="text-sm text-center p-2 dark:text-white">2.87 - 17.02 (K/µL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">2.30 - 10.29 (K/µL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">0.92 - 6.88 (K/µL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">0.05 - 0.67 (K/µL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">0.17 - 1.57 (K/µL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">0.01 - 0.26 (K/µL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">151 - 600 (K/µL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">11.4 - 21.6 (fL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">0.17 - 0.86 (%)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+              <tr id="<%= dom_id(health_check) %>" class="border-b bg-gray-100">
+                <td class="text-sm text-center p-2 font-semibold"><%= idx+1 %></td>
+                <td class="text-sm text-center p-2"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
+                <td class="text-sm <%=range_row_class(health_check.rbc, 12.20, 6.54)%> text-center p-2"><%= health_check.rbc %></td>
+                <td class="text-sm <%=range_row_class(health_check.hct, 52.3, 30.3)%> text-center p-2"><%= health_check.hct %></td>
+                <td class="text-sm <%=range_row_class(health_check.hgb, 16.2, 9.8)%> text-center p-2"><%= health_check.hgb %></td>
+                <td class="text-sm <%=range_row_class(health_check.mcv, 53.1, 35.9)%> text-center p-2"><%= health_check.mcv %></td>
+                <td class="text-sm <%=range_row_class(health_check.mch, 17.3, 11.8)%> text-center p-2"><%= health_check.mch %></td>
+                <td class="text-sm <%=range_row_class(health_check.mchc, 35.8, 28.1)%> text-center p-2"><%= health_check.mchc %></td>
+                <td class="text-sm <%=range_row_class(health_check.rdw, 27.0, 15.0)%> text-center p-2"><%= health_check.rdw %></td>
+                <td class="text-sm <%=range_row_class(health_check.retic, 50.0, 3.0)%> text-center p-2"><%= health_check.retic %></td>
+                <td class="text-sm <%=range_row_class(health_check.retic_hgb, 20.8, 13.2)%> text-center p-2"><%= health_check.retic_hgb %></td>
+                <td class="text-sm <%=range_row_class(health_check.wbc, 17.02, 2.87)%> text-center p-2"><%= health_check.wbc %></td>
+                <td class="text-sm <%=range_row_class(health_check.neu, 10.29, 2.30)%> text-center p-2"><%= health_check.neu %></td>
+                <td class="text-sm <%=range_row_class(health_check.lym, 6.88, 0.92)%> text-center p-2"><%= health_check.lym %></td>
+                <td class="text-sm <%=range_row_class(health_check.mono, 0.67, 0.05)%> text-center p-2"><%= health_check.mono %></td>
+                <td class="text-sm <%=range_row_class(health_check.eos, 1.57, 0.17)%> text-center p-2"><%= health_check.eos %></td>
+                <td class="text-sm <%=range_row_class(health_check.baso, 0.26, 0.01)%> text-center p-2"><%= health_check.baso %></td>
+                <td class="text-sm <%=range_row_class(health_check.plt, 600, 151)%> text-center p-2"><%= health_check.plt %></td>
+                <td class="text-sm <%=range_row_class(health_check.mpv, 21.6, 11.4)%> text-center p-2"><%= health_check.mpv %></td>
+                <td class="text-sm <%=range_row_class(health_check.pct, 0.86, 0.17)%> text-center p-2"><%= health_check.pct %></td> 
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Transposed Table for Small Screens -->
+      
+    </div>
+  </div>
+<% end %>
