@@ -10,8 +10,28 @@
   <div id="health_checks">
 
     <div class="flex flex-col justify-center items-center gap-4 mt-2 md:flex-row">
-      <div class="flex justify-center">
-        <%= image_tag "aji_health_checkup.png", class: "rounded-xl shadow-lg w-full md:w-1/2 mb-4" %>
+      <div class="relative inline-block">
+        <%= image_tag "aji_health_checkup.png", class: "rounded-xl shadow-lg w-full md:w-1/2 mx-auto" %>
+        <%= link_to liver_pet_health_checks_path, class: "absolute group hover:bg-red-500/50", style: "left: 48%; top: 40%; width: 5%; height: 15%;" do %>
+          <span class="absolute -top-1/2 right-full mr-2 -translate-y-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+            Go to Liver Health Report
+          </span>
+        <% end %>
+        <%= link_to kidney_pet_health_checks_path, class: "absolute group hover:bg-gray-500/50", style: "left: 54%; top: 38%; width: 3%; height: 12%;" do %>
+          <span class="absolute -top-8 left-1/2 -translate-x-2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+            Go to Kidney Health Report
+          </span>
+        <% end %>
+        <%= link_to pancreas_pet_health_checks_path, class: "absolute group hover:bg-green-500/50", style: "left: 54%; top: 50%; width: 4%; height: 11%;" do %>
+          <span class="absolute top-full mt-2 left-1/2 -translate-x-2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+            Go to Pancreas/Pancreatic Islet Health Report
+          </span>
+        <% end %>
+        <%= link_to stomach_pet_health_checks_path, class: "absolute group hover:bg-blue-500/50", style: "left: 48%; top: 55%; width: 6%; height: 10%;" do %>
+          <span class="absolute right-full mr-2 top-full mt-2 -translate-y-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+            Go to Stomach Health Report
+          </span>
+        <% end %>
       </div>
     </div>
     <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4 space-y-2 md:space-y-0 mb-4 text-amber-600 font-bold">
