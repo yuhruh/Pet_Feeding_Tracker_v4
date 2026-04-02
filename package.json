@@ -9,6 +9,9 @@
   },
   "dependencies": {
     "apexcharts": "^3.54.1",
-    "i18n-js": "^4.5.2"
+    "i18n-js": "^4.5.3"
+  },
+  "overrides": {
+    "lodash": "4.17.21"
   }
 }
