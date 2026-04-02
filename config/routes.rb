@@ -15,7 +15,7 @@ Rails.application.routes.draw do
           get "kidney"
           get "pancreas"
           get "stomach"
-          get "others"
+          get "heart"
           get "blood"
           get "all_test"
           delete :bulk_delete

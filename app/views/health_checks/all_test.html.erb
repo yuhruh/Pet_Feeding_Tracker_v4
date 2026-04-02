@@ -41,19 +41,6 @@
         <%= form.submit "Delete Selected", class: "ml-4 p-2 rounded-md shadow-lg font-semibold border-2 border-red-300 text-gray-700 bg-red-200 hover:bg-gray-100 hover:border-gray-300 hover:text-red-700 hover:scale-110" %>
       </div>
       <%= render 'health_check' %>
-      <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4 space-y-2 md:space-y-0 mb-4 font-bold"> 
-        <%= link_to new_pet_health_check_path, class: "text-center rounded-md px-3.5 py-2.5 text-white bg-gray-600 hover:bg-white hover:text-gray-600 hover:border-2 hover:border-gray-600 inline-flex items-center font-medium cursor-pointer" do %>
-          <svg width="25px" height="25px" viewBox="0 0 48 48" version="1" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 48 48" class="mr-2">
-            <circle fill="#4CAF50" cx="24" cy="24" r="21"/>
-            <g fill="currentColor">
-                <rect x="21" y="14" width="6" height="20"/>
-                <rect x="14" y="21" width="20" height="6"/>
-            </g>
-          </svg>
-          Add new report
-        <% end %>
-        <%= link_to "Go Back to Home", root_path, class: "text-center rounded-md px-3.5 py-2.5 text-white bg-amber-600 hover:bg-white hover:text-amber-600 hover:border-2 hover:border-amber-600 inline-block font-medium cursor-pointer" %>
-      </div>
     <% else %>
       < class="flex flex-col md:flex-row justify-center items-center md:space-x-4 space-y-2 md:space-y-0 mb-4 font-bold"> 
         <p class="text-amber-700 text-center my-10">No <%= @pet.petname.capitalize %>'s health checks found. Add Report Right now!!</p>
@@ -85,7 +72,6 @@
             </g>
           </svg>
         <% end %>
-        <%= link_to "Go Back to Home", root_path, class: "text-center rounded-md px-3.5 py-2.5 text-white bg-amber-600 hover:bg-white hover:text-amber-600 hover:border-2 hover:border-amber-600 inline-block font-medium cursor-pointer" %>
       </div>
     <% end %>
   <% end %>
