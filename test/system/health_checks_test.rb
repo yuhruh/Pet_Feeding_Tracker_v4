@@ -15,7 +15,7 @@ class HealthChecksTest < ApplicationSystemTestCase
 
   test "should create health check" do
     sign_in_as @user
-    visit all_test_pet_health_checks_url(locale: I18n.default_locale, pet_id: @pet.id)
+    visit pet_health_checks_url(locale: I18n.default_locale, pet_id: @pet.id)
     click_on "Add new report"
 
     fill_in "ALB(g/dL)", with: @health_check.alb
