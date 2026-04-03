@@ -54,6 +54,7 @@ class TrackersTest < ApplicationSystemTestCase
   test "should destroy Tracker" do
     sign_in_as @user
     visit pet_trackers_url(locale: I18n.default_locale, pet_id: @pet.id)
+    assert_selector "##{dom_id(@tracker)}"
     accept_confirm do
       within "##{dom_id(@tracker)}" do
         find("a[data-turbo-method='delete']").click

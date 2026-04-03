@@ -13,7 +13,8 @@ class PetsTest < ApplicationSystemTestCase
 
   test "should create pet" do
     sign_in_as @user
-    click_on "add a cat"
+    find("div[data-target='btn-1']").click
+    click_on "Add a cat"
 
     fill_in "Birthday", with: @pet.birthday
     fill_in "Breed", with: @pet.breed
