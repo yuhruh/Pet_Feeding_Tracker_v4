@@ -1,4 +1,4 @@
-document.addEventListener('turbo:load', () => {
+document.addEventListener("turbo:load", () => {
   // --- Tab Switching Logic ---
   const tabs = document.querySelectorAll('.tab');
   const panels = document.querySelectorAll('.panel');
@@ -152,5 +152,10 @@ document.addEventListener('turbo:load', () => {
   const container = document.getElementById('chart-container');
   if (container) {
     container.scrollLeft = container.scrollWidth;
+  }
+
+  const heart = document.getElementById('heart');
+  if (heart) {
+    heart.classList.remove('hidden');
   }
 });

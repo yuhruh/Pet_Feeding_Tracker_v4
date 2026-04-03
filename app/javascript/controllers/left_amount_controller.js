@@ -1,14 +1,14 @@
 import { Controller } from "@hotwired/stimulus";
-import { I18n } from "i18n-js";
-import translations from "translations";
+// import { I18n } from "i18n-js";
+// import translations from "translations";
 
 export default class extends Controller {
   static targets = ["leftAmount", "leftAmountAlert", "totalAteAmount", "separator", "submitButton"];
 
   connect() {
     this.originalAmount = parseFloat(this.leftAmountTarget.max);
-    this.i18n = new I18n(translations);
-    this.i18n.locale = document.documentElement.lang || "en";
+    // this.i18n = new I18n(translations);
+    // this.i18n.locale = document.documentElement.lang || "en";
   }
 
   validateLeftAmount() {
@@ -41,10 +41,10 @@ export default class extends Controller {
     this.leftAmountAlertTarget.classList.remove('hidden');
 
     if (isValid) {
-      this.leftAmountAlertTarget.textContent = this.i18n.t('javascript.left_amount_controller.valid_amount', { amount: leftAmount });
+      this.leftAmountAlertTarget.textContent = I18n.t('javascript.left_amount_controller.valid_amount', { amount: leftAmount });
       this.leftAmountAlertTarget.classList.replace("text-red-500", "text-green-500");
     } else {
-      this.leftAmountAlertTarget.textContent = this.i18n.t('javascript.left_amount_controller.greater_than_alert', { amount: this.originalAmount });
+      this.leftAmountAlertTarget.textContent = I18n.t('javascript.left_amount_controller.greater_than_alert', { amount: this.originalAmount });
       this.leftAmountAlertTarget.classList.replace("text-green-500", "text-red-500");
     }
   }
@@ -52,7 +52,7 @@ export default class extends Controller {
   #updateTotalAteAmount(leftAmount, isValid) {
     if (isValid && this.leftAmountTarget.value) {
       const ateAmount = this.originalAmount - leftAmount;
-      this.totalAteAmountTarget.textContent = this.i18n.t('javascript.left_amount_controller.total_ate', { amount: ateAmount.toFixed(2) });
+      this.totalAteAmountTarget.textContent = I18n.t('javascript.left_amount_controller.total_ate', { amount: ateAmount.toFixed(2) });
       this.separatorTarget.classList.remove('hidden');
       this.totalAteAmountTarget.classList.remove('hidden');
     } else {

@@ -6,9 +6,10 @@ pin "script"
 pin "@hotwired/turbo-rails", to: "turbo.min.js"
 pin "@hotwired/stimulus", to: "stimulus.min.js"
 pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
-pin "lodash" # @4.17.23
 pin_all_from "app/javascript/controllers", under: "controllers"
 pin "chartkick", to: "chartkick.js"
 pin "Chart.bundle", to: "Chart.bundle.js"
-pin "i18n-js", to: "https://cdn.skypack.dev/i18n-js"
+
+pin "big.js", to: "https://ga.jspm.io/npm:big.js@6.2.1/big.mjs"
+pin "i18n-js", to: "https://esm.sh/i18n-js@4.5.0?bundle"
 pin "translations", to: "translations.js"

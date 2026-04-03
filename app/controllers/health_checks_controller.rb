@@ -141,6 +141,18 @@ class HealthChecksController < ApplicationController
     @health_checks = health_checks.order(order_sql)
   end
 
+  def heart
+    health_checks = @pet.health_checks
+    adapter_type = Rails.configuration.database_configuration[Rails.env]["adapter"]
+    order_sql = if adapter_type == "sqlite3"
+      "exam_date DESC"
+    else
+      "exam_date DESC"
+    end
+
+    @health_checks = health_checks.order(order_sql)
+  end
+
   def all_test
     health_checks = @pet.health_checks
     adapter_type = Rails.configuration.database_configuration[Rails.env]["adapter"]
@@ -168,7 +180,7 @@ class HealthChecksController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def health_check_params
-      params.require(:health_check).permit(:exam_date, :crea, :bun, :phos, :ca, :alb, :chol, :tp, :alt, :alkp, :ggt, :glu, :tbil, :amyl, :lipa, :na, :k, :cl, :rbc, :hct, :hgb, :mcv, :mch, :mchc, :rdw, :retic, :retic_hgb, :wbc, :neu, :lym, :mono, :eos, :baso, :plt, :mpv, :pct, :osm_cal, :pet_id)
+      params.require(:health_check).permit(:exam_date, :crea, :bun, :phos, :ca, :alb, :chol, :tp, :alt, :alkp, :ggt, :glu, :tbil, :amyl, :lipa, :na, :k, :cl, :rbc, :hct, :hgb, :mcv, :mch, :mchc, :rdw, :retic, :retic_hgb, :wbc, :neu, :lym, :mono, :eos, :baso, :plt, :mpv, :pct, :osm_cal, :pet_id, :fbnp, :glob)
     end
 
     def set_current_date

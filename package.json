@@ -5,13 +5,13 @@
     "build": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css"
   },
   "devDependencies": {
+    "i18n-js": "^4.5.3",
     "tailwindcss": "^3.4.19"
   },
   "dependencies": {
-    "apexcharts": "^3.54.1",
-    "i18n-js": "^4.5.3"
+    "apexcharts": "^3.54.1"
   },
   "overrides": {
-    "lodash": "4.17.21"
+    "lodash": "4.18.1"
   }
 }

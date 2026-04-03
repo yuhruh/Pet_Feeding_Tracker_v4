@@ -57,20 +57,62 @@
       <span class="hidden md:inline">|</span>
       <%= link_to "Blood", blood_pet_health_checks_path, class: "hover:underline hover:scale-110 transition-all duration-300" %>
       <span class="hidden md:inline">|</span>
+      <%= link_to "Other", pet_health_checks_path, class: "hover:underline hover:scale-110 transition-all duration-300" %>
+      <span class="hidden md:inline">|</span>
       <%= link_to "All", all_test_pet_health_checks_path, class: "hover:underline hover:scale-110 transition-all duration-300" %>
     </div>
   </div>
-  <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4 space-y-2 md:space-y-0 mb-4 font-bold"> 
-    <%= link_to new_pet_health_check_path, class: "text-center rounded-md px-3.5 py-2.5 text-white bg-gray-600 hover:bg-white hover:text-gray-600 hover:border-2 hover:border-gray-600 inline-flex items-center font-medium cursor-pointer" do %>
-      <svg width="25px" height="25px" viewBox="0 0 48 48" version="1" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 48 48" class="mr-2">
-        <circle fill="#4CAF50" cx="24" cy="24" r="21"/>
-        <g fill="currentColor">
-            <rect x="21" y="14" width="6" height="20"/>
-            <rect x="14" y="21" width="20" height="6"/>
-        </g>
-      </svg>
-      Add new report
+
+  <div class="flex flex-col justify-center items-center gap-2 mb-4 font-bold">
+    <h1 class="text-center font-bold text-xl text-amber-700 mt-2 p-4 underline underline-offset-8 decoration-amber-700 dark:text-amber-600 dark:decoration-amber-600 md:text-3xl">Other Testing Report</h1>
+    <% if @health_checks.empty? %>
+      <p class="text-amber-700 text-center capitalize font-bold my-10">No <%= @pet.petname.capitalize %>'s Other testing report</p>
+    <% else %>
+      <div class="container mx-auto w-full shadow-lg rounded-xl p-2 mb-4">
+        <div class="flex flex-col gap-8 justify-center mt-4 lg:flex-row lg:items-center">
+          <div class="hidden overflow-x-auto w-full md:block">
+            <table class="table-auto mb-2 px-2 w-full dark:bg-slate-100">
+              <thead>
+                <tr class="bg-gray-100 dark:bg-black">
+                  <th class="text-sm text-center p-2 dark:text-white">#</th>
+                  <th class="text-sm text-center p-2 dark:text-white">Exam Date</th>
+                  <th class="text-sm text-center p-2 dark:text-white">FeLV</th>
+                  <th class="text-sm text-center p-2 dark:text-white">FIV</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                  <tr id="<%= dom_id(health_check) %>" class="border-b bg-gray-100">
+                    <td class="text-sm text-center p-2 font-semibold"><%= idx+1 %></td>
+                    <td class="text-sm text-center p-2"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
+                    <td class="text-sm text-center p-2"><%= health_check.felv %></td>
+                    <td class="text-sm text-center p-2"><%= health_check.fiv %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+            <ul class="list-disc list-inside ml-4">
+              <li class="text-red-700 font-bold italic mt-2">Red means the value is abnormal</li>
+            </ul>
+          </div>
+
+          <!-- Transposed Table for Small Screens -->
+          
+        </div>
+      </div>
     <% end %>
-    <%= link_to "Go Back to Home", root_path, class: "text-center rounded-md px-3.5 py-2.5 text-white bg-amber-600 hover:bg-white hover:text-amber-600 hover:border-2 hover:border-amber-600 inline-block font-medium cursor-pointer" %>
+    <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4 space-y-2 md:space-y-0 mb-4 font-bold">
+      <%= link_to new_pet_health_check_path, class: "text-center rounded-md px-3.5 py-2.5 text-white bg-gray-600 hover:bg-white hover:text-gray-600 hover:border-2 hover:border-gray-600 inline-flex items-center font-medium cursor-pointer" do %>
+        <svg width="25px" height="25px" viewBox="0 0 48 48" version="1" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 48 48" class="mr-2">
+          <circle fill="#4CAF50" cx="24" cy="24" r="21"/>
+          <g fill="currentColor">
+              <rect x="21" y="14" width="6" height="20"/>
+              <rect x="14" y="21" width="20" height="6"/>
+          </g>
+        </svg>
+        Add new report
+      <% end %>
+      <%= link_to "Go Back to Home", root_path, class: "text-center rounded-md px-3.5 py-2.5 text-white bg-amber-600 hover:bg-white hover:text-amber-600 hover:border-2 hover:border-amber-600 inline-block font-medium cursor-pointer" %>
+    </div>
   </div>
 </div>

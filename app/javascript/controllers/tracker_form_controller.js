@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
-import { I18n } from "i18n-js";
-import translations from "translations";
+// import { I18n } from "i18n-js";
+// import translations from "translations";
 
 export default class extends Controller {
   static targets = ["foodType", "dryFoodOptions", "dryFoodSelect", "wetFoodOptions", "wetFoodSelect", "brand", "description", "amount", "amountAlert", "submitButton"]
@@ -12,11 +12,11 @@ export default class extends Controller {
 
   connect() {
     this.csrfToken = document.querySelector("meta[name='csrf-token']").content;
-    // initialize with imported translatios object
-    const i18n = new I18n(translations);
-    this.i18n = i18n;
-    // set the locale
-    this.i18n.locale = document.documentElement.lang || "en";    
+    
+    // const i18n = new I18n(translations);
+    // this.i18n = i18n;
+    // // set the locale
+    // this.i18n.locale = document.documentElement.lang || "en";  
 
     this.selectedFoodLeftAmount = null; // Initialize storage state
     this.toggleDryFoodOptions()
@@ -45,7 +45,7 @@ export default class extends Controller {
 
       if (filteredFoods.length === 0) {
         const selectedText = this.foodTypeTarget.options[this.foodTypeTarget.selectedIndex].text;
-        const message = this.i18n.t('trackers.form.no_storage_message', { type: selectedText });
+        const message = I18n.t('trackers.form.no_storage_message', { type: selectedText });
         alert(message);
         const newDryFoodUrl = `/${locale}/dry_foods/new`;
         window.location.href = newDryFoodUrl;
@@ -77,14 +77,14 @@ export default class extends Controller {
   }
 
   updateDryFoodOptions(foods) {
-    this.dryFoodSelectTarget.innerHTML = `<option value="">${this.i18n.t('trackers.form.select_dry_food')}</option>`;
+    this.dryFoodSelectTarget.innerHTML = `<option value="">${I18n.t('trackers.form.select_dry_food')}</option>`;
     foods.forEach(food => {
       const option = document.createElement("option");
       option.value = food.id;
-      const leftAmountText = this.i18n.t('javascript.tracker_form_controller.left_in_storage', { amount: food.left_amount });
+      const leftAmountText = I18n.t('javascript.tracker_form_controller.left_in_storage', { amount: food.left_amount });
 
       if (food.left_amount < food.amount * 10/100) {
-        const restockText = this.i18n.t('javascript.tracker_form_controller.should_restock');
+        const restockText = I18n.t('javascript.tracker_form_controller.should_restock');
         option.text = `⚠️ ${food.brand} - ${food.description} (${leftAmountText}, ${restockText})`;
       } else {
         option.text = `${food.brand} - ${food.description} (${leftAmountText})`;
@@ -94,7 +94,7 @@ export default class extends Controller {
   }
 
   updateWetFoodOptions(foods) {
-    this.wetFoodSelectTarget.innerHTML = `<option value="">${this.i18n.t('trackers.form.select_favorite_or_enter_manually')}</option>`;
+    this.wetFoodSelectTarget.innerHTML = `<option value="">${I18n.t('trackers.form.select_favorite_or_enter_manually')}</option>`;
     if (!Array.isArray(foods)) {
       return;
     }
@@ -234,14 +234,14 @@ export default class extends Controller {
     // only validate if we have a selected dry food and an input amount
     if (this.selectedFoodLeftAmount != null && !isNaN(inputAmount)) {
       if (inputAmount > this.selectedFoodLeftAmount) {
-        this.amountAlertTarget.textContent = this.i18n.t('javascript.tracker_form_controller.only_left_in_storage', { amount: this.selectedFoodLeftAmount });
+        this.amountAlertTarget.textContent = I18n.t('javascript.tracker_form_controller.only_left_in_storage', { amount: this.selectedFoodLeftAmount });
         this.amountAlertTarget.classList.remove('hidden');
         this.amountAlertTarget.classList.replace("text-green-500", "text-red-500");
         this.submitButtonTarget.disabled = true;
         this.submitButtonTarget.classList.remove("bg-softBlue", "hover:bg-white", "hover:text-softBlue", "hover:border-softBlue", "cursor-pointer");
         this.submitButtonTarget.classList.add("bg-gray-400", "cursor-not-allowed");
       } else {
-        this.amountAlertTarget.textContent = this.i18n.t('javascript.tracker_form_controller.is_valid_amount', { amount: inputAmount });
+        this.amountAlertTarget.textContent = I18n.t('javascript.tracker_form_controller.is_valid_amount', { amount: inputAmount });
         this.amountAlertTarget.classList.remove('hidden');
         this.amountAlertTarget.classList.replace("text-red-500", "text-green-500");
         this.submitButtonTarget.disabled = false;

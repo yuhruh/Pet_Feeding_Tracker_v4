@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_30_031040) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_02_142912) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -105,6 +105,11 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_30_031040) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "exam_date"
+    t.decimal "glob"
+    t.string "fbnp"
+    t.string "felv"
+    t.string "fiv"
+    t.decimal "fpl2"
     t.index ["pet_id"], name: "index_health_checks_on_pet_id"
   end
 

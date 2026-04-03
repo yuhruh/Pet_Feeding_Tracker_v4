@@ -33,6 +33,7 @@
             <th class="text-sm text-center p-2 dark:text-white">PHOS(mg/dL)</th>
             <th class="text-sm text-center p-2 dark:text-white">TP(g/dL)</th>
             <th class="text-sm text-center p-2 dark:text-white">ALB(g/dL)</th>
+            <th class="text-sm text-center p-2 dark:text-white">GLOB(g/dL)</th>
             <th class="text-sm text-center p-2 dark:text-white">ALT(U/L)</th>
             <th class="text-sm text-center p-2 dark:text-white">ALKP(U/L)</th>
             <th class="text-sm text-center p-2 dark:text-white">Na(mmol/L)</th>
@@ -45,6 +46,7 @@
             <th class="text-sm text-center p-2 dark:text-white">AMYL(U/L)</th>
             <th class="text-sm text-center p-2 dark:text-white">LIPA(U/L)</th>
             <th class="text-sm text-center p-2 dark:text-white">Osm Calc(mmol/kg)</th>
+            <th class="text-sm text-center p-2 dark:text-white">fBNP</th>
             <th class="capitalize text-sm text-center p-2 dark:text-white">edit</th>
             <th class="capitalize text-sm text-center p-2 dark:text-white">delete</th>
           </tr>
@@ -78,6 +80,7 @@
               <th class="text-sm text-center p-2 dark:text-white">3.1 - 7.5 (mg/dL)</th>
               <th class="text-sm text-center p-2 dark:text-white">5.7 - 8.9 (g/dL)</th>
               <th class="text-sm text-center p-2 dark:text-white">2.2 - 4.0 (g/dL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">2.8 - 5.1 (g/dL)</th>
               <th class="text-sm text-center p-2 dark:text-white">12 - 130 (U/L)</th>
               <th class="text-sm text-center p-2 dark:text-white">14 - 111 (U/L)</th>
               <th class="text-sm text-center p-2 dark:text-white">150 - 165 (mmol/L)</th>
@@ -89,6 +92,7 @@
               <th class="text-sm text-center p-2 dark:text-white">0.0 - 0.9 (mg/dL)</th>
               <th class="text-sm text-center p-2 dark:text-white">500 - 1500 (U/L)</th>
               <th class="text-sm text-center p-2 dark:text-white">100 - 1400 (U/L)</th>
+              <th class="text-sm text-center p-2 dark:text-white">-</th>
               <th class="text-sm text-center p-2 dark:text-white">-</th>
               <th class="text-sm text-center p-2 dark:text-white"></th>
               <th class="text-sm text-center p-2 dark:text-white"></th>
@@ -126,6 +130,7 @@
               <td class="text-sm <%=range_row_class(health_check.phos, 7.5, 3.1)%> text-center p-2"><%= health_check.phos %></td>
               <td class="text-sm <%=range_row_class(health_check.tp, 8.9, 5.7)%> text-center p-2"><%= health_check.tp %></td>
               <td class="text-sm <%=range_row_class(health_check.alb, 4.0, 2.2)%> text-center p-2"><%= health_check.alb %></td>
+              <td class="text-sm <%=range_row_class(health_check.glob, 5.1, 2.8)%> text-center p-2"><%= health_check.glob %></td>
               <td class="text-sm <%=range_row_class(health_check.alt, 130, 12)%> text-center p-2"><%= health_check.alt %></td>
               <td class="text-sm <%=range_row_class(health_check.alkp, 111, 14)%> text-center p-2"><%= health_check.alkp %></td>
               <td class="text-sm <%=range_row_class(health_check.na, 165, 150)%> text-center p-2"><%= health_check.na %></td>
@@ -137,7 +142,8 @@
               <td class="text-sm <%=range_row_class(health_check.tbil, 0.9, 0.0)%> text-center p-2"><%= health_check.tbil %></td>
               <td class="text-sm <%=range_row_class(health_check.amyl, 1500, 500)%> text-center p-2"><%= health_check.amyl %></td>
               <td class="text-sm <%=range_row_class(health_check.lipa, 1400, 100)%> text-center p-2"><%= health_check.lipa %></td>
-              <td class="text-sm font-normal text-center p-2"><%= health_check.osm_cal %></td>                
+              <td class="text-sm font-normal text-center p-2"><%= health_check.osm_cal %></td>
+              <td class="text-sm font-normal text-center p-2"><%= health_check.fbnp %></td>                
               <td class="text-sm text-center p-2">
                 <%= link_to edit_pet_health_check_path(@pet, health_check), class: "inline-block transition-transform text-emerald-400 hover:text-emerald-600 hover:scale-110" do %>
                   <span class="sr-only">Edit this health check</span>

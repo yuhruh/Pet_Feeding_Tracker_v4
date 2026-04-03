@@ -58,6 +58,7 @@
               <th class="text-sm text-center p-2 dark:text-white">PHOS(mg/dL)</th>
               <th class="text-sm text-center p-2 dark:text-white">CA(mg/dL)</th>
               <th class="text-sm text-center p-2 dark:text-white">ALB(g/dL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">GLOB(g/dL)</th>
               <th class="text-sm text-center p-2 dark:text-white">CHOL(mg/dL)</th>
             </tr>
           </thead>
@@ -70,6 +71,7 @@
               <th class="text-sm text-center p-2 dark:text-white">3.1 - 7.5 (mg/dL)</th>
               <th class="text-sm text-center p-2 dark:text-white">7.8 - 11.3 (mg/dL)</th>
               <th class="text-sm text-center p-2 dark:text-white">2.2 - 4.0 (g/dL)</th>
+              <th class="text-sm text-center p-2 dark:text-white">2.8 - 5.1 (g/dL)</th>
               <th class="text-sm text-center p-2 dark:text-white">65 - 225 (mg/dL)</th>
             </tr>
           </thead>
@@ -83,6 +85,7 @@
                 <td class="text-sm text-center <%=range_row_class(health_check.phos, 7.5, 3.1)%> p-2"><%= health_check.phos %></td>
                 <td class="text-sm text-center <%=range_row_class(health_check.ca, 11.3, 7.8)%> p-2"><%= health_check.ca %></td>
                 <td class="text-sm text-center <%=range_row_class(health_check.alb, 4.0, 2.2)%> p-2"><%= health_check.alb %></td>
+                <td class="text-sm text-center <%=range_row_class(health_check.glob, 5.1, 2.8)%> p-2"><%= health_check.alb %></td>
                 <td class="text-sm text-center <%=range_row_class(health_check.chol, 225, 65)%> p-2"><%= health_check.chol %></td>
               </tr>
             <% end %>
