@@ -16,6 +16,7 @@ class DryFoodsTest < ApplicationSystemTestCase
   test "should create dry food" do
     sign_in_as @user
     visit dry_foods_url
+    assert_selector "h1", text: "Dry Foods Storage List"
     click_on "add dry food"
 
     fill_in "Amount", with: @dry_food.amount
