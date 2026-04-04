@@ -63,7 +63,9 @@ class HealthChecksTest < ApplicationSystemTestCase
   test "should update Health check" do
     sign_in_as @user
     visit pet_health_checks_url(locale: I18n.default_locale, pet_id: @pet.id)
-    click_on "Edit this health check"
+    find("div[data-target='all']").click
+    assert_selector "#edit_health_check_#{@health_check.id}"
+    find("#edit_health_check_#{@health_check.id}").click
 
     fill_in "ALB(g/dL)", with: @health_check.alb
     fill_in "ALKP(U/L)", with: @health_check.alkp

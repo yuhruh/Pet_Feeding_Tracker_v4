@@ -31,16 +31,18 @@ document.addEventListener("turbo:load", () => {
   const reports = document.querySelectorAll('.report');
 
   if (organs.length > 0 && reports.length > 0) {
+    // Hide all reports on page load, so user can select one.
+    reports.forEach(report => report.classList.add('hidden'));
+    
     const organClick = (e) => {
-      // reports.forEach(report => report.classList.add('hidden'));
+      reports.forEach(report => report.classList.add('hidden'));
 
-      const targetName = e.currentTarget.dataset.target || e.currentTarget.textContent.trim().toLowerCase();
-
-      if (targetName.includes('/')) targetName = 'pancreas';
+      let targetName = e.currentTarget.dataset.target || e.currentTarget.textContent.trim().toLowerCase();
 
       const organTarget = document.getElementById(targetName);
       if (organTarget) {
         organTarget.classList.remove('hidden');
+        organTarget.classList.add('flex');
       }
     }
     organs.forEach(organ => organ.addEventListener('click', organClick));

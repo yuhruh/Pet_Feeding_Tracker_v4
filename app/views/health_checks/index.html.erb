@@ -22,7 +22,7 @@
             kidney
           </span>
         </div>
-        <div class= "absolute group hover:bg-green-500/50 organ" data-target="pancreas/pancreatic islet" style="left: 54%; top: 49%; width: 5%; height: 11%;">
+        <div class= "absolute group hover:bg-green-500/50 organ" data-target="pancreas" style="left: 54%; top: 49%; width: 5%; height: 11%;">
           <span class="absolute capitalize top-full mt-2 left-1/2 -translate-x-2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
             pancreas/pancreatic islet
           </span>
@@ -46,19 +46,19 @@
     </div>
 
     <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4 space-y-2 md:space-y-0 mb-4 text-amber-600 font-bold">
-      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ">liver</div>
+      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ" data-target="liver">liver</div>
       <span class="hidden md:inline">|</span>
-      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ">kidney</div>
+      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ" data-target="kidney" >kidney</div>
       <span class="hidden md:inline">|</span>
-      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ">pancreas/pancreatic islet</div>
+      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ" data-target="pancreas">pancreas/pancreatic islet</div>
       <span class="hidden md:inline">|</span>
-      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ">stomach</div>
+      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ" data-target="stomach" >stomach</div>
       <span class= "hidden md:inline">|</span>
-      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ">heart</div>
+      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ" data-target="heart">heart</div>
       <span class= "hidden md:inline">|</span>
-      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ">blood</div>
+      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ" data-target="blood">blood</div>
       <span class="hidden md:inline">|</span>
-      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ">all</div>
+      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ" data-target="all">all</div>
     </div>
   </div>
 
@@ -67,27 +67,27 @@
       <%= render 'health_check', class: "relative rounded-lg shadow-lg z-10" %>
     </div>   
 
-    <div id="heart" class="flex flex-col hidden py-5 md:flex-row md:space-x-7 report heart">
+    <div id="heart" class="flex flex-col py-5 md:flex-row md:space-x-7 report heart">
       <%= render 'heart', class: "relative rounded-lg shadow-lg z-10" %>
     </div>
 
-    <div id="stomach" class="flex flex-col hidden py-5 md:flex-row md:space-x-7 report stomach">
+    <div id="stomach" class="flex flex-col py-5 md:flex-row md:space-x-7 report stomach">
       <%= render 'stomach', class: "relative rounded-lg shadow-lg z-10" %>
     </div>
 
-    <div id="blood" class="flex flex-col hidden py-5 md:flex-row md:space-x-7 report blood">
+    <div id="blood" class="flex flex-col justify-center items-center py-5 md:flex-row md:space-x-7 report blood">
       <%= render 'blood', class: "relative rounded-lg shadow-lg z-10" %>
     </div>
 
-    <div id="kidney" class="flex flex-col hidden py-5 md:flex-row md:space-x-7 report kidney">
+    <div id="kidney" class="flex flex-col justify-center items-center py-5 md:flex-row md:space-x-7 report kidney">
       <%= render 'kidney', class: "relative rounded-lg shadow-lg z-10" %>
     </div>
 
-    <div id="liver" class="flex flex-col hidden py-5 md:flex-row md:space-x-7 report liver">
+    <div id="liver" class="flex flex-col justify-center items-center py-5 md:flex-row md:space-x-7 report liver">
       <%= render 'liver', class: "relative rounded-lg shadow-lg z-10" %>
     </div>
 
-    <div id="pancreas/pancreatic islet" class="flex flex-col hidden py-5 md:flex-row md:space-x-7 report pancreas/pancreatic islet">
+    <div id="pancreas" class="flex flex-col py-5 md:flex-row md:space-x-7 report pancreas/pancreatic islet">
       <%= render 'pancreas', class: "relative rounded-lg shadow-lg z-10" %>
     </div>
   </div>
