@@ -9,110 +9,99 @@
 
   <div id="health_checks">
 
-    <div class="flex flex-col justify-center items-center gap-4 mt-2 md:flex-row">
+    <div id="organs" class="flex flex-col justify-center items-center gap-4 mt-2 md:flex-row">
       <div class="relative inline-block">
         <%= image_tag "Leonard_Da_Vinci_Aji.png", class: "rounded-xl shadow-lg w-full mb-4 md:w-1/2 mx-auto" %>
-        <%= link_to liver_pet_health_checks_path, class: "absolute group hover:bg-red-500/50", style: "left: 51%; top: 37.5%; width: 4%; height: 11%;" do %>
-          <span class="absolute -top-1/2 right-full mr-2 -translate-y-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
-            Go to Liver
+        <div class="absolute group hover:bg-red-500/50 organ" data-target="liver" style="left: 51%; top: 37.5%; width: 4%; height: 11%;">
+          <span class="absolute capitalize -top-1/2 right-full mr-2 -translate-y-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+            liver
           </span>
-        <% end %>
-        <%= link_to kidney_pet_health_checks_path, class: "absolute group hover:bg-gray-500/50", style: "left: 55%; top: 37%; width: 3%; height: 11%;" do %>
-          <span class="absolute -top-8 left-1/2 -translate-x-2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
-            Go to Kidney
+        </div>
+        <div class="absolute group hover:bg-gray-500/50 organ" data-target="kidney" style="left: 55%; top: 37%; width: 3%; height: 11%;">
+          <span class="absolute capitalize -top-8 left-1/2 -translate-x-2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+            kidney
           </span>
-        <% end %>
-        <%= link_to pancreas_pet_health_checks_path, class: "absolute group hover:bg-green-500/50", style: "left: 54%; top: 49%; width: 5%; height: 11%;" do %>
-          <span class="absolute top-full mt-2 left-1/2 -translate-x-2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
-            Go to Pancreas/Pancreatic Islet
+        </div>
+        <div class= "absolute group hover:bg-green-500/50 organ" data-target="pancreas/pancreatic islet" style="left: 54%; top: 49%; width: 5%; height: 11%;">
+          <span class="absolute capitalize top-full mt-2 left-1/2 -translate-x-2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+            pancreas/pancreatic islet
           </span>
-        <% end %>
-        <%= link_to stomach_pet_health_checks_path, class: "absolute group hover:bg-blue-500/50", style: "left: 50%; top: 55%; width: 5%; height: 7%;" do %>
-          <span class="absolute right-full mr-2 top-full mt-2 -translate-y-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
-            Go to Stomach
+        </div>
+        <div class="absolute group hover:bg-blue-500/50 organ" data-target="stomach" style="left: 50%; top: 55%; width: 5%; height: 7%;">
+          <span class="absolute capitalize right-full mr-2 top-full mt-2 -translate-y-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+            stomach
           </span>
-        <% end %>
-        <%= link_to heart_pet_health_checks_path, class: "absolute group hover:bg-orange-500/50", style: "left: 48.5%; top: 39.5%; width: 3%; height: 15%;" do %>
-          <span class="absolute right-full mr-2 top-full mt-2 -translate-y-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
-            Go to Heart
+        </div>
+        <div class= "absolute group hover:bg-orange-500/50 organ" data-target="heart" style= "left: 48.5%; top: 39.5%; width: 3%; height: 15%;">
+          <span class="absolute capitalize right-full mr-2 top-full mt-2 -translate-y-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+            heart
           </span>
-        <% end %>
-        <%= link_to blood_pet_health_checks_path, class: "absolute group hover:bg-lime-500/50", style: "left: 45%; top: 46%; width: 3.5%; height: 23%;" do %>
-          <span class="absolute right-full mr-2 top-full mt-2 -translate-y-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
-            Go to Blood
+        </div>
+        <div class= "absolute group hover:bg-lime-500/50 organ" data-target="blood" style= "left: 45%; top: 46%; width: 3.5%; height: 23%;">
+          <span class="absolute capitalize right-full mr-2 top-full mt-2 -translate-y-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+            blood
           </span>
-        <% end %>
+        </div>
       </div>
     </div>
+
     <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4 space-y-2 md:space-y-0 mb-4 text-amber-600 font-bold">
-      <%= link_to "Liver", liver_pet_health_checks_path, class: "hover:underline hover:scale-110 transition-all duration-300" %>
+      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ">liver</div>
       <span class="hidden md:inline">|</span>
-      <%= link_to "Kidney", kidney_pet_health_checks_path, class: "hover:underline hover:scale-110 transition-all duration-300" %>
+      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ">kidney</div>
       <span class="hidden md:inline">|</span>
-      <%= link_to "Pancreas/Pancreatic Islet", pancreas_pet_health_checks_path, class: "hover:underline hover:scale-110 transition-all duration-300" %>
+      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ">pancreas/pancreatic islet</div>
       <span class="hidden md:inline">|</span>
-      <%= link_to "Stomach", stomach_pet_health_checks_path, class: "hover:underline hover:scale-110 transition-all duration-300" %>
+      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ">stomach</div>
+      <span class= "hidden md:inline">|</span>
+      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ">heart</div>
+      <span class= "hidden md:inline">|</span>
+      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ">blood</div>
       <span class="hidden md:inline">|</span>
-      <%= link_to "Heart", heart_pet_health_checks_path, class: "hover:underline hover:scale-110 transition-all duration-300" %>
-      <span class="hidden md:inline">|</span>
-      <%= link_to "Blood", blood_pet_health_checks_path, class: "hover:underline hover:scale-110 transition-all duration-300" %>
-      <span class="hidden md:inline">|</span>
-      <%= link_to "Other", pet_health_checks_path, class: "hover:underline hover:scale-110 transition-all duration-300" %>
-      <span class="hidden md:inline">|</span>
-      <%= link_to "All", all_test_pet_health_checks_path, class: "hover:underline hover:scale-110 transition-all duration-300" %>
+      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ">all</div>
     </div>
   </div>
 
-  <div class="flex flex-col justify-center items-center gap-2 mb-4 font-bold">
-    <h1 class="text-center font-bold text-xl text-amber-700 mt-2 p-4 underline underline-offset-8 decoration-amber-700 dark:text-amber-600 dark:decoration-amber-600 md:text-3xl">Other Testing Report</h1>
-    <% if @health_checks.empty? %>
-      <p class="text-amber-700 text-center capitalize font-bold my-10">No <%= @pet.petname.capitalize %>'s Other testing report</p>
-    <% else %>
-      <div class="container mx-auto w-full shadow-lg rounded-xl p-2 mb-4">
-        <div class="flex flex-col gap-8 justify-center mt-4 lg:flex-row lg:items-center">
-          <div class="hidden overflow-x-auto w-full md:block">
-            <table class="table-auto mb-2 px-2 w-full dark:bg-slate-100">
-              <thead>
-                <tr class="bg-gray-100 dark:bg-black">
-                  <th class="text-sm text-center p-2 dark:text-white">#</th>
-                  <th class="text-sm text-center p-2 dark:text-white">Exam Date</th>
-                  <th class="text-sm text-center p-2 dark:text-white">FeLV</th>
-                  <th class="text-sm text-center p-2 dark:text-white">FIV</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
-                  <tr id="<%= dom_id(health_check) %>" class="border-b bg-gray-100">
-                    <td class="text-sm text-center p-2 font-semibold"><%= idx+1 %></td>
-                    <td class="text-sm text-center p-2"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
-                    <td class="text-sm text-center p-2"><%= health_check.felv %></td>
-                    <td class="text-sm text-center p-2"><%= health_check.fiv %></td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-            <ul class="list-disc list-inside ml-4">
-              <li class="text-red-700 font-bold italic mt-2">Red means the value is abnormal</li>
-            </ul>
-          </div>
+  <div class="flex flex-col justify-center items-center gap-2 mb-4 font-bold md:flex-row md:space-x-7">
+    <div id="all" class="report all">
+      <%= render 'health_check', class: "relative rounded-lg shadow-lg z-10" %>
+    </div>   
 
-          <!-- Transposed Table for Small Screens -->
-          
-        </div>
-      </div>
-    <% end %>
-    <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4 space-y-2 md:space-y-0 mb-4 font-bold">
-      <%= link_to new_pet_health_check_path, class: "text-center rounded-md px-3.5 py-2.5 text-white bg-gray-600 hover:bg-white hover:text-gray-600 hover:border-2 hover:border-gray-600 inline-flex items-center font-medium cursor-pointer" do %>
-        <svg width="25px" height="25px" viewBox="0 0 48 48" version="1" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 48 48" class="mr-2">
-          <circle fill="#4CAF50" cx="24" cy="24" r="21"/>
-          <g fill="currentColor">
-              <rect x="21" y="14" width="6" height="20"/>
-              <rect x="14" y="21" width="20" height="6"/>
-          </g>
-        </svg>
-        Add new report
-      <% end %>
-      <%= link_to "Go Back to Home", root_path, class: "text-center rounded-md px-3.5 py-2.5 text-white bg-amber-600 hover:bg-white hover:text-amber-600 hover:border-2 hover:border-amber-600 inline-block font-medium cursor-pointer" %>
+    <div id="heart" class="flex flex-col hidden py-5 md:flex-row md:space-x-7 report heart">
+      <%= render 'heart', class: "relative rounded-lg shadow-lg z-10" %>
     </div>
+
+    <div id="stomach" class="flex flex-col hidden py-5 md:flex-row md:space-x-7 report stomach">
+      <%= render 'stomach', class: "relative rounded-lg shadow-lg z-10" %>
+    </div>
+
+    <div id="blood" class="flex flex-col hidden py-5 md:flex-row md:space-x-7 report blood">
+      <%= render 'blood', class: "relative rounded-lg shadow-lg z-10" %>
+    </div>
+
+    <div id="kidney" class="flex flex-col hidden py-5 md:flex-row md:space-x-7 report kidney">
+      <%= render 'kidney', class: "relative rounded-lg shadow-lg z-10" %>
+    </div>
+
+    <div id="liver" class="flex flex-col hidden py-5 md:flex-row md:space-x-7 report liver">
+      <%= render 'liver', class: "relative rounded-lg shadow-lg z-10" %>
+    </div>
+
+    <div id="pancreas/pancreatic islet" class="flex flex-col hidden py-5 md:flex-row md:space-x-7 report pancreas/pancreatic islet">
+      <%= render 'pancreas', class: "relative rounded-lg shadow-lg z-10" %>
+    </div>
+  </div>
+  <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4 space-y-2 md:space-y-0 mb-4 font-bold">
+    <%= link_to new_pet_health_check_path, class: "text-center rounded-md px-3.5 py-2.5 text-white bg-gray-600 hover:bg-white hover:text-gray-600 hover:border-2 hover:border-gray-600 inline-flex items-center font-medium cursor-pointer" do %>
+      <svg width="25px" height="25px" viewBox="0 0 48 48" version="1" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 48 48" class="mr-2">
+        <circle fill="#4CAF50" cx="24" cy="24" r="21"/>
+        <g fill="currentColor">
+            <rect x="21" y="14" width="6" height="20"/>
+            <rect x="14" y="21" width="20" height="6"/>
+        </g>
+      </svg>
+      Add new report
+    <% end %>
+    <%= link_to "Go Back to Home", root_path, class: "text-center rounded-md px-3.5 py-2.5 text-white bg-amber-600 hover:bg-white hover:text-amber-600 hover:border-2 hover:border-amber-600 inline-block font-medium cursor-pointer" %>
   </div>
 </div>

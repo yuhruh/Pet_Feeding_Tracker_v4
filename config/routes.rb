@@ -11,13 +11,6 @@ Rails.application.routes.draw do
     resources :pets do
       resources :health_checks do
         collection do
-          get "liver"
-          get "kidney"
-          get "pancreas"
-          get "stomach"
-          get "heart"
-          get "blood"
-          get "all_test"
           delete :bulk_delete
         end
       end

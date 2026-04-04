@@ -26,6 +26,27 @@ document.addEventListener("turbo:load", () => {
     tabs.forEach(tab => tab.addEventListener('click', onTabClick));
   }
 
+  // --- Report Switching Logic ---
+  const organs = document.querySelectorAll('.organ');
+  const reports = document.querySelectorAll('.report');
+
+  if (organs.length > 0 && reports.length > 0) {
+    const organClick = (e) => {
+      // reports.forEach(report => report.classList.add('hidden'));
+
+      const targetName = e.currentTarget.dataset.target || e.currentTarget.textContent.trim().toLowerCase();
+
+      if (targetName.includes('/')) targetName = 'pancreas';
+
+      const organTarget = document.getElementById(targetName);
+      if (organTarget) {
+        organTarget.classList.remove('hidden');
+      }
+    }
+    organs.forEach(organ => organ.addEventListener('click', organClick));
+  }
+
+
   // --- Dark/Light Mode Toggle ---
   const themeToggleBtn = document.getElementById('theme-toggle');
   if (themeToggleBtn) {
@@ -148,14 +169,9 @@ document.addEventListener("turbo:load", () => {
     });
   }
 
-  // make the scrolls the cahrt of the right side
+  // make the scrolls the chart of the right side
   const container = document.getElementById('chart-container');
   if (container) {
     container.scrollLeft = container.scrollWidth;
-  }
-
-  const heart = document.getElementById('heart');
-  if (heart) {
-    heart.classList.remove('hidden');
   }
 });

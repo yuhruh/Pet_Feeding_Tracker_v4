@@ -1,0 +1,83 @@
+<div id="stomach" class="flex flex-col justify-center items-center">
+  <div class="flex justify-center">
+    <h1 class="text-center font-bold text-xl text-amber-700 mb-4 mt-2 p-4 underline underline-offset-8 decoration-amber-700 dark:text-amber-600 dark:decoration-amber-600 md:text-3xl">Stomach Health Report</h1>
+    <div class="flex flex-row justify-center items-center gap-4 mt-2">
+      <div class="relative group">
+        <span class="absolute -top-8 left-1/2 -transition-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+          Go Back to Report Index
+        </span>
+        <%= link_to pet_health_checks_path, class: "hover:opacity-80 transition-opacity cursor-pointer" do %>
+          <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            class="transition-transform duration-200 group-hover:scale-110 group-hover:rotate-45 origin-center"
+            width="50px" height="50px" viewBox="0 0 511.993 511.993" style="enable-background:new 0 0 511.993 511.993;" xml:space="preserve">
+            <path style="fill:#F4BE8E;" d="M416.116,104.848c-57.437-11.546-82.856,6.422-118.122,43.92l0.125-106.481
+              c0-5.875-14.281-10.64-31.937-10.64c-17.641,0-35.781,3.688-35.781,9.578c0,0-4.328,265.54-65.342,277.774
+              C77.406,336.577-0.374,288.844,0.001,446.887c0,5.891,14.296,10.655,31.937,10.655c17.656,0,31.937-4.765,31.937-10.655
+              c24.312-83.045,30.812,8.687,158.137,30.624C446.209,516.119,632.174,148.237,416.116,104.848z"/>
+            <g style="opacity:0.2;">
+              <path style="fill:#FFFFFF;" d="M89.905,413.825c0.375-0.391,0.688-0.766,0.938-1.094c-15.484-10.156-30.218-0.453-48.28,34.155
+                c0,4.641-8.89,8.577-21.281,10.046l0,0c1.625,0.188,3.281,0.328,5.016,0.438c0.094,0.016,0.203,0.016,0.297,0.016
+                c0.797,0.047,1.609,0.078,2.438,0.109c0.125,0,0.25,0,0.375,0.016c0.828,0.016,1.688,0.031,2.531,0.031
+                c17.656,0,31.937-4.765,31.937-10.655C72.687,416.778,79.155,409.638,89.905,413.825z"/>
+              <path style="fill:#FFFFFF;" d="M276.808,42.287l-0.156,127.466c7.437-7.891,14.421-14.922,21.374-20.984l0.094-106.481
+                c0-5.875-14.281-10.64-31.937-10.64c-3.875,0-7.75,0.172-11.469,0.516C267.526,33.538,276.808,37.553,276.808,42.287z"/>
+              <path style="fill:#FFFFFF;" d="M416.116,104.848c-16.062-3.234-29.624-4.141-41.593-2.984c6.312,0.547,13.031,1.531,20.25,2.984
+                c201.807,40.53,52.873,364.116-150.31,375.194C458.24,491.761,624.908,146.784,416.116,104.848z"/>
+            </g>
+          </svg>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <% if @health_checks.empty? %>
+    <p class="text-amber-700 text-center font-bold my-10">No <%= @pet.petname.capitalize %>'s liver health checks report</p>
+    <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4">
+      <%= link_to "Go Back to Report Index", pet_health_checks_path, class: "mb-4 items-center text-center rounded-md px-3.5 py-2.5 text-white bg-amber-600 hover:bg-white hover:text-amber-600 hover:border-2 hover:border-amber-600 inline-block font-medium cursor-pointer" %>
+    </div>
+  <% else %>
+    <div class="container mx-auto w-full shadow-lg rounded-xl p-2 mb-4">
+      <div class="flex flex-col gap-8 justify-center mt-4 lg:flex-row lg:items-center">
+        <div class="hidden overflow-x-auto w-full md:block">
+          <table class="table-auto mb-2 px-2 w-full dark:bg-slate-100">
+            <thead>
+              <tr class="bg-gray-100 dark:bg-black">
+                <th class="text-sm text-center p-2 dark:text-white">#</th>
+                <th class="text-sm text-center p-2 dark:text-white">Exam Date</th>
+                <th class="text-sm text-center p-2 dark:text-white">TP(g/dL)</th>
+                <th class="text-sm text-center p-2 dark:text-white">ALB(g/dL)</th>
+                <th class="text-sm text-center p-2 dark:text-white">BUN(mg/dL)</th>
+              </tr>
+            </thead>
+            <thead>
+              <tr class="border-b-4 bg-gray-100 dark:bg-black">
+                <th class="text-sm text-center p-2 dark:text-white"></th>
+                <th class="text-sm text-center p-2 dark:text-white">Reference Range</th>
+                <th class="text-sm text-center p-2 dark:text-white">5.7 - 8.9 (g/dL)</th>
+                <th class="text-sm text-center p-2 dark:text-white">2.2 - 4.0 (g/dL)</th>
+                <th class="text-sm text-center p-2 dark:text-white">16 - 36 (mg/dL)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <tr id="<%= dom_id(health_check) %>" class="border-b bg-gray-100">
+                  <td class="text-sm text-center p-2 font-semibold"><%= idx+1 %></td>
+                  <td class="text-sm text-center p-2"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
+                  <td class="text-sm text-center <%=range_row_class(health_check.tp, 8.9, 5.7)%> p-2"><%= health_check.tp %></td>
+                  <td class="text-sm text-center <%=range_row_class(health_check.alb, 4.0, 2.2)%> p-2"><%= health_check.alb %></td>
+                  <td class="text-sm text-center <%=range_row_class(health_check.bun, 36, 16)%> p-2"><%= health_check.bun %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <ul class="list-disc list-inside ml-4">
+            <li class="text-red-700 font-bold italic mt-2">Red means the value is higher than reference range</li>
+            <li class="text-sky-700 font-bold italic mt-2">Blue means the value is lower than reference range</li>
+          </ul>
+        </div>
+
+        <!-- Transposed Table for Small Screens -->
+        
+      </div>
+    </div>
+  <% end %>
+</div>
