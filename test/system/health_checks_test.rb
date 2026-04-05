@@ -63,7 +63,7 @@ class HealthChecksTest < ApplicationSystemTestCase
   test "should update Health check" do
     sign_in_as @user
     visit pet_health_checks_url(locale: I18n.default_locale, pet_id: @pet.id)
-    find("div[data-target='all']").click
+    find("div[data-target='all']", match: :first).click
     assert_selector "#edit_health_check_#{@health_check.id}"
     find("#edit_health_check_#{@health_check.id}").click
 

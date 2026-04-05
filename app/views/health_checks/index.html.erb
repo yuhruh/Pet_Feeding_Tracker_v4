@@ -42,10 +42,22 @@
             blood
           </span>
         </div>
+        <div class="absolute group hover:bg-violet-500/50 organ" data-target="all" style="left: 39%; top: 16%; width: 9%; height: 30%;">
+          <span class="absolute capitalize -top-8 left-1/2 -translate-x-2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+            all
+          </span>
+        </div>
+        <div class="absolute group hover:bg-violet-500/50 organ" data-target="all" style="left: 42%; top: 46%; width: 2%; height: 6%;">
+          <span class="absolute capitalize -top-8 left-1/2 -translate-x-2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+            all
+          </span>
+        </div>
       </div>
     </div>
 
     <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4 space-y-2 md:space-y-0 mb-4 text-amber-600 font-bold">
+      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ" data-target="all">all</div>
+      <span class="hidden md:inline">|</span>
       <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ" data-target="liver">liver</div>
       <span class="hidden md:inline">|</span>
       <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ" data-target="kidney" >kidney</div>
@@ -58,7 +70,7 @@
       <span class= "hidden md:inline">|</span>
       <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ" data-target="blood">blood</div>
       <span class="hidden md:inline">|</span>
-      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ" data-target="all">all</div>
+      <div class= "capitalize hover:underline hover:scale-110 transition-all duration-300 organ" data-target="other">other</div>
     </div>
   </div>
 
@@ -89,6 +101,10 @@
 
     <div id="pancreas" class="report pancreas/pancreatic islet w-full">
       <%= render 'pancreas', class: "relative rounded-lg shadow-lg z-10" %>
+    </div>
+
+    <div id="other" class="report other w-full">
+      <%= render 'other', class: "relative rounded-lg shadow-lg z-10" %>
     </div>
   </div>
   <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4 space-y-2 md:space-y-0 mb-4 font-bold">
