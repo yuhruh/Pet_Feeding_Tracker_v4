@@ -62,16 +62,16 @@
     </div>
   </div>
 
-  <div class="flex flex-col justify-center items-center gap-2 mb-4 font-bold md:flex-row md:space-x-7">
+  <div class="flex flex-col justify-center items-center gap-2 mb-4 font-bold md:flex-row">
     <div id="all" class="report all">
       <%= render 'health_check', class: "relative rounded-lg shadow-lg z-10" %>
     </div>   
 
-    <div id="heart" class="flex flex-col py-5 md:flex-row md:space-x-7 report heart">
+    <div id="heart" class="report heart w-full">
       <%= render 'heart', class: "relative rounded-lg shadow-lg z-10" %>
     </div>
 
-    <div id="stomach" class="flex flex-col py-5 md:flex-row md:space-x-7 report stomach">
+    <div id="stomach" class="report stomach w-full">
       <%= render 'stomach', class: "relative rounded-lg shadow-lg z-10" %>
     </div>
 
