@@ -1,6 +1,8 @@
 module HealthChecksHelper
   def range_row_class(actual, high, low)
-    classes = [ "text-center" ]
+    return "font-normal" if actual.nil?
+
+    classes = []
     if actual.to_f > high
       classes << "text-red-700 font-bold italic"
     elsif actual.to_f < low
