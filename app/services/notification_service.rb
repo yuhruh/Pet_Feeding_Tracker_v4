@@ -23,7 +23,7 @@ class NotificationService
     line_uid = @user.connected_services.find_by(provider: "line").uid
     message = {
       type: "text",
-      text: "It's time to weigh your pet's weight!"
+      text: I18n.t("services.notifications.pet_weight_reminder")
     }
     line_bot_client.push_message(line_uid, message)
   end

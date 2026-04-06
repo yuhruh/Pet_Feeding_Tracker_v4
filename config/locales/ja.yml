@@ -1,8 +1,7 @@
 ja:
   hero_section:
     heading: "ペットの給餌を視覚的に追跡するアプリ 🐾"
-    subheading: "猫の食事の好みや量の傾向を、明確で視覚的なインターフェースで経時的に追跡します。
-                  管理されていないExcelデータセットをグラフに変換するのに役立ちます。"
+    subheading: "猫の食事の好みや量の傾向を、明確で視覚的なインターフェースで経時的に追跡します。 管理されていないExcelデータセットをグラフに変換するのに役立ちます。"
     features_title: "特徴"
     features_subtitle: "猫の飼い主が愛猫の好物を簡単に把握し、体調の異変にいち早く気づけるようにすることを目指しています。"
     tab_1: "シンプルなペット管理 😼"
@@ -200,6 +199,10 @@ ja:
       pet_favorite_list: "%{petname}のお気に入りリスト"
       add_dry_food: "ドライフードを追加"
       storage_list: "保管リスト"
+      health_checkup: "健康診断"
+      add_new_tracker: "新しいトラッカーを追加"
+      add_report: "レポートを追加"
+      view_annual_reports: "年次レポートを表示"
       sign_out: "サインアウト"
       get_started: "はじめに"
       sign_in: "サインイン"
@@ -523,6 +526,21 @@ ja:
     user_mailer:
       welcome:
         subject: "猫トラッカーアプリへようこそ！"
+      send_pet_weight_reminder:
+        subject: "ペットの体重を測る時間です！ 📝"
+  services:
+    csv_import:
+      failed_to_parse: "CSVファイルの解析に失敗しました: %{message}"
+      failed_to_import: "データのインポートに失敗しました: %{message}"
+      row_error: "%{row}行目: %{message}"
+      date_earlier_than_birthday: "日付はペットの誕生日より前にはできません。"
+      invalid_date_format: "「日付」列の形式が正しくありません。"
+      invalid_feed_time_format: "「給餌時間」列の形式が正しくありません。"
+      invalid_amount_number: "「量」列の数値が正しくありません。"
+      invalid_left_amount_number: "「残量」列の数値が正しくありません。"
+      invalid_weight_number: "「体重」列の数値が正しくありません。"
+    notifications:
+      pet_weight_reminder: "ペットの体重を測る時間です！"
   javascript:
     left_amount_controller:
       greater_than_alert: "%{amount}g を超えることはできません。"
@@ -534,10 +552,177 @@ ja:
       only_left_in_storage: "⚠️ 在庫は残り %{amount}g です。"
       is_valid_amount: "%{amount}g は有効な量です。"
       select_wet_food: "お気に入りを選択するか、手動で入力してください"
+      favorite_score: "お気に入りスコア:"
+      last_feed_date: "最終給餌日:"
+    hello_controller:
+      hello_world: "こんにちは、世界！"
   activerecord:
+    attributes:
+      tracker:
+        date: "日付"
+        feed_time: "給餌時間"
+        come_back_to_eat: "後で食べる"
+        food_type: "フードの種類"
+        brand: "ブランド"
+        description: "説明"
+        amount: "量(g)"
+        left_amount: "残量(g)"
+        total_ate_amount: "完食量(g)"
+        hungry: "空腹状態"
+        love: "お気に入り"
+        result: "結果"
+        note: "メモ"
+        weight: "体重(kg)"
+      pet:
+        petname: "ペットの名前"
+        birthday: "誕生日"
+        weight: "体重(kg)"
+        gender: "性別"
+        breed: "品種"
+      user:
+        username: "ユーザー名"
+        email_address: "メールアドレス"
+        timezone: "タイムゾーン"
+      dry_food:
+        brand: "ブランド"
+        food_type: "フードの種類"
+        description: "説明"
+        amount: "量(g)"
+        used_amount: "使用量(g)"
+        average_used_amount: "平均使用量(g)"
+        total_ate_amount: "完食量(g)"
+        left_amount: "残量(g)"
+        days_remaining: "残り日数"
+      health_check:
+        exam_date: "受診日"
+        crea: "CREA(mg/dL)"
+        bun: "BUN(mg/dL)"
+        phos: "PHOS(mg/dL)"
+        ca: "CA(mg/dL)"
+        alb: "ALB(g/dL)"
+        chol: "CHOL(mg/dL)"
+        tp: "TP(g/dL)"
+        alt: "ALT(U/L)"
+        alkp: "ALKP(U/L)"
+        ggt: "GGT(U/L)"
+        glu: "GLU(mg/dL)"
+        tbil: "TBIL(mg/dL)"
+        amyl: "AMYL(U/L)"
+        lipa: "LIPA(U/L)"
+        na: "Na(mmol/L)"
+        k: "K(mmol/L)"
+        cl: "Cl(mmol/L)"
+        rbc: "RBC(M/µl)"
+        hct: "HCT(%)"
+        hgb: "HGB(g/dL)"
+        mcv: "MCV(fL)"
+        mch: "MCH(pg)"
+        mchc: "MCHC(g/dL)"
+        rdw: "RDW(%)"
+        retic: "RETIC(K/µL)"
+        retic_hgb: "RETIC-HGB(pg)"
+        wbc: "WBC(K/µL)"
+        neu: "NEU(K/µL)"
+        lym: "LYM(K/µL)"
+        mono: "MONO(K/µL)"
+        eos: "EOS(K/µL)"
+        baso: "BASO(K/µL)"
+        plt: "PLT(K/µL)"
+        mpv: "MPV(fL)"
+        pct: "PCT(%)"
+        osm_cal: "滲透圧計算(mmol/kg)"
+        glob: "GLOB(g/dL)"
+        fbnp: "fBNP"
+        felv: "FeLV"
+        fiv: "FIV"
+        fpl2: "fPL2(ng/mL)"
     errors:
       models:
         tracker:
           attributes:
             amount:
               greater_than_left_amount: "在庫の残量（%{left_amount}g）以下で入力してください。"
+  authentication:
+    required: "このページにアクセスするにはログインしてください"
+  health_checks:
+    index:
+      title: "%{petname}の健康レポート"
+      header: "年次健康診断レポート"
+      add_new: "新しいレポートを追加"
+      go_back_home: "ホームに戻る"
+      organs:
+        liver: "肝臓"
+        kidney: "腎臓"
+        pancreas: "膵臓/膵島"
+        stomach: "胃"
+        heart: "心臓"
+        blood: "血液"
+        all: "すべて"
+        other: "その他"
+      legend:
+        red: "赤色は基準値より高いことを意味します"
+        blue: "青色は基準値より低いことを意味します"
+      reference_range: "基準範囲"
+      edit: "編集"
+      delete: "削除"
+    new:
+      title: "新規 %{petname}の健康診断"
+      header: "年次健康診断レポートを追加"
+      add_button: "新しいレポートを追加"
+      back_link: "%{petname}の健康診断一覧に戻る"
+    edit:
+      title: "%{petname}の健康診断を編集"
+      header: "年次健康診断レポートを編集"
+      update_button: "健康診断レポートを更新"
+      back_link: "%{petname}の健康診断一覧に戻る"
+    form:
+      blood_test: "血液検査"
+    show:
+      title: "健康診断を表示中"
+      back: "健康診断一覧に戻る"
+      edit: "この健康診断を編集"
+      destroy: "この健康診断を削除"
+      confirm: "本当によろしいですか？"
+      confirm_delete: "この健康診断を削除してもよろしいですか？"
+    blood:
+      header: "血液健康レポート"
+      back_link: "レポート一覧に戻る"
+    heart:
+      header: "心臓レポート"
+      back_link: "レポート一覧に戻る"
+    stomach:
+      header: "胃の健康レポート"
+      back_link: "レポート一覧に戻る"
+    kidney:
+      header: "腎臓健康レポート"
+      back_link: "レポート一覧に戻る"
+    liver:
+      header: "肝臓健康レポート"
+      back_link: "レポート一覧に戻る"
+    pancreas:
+      header: "膵臓健康レポート"
+      back_link: "レポート一覧に戻る"
+    other:
+      header: "その他の健康レポート"
+      back_link: "レポート一覧に戻る"
+    create:
+      notice: "健康診断の記録が正常に作成されました。"
+    update:
+      notice: "健康診断の記録が正常に更新されました。"
+    destroy:
+      notice: "健康診断の記録が正常に削除されました。"
+    bulk_delete:
+      notice: "選択した健康診断の記録が正常に削除されました。"
+    not_found: "健康診断の記録が見つかりません。"
+  omni_auth:
+    sessions:
+      create:
+        connected: "%{provider} が接続されました"
+        first_time_sign_in: "初めてのログインです。トラッカーを続けるには、まず新しい猫を追加してください。"
+        welcome_back: "サインインしました。猫の給餌トラッカーアプリへおかえりなさい、%{username}さん。"
+        email_exists: "このメールアドレスのアカウントが既に存在します。このサービスに関連付けるには、%{service_methods} アカウントを使用してサインインしてください。"
+        enter_email_line: "LINE登録を完了するためにメールアドレスを入力してください。"
+        enter_email: "登録を完了するためにメールアドレスを入力してください。"
+      failure:
+        cancelled: "サインインプロセスをキャンセルしました。もう一度お試しください。"
+        issue: "サインインプロセスに問題が発生しました。もう一度お試しください。"

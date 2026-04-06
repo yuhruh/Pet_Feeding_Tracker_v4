@@ -104,7 +104,7 @@ class HealthChecksTest < ApplicationSystemTestCase
     fill_in "TBIL(mg/dL)", with: @health_check.tbil
     fill_in "TP(g/dL)", with: @health_check.tp
     fill_in "WBC(K/µL)", with: @health_check.wbc
-    click_on "Update Health check"
+    click_on "Update Health Check"
 
     assert_text "Health check was successfully updated"
   end

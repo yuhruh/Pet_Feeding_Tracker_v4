@@ -39,16 +39,16 @@ class CsvImportTrackersService
           begin
             @pet.trackers.create!(tracker_hash)
           rescue ArgumentError => e
-            @errors << "Row #{i + 2}: #{e.message}"
+            @errors << I18n.t("services.csv_import.row_error", row: i + 2, message: e.message)
             raise ActiveRecord::Rollback
           end
         end
       rescue CSV::MalformedCSVError => e
-        @errors << "Failed to parse CSV file: #{e.message}"
+        @errors << I18n.t("services.csv_import.failed_to_parse", message: e.message)
         raise ActiveRecord::Rollback
       rescue ActiveRecord::RecordInvalid => e
         # This will catch validation errors from the model, e.g. presence checks
-        @errors << "Failed to import data: #{e.message}"
+        @errors << I18n.t("services.csv_import.failed_to_import", message: e.message)
         raise ActiveRecord::Rollback
       end
     end
@@ -62,13 +62,13 @@ class CsvImportTrackersService
         if row["date"].present?
           parsed_date = Date.parse(row["date"])
           if parsed_date < @pet.birthday
-            @errors << "Row #{row_index + 2}: Date cannot be earlier than pet's birthday."
+            @errors << I18n.t("services.csv_import.row_error", row: row_index + 2, message: I18n.t("services.csv_import.date_earlier_than_birthday"))
           else
             tracker_hash[:date] = parsed_date
           end
         end
       rescue ArgumentError
-        @errors << "Row #{row_index + 2}: Invalid format for 'date' column."
+        @errors << I18n.t("services.csv_import.row_error", row: row_index + 2, message: I18n.t("services.csv_import.invalid_date_format"))
       end
 
       begin
@@ -78,25 +78,25 @@ class CsvImportTrackersService
           end
         end
       rescue ArgumentError
-        @errors << "Row #{row_index + 2}: Invalid format for 'feed_time' column."
+        @errors << I18n.t("services.csv_import.row_error", row: row_index + 2, message: I18n.t("services.csv_import.invalid_feed_time_format"))
       end
 
       begin
         tracker_hash[:amount] = Float(row["amount"]) if row["amount"].present?
       rescue ArgumentError
-        @errors << "Row #{row_index + 2}: Invalid number for 'amount' column."
+        @errors << I18n.t("services.csv_import.row_error", row: row_index + 2, message: I18n.t("services.csv_import.invalid_amount_number"))
       end
 
       begin
         tracker_hash[:left_amount] = Float(row["left_amount"]) if row["left_amount"].present?
       rescue ArgumentError
-        @errors << "Row #{row_index + 2}: Invalid number for 'left_amount' column."
+        @errors << I18n.t("services.csv_import.row_error", row: row_index + 2, message: I18n.t("services.csv_import.invalid_left_amount_number"))
       end
 
       begin
         tracker_hash[:weight] = Float(row["weight"]) if row["weight"].present?
       rescue ArgumentError
-        @errors << "Row #{row_index + 2}: Invalid number for 'weight' column."
+        @errors << I18n.t("services.csv_import.row_error", row: row_index + 2, message: I18n.t("services.csv_import.invalid_weight_number"))
       end
     end
 

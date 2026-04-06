@@ -94,7 +94,7 @@ export default class extends Controller {
   }
 
   updateWetFoodOptions(foods) {
-    this.wetFoodSelectTarget.innerHTML = `<option value="">${I18n.t('trackers.form.select_favorite_or_enter_manually')}</option>`;
+    this.wetFoodSelectTarget.innerHTML = `<option value="">${I18n.t('javascript.tracker_form_controller.select_wet_food')}</option>`;
     if (!Array.isArray(foods)) {
       return;
     }
@@ -145,7 +145,7 @@ export default class extends Controller {
       const option = document.createElement('option');
       option.value = food.results[0].id;
       if (food.results[0].favorite_score >= 30) {
-        option.text = `${food.brand} ${food.description}: Favorite Score: ${food.results[0].favorite_score} - Last Feed Date: ${food.results[0].date}`;
+        option.text = `${food.brand} ${food.description}: ${I18n.t('javascript.tracker_form_controller.favorite_score')} ${food.results[0].favorite_score} - ${I18n.t('javascript.tracker_form_controller.last_feed_date')} ${food.results[0].date}`;
         this.wetFoodSelectTarget.add(option);
       }
     });

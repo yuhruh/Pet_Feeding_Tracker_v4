@@ -68,19 +68,19 @@ class Tracker < ApplicationRecord
   def self.to_csv
     require "csv"
     CSV.generate(headers: true, col_sep: ";") do |csv|
-      csv << [ "date", "feed_time", "come_back_to_eat", "food_type", "brand", "description", "amount", "left_amount", "total_ate_amount", "hungry", "love", "result", "note", "weight" ]
+      csv << [ "date", "feed_time", "come_back_to_eat", "food_type", "brand", "description", "amount", "left_amount", "total_ate_amount", "hungry", "love", "result", "note", "weight" ].map { |attr| human_attribute_name(attr) }
       all.each do |tracker|
         csv << [
           tracker.date,
           tracker.feed_time&.strftime("%H:%M"),
           tracker.come_back_to_eat,
-          tracker.food_type,
+          I18n.t("trackers.food_types.#{tracker.food_type}"),
           tracker.brand,
           tracker.description,
           tracker.amount,
           tracker.left_amount,
           tracker.total_ate_amount,
-          HUNGRY_MAP[tracker.hungry.to_sym],
+          I18n.t("trackers.hungry_options.#{tracker.hungry}"),
           tracker.love,
           tracker.result,
           tracker.note,

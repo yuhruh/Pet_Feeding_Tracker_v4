@@ -1,7 +1,7 @@
 zh-TW:
   hero_section:
-    heading: "視覺化寵物餵食追踪應用程序 🐾"
-    subheading: "擁有清晰可視化的界面，用於追踪貓科動物的飲食喜好、趨勢。協助飼主將雜亂無章的Excel資料轉換成圖表。"
+    heading: "視覺化寵物餵食追蹤應用程序 🐾"
+    subheading: "擁有清晰可視化的界面，用於追蹤您的貓科動物的飲食喜好、趨勢。協助飼主將雜亂無章的Excel資料轉換成圖表。"
     features_title: "功能"
     features_subtitle: "主要目的是讓飼主輕鬆探索他們的貓科動物的喜好，並迅速注意到牠們的身體警訊。"
     tab_1: "簡單的寵物管理 😼"
@@ -199,6 +199,10 @@ zh-TW:
       pet_favorite_list: "%{petname} 的最愛清單"
       add_dry_food: "新增乾糧"
       storage_list: "乾糧儲存清單"
+      health_checkup: "健康檢查"
+      add_new_tracker: "新增飲食紀錄"
+      add_report: "新增報告"
+      view_annual_reports: "查看年度報告"
       sign_out: "登出"
       get_started: "開始使用"
       sign_in: "登入"
@@ -522,6 +526,21 @@ zh-TW:
     user_mailer:
       welcome:
         subject: "歡迎使用寵物飲食紀錄 App！"
+      send_pet_weight_reminder:
+        subject: "該幫您的寵物量體重囉！ 📝"
+  services:
+    csv_import:
+      failed_to_parse: "CSV 檔案解析失敗: %{message}"
+      failed_to_import: "資料匯入失敗: %{message}"
+      row_error: "第 %{row} 列: %{message}"
+      date_earlier_than_birthday: "日期不能早於寵物的生日。"
+      invalid_date_format: "「日期」欄位格式無效。"
+      invalid_feed_time_format: "「餵食時間」欄位格式無效。"
+      invalid_amount_number: "「量」欄位數值無效。"
+      invalid_left_amount_number: "「剩餘量」欄位數值無效。"
+      invalid_weight_number: "「體重」欄位數值無效。"
+    notifications:
+      pet_weight_reminder: "該幫您的寵物量體重囉！"
   javascript:
     left_amount_controller:
       greater_than_alert: "不應超過 %{amount} 克。"
@@ -533,10 +552,177 @@ zh-TW:
       only_left_in_storage: "⚠️ 庫存僅剩 %{amount} 克。"
       is_valid_amount: "%{amount} 克是有效數量。"
       select_wet_food: "選擇一個最愛或手動輸入"
+      favorite_score: "喜愛程度分數:"
+      last_feed_date: "上次餵食日期:"
+    hello_controller:
+      hello_world: "你好，世界！"
   activerecord:
+    attributes:
+      tracker:
+        date: "日期"
+        feed_time: "餵食時間"
+        come_back_to_eat: "回頭吃"
+        food_type: "食物類型"
+        brand: "品牌"
+        description: "描述"
+        amount: "量(克)"
+        left_amount: "剩餘量(克)"
+        total_ate_amount: "總共食用量(克)"
+        hungry: "飢餓狀態"
+        love: "喜愛程度"
+        result: "結果"
+        note: "備註"
+        weight: "體重(公斤)"
+      pet:
+        petname: "寵物名稱"
+        birthday: "生日"
+        weight: "體重(公斤)"
+        gender: "性別"
+        breed: "品種"
+      user:
+        username: "使用者名稱"
+        email_address: "電子郵件地址"
+        timezone: "時區"
+      dry_food:
+        brand: "品牌"
+        food_type: "食物類型"
+        description: "描述"
+        amount: "量(克)"
+        used_amount: "使用量(克)"
+        average_used_amount: "平均使用量(克)"
+        total_ate_amount: "總共食用量(克)"
+        left_amount: "剩餘量(克)"
+        days_remaining: "預計剩餘天數"
+      health_check:
+        exam_date: "檢查日期"
+        crea: "肌酸酐 CREA(mg/dL)"
+        bun: "血尿素氮 BUN(mg/dL)"
+        phos: "磷 PHOS(mg/dL)"
+        ca: "鈣 CA(mg/dL)"
+        alb: "白蛋白 ALB(g/dL)"
+        chol: "膽固醇 CHOL(mg/dL)"
+        tp: "總蛋白 TP(g/dL)"
+        alt: "丙胺酸轉胺酶 ALT(U/L)"
+        alkp: "鹼性磷酸酶 ALKP(U/L)"
+        ggt: "γ-麩胺醯轉肽酶 GGT(U/L)"
+        glu: "血糖 GLU(mg/dL)"
+        tbil: "總膽紅素 TBIL(mg/dL)"
+        amyl: "澱粉酶 AMYL(U/L)"
+        lipa: "脂肪酶 LIPA(U/L)"
+        na: "鈉 Na(mmol/L)"
+        k: "鉀 K(mmol/L)"
+        cl: "氯 Cl(mmol/L)"
+        rbc: "紅血球 RBC(M/µl)"
+        hct: "血容比 HCT(%)"
+        hgb: "血紅素 HGB(g/dL)"
+        mcv: "平均紅血球容積 MCV(fL)"
+        mch: "平均紅血球血紅素 MCH(pg)"
+        mchc: "平均紅血球血紅素濃度 MCHC(g/dL)"
+        rdw: "紅血球分佈幅 RDW(%)"
+        retic: "網狀紅血球 RETIC(K/µL)"
+        retic_hgb: "網狀紅血球血紅素 RETIC-HGB(pg)"
+        wbc: "白血球 WBC(K/µL)"
+        neu: "嗜中性球 NEU(K/µL)"
+        lym: "淋巴球 LYM(K/µL)"
+        mono: "單核球 MONO(K/µL)"
+        eos: "嗜酸性球 EOS(K/µL)"
+        baso: "嗜鹼性球 BASO(K/µL)"
+        plt: "血小板 PLT(K/µL)"
+        mpv: "平均血小板容積 MPV(fL)"
+        pct: "血小板壓積 PCT(%)"
+        osm_cal: "滲透壓計算 Osm Calc(mmol/kg)"
+        glob: "球蛋白 GLOB(g/dL)"
+        fbnp: "fBNP"
+        felv: "貓白血病 FeLV"
+        fiv: "貓愛滋 FIV"
+        fpl2: "胰脂肪酶 fPL2(ng/mL)"
     errors:
       models:
         tracker:
           attributes:
             amount:
               greater_than_left_amount: "必須小於或等於庫存剩餘量，目前庫存剩餘 %{left_amount}g。"
+  authentication:
+    required: "您必須登入才能存取此頁面"
+  health_checks:
+    index:
+      title: "%{petname} 的健康報告"
+      header: "年度健康檢查報告"
+      add_new: "新增報告"
+      go_back_home: "回到首頁"
+      organs:
+        liver: "肝臟"
+        kidney: "腎臟"
+        pancreas: "胰臟/胰島"
+        stomach: "胃"
+        heart: "心臟"
+        blood: "血液"
+        all: "全部"
+        other: "其他"
+      legend:
+        red: "紅色代表數值高於參考範圍"
+        blue: "藍色代表數值低於參考範圍"
+      reference_range: "參考範圍"
+      edit: "編輯"
+      delete: "刪除"
+    new:
+      title: "新增 %{petname} 的健康檢查"
+      header: "新增年度健康檢查報告"
+      add_button: "新增報告"
+      back_link: "回到 %{petname} 的健康檢查列表"
+    edit:
+      title: "編輯 %{petname} 的健康檢查"
+      header: "編輯年度健康檢查報告"
+      update_button: "更新健康檢查報告"
+      back_link: "回到 %{petname} 的健康檢查列表"
+    form:
+      blood_test: "血液檢查"
+    show:
+      title: "顯示健康檢查"
+      back: "回到健康檢查列表"
+      edit: "編輯此健康檢查"
+      destroy: "刪除此健康檢查"
+      confirm: "您確定嗎？"
+      confirm_delete: "您確定要刪除此健康檢查嗎？"
+    blood:
+      header: "血液健康報告"
+      back_link: "回到報告列表"
+    heart:
+      header: "心臟報告"
+      back_link: "回到報告列表"
+    stomach:
+      header: "胃部健康報告"
+      back_link: "回到報告列表"
+    kidney:
+      header: "腎臟健康報告"
+      back_link: "回到報告列表"
+    liver:
+      header: "肝臟健康報告"
+      back_link: "回到報告列表"
+    pancreas:
+      header: "胰臟健康報告"
+      back_link: "回到報告列表"
+    other:
+      header: "其他健康報告"
+      back_link: "回到報告列表"
+    create:
+      notice: "健康檢查記錄已成功建立。"
+    update:
+      notice: "健康檢查記錄已成功更新。"
+    destroy:
+      notice: "健康檢查記錄已成功刪除。"
+    bulk_delete:
+      notice: "所選的健康檢查記錄已成功刪除。"
+    not_found: "找不到健康檢查記錄。"
+  omni_auth:
+    sessions:
+      create:
+        connected: "%{provider} 已連結"
+        first_time_sign_in: "這是您第一次登入，請先新增一隻貓以進行後續追蹤。"
+        welcome_back: "您已登入。歡迎回到貓咪餵食追蹤 App，%{username}"
+        email_exists: "已有使用此電子郵件地址的帳號。請使用您的 %{service_methods} 帳號登入，以與此服務關聯。"
+        enter_email_line: "請輸入電子郵件地址以完成您的 LINE 註冊。"
+        enter_email: "請輸入電子郵件地址以完成您的註冊。"
+      failure:
+        cancelled: "您已取消登入程序。請再試一次。"
+        issue: "登入程序發生問題。請再試一次。"

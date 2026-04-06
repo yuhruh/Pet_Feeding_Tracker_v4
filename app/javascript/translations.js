@@ -1,4 +1,4 @@
-export default {
+{
   "en": {
     "javascript": {
       "left_amount_controller": {
@@ -7,7 +7,9 @@ export default {
         "valid_amount": "%{amount}g is valid."
       },
       "tracker_form_controller": {
+        "favorite_score": "Favorite Score:",
         "is_valid_amount": "%{amount}g is valid.",
+        "last_feed_date": "Last Feed Date:",
         "left_in_storage": "Left %{amount} g",
         "only_left_in_storage": "⚠️ Only %{amount}g left in storage.",
         "select_wet_food": "Select a favorite or enter manually",
@@ -171,7 +173,9 @@ export default {
         "valid_amount": "%{amount}g は有効です。"
       },
       "tracker_form_controller": {
+        "favorite_score": "お気に入りスコア:",
         "is_valid_amount": "%{amount}g は有効な量です。",
+        "last_feed_date": "最終給餌日:",
         "left_in_storage": "残り %{amount} g",
         "only_left_in_storage": "⚠️ 在庫は残り %{amount}g です。",
         "select_wet_food": "お気に入りを選択するか、手動で入力してください",
@@ -335,7 +339,9 @@ export default {
         "valid_amount": "%{amount} 克是有效數量。"
       },
       "tracker_form_controller": {
+        "favorite_score": "喜愛程度分數:",
         "is_valid_amount": "%{amount} 克是有效數量。",
+        "last_feed_date": "上次餵食日期:",
         "left_in_storage": "剩下 %{amount} 克",
         "only_left_in_storage": "⚠️ 庫存僅剩 %{amount} 克。",
         "select_wet_food": "選擇一個最愛或手動輸入",
@@ -491,4 +497,4 @@ export default {
       }
     }
   }
-};
+}

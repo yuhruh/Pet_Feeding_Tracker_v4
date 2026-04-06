@@ -72,7 +72,7 @@
                   <%= pet.petname %>
                 </div>
                 <div>
-                  <%= link_to "Add new tracker", new_pet_tracker_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+                  <%= link_to t('layouts.navigation.add_new_tracker'), new_pet_tracker_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
                   <%= link_to t('layouts.navigation.view_pet_trackers', petname: pet.petname.split(" ").map(&:capitalize).join(" ")), pet_trackers_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
                   <%= link_to t('layouts.navigation.pet_favorite_list', petname: pet.petname.split(" ").map(&:capitalize).join(" ")), favorite_food_pet_trackers_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-rose-100 hover:text-rose-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
                 </div>
@@ -98,7 +98,7 @@
         <div class="relative">
           <div class="flex w-max bg-white px-3 py-2 
             text-grayishBlue tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed dark:bg-darkBlue cursor-pointer btn" data-target="btn-4">
-              Health Checkup
+              <%= t('layouts.navigation.health_checkup') %>
             <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400">
               <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
             </svg>
@@ -110,8 +110,8 @@
                   <%= pet.petname %>
                 </div>
                 <div>
-                  <%= link_to "Add report", new_pet_health_check_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
-                  <%= link_to "View Annual Reports", pet_health_checks_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+                  <%= link_to t('layouts.navigation.add_report'), new_pet_health_check_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+                  <%= link_to t('layouts.navigation.view_annual_reports'), pet_health_checks_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
                 </div>
               <% end %>
             </div>
@@ -333,11 +333,11 @@
               c0,1.6,0.4,5.6,4.8,5.6h39.6c4.4,0,5.2-4,5.2-5.6v-61.6c0-2.4,1.6-4,4-4h61.6c2.4,0,5.6-0.8,5.6-4.8v-40c0-4.4-3.6-4.8-5.6-4.8
               h-61.6c-2.4,0-4-1.6-4-4V196c0-1.6-0.4-5.6-5.2-5.6H234c-4.4,0-4.8,4-4.8,5.6v61.6c0,2.4-1.6,4-4,4H163.6z"/>
           </svg>
-          <div class="font-bold">Health Checkup</div>
+          <div class="font-bold"><%= t('layouts.navigation.health_checkup') %></div>
         </div>
         <% Current.user.pets.select(&:persisted?).each do |pet| %>
-          <%= link_to "Add Report", new_pet_health_check_path(pet), class: "block px-4 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
-          <%= link_to "View Annual Reports", pet_health_checks_path(pet), class: "block px-4 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+          <%= link_to t('layouts.navigation.add_report'), new_pet_health_check_path(pet), class: "block px-4 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+          <%= link_to t('layouts.navigation.view_annual_reports'), pet_health_checks_path(pet), class: "block px-4 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
         <% end %>
       </div>
       <div class="w-full py-3 text-center">
@@ -396,7 +396,7 @@
               </div>
             </div>
             <div class="flex items-center justify-center">
-              <%= link_to "add new tracker", new_pet_tracker_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 hover:scale-90 hover:rounded-lg focus:bg-gray-100 focus:text-softRed underline underline-offset-4 focus:outline-hidden"%>
+              <%= link_to t('layouts.navigation.add_new_tracker'), new_pet_tracker_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 hover:scale-90 hover:rounded-lg focus:bg-gray-100 focus:text-softRed underline underline-offset-4 focus:outline-hidden"%>
               <%= link_to t('layouts.navigation.mobile.view_pet_trackers', petname: pet.petname.split(" ").map(&:capitalize).join(" ")), pet_trackers_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 hover:scale-90 hover:rounded-lg focus:bg-gray-100 focus:text-softRed underline underline-offset-4 focus:outline-hidden" %>
               <%= link_to t('layouts.navigation.mobile.pet_favorite_list', petname: pet.petname.split(" ").map(&:capitalize).join(" ")), favorite_food_pet_trackers_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-emerald-100 hover:text-emerald-600 hover:scale-90 hover:rounded-lg focus:bg-gray-100 underline underline-offset-4 focus:text-softRed focus:outline-hidden" %>
             </div>

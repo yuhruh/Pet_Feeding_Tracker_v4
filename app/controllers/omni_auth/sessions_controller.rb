@@ -9,7 +9,7 @@ class OmniAuth::SessionsController < ApplicationController
     end
 
     if Current.user.present?
-      flash[:notice] = "#{@service.provider.to_s.humanize} connected"
+      flash[:notice] = t("omni_auth.sessions.create.connected", provider: @service.provider.to_s.humanize)
       redirect_to pets_path
     else
       start_new_session_for @user
@@ -19,10 +19,10 @@ class OmniAuth::SessionsController < ApplicationController
       @user.save(validate: false)
 
       if @user.new_user?
-        flash[:notice] = "This is your first time to sign in, please add a new cat first for further tracker."
+        flash[:notice] = t("omni_auth.sessions.create.first_time_sign_in")
         redirect_to new_pet_path
       else
-        flash[:notice] = "You have been signed in. Welcome back to Cat Feeding Tracker App. #{Current.user.username.capitalize}"
+        flash[:notice] = t("omni_auth.sessions.create.welcome_back", username: Current.user.username.capitalize)
         redirect_to pets_path
       end
     end
@@ -30,9 +30,9 @@ class OmniAuth::SessionsController < ApplicationController
 
   def failure
     if params[:message] == "access_denied"
-      flash[:alert] = "You cancelled the sign in process. Please try again."
+      flash[:alert] = t("omni_auth.sessions.failure.cancelled")
     else
-      flash[:alert] = "There was an issue with the sign in process. Please try again."
+      flash[:alert] = t("omni_auth.sessions.failure.issue")
     end
 
     redirect_to new_session_path
@@ -58,15 +58,15 @@ class OmniAuth::SessionsController < ApplicationController
       @user = @service.user
     elsif User.find_by(email_address: user_info.dig(:info, :email)).present?
       service_methods = ConnectedService.where(user_id: User.find_by(email_address: user_info.dig(:info, :email))).pluck(:provider).map(&:to_s).join(", ")
-      flash[:notice] = "There's already an account with this email address. Please sign in with it using your #{service_methods} account to associate it with this service."
+      flash[:notice] = t("omni_auth.sessions.create.email_exists", service_methods: service_methods)
       redirect_to new_session_path
     else
       if user_info.dig(:info, :email).blank? && user_info.provider == "line"
         session["omniauth.auth"] = user_info.to_hash
-        flash[:notice] = "Please enter an email address to complete your LINE registration."
+        flash[:notice] = t("omni_auth.sessions.create.enter_email_line")
         redirect_to new_registrations_path and return
       elsif user_info.dig(:info, :email).blank?
-        flash[:alert] = "Please enter an email address to complete your registration."
+        flash[:alert] = t("omni_auth.sessions.create.enter_email")
         redirect_to new_registrations_path and return
       else
         @user = create_user

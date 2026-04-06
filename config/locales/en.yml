@@ -1,8 +1,7 @@
 en:
   hero_section:
     heading: "A visual pet feeder tracker app 🐾"
-    subheading: "A clear and visualized interface to track feline's eating favorite, amounts trends over time.
-                  Help you transformed unmanaged Excel dataset to chart."
+    subheading: "A clear and visualized interface to track feline's eating favorite, amounts trends over time. Help you transformed unmanaged Excel dataset to chart."
     features_title: "Features"
     features_subtitle: "Aim to make cat owners easily explore what their feline love and quickly notice their body warning."
     tab_1: "Simple Pet Management 😼"
@@ -199,8 +198,12 @@ en:
       view_pet_trackers: "View %{petname}'s Trackers"
       pet_favorite_list: "%{petname}'s Favorite List"
       add_dry_food: "Add dry food"
-      storage_list: "storage list"
-      sign_out: "Sign Out"
+      storage_list: "Storage List"
+      health_checkup: "Health Checkup"
+      add_new_tracker: "Add new tracker"
+      add_report: "Add report"
+      view_annual_reports: "View Annual Reports"
+      sign_out: "Sign out"
       get_started: "Get Started"
       sign_in: "Sign In"
       languages: "Languages"
@@ -523,6 +526,21 @@ en:
     user_mailer:
       welcome:
         subject: "Welcome to Cat Trackers App!"
+      send_pet_weight_reminder:
+        subject: "Time to weigh your pet! 📝"
+  services:
+    csv_import:
+      failed_to_parse: "Failed to parse CSV file: %{message}"
+      failed_to_import: "Failed to import data: %{message}"
+      row_error: "Row %{row}: %{message}"
+      date_earlier_than_birthday: "Date cannot be earlier than pet's birthday."
+      invalid_date_format: "Invalid format for 'date' column."
+      invalid_feed_time_format: "Invalid format for 'feed_time' column."
+      invalid_amount_number: "Invalid number for 'amount' column."
+      invalid_left_amount_number: "Invalid number for 'left_amount' column."
+      invalid_weight_number: "Invalid number for 'weight' column."
+    notifications:
+      pet_weight_reminder: "It's time to weigh your pet's weight!"
   javascript:
     left_amount_controller:
       greater_than_alert: "Should not greater than %{amount}g."
@@ -534,10 +552,177 @@ en:
       only_left_in_storage: "⚠️ Only %{amount}g left in storage."
       is_valid_amount: "%{amount}g is valid."
       select_wet_food: "Select a favorite or enter manually"
+      favorite_score: "Favorite Score:"
+      last_feed_date: "Last Feed Date:"
+    hello_controller:
+      hello_world: "Hello World!"
   activerecord:
+    attributes:
+      tracker:
+        date: "Date"
+        feed_time: "Feed Time"
+        come_back_to_eat: "Come Back to Eat"
+        food_type: "Food Type"
+        brand: "Brand"
+        description: "Description"
+        amount: "Amount(g)"
+        left_amount: "Left Amount(g)"
+        total_ate_amount: "Total Ate Amount(g)"
+        hungry: "Hungry"
+        love: "Love"
+        result: "Result"
+        note: "Note"
+        weight: "Weight(kg)"
+      pet:
+        petname: "Petname"
+        birthday: "Birthday"
+        weight: "Weight(kg)"
+        gender: "Gender"
+        breed: "Breed"
+      user:
+        username: "Username"
+        email_address: "Email Address"
+        timezone: "Time Zone"
+      dry_food:
+        brand: "Brand"
+        food_type: "Food Type"
+        description: "Description"
+        amount: "Amount(g)"
+        used_amount: "Used Amount(g)"
+        average_used_amount: "Average Used Amount(g)"
+        total_ate_amount: "Total Ate Amount(g)"
+        left_amount: "Left Amount(g)"
+        days_remaining: "Days Remaining"
+      health_check:
+        exam_date: "Exam Date"
+        crea: "CREA(mg/dL)"
+        bun: "BUN(mg/dL)"
+        phos: "PHOS(mg/dL)"
+        ca: "CA(mg/dL)"
+        alb: "ALB(g/dL)"
+        chol: "CHOL(mg/dL)"
+        tp: "TP(g/dL)"
+        alt: "ALT(U/L)"
+        alkp: "ALKP(U/L)"
+        ggt: "GGT(U/L)"
+        glu: "GLU(mg/dL)"
+        tbil: "TBIL(mg/dL)"
+        amyl: "AMYL(U/L)"
+        lipa: "LIPA(U/L)"
+        na: "Na(mmol/L)"
+        k: "K(mmol/L)"
+        cl: "Cl(mmol/L)"
+        rbc: "RBC(M/µl)"
+        hct: "HCT(%)"
+        hgb: "HGB(g/dL)"
+        mcv: "MCV(fL)"
+        mch: "MCH(pg)"
+        mchc: "MCHC(g/dL)"
+        rdw: "RDW(%)"
+        retic: "RETIC(K/µL)"
+        retic_hgb: "RETIC-HGB(pg)"
+        wbc: "WBC(K/µL)"
+        neu: "NEU(K/µL)"
+        lym: "LYM(K/µL)"
+        mono: "MONO(K/µL)"
+        eos: "EOS(K/µL)"
+        baso: "BASO(K/µL)"
+        plt: "PLT(K/µL)"
+        mpv: "MPV(fL)"
+        pct: "PCT(%)"
+        osm_cal: "Osm Calc(mmol/kg)"
+        glob: "GLOB(g/dL)"
+        fbnp: "fBNP"
+        felv: "FeLV"
+        fiv: "FIV"
+        fpl2: "fPL2(ng/mL)"
     errors:
       models:
         tracker:
           attributes:
             amount:
               greater_than_left_amount: "must be less than or equal to the amount left in storage, which is %{left_amount}g."
+  authentication:
+    required: "You must be logged in to access this page"
+  health_checks:
+    index:
+      title: "%{petname}'s Health Reports"
+      header: "Annual Health Check-up Report"
+      add_new: "Add new report"
+      go_back_home: "Go Back to Home"
+      organs:
+        liver: "liver"
+        kidney: "kidney"
+        pancreas: "pancreas/pancreatic islet"
+        stomach: "stomach"
+        heart: "heart"
+        blood: "blood"
+        all: "all"
+        other: "other"
+      legend:
+        red: "Red means the value is higher than reference range"
+        blue: "Blue means the value is lower than reference range"
+      reference_range: "Reference Range"
+      edit: "edit"
+      delete: "delete"
+    new:
+      title: "New %{petname}'s health check"
+      header: "Add Annual Health Check-up Report"
+      add_button: "Add new report"
+      back_link: "Back to %{petname}'s health checks index"
+    edit:
+      title: "Edit %{petname}'s health check"
+      header: "Edit Annual Health Check-up Report"
+      update_button: "Update Health Check"
+      back_link: "Back to %{petname}'s health checks index"
+    form:
+      blood_test: "blood test"
+    show:
+      title: "Showing health check"
+      back: "Back to health checks"
+      edit: "Edit this health check"
+      destroy: "Destroy this health check"
+      confirm: "Are you sure?"
+      confirm_delete: "Are you sure you want to delete this health check?"
+    blood:
+      header: "Blood Health Report"
+      back_link: "Go Back to Report Index"
+    heart:
+      header: "Heart Report"
+      back_link: "Go Back to Report Index"
+    stomach:
+      header: "Stomach Health Report"
+      back_link: "Go Back to Report Index"
+    kidney:
+      header: "Kidney Health Report"
+      back_link: "Go Back to Report Index"
+    liver:
+      header: "Liver Health Report"
+      back_link: "Go Back to Report Index"
+    pancreas:
+      header: "Pancreas Health Report"
+      back_link: "Go Back to Report Index"
+    other:
+      header: "Other Health Report"
+      back_link: "Go Back to Report Index"
+    create:
+      notice: "Health check was successfully created."
+    update:
+      notice: "Health check was successfully updated."
+    destroy:
+      notice: "Health check was successfully destroyed."
+    bulk_delete:
+      notice: "Selected health checks were successfully deleted."
+    not_found: "Health check not found."
+  omni_auth:
+    sessions:
+      create:
+        connected: "%{provider} connected"
+        first_time_sign_in: "This is your first time to sign in, please add a new cat first for further tracker."
+        welcome_back: "You have been signed in. Welcome back to Cat Feeding Tracker App. %{username}"
+        email_exists: "There's already an account with this email address. Please sign in with it using your %{service_methods} account to associate it with this service."
+        enter_email_line: "Please enter an email address to complete your LINE registration."
+        enter_email: "Please enter an email address to complete your registration."
+      failure:
+        cancelled: "You cancelled the sign in process. Please try again."
+        issue: "There was an issue with the sign in process. Please try again."

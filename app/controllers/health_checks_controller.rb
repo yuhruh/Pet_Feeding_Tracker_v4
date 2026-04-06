@@ -40,7 +40,7 @@ class HealthChecksController < ApplicationController
 
     respond_to do |format|
       if @health_check.save
-        format.html { redirect_to pet_health_checks_path(@pet), notice: "Health check was successfully created." }
+        format.html { redirect_to pet_health_checks_path(@pet), notice: t(".notice") }
         format.json { render :show, status: :created, location: pet_health_checks_path(@pet) }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -54,7 +54,7 @@ class HealthChecksController < ApplicationController
     @health_check.assign_attributes(health_check_params)
     respond_to do |format|
       if @health_check.update(health_check_params)
-        format.html { redirect_to pet_health_checks_path(@pet), notice: "Health check was successfully updated.", status: :see_other }
+        format.html { redirect_to pet_health_checks_path(@pet), notice: t(".notice"), status: :see_other }
         format.json { render :show, status: :ok, location: pet_health_checks_path(@pet) }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -68,7 +68,7 @@ class HealthChecksController < ApplicationController
     @health_check.destroy!
 
     respond_to do |format|
-      format.html { redirect_to pet_health_checks_url(@pet), notice: "Health check was successfully destroyed.", status: :see_other }
+      format.html { redirect_to pet_health_checks_url(@pet), notice: t(".notice"), status: :see_other }
       format.json { head :no_content }
     end
   end
@@ -76,7 +76,7 @@ class HealthChecksController < ApplicationController
   def bulk_delete
     @pet.health_checks.where(id: params[:health_check_ids]).destroy_all
     respond_to do |format|
-      format.html { redirect_to pet_health_checks_path(@pet), notice: "Selected health checks were successfully deleted." }
+      format.html { redirect_to pet_health_checks_path(@pet), notice: t(".notice") }
       format.json { head :no_content }
     end
   end
@@ -89,7 +89,7 @@ class HealthChecksController < ApplicationController
     def set_health_check
       @health_check = @pet.health_checks.find(params[:id])
       rescue ActiveRecord::RecordNotFound
-        flash[:alert] = "Health check not found."
+        flash[:alert] = t("health_checks.not_found")
         redirect_to pet_health_checks_url
       # @health_check = HealthCheck.find(params.expect(:id))
     end
