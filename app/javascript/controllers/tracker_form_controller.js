@@ -1,6 +1,4 @@
 import { Controller } from "@hotwired/stimulus";
-// import { I18n } from "i18n-js";
-// import translations from "translations";
 
 export default class extends Controller {
   static targets = ["foodType", "dryFoodOptions", "dryFoodSelect", "wetFoodOptions", "wetFoodSelect", "brand", "description", "amount", "amountAlert", "submitButton"]
@@ -12,12 +10,6 @@ export default class extends Controller {
 
   connect() {
     this.csrfToken = document.querySelector("meta[name='csrf-token']").content;
-    
-    // const i18n = new I18n(translations);
-    // this.i18n = i18n;
-    // // set the locale
-    // this.i18n.locale = document.documentElement.lang || "en";  
-
     this.selectedFoodLeftAmount = null; // Initialize storage state
     this.toggleDryFoodOptions()
   }
@@ -25,7 +17,7 @@ export default class extends Controller {
   async toggleDryFoodOptions() {
     const type = this.foodTypeTarget.value;
     const pathParts = window.location.pathname.split('/');
-    const locale = pathParts[1] || 'en';
+    const locale = document.documentElement.lang || 'en';
     const dryFoodsUrl = `/${locale}/dry_foods.json`;
 
     if (type === "kibble" || type === "freeze_dried") {
@@ -131,17 +123,6 @@ export default class extends Controller {
     console.log(filteredFood)
 
     filteredFood.forEach(food => {
-      // const bestResult = food.results.reduce((max, current) => {
-      //   return current.favorite_score > max.favorite_score ? current : max;
-      // }, food.results[0]);
-
-      // if (bestResult.favorite_score >= 30) {
-      //   const option = document.createElement('option');
-      //   option.value = food.results[0].id;
-      //   option.text = `${food.brand} ${food.description}: Favorite Score: ${bestResult.favorite_score} - Last Feed Date: ${bestResult.date}`;
-      //   this.wetFoodSelectTarget.add(option);
-      // }
-
       const option = document.createElement('option');
       option.value = food.results[0].id;
       if (food.results[0].favorite_score >= 30) {
@@ -156,7 +137,7 @@ export default class extends Controller {
 
     if (foodId) {
       try {
-        const locale = window.location.pathname.split('/')[1] || 'en';
+        const locale = document.documentElement.lang || 'en';
         const url = `/${locale}/dry_foods/${foodId}.json`;
         const response = await fetch(url, {
           headers: {
@@ -197,7 +178,7 @@ export default class extends Controller {
 
     if (foodId) {
       try {
-        const locale = window.location.pathname.split('/')[1] || 'en';
+        const locale = document.documentElement.lang || 'en';
         const petId = window.location.pathname.split('/')[3];
         const url = `/${locale}/pets/${petId}/trackers/${foodId}.json`
         const response = await fetch(url, {

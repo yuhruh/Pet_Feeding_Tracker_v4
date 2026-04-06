@@ -1,14 +1,10 @@
 import { Controller } from "@hotwired/stimulus";
-// import { I18n } from "i18n-js";
-// import translations from "translations";
 
 export default class extends Controller {
   static targets = ["leftAmount", "leftAmountAlert", "totalAteAmount", "separator", "submitButton"];
 
   connect() {
     this.originalAmount = parseFloat(this.leftAmountTarget.max);
-    // this.i18n = new I18n(translations);
-    // this.i18n.locale = document.documentElement.lang || "en";
   }
 
   validateLeftAmount() {

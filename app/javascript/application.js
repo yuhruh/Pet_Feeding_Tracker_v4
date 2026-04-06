@@ -15,6 +15,11 @@ i18n.defaultCurrency = { format: "%u%n", unit: "$", precision: 2 }
 // 3. Attach it to the window object so Stimulus controllers can use it
 window.I18n = i18n
 
+// 4. Update locale on every Turbo load
+document.addEventListener("turbo:load", () => {
+  window.I18n.locale = document.documentElement.lang || "en"
+})
+
 import "controllers"
 import "chartkick"
 import "Chart.bundle"
