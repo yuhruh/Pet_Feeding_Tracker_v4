@@ -1,14 +1,14 @@
 module HealthChecksHelper
   def range_row_class(actual, high, low)
-    return "font-normal" if actual.nil?
+    return "text-center font-normal dark:text-gray-800" if actual.nil?
 
     classes = []
     if actual.to_f > high
-      classes << "text-red-700 font-bold italic"
+      classes << "text-center text-red-700 font-bold italic"
     elsif actual.to_f < low
-      classes << "text-sky-700 font-bold italic"
+      classes << "text-center text-sky-700 font-bold italic"
     else
-      classes << "font-normal"
+      classes << "text-center font-normal dark:text-gray-800"
     end
     classes.join(" ")
   end

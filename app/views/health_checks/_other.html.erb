@@ -54,8 +54,8 @@
             <tbody>
               <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
                 <tr id="<%= dom_id(health_check) %>" class="border-b bg-gray-100">
-                  <td class="text-sm text-center p-2 font-semibold"><%= idx+1 %></td>
-                  <td class="text-sm text-center p-2"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
+                  <td class="text-sm text-center p-2 font-semibold dark:text-gray-800"><%= idx+1 %></td>
+                  <td class="text-sm text-center p-2 dark:text-gray-800"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
                   <td class="text-sm text-center p-2"><%= health_check.felv %></td>
                   <td class="text-sm text-center p-2"><%= health_check.fiv %></td>
                 </tr>
@@ -66,8 +66,36 @@
             <li class="text-red-700 font-bold italic mt-2">Red means the value is abnormal</li>
           </ul>
         </div>
-
         <!-- Transposed Table for Small Screens -->
+        <div class="md:hidden overflow-x-auto">
+          <table class="table-auto mb-2">
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">#</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm text-center p-2 font-semibold dark:text-gray-800"><%= idx+1 %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">Exam Date</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm text-center dark:text-gray-800 p-2"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">FeLV</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm p-2"><%= health_check.felv %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">FIV</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm p-2"><%= health_check.fiv %></td>
+              <% end %>
+            </tr>
+
+          </table>
+        </div>
         
       </div>
     </div>

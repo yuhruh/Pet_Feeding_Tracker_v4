@@ -148,10 +148,10 @@
             <tbody>
               <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
                 <tr id="<%= dom_id(health_check) %>" class="border-b bg-gray-100">
-                  <td class="text-sm text-center p-2 font-semibold"><%= idx+1 %></td>
-                  <td class="text-sm text-center p-2"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
+                  <td class="text-sm text-center p-2 font-semibold dark:text-gray-800"><%= idx+1 %></td>
+                  <td class="text-sm text-center p-2 dark:text-gray-800"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
                   <td class="text-sm <%=range_row_class(health_check.rbc, 12.20, 6.54)%> p-2"><%= health_check.rbc %></td>
-                  <td class="text-sm <%=range_row_class(health_check.hct, 52.3, 30.3)%> text-center p-2"><%= health_check.hct %></td>
+                  <td class="text-sm <%=range_row_class(health_check.hct, 52.3, 30.3)%> p-2"><%= health_check.hct %></td>
                   <td class="text-sm <%=range_row_class(health_check.hgb, 16.2, 9.8)%> p-2"><%= health_check.hgb %></td>
                   <td class="text-sm <%=range_row_class(health_check.mcv, 53.1, 35.9)%> p-2"><%= health_check.mcv %></td>
                   <td class="text-sm <%=range_row_class(health_check.mch, 17.3, 11.8)%> p-2"><%= health_check.mch %></td>
@@ -178,7 +178,150 @@
           </ul>
         </div>
         <!-- Transposed Table for Small Screens -->
-        
+        <div class="md:hidden overflow-x-auto">
+          <table class="table-auto mb-2">
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">#</th>
+              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap"></th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm text-center p-2 font-semibold dark:text-gray-800"><%= idx+1 %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">Exam Date</th>
+              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">Reference Range</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm text-center dark:text-gray-800 p-2"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">RBC(M/µl)</th>
+              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">6.54 - 12.20 (M/µl)</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm <%=range_row_class(health_check.rbc, 12.20, 6.54)%> p-2"><%= health_check.rbc %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">HCT(%)</th>
+              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">30.3 - 52.3 (%)</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm <%=range_row_class(health_check.hct, 52.3, 30.3)%> p-2"><%= health_check.hct %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">HGB(g/dL)</th>
+              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">9.8 - 16.2 (g/dL)</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm <%=range_row_class(health_check.hgb, 16.2, 9.8)%> p-2"><%= health_check.hgb %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">MCV(fL)</th>
+              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">35.9 - 53.1 (fL)</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm <%=range_row_class(health_check.mcv, 53.1, 35.9)%> p-2"><%= health_check.mcv %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">MCH(pg)</th>
+              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">11.8 - 17.3 (pg)</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm <%=range_row_class(health_check.mch, 17.3, 11.8)%> p-2"><%= health_check.mch %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">MCHC(g/dL)</th>
+              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">28.1 - 35.8 (g/dL)</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm <%=range_row_class(health_check.mchc, 35.8, 28.1)%> p-2"><%= health_check.mchc %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">RDW(%)</th>
+              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">15.0 - 27.0 (%)</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm <%=range_row_class(health_check.rdw, 27.0, 15.0)%> p-2"><%= health_check.rdw %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">RETIC(K/µL)</th>
+              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">3.0 - 50.0 (K/µL)</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm <%=range_row_class(health_check.retic, 50.0, 3.0)%> p-2"><%= health_check.retic %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">RETIC-HGB(pg)</th>
+              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">13.2 - 20.8 (pg)</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm <%=range_row_class(health_check.retic_hgb, 20.8, 13.2)%> p-2"><%= health_check.retic_hgb %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">WBC(K/µL)</th>
+              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">2.87 - 17.02 (K/µL)</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm <%=range_row_class(health_check.wbc, 17.02, 2.87)%> p-2"><%= health_check.wbc %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">NEU(K/µL)</th>
+              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">2.30 - 10.29 (K/µL)</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm <%=range_row_class(health_check.neu, 10.29, 2.30)%> p-2"><%= health_check.neu %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">LYM(K/µL)</th>
+              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">0.92 - 6.88 (K/µL)</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm <%=range_row_class(health_check.lym, 6.88, 0.92)%> p-2"><%= health_check.lym %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">MONO(K/µL)</th>
+              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">0.05 - 0.67 (K/µL)</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm <%=range_row_class(health_check.mono, 0.67, 0.05)%> p-2"><%= health_check.mono %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">EOS(K/µL)</th>
+              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">0.17 - 1.57 (K/µL)</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm <%=range_row_class(health_check.eos, 1.57, 0.17)%> p-2"><%= health_check.eos %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">BASO(K/µL)</th>
+              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">0.01 - 0.26 (K/µL)</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm <%=range_row_class(health_check.baso, 0.26, 0.01)%> p-2"><%= health_check.baso %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">PLT(K/µL)</th>
+              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">151 - 600 (K/µL)</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm <%=range_row_class(health_check.plt, 600, 151)%> p-2"><%= health_check.plt %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">MPV(fL)</th>
+              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">11.4 - 21.6 (fL)</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm <%=range_row_class(health_check.mpv, 21.6, 11.4)%> p-2"><%= health_check.mpv %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">PCT(%)</th>
+              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">0.17 - 0.86 (%)</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm <%=range_row_class(health_check.pct, 0.86, 0.17)%> p-2"><%= health_check.pct %></td>
+              <% end %>
+            </tr>
+          </table>
+        </div>  
       </div>
     </div>
   <% end %>

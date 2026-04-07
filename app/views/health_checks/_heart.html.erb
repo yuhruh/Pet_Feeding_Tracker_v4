@@ -57,18 +57,11 @@
                 <th class="text-sm text-center p-2 dark:text-white">fBNP</th>
               </tr>
             </thead>
-            <thead>
-              <tr class="border-b-4 bg-gray-100 dark:bg-black">
-                <th class="text-sm text-center p-2 dark:text-white"></th>
-                <th class="text-sm text-center p-2 dark:text-white">Reference Range</th>
-                <th class="text-sm text-center p-2 dark:text-white">-</th>
-              </tr>
-            </thead>
             <tbody>
               <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
                 <tr id="<%= dom_id(health_check) %>" class="border-b bg-gray-100">
-                  <td class="text-sm text-center p-2 font-semibold"><%= idx+1 %></td>
-                  <td class="text-sm text-center p-2"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
+                  <td class="text-sm text-center p-2 font-semibold dark:text-gray-800"><%= idx+1 %></td>
+                  <td class="text-sm text-center p-2 dark:text-gray-800"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
                   <td class="text-sm text-center p-2"><%= health_check.fbnp %></td>
                 </tr>
               <% end %>
@@ -79,8 +72,29 @@
             <li class="text-sky-700 font-bold italic mt-2">Blue means the value is lower than reference range</li>
           </ul>
         </div>
-
         <!-- Transposed Table for Small Screens -->
+        <div class="md:hidden overflow-x-auto">
+          <table class="table-auto mb-2">
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">#</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm text-center p-2 font-semibold dark:text-gray-800"><%= idx+1 %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">Exam Date</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm text-center dark:text-gray-800 p-2"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
+              <% end %>
+            </tr>
+            <tr class="border-b bg-gray-100">
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">FBNP</th>
+              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+                <td class="capitalize text-sm p-2"><%= health_check.fbnp %></td>
+              <% end %>
+            </tr>
+          </table>
+        </div>
         
       </div>
     </div>
