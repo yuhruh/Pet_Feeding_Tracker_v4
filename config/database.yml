@@ -31,7 +31,7 @@ test:
 
 production:
   primary:
-    <<: *default
+    adaptet: postgresql
     url: <%= ENV['DATABASE_URL'] %>
   cache:
     <<: *default
