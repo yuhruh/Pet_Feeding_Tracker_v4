@@ -72,8 +72,11 @@ Rails.application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.default_options = { from: "ajicaretracker@gmail.com" }
-  config.action_mailer.default_url_options = { host: "pet-feeding-tracker-v4.onrender.com" }
-  config.action_mailer.asset_host = "https://pet-feeding-tracker-v4.onrender.com"
+
+  # Dynamically set host based on environment variable
+  host = ENV.fetch("RAILS_HOST", "pet-feeding-tracker-v4.onrender.com")
+  config.action_mailer.default_url_options = { host: host }
+  config.action_mailer.asset_host = "https://#{host}"
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
   # config.action_mailer.smtp_settings = {
