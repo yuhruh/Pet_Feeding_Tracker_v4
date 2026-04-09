@@ -305,6 +305,7 @@ zh-TW:
       notice: "寵物 %{name} 已成功刪除。"
   passwords_mailer:
     reset:
+      subject: "重設您的密碼 😺"
       greeting: "嗨， %{username}："
       instruction_html: "您可以在接下來的 15 分鐘內，透過%{password_reset_link}重設您的密碼。"
       instruction_text: "您可以在接下來的 15 分鐘內，透過此密碼重設頁面重設您的密碼："
@@ -520,14 +521,13 @@ zh-TW:
     destroy:
       alert: "%{name}及其所有相關紀錄已成功刪除。"
   mailers:
-    passwords_mailer:
-      reset:
-        subject: "重設您的密碼 😺"
-    user_mailer:
-      welcome:
-        subject: "歡迎使用寵物飲食紀錄 App！"
-      send_pet_weight_reminder:
-        subject: "該幫您的寵物量體重囉！ 📝"
+    user_backup:
+      subject: "您的寵物追蹤器備份"
+  user_mailer:
+    welcome_email:
+      subject: "歡迎使用寵物飲食紀錄 App！"
+    send_pet_weight_reminder:
+      subject: "該幫您的寵物量體重囉！ 📝"
   services:
     csv_import:
       failed_to_parse: "CSV 檔案解析失敗: %{message}"

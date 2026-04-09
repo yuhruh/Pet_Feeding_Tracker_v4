@@ -305,6 +305,7 @@ ja:
       notice: "猫%{name}は正常に破棄されました。"
   passwords_mailer:
     reset:
+      subject: "パスワードをリセットしてください 😺"
       greeting: "こんにちは、 %{username} さん："
       instruction_html: "次の15分以内に %{password_reset_link} でパスワードをリセットできます。"
       instruction_text: "次の15分以内にこのパスワードリセットページでパスワードをリセットできます："
@@ -520,14 +521,13 @@ ja:
     destroy:
       alert: "%{name}および関連するすべての記録は正常に削除されました。"
   mailers:
-    passwords_mailer:
-      reset:
-        subject: "パスワードをリセットしてください 😺"
-    user_mailer:
-      welcome:
-        subject: "猫トラッカーアプリへようこそ！"
-      send_pet_weight_reminder:
-        subject: "ペットの体重を測る時間です！ 📝"
+    user_backup:
+      subject: "ペットトラッカーのバックアップ"
+  user_mailer:
+    welcome_email:
+      subject: "猫トラッカーアプリへようこそ！"
+    send_pet_weight_reminder:
+      subject: "ペットの体重を測る時間です！ 📝"
   services:
     csv_import:
       failed_to_parse: "CSVファイルの解析に失敗しました: %{message}"
