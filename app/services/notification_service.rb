@@ -29,6 +29,6 @@ class NotificationService
   end
 
   def send_email_notification
-    UserMailer.send_pet_weight_reminder(@user).deliver_now
+    UserMailer.send_pet_weight_reminder(@user).deliver_later
   end
 end
