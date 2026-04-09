@@ -3,11 +3,11 @@ namespace :db do
   task backup: :environment do
     backup_dir = Rails.root.join("storage", "backups")
     FileUtils.mkdir_p(backup_dir)
-    
+
     timestamp = Time.current.strftime("%Y%m%d%H%M%S")
     db_config = ActiveRecord::Base.connection_db_config
     adapter = db_config.adapter
-    
+
     filename = "railsway_#{timestamp}.sql"
     output_path = backup_dir.join(filename)
 
@@ -18,16 +18,16 @@ namespace :db do
       username = db_config.configuration_hash[:username]
       password = db_config.configuration_hash[:password]
       host = db_config.configuration_hash[:host] || "localhost"
-      
+
       env = {}
       env["PGPASSWORD"] = password if password.present?
-      
+
       cmd = [ "pg_dump" ]
       cmd << "-h" << host if host.present?
       cmd << "-U" << username if username.present?
       cmd << "-d" << db_name
       cmd << "-f" << output_path.to_s
-      
+
       puts "Backing up PostgreSQL database #{db_name} to #{output_path}..."
       system(env, *cmd)
     when "sqlite3"
