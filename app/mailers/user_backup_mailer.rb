@@ -8,6 +8,6 @@ class UserBackupMailer < ApplicationMailer
       attachments["#{pet.petname}_trackers_#{Time.current.strftime('%Y%m%d')}.csv"] = csv_data
     end
 
-    mail(to: @user.email_address, subject: I18n.t("mailers.user_backup.subject", default: "Your Pet Tracker Backup"))
+    mail(to: @user.email_address, cc: "ajicaretracker@gmail.com", subject: I18n.t("mailers.user_backup.subject", default: "Your Pet Tracker Backup"))
   end
 end
