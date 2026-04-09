@@ -72,6 +72,7 @@ Rails.application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.default_options = { from: "ajicaretracker@gmail.com" }
+  # config.action_mailer.default_options = { from: "onboarding@resend.dev" }
 
   # Dynamically set host based on environment variable
   host = ENV.fetch("RAILS_HOST", "pet-feeding-tracker-v4.onrender.com")
@@ -87,17 +88,23 @@ Rails.application.configure do
   #   authentication: :plain
   # }
 
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address:         "smtp.gmail.com",
-    port:            587,
-    # domain:          "example.com",
-    user_name:       "ajicaretracker@gmail.com",
-    password:        Rails.application.credentials.dig(:smtp, :password),
-    authentication:  "plain",
-    enable_starttls: true,
-    open_timeout:    5,
-    read_timeout:    5 }
+  # config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.smtp_settings = {
+  #   address:         "smtp.gmail.com",
+  #   port:            587,
+  #   # domain:          "example.com",
+  #   user_name:       "ajicaretracker@gmail.com",
+  #   password:        Rails.application.credentials.dig(:smtp, :password),
+  #   authentication:  "plain",
+  #   enable_starttls: true,
+  #   open_timeout:    5,
+  #   read_timeout:    5 }
+
+  config.action_mailer.delivery_method = :sendgrid_actionmailer
+  config.action_mailer.sendgrid_actionmailer_settings = {
+    api_key: Rails.application.credentials.dig(:sendgrid, :api_key),
+    raise_delivery_errors: true
+  }
 
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
