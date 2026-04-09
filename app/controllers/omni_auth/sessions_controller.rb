@@ -59,7 +59,7 @@ class OmniAuth::SessionsController < ApplicationController
     elsif User.find_by(email_address: user_info.dig(:info, :email)).present?
       service_methods = ConnectedService.where(user_id: User.find_by(email_address: user_info.dig(:info, :email))).pluck(:provider).map(&:to_s).join(", ")
       flash[:notice] = t("omni_auth.sessions.create.email_exists", service_methods: service_methods)
-      redirect_to new_session_path
+      redirect_to new_session_path and return
     else
       if user_info.dig(:info, :email).blank? && user_info.provider == "line"
         session["omniauth.auth"] = user_info.to_hash
@@ -70,7 +70,7 @@ class OmniAuth::SessionsController < ApplicationController
         redirect_to new_registrations_path and return
       else
         @user = create_user
-        UserMailer.with(user: @user).welcome_email.deliver_now
+        UserMailer.with(user: @user).welcome_email.deliver_later
       end
     end
   end
@@ -80,7 +80,7 @@ class OmniAuth::SessionsController < ApplicationController
     username = user_info.dig(:info, :name) || user_info.dig(:info, :email).split("@").first
     random_password = SecureRandom.hex(10)
     # user_timezone = session["omniauth.timezone"]
-    user_timezone = request.env.dig("omniauth.params", "timezone") || session["omniauth.timezone"]
+    user_timezone = request.env.dig("omniauth.params", "timezone") || session[:timezone]
     # binding.b
 
     User.create!(
