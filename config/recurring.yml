@@ -16,3 +16,9 @@ production:
   pet_weight_reminder:
     command: "Rails.application.load_tasks; Rake::Task['notifications:weigh_pets'].invoke"
     schedule: every day at 9am
+  user_backups:
+    class: UserBackupJob
+    schedule: every 5 days at 3am
+  db_backup:
+    command: "bin/rails db:backup"
+    schedule: every day at 4am

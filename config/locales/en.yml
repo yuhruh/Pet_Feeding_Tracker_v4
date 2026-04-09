@@ -101,6 +101,9 @@ en:
     hungry_option_3: "🔺 No, not really. Ate A Little"
     csv_example_title: "💡 CSV Example Row"
     csv_example_description: "You can use this format for your file to import:"
+  mailers:
+    user_backup:
+      subject: "Your Pet Tracker Backup"
   about_page:
     title: "The Story Behind Aji Tracker"
     paragraph_1: "This app was inspired by my first cat, Aji, a ginger and white furball with a surprisingly particular taste. Unlike most ginger cats, Aji has his own unique preferences, and it took a lot of trial and error to discover that he loves chicken far more than tuna or salmon."
@@ -524,7 +527,7 @@ en:
       reset:
         subject: "Reset your password 😺"
     user_mailer:
-      welcome:
+      welcome_email:
         subject: "Welcome to Cat Trackers App!"
       send_pet_weight_reminder:
         subject: "Time to weigh your pet! 📝"

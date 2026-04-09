@@ -39,8 +39,8 @@ class RegistrationsController < ApplicationController
         session.delete("omniauth.auth")
       end
       start_new_session_for @user
-      UserMailer.with(user: @user).welcome_email.deliver_later
-      redirect_to new_pet_path, notice: t(".notice", username: Current.user.username.capitalize)
+      UserMailer.with(user: @user).welcome_email.deliver_now
+      redirect_to new_pet_path, notice: t(".notice", username: @user.username.capitalize)
     else
       flash[:alert] = @user.errors.full_messages.join(", ")
       render :new, status: :unprocessable_entity

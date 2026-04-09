@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict sPFnJHgvbAGmOXziWlaSpKiqGtP2hQzDNTRDt0xpVxtmOGdwbA1WiIacmexrRnj
+\restrict OJkX7Prwf6GFBQj0rHffWkqe2lHaAzCJfKsSgnXKMduzthXaeAB5kvb5wj8ZwSg
 
 -- Dumped from database version 18.3 (Debian 18.3-1.pgdg12+1)
 -- Dumped by pg_dump version 18.3 (Homebrew)
@@ -1196,9 +1196,6 @@ COPY public.solid_queue_failed_executions (id, job_id, error, created_at) FROM s
 
 COPY public.solid_queue_jobs (id, queue_name, class_name, arguments, priority, active_job_id, scheduled_at, finished_at, concurrency_key, created_at, updated_at) FROM stdin;
 5	solid_queue_recurring	SolidQueue::RecurringJob	{"job_class":"SolidQueue::RecurringJob","job_id":"d52d8738-6a6a-495d-8f1e-f930685c86a2","provider_job_id":null,"queue_name":"solid_queue_recurring","priority":null,"arguments":["SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"],"executions":0,"exception_executions":{},"locale":"en","timezone":"UTC","enqueued_at":"2026-04-06T22:12:00.028612530Z","scheduled_at":"2026-04-06T22:12:00.028403784Z"}	0	d52d8738-6a6a-495d-8f1e-f930685c86a2	2026-04-06 22:12:00.028403	\N	\N	2026-04-06 22:12:00.059874	2026-04-06 22:12:00.059874
-9	solid_queue_recurring	SolidQueue::RecurringJob	{"job_class":"SolidQueue::RecurringJob","job_id":"6dc32f96-bec8-464e-a134-92420e2361e1","provider_job_id":null,"queue_name":"solid_queue_recurring","priority":null,"arguments":["SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"],"executions":0,"exception_executions":{},"locale":"en","timezone":"UTC","enqueued_at":"2026-04-07T05:12:00.015673873Z","scheduled_at":"2026-04-07T05:12:00.015398997Z"}	0	6dc32f96-bec8-464e-a134-92420e2361e1	2026-04-07 05:12:00.015398	2026-04-07 05:12:00.807178	\N	2026-04-07 05:12:00.099824	2026-04-07 05:12:00.807178
-10	solid_queue_recurring	SolidQueue::RecurringJob	{"job_class":"SolidQueue::RecurringJob","job_id":"306a5778-ed51-412d-8b41-229b9cd9cc67","provider_job_id":null,"queue_name":"solid_queue_recurring","priority":null,"arguments":["SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"],"executions":0,"exception_executions":{},"locale":"en","timezone":"UTC","enqueued_at":"2026-04-07T06:12:00.011736675Z","scheduled_at":"2026-04-07T06:12:00.011689762Z"}	0	306a5778-ed51-412d-8b41-229b9cd9cc67	2026-04-07 06:12:00.011689	2026-04-07 06:12:00.454115	\N	2026-04-07 06:12:00.015013	2026-04-07 06:12:00.454115
-11	solid_queue_recurring	SolidQueue::RecurringJob	{"job_class":"SolidQueue::RecurringJob","job_id":"6a4225da-a777-4bdd-a142-7eb431f48d59","provider_job_id":null,"queue_name":"solid_queue_recurring","priority":null,"arguments":["SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"],"executions":0,"exception_executions":{},"locale":"en","timezone":"UTC","enqueued_at":"2026-04-07T07:12:00.003177360Z","scheduled_at":"2026-04-07T07:12:00.003146208Z"}	0	6a4225da-a777-4bdd-a142-7eb431f48d59	2026-04-07 07:12:00.003146	2026-04-07 07:12:00.394555	\N	2026-04-07 07:12:00.004116	2026-04-07 07:12:00.394555
 12	solid_queue_recurring	SolidQueue::RecurringJob	{"job_class":"SolidQueue::RecurringJob","job_id":"44c3e2bf-54c1-4cc3-8d34-3aac585c7b85","provider_job_id":null,"queue_name":"solid_queue_recurring","priority":null,"arguments":["SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"],"executions":0,"exception_executions":{},"locale":"en","timezone":"UTC","enqueued_at":"2026-04-07T08:12:00.016232178Z","scheduled_at":"2026-04-07T08:12:00.015897798Z"}	0	44c3e2bf-54c1-4cc3-8d34-3aac585c7b85	2026-04-07 08:12:00.015897	2026-04-07 08:12:00.675707	\N	2026-04-07 08:12:00.067095	2026-04-07 08:12:00.675707
 13	solid_queue_recurring	SolidQueue::RecurringJob	{"job_class":"SolidQueue::RecurringJob","job_id":"80c46cf0-b6b6-47d7-840d-c4c9ff7a46e6","provider_job_id":null,"queue_name":"solid_queue_recurring","priority":null,"arguments":["Rails.application.load_tasks; Rake::Task['notifications:weigh_pets'].invoke"],"executions":0,"exception_executions":{},"locale":"en","timezone":"UTC","enqueued_at":"2026-04-07T09:00:00.047125775Z","scheduled_at":"2026-04-07T09:00:00.047061441Z"}	0	80c46cf0-b6b6-47d7-840d-c4c9ff7a46e6	2026-04-07 09:00:00.047061	2026-04-07 09:00:00.685994	\N	2026-04-07 09:00:00.04994	2026-04-07 09:00:00.685994
 14	default	PetWeightReminderJob	{"job_class":"PetWeightReminderJob","job_id":"34edb700-b08d-4497-b303-23dd0cddbcdc","provider_job_id":null,"queue_name":"default","priority":null,"arguments":[{"_aj_globalid":"gid://pet-tracker-v4/User/3"}],"executions":0,"exception_executions":{},"locale":"en","timezone":"UTC","enqueued_at":"2026-04-07T09:00:00.538926463Z","scheduled_at":"2026-04-07T09:00:00.538285594Z"}	0	34edb700-b08d-4497-b303-23dd0cddbcdc	2026-04-07 09:00:00.538285	2026-04-07 09:00:01.112417	\N	2026-04-07 09:00:00.542576	2026-04-07 09:00:01.112417
@@ -1223,6 +1220,11 @@ COPY public.solid_queue_jobs (id, queue_name, class_name, arguments, priority, a
 33	solid_queue_recurring	SolidQueue::RecurringJob	{"job_class":"SolidQueue::RecurringJob","job_id":"fb31a4bd-1182-456e-a921-d24f79b43bf9","provider_job_id":null,"queue_name":"solid_queue_recurring","priority":null,"arguments":["SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"],"executions":0,"exception_executions":{},"locale":"en","timezone":"UTC","enqueued_at":"2026-04-08T01:12:00.003097198Z","scheduled_at":"2026-04-08T01:12:00.003054335Z"}	0	fb31a4bd-1182-456e-a921-d24f79b43bf9	2026-04-08 01:12:00.003054	2026-04-08 01:12:00.689731	\N	2026-04-08 01:12:00.004887	2026-04-08 01:12:00.689731
 34	solid_queue_recurring	SolidQueue::RecurringJob	{"job_class":"SolidQueue::RecurringJob","job_id":"8946af3b-5534-4085-845a-4840af9012bb","provider_job_id":null,"queue_name":"solid_queue_recurring","priority":null,"arguments":["SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"],"executions":0,"exception_executions":{},"locale":"en","timezone":"UTC","enqueued_at":"2026-04-08T02:12:00.004268398Z","scheduled_at":"2026-04-08T02:12:00.004228806Z"}	0	8946af3b-5534-4085-845a-4840af9012bb	2026-04-08 02:12:00.004228	2026-04-08 02:12:00.732966	\N	2026-04-08 02:12:00.004531	2026-04-08 02:12:00.732966
 35	solid_queue_recurring	SolidQueue::RecurringJob	{"job_class":"SolidQueue::RecurringJob","job_id":"4892d4d4-73d7-4dae-b098-9219de71aff3","provider_job_id":null,"queue_name":"solid_queue_recurring","priority":null,"arguments":["SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"],"executions":0,"exception_executions":{},"locale":"en","timezone":"UTC","enqueued_at":"2026-04-08T03:12:00.006801045Z","scheduled_at":"2026-04-08T03:12:00.006726701Z"}	0	4892d4d4-73d7-4dae-b098-9219de71aff3	2026-04-08 03:12:00.006726	2026-04-08 03:12:00.356251	\N	2026-04-08 03:12:00.007091	2026-04-08 03:12:00.356251
+36	solid_queue_recurring	SolidQueue::RecurringJob	{"job_class":"SolidQueue::RecurringJob","job_id":"37172a04-cd1b-4077-ab09-d958469ce41e","provider_job_id":null,"queue_name":"solid_queue_recurring","priority":null,"arguments":["SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"],"executions":0,"exception_executions":{},"locale":"en","timezone":"UTC","enqueued_at":"2026-04-08T04:12:00.008064552Z","scheduled_at":"2026-04-08T04:12:00.007365404Z"}	0	37172a04-cd1b-4077-ab09-d958469ce41e	2026-04-08 04:12:00.007365	2026-04-08 04:12:00.421431	\N	2026-04-08 04:12:00.008658	2026-04-08 04:12:00.421431
+37	solid_queue_recurring	SolidQueue::RecurringJob	{"job_class":"SolidQueue::RecurringJob","job_id":"7c789a70-6141-473f-ad23-e08b31102c72","provider_job_id":null,"queue_name":"solid_queue_recurring","priority":null,"arguments":["SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"],"executions":0,"exception_executions":{},"locale":"en","timezone":"UTC","enqueued_at":"2026-04-08T05:12:00.014224201Z","scheduled_at":"2026-04-08T05:12:00.014082178Z"}	0	7c789a70-6141-473f-ad23-e08b31102c72	2026-04-08 05:12:00.014082	2026-04-08 05:12:00.704287	\N	2026-04-08 05:12:00.041877	2026-04-08 05:12:00.704287
+38	solid_queue_recurring	SolidQueue::RecurringJob	{"job_class":"SolidQueue::RecurringJob","job_id":"ce38791e-0477-440b-9665-770cfd7985c4","provider_job_id":null,"queue_name":"solid_queue_recurring","priority":null,"arguments":["SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"],"executions":0,"exception_executions":{},"locale":"en","timezone":"UTC","enqueued_at":"2026-04-08T06:12:00.002941736Z","scheduled_at":"2026-04-08T06:12:00.002909055Z"}	0	ce38791e-0477-440b-9665-770cfd7985c4	2026-04-08 06:12:00.002909	2026-04-08 06:12:00.70241	\N	2026-04-08 06:12:00.004972	2026-04-08 06:12:00.70241
+39	solid_queue_recurring	SolidQueue::RecurringJob	{"job_class":"SolidQueue::RecurringJob","job_id":"cd3ce3bc-63d2-43fc-bccb-bedfbe95d11d","provider_job_id":null,"queue_name":"solid_queue_recurring","priority":null,"arguments":["SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"],"executions":0,"exception_executions":{},"locale":"en","timezone":"UTC","enqueued_at":"2026-04-08T07:12:00.004106916Z","scheduled_at":"2026-04-08T07:12:00.004062355Z"}	0	cd3ce3bc-63d2-43fc-bccb-bedfbe95d11d	2026-04-08 07:12:00.004062	2026-04-08 07:12:00.812317	\N	2026-04-08 07:12:00.004974	2026-04-08 07:12:00.812317
+40	solid_queue_recurring	SolidQueue::RecurringJob	{"job_class":"SolidQueue::RecurringJob","job_id":"70a3f10c-cdaa-44d1-a97e-4c3d7863bbb8","provider_job_id":null,"queue_name":"solid_queue_recurring","priority":null,"arguments":["SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"],"executions":0,"exception_executions":{},"locale":"en","timezone":"UTC","enqueued_at":"2026-04-08T08:12:00.004022074Z","scheduled_at":"2026-04-08T08:12:00.003987273Z"}	0	70a3f10c-cdaa-44d1-a97e-4c3d7863bbb8	2026-04-08 08:12:00.003987	2026-04-08 08:12:00.738976	\N	2026-04-08 08:12:00.004258	2026-04-08 08:12:00.738976
 \.
 
 
@@ -1239,10 +1241,10 @@ COPY public.solid_queue_pauses (id, queue_name, created_at) FROM stdin;
 --
 
 COPY public.solid_queue_processes (id, kind, last_heartbeat_at, supervisor_id, pid, hostname, metadata, created_at, name) FROM stdin;
-121	Supervisor(fork)	2026-04-08 03:20:46.810428	\N	1	srv-d7a6qiruibrs73dh6sog-5687bb7db9-b7jl4	\N	2026-04-07 13:24:40.3585	supervisor(fork)-020218b5134e559a3c07
-122	Dispatcher	2026-04-08 03:20:47.47237	121	14	srv-d7a6qiruibrs73dh6sog-5687bb7db9-b7jl4	{"polling_interval":1,"batch_size":500,"concurrency_maintenance_interval":600}	2026-04-07 13:24:40.429255	dispatcher-3dd068d9baa822f6d8bf
-124	Scheduler	2026-04-08 03:20:47.634344	121	25	srv-d7a6qiruibrs73dh6sog-5687bb7db9-b7jl4	{"recurring_schedule":["clear_solid_queue_finished_jobs","pet_weight_reminder"]}	2026-04-07 13:24:40.441135	scheduler-93a416c835fbe1dd1546
-123	Worker	2026-04-08 03:20:48.702609	121	18	srv-d7a6qiruibrs73dh6sog-5687bb7db9-b7jl4	{"polling_interval":0.1,"queues":"*","thread_pool_size":3}	2026-04-07 13:24:40.435198	worker-5275673a7147a11e61be
+129	Supervisor(fork)	2026-04-08 08:21:55.369053	\N	1	srv-d7a6qiruibrs73dh6sog-55c65c5f7d-zz5fm	\N	2026-04-08 08:17:55.275643	supervisor(fork)-970372b2ddf19f945e5e
+130	Dispatcher	2026-04-08 08:21:55.600468	129	14	srv-d7a6qiruibrs73dh6sog-55c65c5f7d-zz5fm	{"polling_interval":1,"batch_size":500,"concurrency_maintenance_interval":600}	2026-04-08 08:17:55.35569	dispatcher-590be99be1e1926118f0
+131	Worker	2026-04-08 08:21:55.828987	129	18	srv-d7a6qiruibrs73dh6sog-55c65c5f7d-zz5fm	{"polling_interval":0.1,"queues":"*","thread_pool_size":3}	2026-04-08 08:17:55.362006	worker-d9d5f39455d0d1e0e5ff
+132	Scheduler	2026-04-08 08:21:55.8986	129	25	srv-d7a6qiruibrs73dh6sog-55c65c5f7d-zz5fm	{"recurring_schedule":["clear_solid_queue_finished_jobs","pet_weight_reminder"]}	2026-04-08 08:17:55.367144	scheduler-3c285c9624951ef4573b
 \.
 
 
@@ -1260,9 +1262,6 @@ COPY public.solid_queue_ready_executions (id, job_id, queue_name, priority, crea
 
 COPY public.solid_queue_recurring_executions (id, job_id, task_key, run_at, created_at) FROM stdin;
 5	5	clear_solid_queue_finished_jobs	2026-04-06 22:12:00	2026-04-06 22:12:00.022137
-9	9	clear_solid_queue_finished_jobs	2026-04-07 05:12:00	2026-04-07 05:12:00.022067
-10	10	clear_solid_queue_finished_jobs	2026-04-07 06:12:00	2026-04-07 06:12:00.0246
-11	11	clear_solid_queue_finished_jobs	2026-04-07 07:12:00	2026-04-07 07:12:00.010551
 12	12	clear_solid_queue_finished_jobs	2026-04-07 08:12:00	2026-04-07 08:12:00.023136
 13	13	pet_weight_reminder	2026-04-07 09:00:00	2026-04-07 09:00:00.057611
 14	17	clear_solid_queue_finished_jobs	2026-04-07 09:12:00	2026-04-07 09:12:00.015798
@@ -1284,6 +1283,11 @@ COPY public.solid_queue_recurring_executions (id, job_id, task_key, run_at, crea
 30	33	clear_solid_queue_finished_jobs	2026-04-08 01:12:00	2026-04-08 01:12:00.008793
 31	34	clear_solid_queue_finished_jobs	2026-04-08 02:12:00	2026-04-08 02:12:00.011681
 32	35	clear_solid_queue_finished_jobs	2026-04-08 03:12:00	2026-04-08 03:12:00.014617
+33	36	clear_solid_queue_finished_jobs	2026-04-08 04:12:00	2026-04-08 04:12:00.015176
+34	37	clear_solid_queue_finished_jobs	2026-04-08 05:12:00	2026-04-08 05:12:00.020299
+35	38	clear_solid_queue_finished_jobs	2026-04-08 06:12:00	2026-04-08 06:12:00.013174
+36	39	clear_solid_queue_finished_jobs	2026-04-08 07:12:00	2026-04-08 07:12:00.007931
+37	40	clear_solid_queue_finished_jobs	2026-04-08 08:12:00	2026-04-08 08:12:00.008051
 \.
 
 
@@ -5967,11 +5971,11 @@ COPY public.trackers (id, date, feed_time, come_back_to_eat, food_type, brand, d
 5686	2026-04-06	01:14:00	10:00, 18:42, 	Kibble	天然密碼	無穀鴨肉&火雞肉 全齡貓配方	❌ No, not interested	25.70	16.40	🔺 So So	9.30	2	❌ - 🔺	17	加誠實貓 雞塊 5.2g	\N	2	56	2026-04-06 01:14:45.354909	2026-04-06 12:04:58.492508	t
 5690	2026-04-06	12:03:00	1:30, 4:41, 8:50, 	Kibble	天然密碼	無穀鴨肉&火雞肉 全齡貓配方	❌ No, not interested	25.60	12.80	🔺 So So	12.80	3	❌ - 🔺	19	加誠實貓 雞塊 5.3g	\N	2	56	2026-04-06 12:04:00.494879	2026-04-07 01:59:33.718113	t
 5694	2026-04-07	02:08:00	15:01, 18:39, 20:54, 	Kibble	天然密碼	無穀鴨肉&火雞肉 全齡貓配方	❌ No, not interested	25.20	14.20	🔺 So So	11.00	3	❌ - 🔺	19	加汪喵 櫻桃鴨 5.2g	\N	2	56	2026-04-07 02:18:53.813503	2026-04-07 13:51:57.949578	t
-5700	2026-04-08	00:57:00	\N	Wet	ciao	ic-311 巧餐包 奢華鮪魚+雞肉 x2	💖 Yes, eat right away	70.00	\N	\N	\N	\N	\N	0	\N	\N	2	\N	2026-04-08 00:57:43.174904	2026-04-08 00:57:43.174904	f
-5701	2026-04-08	01:05:00		Kibble	天然密碼	無穀鴨肉&火雞肉 全齡貓配方	❌ No, not interested	25.20	\N		25.20	0	\N	0	加汪喵 櫻桃鴨 5.2g	\N	2	56	2026-04-08 01:05:44.913716	2026-04-08 01:05:55.006443	f
 5702	2026-04-08	01:08:00		Kibble	第一饗宴 firstmate	無穀低敏 鴨肉藍莓全貓配方	❌ No, not interested	25.30	\N		25.30	0	\N	0	加汪喵 櫻桃鴨 5.3g	\N	2	68	2026-04-08 01:08:29.27299	2026-04-08 01:08:40.44354	f
 5703	2026-04-08	01:11:00	\N	Freeze-Dried	汪喵星球	凍乾主食餐 安心雞肉	❌ No, not interested	10.30	\N	\N	\N	\N	\N	0	\N	\N	2	73	2026-04-08 01:11:31.532258	2026-04-08 01:11:31.532258	f
-5704	2026-04-08	03:00:00	\N	Wet	ciao	啾嚕奢華果凍杯 tsc-45 雞肉 x3	💖 Yes, eat right away	105.00	\N	\N	\N	\N	\N	0	\N	\N	2	\N	2026-04-08 03:09:08.275532	2026-04-08 03:09:08.275532	f
+5704	2026-04-08	03:00:00	11:47, 12:48, 	Wet	ciao	啾嚕奢華果凍杯 tsc-45 雞肉 x3	💖 Yes, eat right away	105.00	\N		105.00	2	\N	0		\N	2	\N	2026-04-08 03:09:08.275532	2026-04-08 04:48:58.351849	f
+5701	2026-04-08	01:05:00	11:46, 12:47, 	Kibble	天然密碼	無穀鴨肉&火雞肉 全齡貓配方	❌ No, not interested	25.20	\N		25.20	2	\N	0	加汪喵 櫻桃鴨 5.2g	\N	2	56	2026-04-08 01:05:44.913716	2026-04-08 04:49:08.075265	f
+5700	2026-04-08	00:57:00	-	Wet	ciao	ic-311 巧餐包 奢華鮪魚+雞肉 x2	🔺 No, not really. Ate A Little	70.00	52.00	❌ No!!!	18.00	0	🔺 - ❌	13		\N	2	\N	2026-04-08 00:57:43.174904	2026-04-08 04:51:37.688246	f
 \.
 
 
@@ -6060,7 +6064,7 @@ SELECT pg_catalog.setval('public.solid_queue_blocked_executions_id_seq', 1, fals
 -- Name: solid_queue_claimed_executions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.solid_queue_claimed_executions_id_seq', 35, true);
+SELECT pg_catalog.setval('public.solid_queue_claimed_executions_id_seq', 40, true);
 
 
 --
@@ -6074,7 +6078,7 @@ SELECT pg_catalog.setval('public.solid_queue_failed_executions_id_seq', 1, true)
 -- Name: solid_queue_jobs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.solid_queue_jobs_id_seq', 35, true);
+SELECT pg_catalog.setval('public.solid_queue_jobs_id_seq', 40, true);
 
 
 --
@@ -6088,28 +6092,28 @@ SELECT pg_catalog.setval('public.solid_queue_pauses_id_seq', 1, false);
 -- Name: solid_queue_processes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.solid_queue_processes_id_seq', 124, true);
+SELECT pg_catalog.setval('public.solid_queue_processes_id_seq', 132, true);
 
 
 --
 -- Name: solid_queue_ready_executions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.solid_queue_ready_executions_id_seq', 35, true);
+SELECT pg_catalog.setval('public.solid_queue_ready_executions_id_seq', 40, true);
 
 
 --
 -- Name: solid_queue_recurring_executions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.solid_queue_recurring_executions_id_seq', 32, true);
+SELECT pg_catalog.setval('public.solid_queue_recurring_executions_id_seq', 37, true);
 
 
 --
 -- Name: solid_queue_recurring_tasks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.solid_queue_recurring_tasks_id_seq', 62, true);
+SELECT pg_catalog.setval('public.solid_queue_recurring_tasks_id_seq', 66, true);
 
 
 --
@@ -6754,50 +6758,8 @@ ALTER TABLE ONLY public.solid_queue_scheduled_executions
 
 
 --
--- Name: FUNCTION pg_stat_statements(showtext boolean, OUT userid oid, OUT dbid oid, OUT toplevel boolean, OUT queryid bigint, OUT query text, OUT plans bigint, OUT total_plan_time double precision, OUT min_plan_time double precision, OUT max_plan_time double precision, OUT mean_plan_time double precision, OUT stddev_plan_time double precision, OUT calls bigint, OUT total_exec_time double precision, OUT min_exec_time double precision, OUT max_exec_time double precision, OUT mean_exec_time double precision, OUT stddev_exec_time double precision, OUT rows bigint, OUT shared_blks_hit bigint, OUT shared_blks_read bigint, OUT shared_blks_dirtied bigint, OUT shared_blks_written bigint, OUT local_blks_hit bigint, OUT local_blks_read bigint, OUT local_blks_dirtied bigint, OUT local_blks_written bigint, OUT temp_blks_read bigint, OUT temp_blks_written bigint, OUT shared_blk_read_time double precision, OUT shared_blk_write_time double precision, OUT local_blk_read_time double precision, OUT local_blk_write_time double precision, OUT temp_blk_read_time double precision, OUT temp_blk_write_time double precision, OUT wal_records bigint, OUT wal_fpi bigint, OUT wal_bytes numeric, OUT wal_buffers_full bigint, OUT jit_functions bigint, OUT jit_generation_time double precision, OUT jit_inlining_count bigint, OUT jit_inlining_time double precision, OUT jit_optimization_count bigint, OUT jit_optimization_time double precision, OUT jit_emission_count bigint, OUT jit_emission_time double precision, OUT jit_deform_count bigint, OUT jit_deform_time double precision, OUT parallel_workers_to_launch bigint, OUT parallel_workers_launched bigint, OUT stats_since timestamp with time zone, OUT minmax_stats_since timestamp with time zone); Type: ACL; Schema: public; Owner: -
---
-
-GRANT ALL ON FUNCTION public.pg_stat_statements(showtext boolean, OUT userid oid, OUT dbid oid, OUT toplevel boolean, OUT queryid bigint, OUT query text, OUT plans bigint, OUT total_plan_time double precision, OUT min_plan_time double precision, OUT max_plan_time double precision, OUT mean_plan_time double precision, OUT stddev_plan_time double precision, OUT calls bigint, OUT total_exec_time double precision, OUT min_exec_time double precision, OUT max_exec_time double precision, OUT mean_exec_time double precision, OUT stddev_exec_time double precision, OUT rows bigint, OUT shared_blks_hit bigint, OUT shared_blks_read bigint, OUT shared_blks_dirtied bigint, OUT shared_blks_written bigint, OUT local_blks_hit bigint, OUT local_blks_read bigint, OUT local_blks_dirtied bigint, OUT local_blks_written bigint, OUT temp_blks_read bigint, OUT temp_blks_written bigint, OUT shared_blk_read_time double precision, OUT shared_blk_write_time double precision, OUT local_blk_read_time double precision, OUT local_blk_write_time double precision, OUT temp_blk_read_time double precision, OUT temp_blk_write_time double precision, OUT wal_records bigint, OUT wal_fpi bigint, OUT wal_bytes numeric, OUT wal_buffers_full bigint, OUT jit_functions bigint, OUT jit_generation_time double precision, OUT jit_inlining_count bigint, OUT jit_inlining_time double precision, OUT jit_optimization_count bigint, OUT jit_optimization_time double precision, OUT jit_emission_count bigint, OUT jit_emission_time double precision, OUT jit_deform_count bigint, OUT jit_deform_time double precision, OUT parallel_workers_to_launch bigint, OUT parallel_workers_launched bigint, OUT stats_since timestamp with time zone, OUT minmax_stats_since timestamp with time zone) TO cat_feeder_tracker_v4_user;
-
-
---
--- Name: FUNCTION pg_stat_statements_info(OUT dealloc bigint, OUT stats_reset timestamp with time zone); Type: ACL; Schema: public; Owner: -
---
-
-GRANT ALL ON FUNCTION public.pg_stat_statements_info(OUT dealloc bigint, OUT stats_reset timestamp with time zone) TO cat_feeder_tracker_v4_user;
-
-
---
--- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: -; Owner: -
---
-
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres GRANT ALL ON SEQUENCES TO cat_feeder_tracker_v4_user;
-
-
---
--- Name: DEFAULT PRIVILEGES FOR TYPES; Type: DEFAULT ACL; Schema: -; Owner: -
---
-
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres GRANT ALL ON TYPES TO cat_feeder_tracker_v4_user;
-
-
---
--- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: -; Owner: -
---
-
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres GRANT ALL ON FUNCTIONS TO cat_feeder_tracker_v4_user;
-
-
---
--- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: -; Owner: -
---
-
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres GRANT ALL ON TABLES TO cat_feeder_tracker_v4_user;
-
-
---
 -- PostgreSQL database dump complete
 --
 
-\unrestrict sPFnJHgvbAGmOXziWlaSpKiqGtP2hQzDNTRDt0xpVxtmOGdwbA1WiIacmexrRnj
+\unrestrict OJkX7Prwf6GFBQj0rHffWkqe2lHaAzCJfKsSgnXKMduzthXaeAB5kvb5wj8ZwSg
 
