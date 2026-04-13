@@ -18,6 +18,18 @@ class HealthChecksController < ApplicationController
     @health_checks = health_checks.order(order_sql)
   end
 
+  def extract_data
+    files = params[:files]
+    if files.present?
+      file_paths = Array(files).map(&:path)
+      ocr_service = GeminiOcrService.new(file_paths)
+      result = ocr_service.call
+      render json: result
+    else
+      render json: { error: "No files provided" }, status: :unprocessable_entity
+    end
+  end
+
   # GET /health_checks/1 or /health_checks/1.json
   def show
     @health_checks = @pet.health_checks

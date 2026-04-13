@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       resources :health_checks do
         collection do
           delete :bulk_delete
+          post :extract_data
         end
       end
       resources :trackers do
