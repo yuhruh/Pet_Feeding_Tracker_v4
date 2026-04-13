@@ -5,6 +5,7 @@ class User < ApplicationRecord
   has_many :pets, dependent: :destroy
   has_many :dry_foods, dependent: :destroy
   validates_associated :pets
+  encrypts :gemini_api_key
 
   attr_accessor :email_address_confirmation
 
