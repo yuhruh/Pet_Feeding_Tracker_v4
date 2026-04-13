@@ -28,10 +28,11 @@ export default class extends Controller {
       formData.append("files[]", files[i])
     }
 
-    // Get CSRF token
+    // Get CSRF token and current locale from URL or HTML lang attribute
     const csrfToken = document.querySelector('meta[name="csrf-token"]').content
+    const currentLocale = document.documentElement.lang || "en"
 
-    fetch(`/pets/${this.petIdValue}/health_checks/extract_data`, {
+    fetch(`/pets/${this.petIdValue}/health_checks/extract_data?locale=${currentLocale}`, {
       method: "POST",
       headers: {
         "X-CSRF-Token": csrfToken
