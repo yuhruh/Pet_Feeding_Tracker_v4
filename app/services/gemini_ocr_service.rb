@@ -10,11 +10,11 @@ class GeminiOcrService
   def initialize(file_paths, user = nil)
     @file_paths = Array(file_paths) # Ensure it's an array
     @user = user
-    @api_key = user_api_key || global_api_key
+    @api_key = user_api_key
   end
 
   def call
-    return { error: "API Key missing" } if @api_key.blank?
+    return { error: "Please add your personal Gemini API Key in User Profile" } if @api_key.blank?
     return { error: "No files provided" } if @file_paths.empty?
 
     uri = URI.parse("#{API_URL}?key=#{@api_key}")
@@ -51,7 +51,7 @@ class GeminiOcrService
       extract_json_from_response(result)
     elsif response.code == "429"
       if using_user_key?
-        { error: I18n.t("services.gemini_ocr.user_quota_reached") } 
+        { error: I18n.t("services.gemini_ocr.user_quota_reached") }
       else
         { error: "Please add your personal Gemini API Key" }
       end
@@ -68,9 +68,9 @@ class GeminiOcrService
     @user&.gemini_api_key.presence
   end
 
-  def global_api_key
-    Rails.application.credentials.gemini_api_key
-  end
+  # def global_api_key
+  #   Rails.application.credentials.gemini_api_key
+  # end
 
   def using_user_key?
     user_api_key.present?
