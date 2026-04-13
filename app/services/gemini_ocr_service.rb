@@ -2,6 +2,7 @@ require "net/http"
 require "uri"
 require "json"
 require "base64"
+
 class GeminiOcrService
   # Using v1beta and gemini-flash-latest as it is the most stable alias in your model list
   API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent"
@@ -37,6 +38,9 @@ class GeminiOcrService
 
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
+    http.read_timeout = 120 # Increase to 2 minutes
+    http.write_timeout = 120
+    http.open_timeout = 120
     request = Net::HTTP::Post.new(uri.request_uri, header)
     request.body = body.to_json
 
@@ -47,15 +51,15 @@ class GeminiOcrService
       extract_json_from_response(result)
     elsif response.code == "429"
       if using_user_key?
-        { error: "Your personal Gemini API quota has been reached. Please wait or upgrade your Google account." }
+        { error: I18n.t("services.gemini_ocr.user_quota_reached") }
       else
-        { error: "Our global AI quota has been reached for today. To use this feature immediately, please add your own free Gemini API key in your Profile settings." }
+        { error: I18n.t("services.gemini_ocr.global_quota_reached") }
       end
     else
-      { error: "API Error (#{response.code}): #{response.body[0..200]}" }
+      { error: I18n.t("services.gemini_ocr.api_error", code: response.code) }
     end
   rescue => e
-    { error: "Service Error: #{e.message}" }
+    { error: I18n.t("services.gemini_ocr.service_error", message: e.message) }
   end
 
   private
@@ -73,19 +77,13 @@ class GeminiOcrService
   end
 
   def prompt_text
-...
-    <<~PROMPT
-      Act as a specialized veterinary lab result data extraction tool.
-      Analyze the provided health checkup report image(s). If multiple images are provided, combine the data from all of them into a single consolidated report.
-      Extract the numerical values for these keys:
-      exam_date (YYYY-MM-DD), rbc, hct, hgb, mcv, mch, mchc, rdw, retic, retic_hgb, wbc, neu, lym, mono, eos, baso, plt, mpv, pct, glu, crea, bun, phos, tp, alb, glob, alt, alkp, na, k, cl, ca, chol, ggt, tbil, amyl, fpl2, lipa, osm_cal, fbnp, felv, fiv.
-      Return ONLY a JSON object. If a value is missing across all images, use null.
-    PROMPT
+  I18n.with_locale(:en) do
+    I18n.t("services.gemini_ocr.prompt")
   end
-
+  end
   def extract_json_from_response(result)
     text_content = result.dig("candidates", 0, "content", "parts", 0, "text")
-    return { error: "No text returned from Gemini" } if text_content.blank?
+    return { error: I18n.t("services.gemini_ocr.no_text_returned") } if text_content.blank?
 
     # Try to find JSON in the text
     json_match = text_content.match(/\{.*\}/m)
@@ -95,6 +93,6 @@ class GeminiOcrService
       JSON.parse(text_content)
     end
   rescue => e
-    { error: "Data extraction failed. Gemini said: #{text_content.to_s[0..100]}..." }
+    { error: I18n.t("services.gemini_ocr.extraction_failed", message: e.message) }
   end
 end

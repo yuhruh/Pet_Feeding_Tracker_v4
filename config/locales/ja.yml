@@ -366,6 +366,16 @@
       message: "コストを削減し、すべての人にこのアプリを無料で提供し続けるために、独自の無料Gemini APIキーの追加をご検討ください。"
       cta: "キーを取得してプロフィールに追加"
       dismiss: "閉じる"
+    ocr_auto_fill:
+      title: "AI 自動入力レポート"
+      description: "検査報告書 (PNG/JPG) をアップロードすると、Gemini AI が数値を自動的に入力します。"
+      select_button: "報告書の画像を選択"
+      status_reading: "AIで %{count} ページの報告書を読み取り中..."
+      status_success: "データの抽出に成功しました！"
+      status_error: "エラー: %{error}"
+      status_failed: "データの抽出に失敗しました。"
+      page_singular: "ページ"
+      page_plural: "ページ"
   trackers:
     form:
       date: "日付"
@@ -545,8 +555,21 @@
       invalid_left_amount_number: "「残量」列の数値が正しくありません。"
       invalid_weight_number: "「体重」列の数値が正しくありません。"
     notifications:
-      pet_weight_reminder: "ペットの体重を測る時間です！"
-  javascript:
+      pet_weight_reminder: "ペットの体重を量る時間です！"
+    gemini_ocr:
+      user_quota_reached: "個人のGemini APIクォータに達しました。しばらく待つか、Googleアカウントをアップグレードしてください。"
+      global_quota_reached: "本日のグローバルAIクォータに達しました。すぐにこの機能を使用するには、プロフィール設定で独自の無料Gemini APIキーを追加してください。"
+      api_error: "APIエラー (%{code})"
+      service_error: "サービスエラー: %{message}"
+      no_text_returned: "Geminiからテキストが返されませんでした"
+      extraction_failed: "データの抽出に失敗しました: %{message}"
+      prompt: |
+        専門的な獣医検査結果データ抽出ツールとして機能してください。
+        提供された健康診断報告書の画像を分析してください。複数の画像が提供された場合は、それらすべての画像を統合した1つのレポートにまとめてください。
+        以下のキーの数値を抽出してください：
+        exam_date (形式: YYYY-MM-DD), rbc, hct, hgb, mcv, mch, mchc, rdw, retic, retic_hgb, wbc, neu, lym, mono, eos, baso, plt, mpv, pct, glu, crea, bun, phos, tp, alb, glob, alt, alkp, na, k, cl, ca, chol, ggt, tbil, amyl, fpl2, lipa, osm_cal, fbnp, felv, fiv.
+        JSONオブジェクトのみを返してください。すべての画像で値が見つからない場合は、nullを使用してください。
+    javascript:
     left_amount_controller:
       greater_than_alert: "%{amount}g を超えることはできません。"
       valid_amount: "%{amount}g は有効です。"

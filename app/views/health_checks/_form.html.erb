@@ -1,11 +1,18 @@
-<div data-controller="ocr-upload" data-ocr-upload-pet-id-value="<%= @pet.id %>">
+<div data-controller="ocr-upload" 
+     data-ocr-upload-pet-id-value="<%= @pet.id %>"
+     data-ocr-upload-status-reading-value="<%= t('shared.ocr_auto_fill.status_reading') %>"
+     data-ocr-upload-status-success-value="<%= t('shared.ocr_auto_fill.status_success') %>"
+     data-ocr-upload-status-error-value="<%= t('shared.ocr_auto_fill.status_error') %>"
+     data-ocr-upload-status-failed-value="<%= t('shared.ocr_auto_fill.status_failed') %>"
+     data-ocr-upload-page-singular-value="<%= t('shared.ocr_auto_fill.page_singular') %>"
+     data-ocr-upload-page-plural-value="<%= t('shared.ocr_auto_fill.page_plural') %>">
   <div class="container mx-auto mb-8 p-6 bg-amber-50 border-2 border-dashed border-amber-400 rounded-xl shadow-inner">
     <div class="flex flex-col items-center justify-center space-y-4">
       <div class="flex items-center space-x-2">
         <%= image_tag('aji_icon_512.png', width: '40px', class: 'opacity-80') %>
-        <h3 class="text-lg font-bold text-amber-800 uppercase tracking-wide">AI Auto-Fill Report</h3>
+        <h3 class="text-lg font-bold text-amber-800 uppercase tracking-wide"><%= t('shared.ocr_auto_fill.title') %></h3>
       </div>
-      <p class="text-sm text-amber-700 text-center max-w-md italic">Upload your laboratory report (PNG/JPG) and let Gemini AI fill out the numbers for you automatically!</p>
+      <p class="text-sm text-amber-700 text-center max-w-full italic"><%= t('shared.ocr_auto_fill.description') %></p>
       
       <div class="relative group">
         <input type="file" 
@@ -20,7 +27,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
           </svg>
-          Select Report Image
+          <%= t('shared.ocr_auto_fill.select_button') %>
         </label>
       </div>
 
