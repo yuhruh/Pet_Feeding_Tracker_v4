@@ -51,9 +51,9 @@ class GeminiOcrService
       extract_json_from_response(result)
     elsif response.code == "429"
       if using_user_key?
-        { error: I18n.t("services.gemini_ocr.user_quota_reached") }
+        { error: I18n.t("services.gemini_ocr.user_quota_reached") } 
       else
-        { error: I18n.t("services.gemini_ocr.global_quota_reached") }
+        { error: "Please add your personal Gemini API Key" }
       end
     else
       { error: I18n.t("services.gemini_ocr.api_error", code: response.code) }
