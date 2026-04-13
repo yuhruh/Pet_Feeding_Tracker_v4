@@ -16,7 +16,12 @@ export default class extends Controller {
 
     this.showLoader()
     const fileCount = files.length
-    this.setStatus(`Reading ${fileCount} report ${fileCount > 1 ? 'pages' : 'page'} with AI...`)
+    
+    // Use data attributes for translated strings passed from the view
+    const pageWord = fileCount > 1 ? this.element.dataset.ocrUploadPagePluralValue : this.element.dataset.ocrUploadPageSingularValue
+    const statusMsg = this.element.dataset.ocrUploadStatusReadingValue.replace("%{count}", fileCount).replace("%{pages}", pageWord)
+    
+    this.setStatus(statusMsg)
 
     const formData = new FormData()
     for (let i = 0; i < files.length; i++) {
@@ -36,15 +41,16 @@ export default class extends Controller {
     .then(response => response.json())
     .then(data => {
       if (data.error) {
-        this.setStatus(`Error: ${data.error}`, "text-red-500")
+        const errorMsg = this.element.dataset.ocrUploadStatusErrorValue.replace("%{error}", data.error)
+        this.setStatus(errorMsg, "text-red-500")
       } else {
         this.fillForm(data)
-        this.setStatus("Data extracted successfully!", "text-green-600")
+        this.setStatus(this.element.dataset.ocrUploadStatusSuccessValue, "text-green-600")
       }
     })
     .catch(error => {
       console.error("OCR Error:", error)
-      this.setStatus("Failed to extract data.", "text-red-500")
+      this.setStatus(this.element.dataset.ocrUploadStatusFailedValue, "text-red-500")
     })
     .finally(() => {
       this.hideLoader()

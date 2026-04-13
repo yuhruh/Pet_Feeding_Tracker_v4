@@ -366,6 +366,16 @@ zh-TW:
       message: "為了幫助我們節省成本並讓所有人都能免費使用，請考慮新增您自己的免費 Gemini API 金鑰。"
       cta: "獲取金鑰並新增到個人資料"
       dismiss: "關閉"
+    ocr_auto_fill:
+      title: "AI 自動填寫報告"
+      description: "上傳您的寵物的體檢報告 (PNG/JPG)，讓 Gemini AI 自動為您填寫數據！"
+      select_button: "選擇報告圖片"
+      status_reading: "正在使用 AI 讀取 %{count} 頁報告..."
+      status_success: "數據提取成功！"
+      status_error: "錯誤：%{error}"
+      status_failed: "提取數據失敗。"
+      page_singular: "頁"
+      page_plural: "頁"
   trackers:
     form:
       date: "日期"
@@ -546,6 +556,19 @@ zh-TW:
       invalid_weight_number: "「體重」欄位數值無效。"
     notifications:
       pet_weight_reminder: "該幫您的寵物量體重囉！"
+    gemini_ocr:
+      user_quota_reached: "您的個人 Gemini API 配額已用完。請稍候或升級您的 Google 帳戶。"
+      global_quota_reached: "我們今天的全域 AI 配額已用完。如需立即使用此功能，請在個人資料設定中添加您自己的免費 Gemini API 金鑰。"
+      api_error: "API 錯誤 (%{code})"
+      service_error: "服務錯誤：%{message}"
+      no_text_returned: "Gemini 沒有返回任何文本"
+      extraction_failed: "數據提取失敗：%{message}"
+      prompt: |
+        擔任專業的獸醫檢驗結果數據提取工具。
+        分析提供的健康檢查報告圖片。如果提供多張圖片，請將所有圖片中的數據合併為一份統一的報告。
+        提取以下檢驗的數值：
+        exam_date (格式: YYYY-MM-DD), rbc, hct, hgb, mcv, mch, mchc, rdw, retic, retic_hgb, wbc, neu, lym, mono, eos, baso, plt, mpv, pct, glu, crea, bun, phos, tp, alb, glob, alt, alkp, na, k, cl, ca, chol, ggt, tbil, amyl, fpl2, lipa, osm_cal, fbnp, felv, fiv。
+        僅返回一個 JSON 對象。如果所有圖片中都缺少某個值，請使用 null。
   javascript:
     left_amount_controller:
       greater_than_alert: "不應超過 %{amount} 克。"

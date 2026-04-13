@@ -366,6 +366,16 @@ en:
       message: "To help us save costs and keep this app free for everyone, please consider adding your own free Gemini API key."
       cta: "Get Key & Add to Profile"
       dismiss: "Dismiss"
+    ocr_auto_fill:
+      title: "AI Auto-Fill Report"
+      description: "Upload your laboratory report (PNG/JPG) and let Gemini AI fill out the numbers for you automatically!"
+      select_button: "Select Report Image"
+      status_reading: "Reading %{count} report %{pages} with AI..."
+      status_success: "Data extracted successfully!"
+      status_error: "Error: %{error}"
+      status_failed: "Failed to extract data."
+      page_singular: "page"
+      page_plural: "pages"
   trackers:
     form:
       date: "Date"
@@ -546,6 +556,19 @@ en:
       invalid_weight_number: "Invalid number for 'weight' column."
     notifications:
       pet_weight_reminder: "It's time to weigh your pet's weight!"
+    gemini_ocr:
+      user_quota_reached: "Your personal Gemini API quota has been reached. Please wait or upgrade your Google account."
+      global_quota_reached: "Our global AI quota has been reached for today. To use this feature immediately, please add your own free Gemini API key in your Profile settings."
+      api_error: "API Error (%{code})"
+      service_error: "Service Error: %{message}"
+      no_text_returned: "No text returned from Gemini"
+      extraction_failed: "Data extraction failed: %{message}"
+      prompt: |
+        Act as a specialized veterinary lab result data extraction tool.
+        Analyze the provided health checkup report image(s). If multiple images are provided, combine the data from all of them into a single consolidated report.
+        Extract the numerical values for these keys:
+        exam_date (YYYY-MM-DD), rbc, hct, hgb, mcv, mch, mchc, rdw, retic, retic_hgb, wbc, neu, lym, mono, eos, baso, plt, mpv, pct, glu, crea, bun, phos, tp, alb, glob, alt, alkp, na, k, cl, ca, chol, ggt, tbil, amyl, fpl2, lipa, osm_cal, fbnp, felv, fiv.
+        Return ONLY a JSON object. If a value is missing across all images, use null.
   javascript:
     left_amount_controller:
       greater_than_alert: "Should not greater than %{amount}g."
