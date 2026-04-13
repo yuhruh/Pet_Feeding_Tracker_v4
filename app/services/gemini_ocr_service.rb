@@ -18,9 +18,9 @@ class GeminiOcrService
 
     uri = URI.parse("#{API_URL}?key=#{@api_key}")
     header = { "Content-Type" => "application/json" }
-    
+
     # Construct the parts array starting with the prompt
-    parts = [{ text: prompt_text }]
+    parts = [ { text: prompt_text } ]
 
     # Add each image as a separate part
     @file_paths.each do |path|
@@ -33,7 +33,7 @@ class GeminiOcrService
       }
     end
 
-    body = { contents: [{ parts: parts }] }
+    body = { contents: [ { parts: parts } ] }
 
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
@@ -41,7 +41,7 @@ class GeminiOcrService
     request.body = body.to_json
 
     response = http.request(request)
-    
+
     if response.code == "200"
       result = JSON.parse(response.body)
       extract_json_from_response(result)
