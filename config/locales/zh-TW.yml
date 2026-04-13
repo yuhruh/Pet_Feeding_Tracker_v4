@@ -361,6 +361,11 @@ zh-TW:
       prohibited_this_html: "禁止儲存此 %{model}："
     time_zone_select:
       timezone: "時區："
+    gemini_key_banner:
+      title: "讓 AjiTracker 持續免費！ 🐾"
+      message: "為了幫助我們節省成本並讓所有人都能免費使用，請考慮新增您自己的免費 Gemini API 金鑰。"
+      cta: "獲取金鑰並新增到個人資料"
+      dismiss: "關閉"
   trackers:
     form:
       date: "日期"

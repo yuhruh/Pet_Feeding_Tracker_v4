@@ -2,14 +2,14 @@ require "net/http"
 require "uri"
 require "json"
 require "base64"
-
 class GeminiOcrService
   # Using v1beta and gemini-flash-latest as it is the most stable alias in your model list
   API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent"
 
-  def initialize(file_paths)
+  def initialize(file_paths, user = nil)
     @file_paths = Array(file_paths) # Ensure it's an array
-    @api_key = Rails.application.credentials.gemini_api_key
+    @user = user
+    @api_key = user_api_key || global_api_key
   end
 
   def call
@@ -45,6 +45,12 @@ class GeminiOcrService
     if response.code == "200"
       result = JSON.parse(response.body)
       extract_json_from_response(result)
+    elsif response.code == "429"
+      if using_user_key?
+        { error: "Your personal Gemini API quota has been reached. Please wait or upgrade your Google account." }
+      else
+        { error: "Our global AI quota has been reached for today. To use this feature immediately, please add your own free Gemini API key in your Profile settings." }
+      end
     else
       { error: "API Error (#{response.code}): #{response.body[0..200]}" }
     end
@@ -54,7 +60,20 @@ class GeminiOcrService
 
   private
 
+  def user_api_key
+    @user&.gemini_api_key.presence
+  end
+
+  def global_api_key
+    Rails.application.credentials.gemini_api_key
+  end
+
+  def using_user_key?
+    user_api_key.present?
+  end
+
   def prompt_text
+...
     <<~PROMPT
       Act as a specialized veterinary lab result data extraction tool.
       Analyze the provided health checkup report image(s). If multiple images are provided, combine the data from all of them into a single consolidated report.

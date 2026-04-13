@@ -361,6 +361,11 @@ en:
       prohibited_this_html: "prohibited this %{model} from being saved:"
     time_zone_select:
       timezone: "TimeZone: "
+    gemini_key_banner:
+      title: "Keep AjiTracker Free! 🐾"
+      message: "To help us save costs and keep this app free for everyone, please consider adding your own free Gemini API key."
+      cta: "Get Key & Add to Profile"
+      dismiss: "Dismiss"
   trackers:
     form:
       date: "Date"

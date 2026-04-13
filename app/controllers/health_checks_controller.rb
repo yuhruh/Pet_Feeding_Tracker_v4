@@ -22,7 +22,7 @@ class HealthChecksController < ApplicationController
     files = params[:files]
     if files.present?
       file_paths = Array(files).map(&:path)
-      ocr_service = GeminiOcrService.new(file_paths)
+      ocr_service = GeminiOcrService.new(file_paths, Current.user)
       result = ocr_service.call
       render json: result
     else

@@ -35,6 +35,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:username, :email, :password, :password_confirmation, :timezone)
+    params.require(:user).permit(:username, :email_address, :password, :password_confirmation, :timezone, :gemini_api_key)
   end
 end
