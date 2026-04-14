@@ -520,6 +520,13 @@
       timezone_readonly_note: "タイムゾーンは読み取り専用で、編集できません"
       update_profile_button: "プロフィールを更新"
       cancel_button: "キャンセル...%{username}のプロフィールに戻る"
+      gemini_api_key_instruction:
+        title: "無料のAPIキーを取得する方法は？"
+        step_1: "Google AI Studioにアクセス"
+        step_1_link: "aistudio.google.com"
+        step_2: "サイドバーの「APIキーを取得 (Get API key)」をクリック"
+        step_3: "「新しいプロジェクトでAPIキーを作成 (Create API key in new project)」をクリック"
+        step_4: "キーをコピーして上に貼り付けてください"
     show:
       title: "%{username}のプロフィール"
       username: "ユーザー名："

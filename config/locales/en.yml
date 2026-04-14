@@ -520,6 +520,13 @@ en:
       timezone_readonly_note: "Timezone is readonly, can not edit"
       update_profile_button: "Update Profile"
       cancel_button: "Cancel...Go back to %{username}'s profile"
+      gemini_api_key_instruction:
+        title: "How to get your free API key?"
+        step_1: "Go to Google AI Studio"
+        step_1_link: "aistudio.google.com"
+        step_2: "Click 'Get API key' on the sidebar"
+        step_3: "Click 'Create API key in new project'"
+        step_4: "Copy your key and paste it above"
     show:
       title: "%{username}'s Profile"
       username: "user name:"

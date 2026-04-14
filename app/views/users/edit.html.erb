@@ -62,7 +62,46 @@
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
           <%= form.password_field :gemini_api_key, value: @user.gemini_api_key, placeholder: "AIza...", class: "shadow-md rounded-md border border-gray-400 focus:outline-softBlue px-3 py-2 w-1/2 bg-white text-gray-900" %>
-          <p class="w-1/2 text-xs text-gray-500 mt-1 italic leading-relaxed text-center md:text-left">Provide your own free Gemini API key to help keep this app free! Get one at <a href="https://aistudio.google.com/" target="_blank" class="text-blue-500 underline">Google AI Studio</a>.</p>
+          
+          <details class="w-1/2 mt-4 bg-amber-50 dark:bg-gray-700 border border-amber-200 dark:border-gray-600 rounded-lg p-3 shadow-sm transition-all duration-300">
+            <summary class="text-sm font-bold text-amber-800 dark:text-amber-400 cursor-pointer hover:text-amber-600 list-none flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <%= t(".gemini_api_key_instruction.title") %>
+            </summary>
+            
+            <div class="mt-4 space-y-4 text-xs md:text-sm text-gray-700 dark:text-gray-200">
+              <div class="flex items-start space-x-3">
+                <div class="flex-shrink-0 w-6 h-6 bg-amber-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
+                <div>
+                  <%= t(".gemini_api_key_instruction.step_1") %>:
+                  <a href="https://aistudio.google.com/" target="_blank" class="text-blue-600 dark:text-blue-400 underline font-semibold">
+                    <%= t(".gemini_api_key_instruction.step_1_link") %>
+                  </a>
+                </div>
+              </div>
+
+              <div class="flex items-start space-x-3 border-l-2 border-amber-200 dark:border-gray-500 ml-3 pl-4">
+                <div class="flex-shrink-0 w-6 h-6 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
+                <p class="pt-1"><%= t(".gemini_api_key_instruction.step_2") %></p>
+              </div>
+
+              <div class="flex items-start space-x-3 border-l-2 border-amber-200 dark:border-gray-500 ml-3 pl-4">
+                <div class="flex-shrink-0 w-6 h-6 bg-amber-400 text-white rounded-full flex items-center justify-center font-bold">3</div>
+                <p class="pt-1"><%= t(".gemini_api_key_instruction.step_3") %></p>
+              </div>
+
+              <div class="flex items-start space-x-3 border-l-2 border-amber-200 dark:border-gray-500 ml-3 pl-4">
+                <div class="flex-shrink-0 w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">4</div>
+                <p class="pt-1"><%= t(".gemini_api_key_instruction.step_4") %></p>
+              </div>
+              
+              <div class="bg-white dark:bg-gray-800 p-2 rounded border border-gray-200 dark:border-gray-600 mt-2 italic text-[10px] text-gray-500">
+                <%= t("shared.gemini_key_banner.message") %>
+              </div>
+            </div>
+          </details>
         </div>
       </div>
 
