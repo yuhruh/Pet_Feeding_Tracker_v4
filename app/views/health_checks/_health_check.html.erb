@@ -498,28 +498,28 @@
                 <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">Osm Calc(mmol/kg)</th>
                 <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">-</th>
                 <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
-                  <td class="capitalize text-sm text-center p-2"><%= health_check.osm_cal %></td>
+                  <td class="capitalize text-sm text-center font-normal dark:text-gray-800 p-2"><%= health_check.osm_cal %></td>
                 <% end %>
               </tr>
               <tr class="border-b bg-gray-100">
                 <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">fBNP</th>
                 <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">-</th>
                 <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
-                  <td class="capitalize text-sm text-center p-2"><%= health_check.fbnp %></td>
+                  <td class="capitalize text-sm text-center font-normal dark:text-gray-800 p-2"><%= health_check.fbnp %></td>
                 <% end %>
               </tr>
               <tr class="border-b bg-gray-100">
                 <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">FeLV</th>
                 <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">-</th>
                 <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
-                  <td class="capitalize text-sm text-center p-2"><%= health_check.felv %></td>
+                  <td class="capitalize text-sm text-center font-normal dark:text-gray-800 p-2"><%= health_check.felv %></td>
                 <% end %>
               </tr>
               <tr class="border-b bg-gray-100">
                 <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">FIV</th>
                 <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">-</th>
                 <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
-                  <td class="capitalize text-sm text-center p-2"><%= health_check.fiv %></td>
+                  <td class="capitalize text-sm text-center font-normal dark:text-gray-800 p-2"><%= health_check.fiv %></td>
                 <% end %>
               </tr>
               <tr class="border-b bg-gray-100">
