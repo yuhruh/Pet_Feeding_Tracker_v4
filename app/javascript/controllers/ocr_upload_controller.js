@@ -67,11 +67,6 @@ export default class extends Controller {
       if (value === null || value === undefined) return
 
       let element = document.getElementById(`health_check_${key}`)
-      
-      // Handle the specific ID for osm-cal if it differs
-      if (!element && key === "osm_cal") {
-        element = document.getElementById("health_check_osm-cal")
-      }
 
       if (element) {
         element.value = value
