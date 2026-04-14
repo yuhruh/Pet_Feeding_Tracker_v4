@@ -191,10 +191,10 @@
                     <td class="text-sm <%=range_row_class(health_check.amyl, 1500, 500)%> p-2"><%= health_check.amyl %></td>
                     <td class="text-sm <%=range_row_class(health_check.fpl2, 3.5, 0)%> p-2"><%= health_check.fpl2 %></td>
                     <td class="text-sm <%=range_row_class(health_check.lipa, 1400, 100)%> p-2"><%= health_check.lipa %></td>
-                    <td class="text-sm font-normal text-center p-2"><%= health_check.osm_cal %></td>
-                    <td class="text-sm font-normal text-center p-2"><%= health_check.fbnp %></td>
-                    <td class="text-sm font-normal text-center p-2"><%= health_check.felv %></td>
-                    <td class="text-sm font-normal text-center p-2"><%= health_check.fiv %></td>                  
+                    <td class="text-sm text-center font-normal capitalize dark:text-gray-800 p-2"><%= health_check.osm_cal %></td>
+                    <td class="text-sm text-center font-normal capitalize dark:text-gray-800 p-2"><%= health_check.fbnp %></td>
+                    <td class="text-sm text-center font-normal capitalize dark:text-gray-800 p-2"><%= health_check.felv %></td>
+                    <td class="text-sm text-center font-normal capitalize dark:text-gray-800 p-2"><%= health_check.fiv %></td>                  
                     <td class="text-sm text-center p-2">
                       <%= link_to edit_pet_health_check_path(@pet, health_check), id: "edit_health_check_#{health_check.id}", class: "inline-block transition-transform text-emerald-400 hover:text-emerald-600 hover:scale-110" do %>
                         <span class="sr-only"><%= t('health_checks.show.edit') %></span>                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
