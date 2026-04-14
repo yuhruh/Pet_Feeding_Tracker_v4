@@ -688,7 +688,7 @@ zh-TW:
         all: "全部"
         other: "其他"
       legend:
-        red: "紅色代表數值高於參考範圍"
+        red: "紅色代表數值高於參考範圍/異常"
         blue: "藍色代表數值低於參考範圍"
       reference_range: "參考範圍"
       edit: "編輯"
