@@ -520,6 +520,13 @@ zh-TW:
       timezone_readonly_note: "時區為唯讀，無法編輯"
       update_profile_button: "更新個人資料"
       cancel_button: "取消...返回 %{username} 的個人資料"
+      gemini_api_key_instruction:
+        title: "如何獲取您的免費 API 金鑰？"
+        step_1: "前往 Google AI Studio"
+        step_1_link: "aistudio.google.com"
+        step_2: "點擊側邊欄的「獲取 API 金鑰 (Get API key)」"
+        step_3: "點擊「在新建專案中建立 API 金鑰 (Create API key in new project)」"
+        step_4: "複製您的金鑰並貼在上方"
     show:
       title: "%{username} 的個人資料"
       username: "使用者名稱："
