@@ -15,9 +15,8 @@ class User < ApplicationRecord
                     length: { maximum: 105 },
                     format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
   validates :email_address, confirmation: true, on: :create
-  validates :password, presence: true,
-                    length: { maximum: 105 }
-  validates :password_confirmation, presence: true
+  validates :password, length: { maximum: 105 }, allow_blank: true, on: :update
+  validates :password_confirmation, presence: true, if: -> { password.present? }, on: :update
   validates :timezone, presence: true, on: :create
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }

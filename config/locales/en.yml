@@ -363,7 +363,7 @@ en:
       timezone: "TimeZone: "
     gemini_key_banner:
       title: "Keep AjiTracker Free! 🐾"
-      message: "To help us save costs and keep this app free for everyone, please consider adding your own free Gemini API key."
+      message: "To help us save costs and keep this app free for everyone, please add your own free Gemini API key."
       cta: "Get Key & Add to Profile"
       dismiss: "Dismiss"
     ocr_auto_fill:
