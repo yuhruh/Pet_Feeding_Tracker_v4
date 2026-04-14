@@ -688,7 +688,7 @@ en:
         all: "all"
         other: "other"
       legend:
-        red: "Red means the value is higher than reference range"
+        red: "Red means the value is higher than reference range/abnormal"
         blue: "Blue means the value is lower than reference range"
       reference_range: "Reference Range"
       edit: "edit"
