@@ -62,7 +62,7 @@
                 <tr id="<%= dom_id(health_check) %>" class="border-b bg-gray-100">
                   <td class="text-sm text-center p-2 font-semibold dark:text-gray-800"><%= idx+1 %></td>
                   <td class="text-sm text-center p-2 dark:text-gray-800"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
-                  <td class="text-sm text-center p-2 dark:text-gray-800"><%= health_check.fbnp %></td>
+                  <td class="text-sm text-center font-normal capitalize p-2 dark:text-gray-800"><%= health_check.fbnp %></td>
                 </tr>
               <% end %>
             </tbody>
@@ -90,7 +90,7 @@
             <tr class="border-b bg-gray-100">
               <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">FBNP</th>
               <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
-                <td class="apitalize text-sm text-center dark:text-gray-800 p-2"><%= health_check.fbnp %></td>
+                <td class="capitalize text-sm font-normal text-center dark:text-gray-800 p-2"><%= health_check.fbnp %></td>
               <% end %>
             </tr>
           </table>
