@@ -1,10 +1,31 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["leftAmount", "leftAmountAlert", "totalAteAmount", "separator", "submitButton"];
+  static targets = ["leftAmount", "leftAmountAlert", "totalAteAmount", "separator", "submitButton", "pencilBrand", "pencilDescription", "brand", "description"];
 
   connect() {
+    console.log("LeftAmount controller connected and ready");
     this.originalAmount = parseFloat(this.leftAmountTarget.max);
+  }
+
+  toggleReadonly(event) {
+    const targetName = event.currentTarget.dataset.targetName
+    const input = targetName === 'brand' ? this.brandTarget : this.descriptionTarget
+    
+    console.log(`Pencil clicked for: ${targetName}. Current readonly state: ${input.readOnly}`);
+    
+    if (input.readOnly) {
+      input.readOnly = false
+      input.classList.remove('bg-gray-100', 'dark:bg-gray-300')
+      input.classList.add('bg-white')
+      input.focus()
+      event.currentTarget.classList.add('text-softBlue', 'scale-110')
+    } else {
+      input.readOnly = true
+      input.classList.add('bg-gray-100', 'dark:bg-gray-300')
+      input.classList.remove('bg-white')
+      event.currentTarget.classList.remove('text-softBlue', 'scale-110')
+    }
   }
 
   validateLeftAmount() {
