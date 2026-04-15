@@ -23,6 +23,7 @@ Rails.application.routes.draw do
         end
       end
     end
+    get "shared/:share_token", to: "shared_trackers#show", as: :shared_pet_trackers
     resource :session, except: [ :new ]
     resource :registrations, only: [ :new, :create ]
     resource :timezone, only: [ :create ]

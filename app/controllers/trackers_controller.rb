@@ -1,5 +1,5 @@
 class TrackersController < ApplicationController
-  # include TrackersCalculable
+  include TrackersCalculable
   before_action :set_pet
   before_action :set_tracker, only: %i[ show edit update destroy ]
   before_action :require_authentication
@@ -21,56 +21,19 @@ class TrackersController < ApplicationController
 
   # GET /trackers or /trackers.json
   def index
-    # @trackers = Tracker.all
-    @all_trackers = @pet.trackers
-    trackers_table = Tracker.arel_table
+    # Use the shared calculation logic from TrackersCalculable concern
+    result = calculate_tracker_data(@pet, params, Current.user)
 
-    @min_date = @pet.trackers.minimum(:date)
-    @max_date = @pet.trackers.maximum(:date)
-
-    if params[:range] == "custom" && params[:start_date].present? && params[:end_date].present?
-      @start_date = Date.parse(params[:start_date])
-      @end_date = Date.parse(params[:end_date])
-
-      if @start_date > @end_date
-        flash.now[:alert] = t(".index.invalid_date_range")
-      elsif @end_date < @min_date || @start_date > @max_date
-        flash.now[:notice] = t(".index.no_data_in_range")
-      end
-
-      @all_trackers = @all_trackers.where(date: @start_date..@end_date)
-    else
-      # Default filtering logic
-      case params[:range]
-      when "7"
-        @all_trackers = @all_trackers.where("date >= ?", 7.days.ago.to_date)
-      when "30"
-        @all_trackers = @all_trackers.where("date >= ?", 30.days.ago.to_date)
-      when "120"
-        @all_trackers = @all_trackers.where("date >= ?", 120.days.ago.to_date)
-      when "180"
-        @all_trackers = @all_trackers.where("date >= ?", 180.days.ago.to_date)
-      when "YTD"
-        @all_trackers = @all_trackers.where("date >= ?", Date.today.beginning_of_year)
-      end
-    end
-
-    if params[:food_type].present?
-      @all_trackers = @all_trackers.where(trackers_table[:food_type].matches("%#{params[:food_type]}%"))
-    end
-
-    if params[:brand].present?
-      @all_trackers = @all_trackers.where(trackers_table[:brand].matches("%#{params[:brand]}%"))
-    end
-
-    if params[:description].present?
-      @all_trackers = @all_trackers.where(trackers_table[:description].matches("%#{params[:description]}%"))
-    end
-
-    if params[:note].present?
-      @all_trackers = @all_trackers.where(trackers_table[:note].matches("%#{params[:note]}%"))
-    end
-
+    @all_trackers = result[:all_trackers]
+    @data = result[:chart_data]
+    @chart_interval = result[:chart_interval]
+    @min_weight = result[:min_weight]
+    @max_weight = result[:max_weight]
+    @min_date = result[:min_date]
+    @max_date = result[:max_date]
+    @dry_properties = result[:dry_properties]
+    @wet_properties = result[:wet_properties]
+    
     page = params[:page].blank? ? 1 : params[:page]
     session[:per_page] = params[:per_page] if params[:per_page].present?
     per_page = session[:per_page] || 10
@@ -88,80 +51,6 @@ class TrackersController < ApplicationController
         send_data @all_trackers.reorder(Arel.sql(order_sql)).to_csv, filename: "#{@pet.petname.capitalize}-trackers-#{Date.today}.csv", type: "text/csv"
       end
     end
-
-    hotel_keywords = [ "hotel", "旅館", "貓旅", "boarding", "resort" ]
-
-    # Sanitize hotel keywords for LIKE query
-    formatted_keywords = hotel_keywords.map { |k| "%#{k}%" }
-
-    # Use Arel to safely construct the query for hotel stays
-    hotel_conditions = formatted_keywords.map do |keyword|
-      trackers_table[:note].matches(keyword)
-    end.reduce(:or)
-
-    # Use Arel to safely construct the query for normal stays (not in a hotel)
-    normal_conditions = trackers_table[:note].eq(nil).or(hotel_conditions.not)
-
-    dry_raw = @all_trackers.where(food_type: [ "Kibble", "Freeze-Dried" ]).where(normal_conditions).where.not(total_ate_amount: nil).group(:date).sum(:total_ate_amount)
-    dry_hotel_raw = @all_trackers.where(food_type: [ "Kibble", "Freeze-Dried" ]).where(hotel_conditions).where.not(total_ate_amount: nil).group(:date).sum(:total_ate_amount)
-    wet_raw = @all_trackers.where(food_type: "Wet").where(normal_conditions).where.not(total_ate_amount: nil).group(:date).sum(:total_ate_amount)
-    wet_hotel_raw = @all_trackers.where(food_type: "Wet").where(hotel_conditions).where.not(total_ate_amount: nil).group(:date).sum(:total_ate_amount)
-
-    all_dates = (dry_raw.keys + dry_hotel_raw.keys + wet_raw.keys + wet_hotel_raw.keys).uniq.sort
-
-     data_points_count = all_dates.size
-
-     @chart_interval = case data_points_count
-     when 0..30 then 1
-     when 31..60 then 2
-     when 61..120 then 3
-     else 6
-     end
-
-
-    format_chart_data = ->(hash, all_dates) {
-      data = all_dates.map { |date| [ date.strftime("%y/%m/%d"), hash[date].to_f ] }
-      data.to_h
-    }
-
-    @dry_properties = format_chart_data.call(dry_raw, all_dates)
-    @dry_hotel_properties = format_chart_data.call(dry_hotel_raw, all_dates)
-    @wet_properties = format_chart_data.call(wet_raw, all_dates)
-    @wet_hotel_properties = format_chart_data.call(wet_hotel_raw, all_dates)
-    # Using average for weight is safer than sum, in case multiple entries exist for one day.
-    @weight = @all_trackers.where.not(weight: nil).group(:date).order(:date).average(:weight).transform_keys { |key| key.strftime("%y/%m/%d") }.transform_values(&:to_f)
-
-    # @total_ate_quantity = @all_trackers.where.not(total_ate_amount: nil).group(:date).sum(:total_ate_amount).transform_keys { |key| key.strftime("%y/%m/%d") }.transform_values(&:to_f)
-
-    weight_values = @weight.values
-    if weight_values.present?
-      min_val = weight_values.min
-      max_val = weight_values.max
-      @min_weight = [ 0, (min_val - 2) ].max.floor
-      @max_weight = (max_val + 2).ceil
-    else
-      @min_weight = 0
-      @max_weight = 15 # A default value
-    end
-
-    # total_ate_quantity_values = @total_ate_quantity.values
-    # if total_ate_quantity_values.present?
-    #   min_val = total_ate_quantity_values.min
-    #   max_val = total_ate_quantity_values.max
-    #   @min_total_ate = [ 0, (min_val - 10) ].max.floor
-    #   @max_total_ate = (max_val + 10).ceil
-    # else
-    #   @min_total_ate = 0
-    #   @max_total_ate = 100 # A default value
-    # end
-
-    @data = [
-      { name: t(".chart.wet_food"), data: @wet_properties },
-      { name: "Wet (Hotel)", data: @wet_hotel_properties },
-      { name: t(".chart.dry_food"), data: @dry_properties },
-      { name: "Dry (Hotel)", data: @dry_hotel_properties },
-      { name: t(".chart.weight"), data: @weight, type: "line" }
-    ]
   end
 
   # GET /trackers/1 or /trackers/1.json

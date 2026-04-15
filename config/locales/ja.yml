@@ -1,4 +1,6 @@
  ja:
+  shared_trackers:
+    read_only_view: "給餌および体重データの公開用読み取り専用ビュー"
   hero_section:
     heading: "ペットの給餌を視覚的に追跡するアプリ 🐾"
     subheading: "猫の食事の好みや量の傾向を、明確で視覚的なインターフェースで経時的に追跡します。 管理されていないExcelデータセットをグラフに変換するのに役立ちます。"
@@ -443,6 +445,8 @@
       description: "説明"
       favorite_score: "お気に入りスコア & 最終給餌日"
     index:
+      share_link: "ページを共有"
+      download_chart: "チャートをダウンロード"
       import_csv: "CSVファイルをインポート"
       import_button: "インポート"
       import_hint: "CSVファイルのみインポートできます"

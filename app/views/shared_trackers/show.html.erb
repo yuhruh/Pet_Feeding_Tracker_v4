@@ -1,0 +1,102 @@
+<% content_for :title, t('trackers.index.title', petname: @pet.petname.capitalize) + " (Shared)" %>
+
+<div class="container mx-auto py-8">
+  <div class="flex flex-col justify-center items-center mb-6">
+    <h1 class="font-bold text-center text-2xl md:text-4xl"><%= t('trackers.index.title', petname: @pet.petname.capitalize) %></h1>
+    <p class="underline decoration-double underline-offset-4 text-gray-500 italic mt-2"><%= t('shared_trackers.read_only_view') %></p>
+  </div>
+
+  <%# Chart Section %>
+  <div class="flex flex-col mb-8 justify-center items-center mx-auto w-full">
+    <div id="chart-container" class="w-full overflow-x-auto border border-gray-100 rounded-lg shadow-sm">
+      <% chart_width = [@data.first[:data].size * 20, 800].max %>
+      <div style="min-width: <%= chart_width%>px;">
+        <% if @data.any? { |s| s[:data].present? } %>
+          <%= column_chart @data, adapter: "google", height: "400px", library: {
+            title: t('trackers.index.chart_title'),
+            isStacked: true,
+            interpolateNulls: true,
+            series: {
+              0 => {type: 'bar', targetAxisIndex: 0},
+              1 => {type: 'bar', targetAxisIndex: 0},
+              2 => {type: 'bar', targetAxisIndex: 0},
+              3 => {type: 'bar', targetAxisIndex: 0},
+              4 => {type: 'line', targetAxisIndex: 1, pointSize: 5}
+            },
+            colors: ['#C1D7EC', '#2563EB', '#FFDAB9','#F97316', '#6B4AB9'],
+            bar: {groupWidth: '75%'},
+            chartArea: {left: 60, right: 60, bottom: 100, top: 40},
+            hAxis: {
+              title: t('trackers.index.chart_h_axis_title'),
+              showTextEvery: @chart_interval,
+              slantedText: true,
+              slantedTextAngle: 45,
+              format: 'yyyy/MM/dd',
+              textStyle: {fontSize: 10}
+            },
+            vAxes: {
+              0 => {title: t('trackers.index.chart_v_axis_amount')},
+              1 => {title: t('trackers.index.chart_v_axis_weight'), viewWindow: {min: @min_weight, max: @max_weight}, gridlines: {color: 'transparent'}}
+            },
+            legend: {position: 'top'},
+            titleTextStyle: {bold: true, fontSize: 18} 
+          } %>
+        <% else %>
+          <div class="text-center p-8 my-4 bg-gray-100 rounded-lg shadow-lg">
+            <p class="font-semibold text-gray-700"><%= t('trackers.index.no_data_for_chart') %></p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <%# Data Table %>
+  <div class="overflow-x-auto shadow-lg rounded-xl">
+    <table class="table-auto w-full dark:bg-slate-100">
+      <thead>
+        <tr class="bg-gray-100 dark:bg-black">
+          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.number') %></th>
+          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.date') %></th>
+          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.time') %></th>
+          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.hungry') %></th>
+          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.come_back_to_eat') %></th>
+          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.food_type') %></th>
+          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.brand') %></th>
+          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.description') %></th>
+          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.amount') %></th>
+          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.left_amount') %></th>
+          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.total_ate_amount') %></th>
+          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.result') %></th>
+          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.weight') %></th>
+          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.note') %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @trackers.each_with_index do |record, idx| %>
+          <% next_record = @trackers[idx + 1] %>
+          <% date_changed = (next_record && next_record.date != record.date) %>
+          <tr class="border-b <%= 'border-b-2 border-gray-400' if date_changed %> bg-white">
+            <td class="text-sky-700 text-sm text-center p-2 font-semibold"><%= idx + 1 %></td>
+            <td class="text-sky-700 text-sm text-center p-2"><%= record.date.strftime("%Y-%m-%d") %></td>
+            <td class="text-sky-700 text-sm text-center p-2"><%= record.feed_time.strftime("%H:%M") %></td>
+            <td class="text-sky-700 text-sm text-center p-2"><%= record.hungry.present? ? t("trackers.hungry_options.#{record.hungry}") : "" %></td>
+            <td class="text-sky-700 text-sm text-center p-2"><%= record.come_back_to_eat %></td>
+            <td class="text-sky-700 text-sm text-center p-2"><%= t("trackers.food_types.#{record.food_type.downcase}") %></td>
+            <td class="text-sky-700 text-sm text-center p-2"><%= record.brand %></td>
+            <td class="text-sky-700 text-sm text-center p-2"><%= record.description %></td>
+            <td class="text-sky-700 text-sm text-center p-2"><%= record.amount %></td>
+            <td class="text-sky-700 text-sm text-center p-2"><%= record.left_amount %></td>
+            <td class="text-sky-700 text-sm text-center p-2"><%= record.total_ate_amount %></td>
+            <td class="text-sky-700 text-sm text-center p-2"><%= record.result %></td>
+            <td class="text-sky-700 text-sm text-center p-2"><%= record.weight %></td>
+            <td class="text-sky-700 text-sm text-center p-2"><%= record.note %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="flex justify-center mt-8 italic text-gray-500">
+    <%= will_paginate @trackers %>
+  </div>
+</div>

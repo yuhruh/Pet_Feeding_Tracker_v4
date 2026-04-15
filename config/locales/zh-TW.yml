@@ -1,4 +1,6 @@
 zh-TW:
+  shared_trackers:
+    read_only_view: "飲食與體重數據的唯讀圖表"
   hero_section:
     heading: "視覺化寵物餵食追蹤應用程序 🐾"
     subheading: "擁有清晰可視化的界面，用於追蹤您的貓科動物的飲食喜好、趨勢。協助飼主將雜亂無章的Excel資料轉換成圖表。"
@@ -443,7 +445,9 @@ zh-TW:
       description: "描述"
       favorite_score: "喜好分數 & 上次餵食日期"
     index:
-      import_csv: "上傳CSV檔案"
+      share_link: "分享頁面"
+      download_chart: "下載圖表"
+      import_csv: "上傳 CSV 檔案"
       import_button: "上傳"
       import_hint: "只能上傳CSV檔案"
       title: "%{petname}的紀錄"
