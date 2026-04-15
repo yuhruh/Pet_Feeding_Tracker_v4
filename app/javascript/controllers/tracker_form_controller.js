@@ -11,17 +11,21 @@ export default class extends Controller {
   connect() {
     this.csrfToken = document.querySelector("meta[name='csrf-token']").content;
     this.selectedFoodLeftAmount = null; // Initialize storage state
-    this.toggleDryFoodOptions()
+    if (this.hasFoodTypeTarget) {
+      this.toggleDryFoodOptions()
+    }
   }
 
   async toggleDryFoodOptions() {
+    if (!this.hasFoodTypeTarget) return;
+
     const type = this.foodTypeTarget.value;
     const pathParts = window.location.pathname.split('/');
     const locale = document.documentElement.lang || 'en';
     const dryFoodsUrl = `/${locale}/dry_foods.json`;
 
     if (type === "kibble" || type === "freeze_dried") {
-      this.dryFoodOptionsTarget.classList.remove("hidden");
+      if (this.hasDryFoodOptionsTarget) this.dryFoodOptionsTarget.classList.remove("hidden");
 
       const response = await fetch(dryFoodsUrl, {
         headers: {
@@ -45,8 +49,8 @@ export default class extends Controller {
         this.updateDryFoodOptions(filteredFoods);
       }
     } else if (type === "wet") {
-      this.wetFoodOptionsTarget.classList.remove("hidden");
-      this.dryFoodOptionsTarget.classList.add("hidden");
+      if (this.hasWetFoodOptionsTarget) this.wetFoodOptionsTarget.classList.remove("hidden");
+      if (this.hasDryFoodOptionsTarget) this.dryFoodOptionsTarget.classList.add("hidden");
 
       if (pathParts.length > 3) {
         const petId = pathParts[3];
@@ -63,12 +67,13 @@ export default class extends Controller {
         this.updateWetFoodOptions(data);
       }
     } else {
-      this.dryFoodOptionsTarget.classList.add("hidden");
-      this.wetFoodOptionsTarget.classList.add("hidden");
+      if (this.hasDryFoodOptionsTarget) this.dryFoodOptionsTarget.classList.add("hidden");
+      if (this.hasWetFoodOptionsTarget) this.wetFoodOptionsTarget.classList.add("hidden");
     }
   }
 
   updateDryFoodOptions(foods) {
+    if (!this.hasDryFoodSelectTarget) return;
     this.dryFoodSelectTarget.innerHTML = `<option value="">${I18n.t('trackers.form.select_dry_food')}</option>`;
     foods.forEach(food => {
       const option = document.createElement("option");
@@ -86,6 +91,7 @@ export default class extends Controller {
   }
 
   updateWetFoodOptions(foods) {
+    if (!this.hasWetFoodSelectTarget) return;
     this.wetFoodSelectTarget.innerHTML = `<option value="">${I18n.t('javascript.tracker_form_controller.select_wet_food')}</option>`;
     if (!Array.isArray(foods)) {
       return;
@@ -120,8 +126,6 @@ export default class extends Controller {
       return null;
     }).filter(food => food !== null);
 
-    console.log(filteredFood)
-
     filteredFood.forEach(food => {
       const option = document.createElement('option');
       option.value = food.results[0].id;
@@ -133,6 +137,7 @@ export default class extends Controller {
   }
 
   async fillDryFoodFields() {
+    if (!this.hasDryFoodSelectTarget) return;
     const foodId = this.dryFoodSelectTarget.value;
 
     if (foodId) {
@@ -147,33 +152,23 @@ export default class extends Controller {
         });
 
         if (!response.ok) {
-          if (response.status === 406) {
-            console.error("Not acceptable. Check API for JSON response.");
-          }
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
-        this.brandTarget.value = data.brand;
-        this.descriptionTarget.value = data.description;
-        // Store the left amount
+        if (this.hasBrandTarget) this.brandTarget.value = data.brand;
+        if (this.hasDescriptionTarget) this.descriptionTarget.value = data.description;
         this.selectedFoodLeftAmount = data.left_amount;
         this.validateAmount()
       } catch (error) {
         console.error("Error fetching dry food data:", error);
-        this.brandTarget.value = "";
-        this.descriptionTarget.value = "";
-        this.selectedFoodLeftAmount = null;
       }
-    } else {
-      this.brandTarget.value = "";
-      this.descriptionTarget.value = "";
-      this.selectedFoodLeftAmount = null;
     }
     this.validateAmount();
   }
 
   async fillWetFoodFields() {
+    if (!this.hasWetFoodSelectTarget) return;
     const foodId = this.wetFoodSelectTarget.value;
 
     if (foodId) {
@@ -193,52 +188,52 @@ export default class extends Controller {
         }
 
         const data = await response.json();
-        this.brandTarget.value = data.brand;
-        this.descriptionTarget.value = data.description;
-        this.amountTarget.value = data.amount;
+        if (this.hasBrandTarget) this.brandTarget.value = data.brand;
+        if (this.hasDescriptionTarget) this.descriptionTarget.value = data.description;
+        if (this.hasAmountTarget) this.amountTarget.value = data.amount;
       } catch (error) {
         console.error("Error fetching wet food data:", error);
-        this.brandTarget.value = "";
-        this.descriptionTarget.value = "";
-        this.amountTarget.value = "";
       }
-    } else {
-      this.brandTarget.value = "";
-      this.descriptionTarget.value = "";
-      this.amountTarget.value = "";
     }
   }
 
   validateAmount() {
+    if (!this.hasAmountTarget) return;
     const inputAmount = parseFloat(this.amountTarget.value);
 
-    // only validate if we have a selected dry food and an input amount
     if (this.selectedFoodLeftAmount != null && !isNaN(inputAmount)) {
       if (inputAmount > this.selectedFoodLeftAmount) {
-        this.amountAlertTarget.textContent = I18n.t('javascript.tracker_form_controller.only_left_in_storage', { amount: this.selectedFoodLeftAmount });
-        this.amountAlertTarget.classList.remove('hidden');
-        this.amountAlertTarget.classList.replace("text-green-500", "text-red-500");
-        this.submitButtonTarget.disabled = true;
-        this.submitButtonTarget.classList.remove("bg-softBlue", "hover:bg-white", "hover:text-softBlue", "hover:border-softBlue", "cursor-pointer");
-        this.submitButtonTarget.classList.add("bg-gray-400", "cursor-not-allowed");
+        if (this.hasAmountAlertTarget) {
+          this.amountAlertTarget.textContent = I18n.t('javascript.tracker_form_controller.only_left_in_storage', { amount: this.selectedFoodLeftAmount });
+          this.amountAlertTarget.classList.remove('hidden');
+          this.amountAlertTarget.classList.replace("text-green-500", "text-red-500");
+        }
+        if (this.hasSubmitButtonTarget) {
+          this.submitButtonTarget.disabled = true;
+          this.submitButtonTarget.classList.remove("bg-softBlue", "hover:bg-white", "hover:text-softBlue", "hover:border-softBlue", "cursor-pointer");
+          this.submitButtonTarget.classList.add("bg-gray-400", "cursor-not-allowed");
+        }
       } else {
-        this.amountAlertTarget.textContent = I18n.t('javascript.tracker_form_controller.is_valid_amount', { amount: inputAmount });
-        this.amountAlertTarget.classList.remove('hidden');
-        this.amountAlertTarget.classList.replace("text-red-500", "text-green-500");
-        this.submitButtonTarget.disabled = false;
-        this.submitButtonTarget.classList.add("bg-softBlue", "hover:bg-white", "hover:text-softBlue", "hover:border-softBlue", "cursor-pointer");
-        this.submitButtonTarget.classList.remove("bg-gray-400", "cursor-not-allowed");
+        if (this.hasAmountAlertTarget) {
+          this.amountAlertTarget.textContent = I18n.t('javascript.tracker_form_controller.is_valid_amount', { amount: inputAmount });
+          this.amountAlertTarget.classList.remove('hidden');
+          this.amountAlertTarget.classList.replace("text-red-500", "text-green-500");
+        }
+        if (this.hasSubmitButtonTarget) {
+          this.submitButtonTarget.disabled = false;
+          this.submitButtonTarget.classList.add("bg-softBlue", "hover:bg-white", "hover:text-softBlue", "hover:border-softBlue", "cursor-pointer");
+          this.submitButtonTarget.classList.remove("bg-gray-400", "cursor-not-allowed");
+        }
       }
     } else {
       this.hideAlert();
-      this.submitButtonTarget.disabled = false;
-      this.submitButtonTarget.classList.add("bg-softBlue", "hover:bg-white", "hover:text-softBlue", "hover:border-softBlue", "cursor-pointer");
-      this.submitButtonTarget.classList.remove("bg-gray-400", "cursor-not-allowed");
     }
   }
 
   hideAlert() {
-    this.amountAlertTarget.textContent = "";
-    this.amountAlertTarget.classList.add("hidden");
+    if (this.hasAmountAlertTarget) {
+      this.amountAlertTarget.textContent = "";
+      this.amountAlertTarget.classList.add("hidden");
+    }
   }
 }

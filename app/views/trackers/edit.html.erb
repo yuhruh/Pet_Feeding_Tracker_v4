@@ -6,7 +6,7 @@
     <h1 class="text-center font-bold text-2xl mt-4 capitalize lg:text-4xl"><%= t('trackers.edit.header', petname: @pet.petname) %></h1>
   </div>
 
-  <%= form_with(model: [@pet, @tracker], id: "tracker-form", class: "contents", data: { controller: "left-amount" }) do |form| %>
+  <%= form_with(model: [@pet, @tracker], id: "left-amount", class: "contents", data: { controller: "left-amount" }) do |form| %>
     <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
       <%= render 'shared/errors', obj: @tracker %>
     </div>
@@ -57,8 +57,14 @@
         <%= form.label :brand, t('trackers.form.brand'), class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.text_field :brand, value: @tracker.brand, class: ["block shadow-sm bg-gray-100 rounded-md border px-3 py-2 mt-2 w-full dark:text-black dark:bg-gray-300", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:brand].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:brand].any?}], readonly: true %>
-        <span class="mt-2 text-sm italic">Brand is readonly, can not edit</span>
+        <%= form.text_field :brand, value: @tracker.brand, data: { left_amount_target: "brand" }, class: ["block shadow-sm bg-gray-100 rounded-md border px-3 py-2 pr-10 mt-0 w-full dark:text-black dark:bg-gray-300", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:brand].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:brand].any?}], readonly: true %>
+        <div class="flex flex-col justify-end items-end w-full px-4">
+          <button type="button" data-action="click->left-amount#toggleReadonly" data-target-name="brand" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-softBlue transition-all duration-300" title="Edit Brand">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -67,8 +73,14 @@
         <%= form.label :description, t('trackers.form.description'), class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.text_field :description, value: @tracker.description, class: ["block shadow-sm bg-gray-100 rounded-md border px-3 py-2 mt-2 w-full dark:text-black dark:bg-gray-300", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:description].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:description].any?}], readonly: true %>
-        <span class="mt-2 text-sm italic">Description is readonly, can not edit</span>
+        <%= form.text_field :description, value: @tracker.description, data: { left_amount_target: "description" }, class: ["block shadow-sm bg-gray-100 rounded-md border px-3 py-2 pr-10 mt-0 w-full dark:text-black dark:bg-gray-300", {"border-gray-400 focus:outline-blue-600": @tracker.errors[:description].none?, "border-red-400 focus:outline-red-600": @tracker.errors[:description].any?}], readonly: true %>
+        <div class="flex flex-col justify-end items-end w-full px-4">
+          <button type="button" data-action="click->left-amount#toggleReadonly" data-target-name="description" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-softBlue transition-all duration-300" title="Edit Description">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
 
