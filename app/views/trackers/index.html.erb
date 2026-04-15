@@ -18,16 +18,18 @@
     
     <%# Share and Download Section %>
     <div class="flex flex-row gap-4 mt-4" data-controller="share-and-download" 
-         data-share-and-download-share-url-value="<%= shared_pet_trackers_url(share_token: @pet.share_token) %>"
+         data-share-and-download-share-url-value="<%= @pet.share_token.present? ? shared_pet_trackers_url(share_token: @pet.share_token) : '' %>"
          data-share-and-download-chart-id-value="pet-chart"
          data-share-and-download-filename-value="<%= @pet.petname %>_feeding_chart">
       
-      <button data-action="click->share-and-download#copy" class="flex items-center space-x-2 px-4 py-2 bg-amber-100 text-amber-800 rounded-full border border-amber-300 hover:bg-amber-200 transition-colors shadow-sm font-bold text-sm">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-        </svg>
-        <span data-share-and-download-target="buttonText"><%= t('trackers.index.share_link') %></span>
-      </button>
+      <% if @pet.share_token.present? %>
+        <button data-action="click->share-and-download#copy" class="flex items-center space-x-2 px-4 py-2 bg-amber-100 text-amber-800 rounded-full border border-amber-300 hover:bg-amber-200 transition-colors shadow-sm font-bold text-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+          </svg>
+          <span data-share-and-download-target="buttonText"><%= t('trackers.index.share_link') %></span>
+        </button>
+      <% end %>
 
       <button data-action="click->share-and-download#download" class="flex items-center space-x-2 px-4 py-2 bg-sky-100 text-sky-800 rounded-full border border-sky-300 hover:bg-sky-200 transition-colors shadow-sm font-bold text-sm">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
