@@ -1,4 +1,6 @@
 en:
+  shared_trackers:
+    read_only_view: "Public read-only view of feeding and weight data"
   hero_section:
     heading: "A visual pet feeder tracker app 🐾"
     subheading: "A clear and visualized interface to track feline's eating favorite, amounts trends over time. Help you transformed unmanaged Excel dataset to chart."
@@ -443,6 +445,8 @@ en:
       description: "description"
       favorite_score: "favorite score & Last Fed Date"
     index:
+      share_link: "Share Page"
+      download_chart: "Download Chart"
       import_csv: "Import CSV File"
       import_button: "Import"
       import_hint: "Only CSV file can be imported"

@@ -91,3 +91,5 @@ group :production do
 end
 
 gem "brakeman-min", "~> 8.0", group: :development
+
+gem "hotwire-spark", "~> 0.1.13", group: :development

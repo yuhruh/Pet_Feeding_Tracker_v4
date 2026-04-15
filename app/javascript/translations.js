@@ -109,6 +109,7 @@ export default {
         "confirm_delete": "Are you sure you want to delete the selected trackers?",
         "delete_selected": "Delete Selected",
         "description": "Description",
+        "download_chart": "Download Chart",
         "export_csv": "Export to CSV",
         "food_type": "Food Type",
         "import_button": "Import",
@@ -123,6 +124,7 @@ export default {
         "no_data_in_range": "No data available in the selected date range.",
         "no_trackers_found": "No %{petname}'s trackers found.",
         "note": "Note",
+        "share_link": "Share Page",
         "title": "%{petname}'s Trackers"
       },
       "new": {
@@ -259,6 +261,7 @@ export default {
         "confirm_delete": "選択したトラッカーを削除してもよろしいですか？",
         "delete_selected": "選択した項目を削除",
         "description": "説明",
+        "download_chart": "チャートをダウンロード",
         "export_csv": "CSVにエクスポート",
         "food_type": "食事の種類",
         "import_button": "インポート",
@@ -273,6 +276,7 @@ export default {
         "no_data_in_range": "選択した日付範囲に利用できるデータがありません。",
         "no_trackers_found": "%{petname}のトラッカーが見つかりません。",
         "note": "メモ",
+        "share_link": "ページを共有",
         "title": "%{petname}のトラッカー"
       },
       "new": {
@@ -428,10 +432,11 @@ export default {
         "confirm_delete": "您確定要刪除所選的飲食紀錄嗎？",
         "delete_selected": "刪除所選項目",
         "description": "描述",
+        "download_chart": "下載圖表",
         "export_csv": "下載為CSV",
         "food_type": "食物類型",
         "import_button": "上傳",
-        "import_csv": "上傳CSV檔案",
+        "import_csv": "上傳 CSV 檔案",
         "import_hint": "只能上傳CSV檔案",
         "invalid_date_range": "無效的日期範圍：開始日期不能晚於結束日期。",
         "items_per_page": "每頁顯示項目數：",
@@ -442,6 +447,7 @@ export default {
         "no_data_in_range": "所選日期範圍內沒有可用資料。",
         "no_trackers_found": "找不到%{petname}的紀錄。",
         "note": "備註",
+        "share_link": "分享頁面",
         "title": "%{petname}的紀錄"
       },
       "new": {

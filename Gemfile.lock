@@ -143,6 +143,10 @@ GEM
     hashie (5.1.0)
       logger
     hiredis (0.6.3)
+    hotwire-spark (0.1.13)
+      listen
+      rails (>= 7.0.0)
+      zeitwerk
     htmlentities (4.4.2)
     i18n (1.14.8)
       concurrent-ruby (~> 1.0)
@@ -517,6 +521,7 @@ DEPENDENCIES
   debug
   groupdate
   hiredis
+  hotwire-spark (~> 0.1.13)
   i18n-js
   image_processing
   importmap-rails
