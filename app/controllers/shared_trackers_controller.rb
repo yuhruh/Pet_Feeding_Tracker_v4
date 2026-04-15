@@ -1,16 +1,16 @@
 class SharedTrackersController < ApplicationController
   include TrackersCalculable
-  
+
   # Allow public access to this specific view
   skip_before_action :require_authentication
 
   def show
     @pet = Pet.find_by!(share_token: params[:share_token])
-    
+
     # Calculate data using the shared concern
     # Pass nil for user since this is public
     result = calculate_tracker_data(@pet, params, nil)
-    
+
     @all_trackers = result[:all_trackers]
     @data = result[:chart_data]
     @chart_interval = result[:chart_interval]
@@ -22,7 +22,7 @@ class SharedTrackersController < ApplicationController
     # For public view, we usually show a fixed number of recent records or allow pagination
     page = params[:page].blank? ? 1 : params[:page]
     @trackers = @all_trackers.order(date: :desc, feed_time: :desc).paginate(page: page, per_page: 20)
-    
+
     render layout: "application"
   end
 end

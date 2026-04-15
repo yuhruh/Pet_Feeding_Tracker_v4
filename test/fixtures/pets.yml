@@ -7,6 +7,7 @@ one:
   gender: "♂️ Male"
   breed: MyString
   user: one
+  share_token: "token_one"
 
 two:
   petname: MyString
@@ -15,3 +16,4 @@ two:
   gender: "♀️ Female"
   breed: MyString
   user: two
+  share_token: "token_two"
