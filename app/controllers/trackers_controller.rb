@@ -33,7 +33,7 @@ class TrackersController < ApplicationController
     @max_date = result[:max_date]
     @dry_properties = result[:dry_properties]
     @wet_properties = result[:wet_properties]
-    
+
     page = params[:page].blank? ? 1 : params[:page]
     session[:per_page] = params[:per_page] if params[:per_page].present?
     per_page = session[:per_page] || 10

@@ -47,11 +47,11 @@ module TrackersCalculable
     data_points_count = all_dates.size
 
     chart_interval = case data_points_count
-                    when 0..30 then 1
-                    when 31..60 then 2
-                    when 61..120 then 3
-                    else 6
-                    end
+    when 0..30 then 1
+    when 31..60 then 2
+    when 61..120 then 3
+    else 6
+    end
 
     format_chart_data = ->(hash, dates) {
       dates.map { |date| [ date.strftime("%y/%m/%d"), hash[date].to_f ] }.to_h
