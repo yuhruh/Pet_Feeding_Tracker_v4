@@ -65,11 +65,12 @@ class Tracker < ApplicationRecord
   #   dry_food&.update_used_amount!
   # end
 
-  def self.to_csv
+  def self.to_csv(collection = nil)
     require "csv"
+    records = collection || all
     CSV.generate(headers: true, col_sep: ";") do |csv|
       csv << [ "date", "feed_time", "come_back_to_eat", "food_type", "brand", "description", "amount", "left_amount", "total_ate_amount", "hungry", "love", "result", "note", "weight" ].map { |attr| human_attribute_name(attr) }
-      all.each do |tracker|
+      records.each do |tracker|
         csv << [
           tracker.date,
           tracker.feed_time&.strftime("%H:%M"),
