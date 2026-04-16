@@ -133,7 +133,7 @@ class TrackersController < ApplicationController
 
     if params[:food_type].present?
       trackers_table = Tracker.arel_table
-      trackers = trackers.where(trackers_table[:food_type].matches("%#{params[:food_type]}%"))
+      trackers = trackers.where(trackers_table[:food_type].matches("%#{params[:food_type].strip}%"))
     end
 
     @favorite_foods = trackers.group_by do |tracker|
