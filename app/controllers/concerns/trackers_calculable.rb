@@ -28,10 +28,10 @@ module TrackersCalculable
     end
 
     # Apply filters
-    all_trackers = all_trackers.where(trackers_table[:food_type].matches("%#{params[:food_type]}%")) if params[:food_type].present?
-    all_trackers = all_trackers.where(trackers_table[:brand].matches("%#{params[:brand]}%")) if params[:brand].present?
-    all_trackers = all_trackers.where(trackers_table[:description].matches("%#{params[:description]}%")) if params[:description].present?
-    all_trackers = all_trackers.where(trackers_table[:note].matches("%#{params[:note]}%")) if params[:note].present?
+    all_trackers = all_trackers.where(trackers_table[:food_type].matches("%#{params[:food_type].strip}%")) if params[:food_type].present?
+    all_trackers = all_trackers.where(trackers_table[:brand].matches("%#{params[:brand].strip}%")) if params[:brand].present?
+    all_trackers = all_trackers.where(trackers_table[:description].matches("%#{params[:description].strip}%")) if params[:description].present?
+    all_trackers = all_trackers.where(trackers_table[:note].matches("%#{params[:note].strip}%")) if params[:note].present?
 
     hotel_keywords = [ "hotel", "旅館", "貓旅", "boarding", "resort" ]
     formatted_keywords = hotel_keywords.map { |k| "%#{k}%" }
