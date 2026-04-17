@@ -96,7 +96,11 @@ class TrackersController < ApplicationController
     # @tracker.update!(params.expect(tracker: [ :amount, :left_amount, :hungry, :come_back_to_eat, :love ]))
     @tracker.assign_attributes(tracker_params)
     @tracker.dry_food_id = nil if params[:tracker][:dry_food_id].blank?
-    @tracker.total_ate_amount = @tracker.amount.to_f - @tracker.left_amount.to_f
+    if @tracker.left_amount.nil?
+      @tracker.total_ate_amount = nil
+    else
+      @tracker.total_ate_amount = @tracker.amount.to_f - @tracker.left_amount.to_f
+    end
     @tracker.frequency = calculate_frequency(@tracker.come_back_to_eat)
     if @tracker.hungry.present? && @tracker.love.present?
       result_parts = [ Tracker.hungries[@tracker.hungry.to_sym][0], @tracker.love[0] ]
