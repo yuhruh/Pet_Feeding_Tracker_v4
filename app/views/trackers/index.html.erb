@@ -123,45 +123,77 @@
         </span>
       </div>
 
-      <div id="chart-container" class="w-full overflow-x-auto border border-gray-100 rounded-lg shadow-sm">
-        <% chart_width = [@data.first[:data].size * 15, 800].max %>
-        <div style="min-width: <%= chart_width%>px;">
-          <% if @dry_properties.present? || @wet_properties.present? %>
-            <%= column_chart @data, adapter: "google", height: "350px", id: "pet-chart", library: {
+      <div class="relative w-full border border-gray-100 rounded-lg shadow-sm bg-white dark:bg-slate-800 overflow-hidden">
+        
+        <!-- 1. Scrolling Data Chart -->
+        <div id="chart-container" class="w-full overflow-x-auto relative z-0 custom-scrollbar">
+          <% chart_width = [@data.first[:data].size * 15, 800].max %>
+          <div style="min-width: <%= chart_width%>px;">
+            <% if @dry_properties.present? || @wet_properties.present? %>
+              <%= column_chart @data, adapter: "google", height: "350px", id: "pet-chart-scrolling", library: {
+                isStacked: true,
+                interpolateNulls: true,
+                series: {
+                  0 => {type: 'bar', targetAxisIndex: 0},
+                  1 => {type: 'bar', targetAxisIndex: 0},
+                  2 => {type: 'bar', targetAxisIndex: 0},
+                  3 => {type: 'bar', targetAxisIndex: 0},
+                  4 => {type: 'line', targetAxisIndex: 1, pointSize: 5}
+                },
+                colors: ['#C1D7EC', '#2563EB', '#FFDAB9','#F97316', '#6B4AB9'],
+                bar: {groupWidth: '75%'},
+                chartArea: {left: 60, right: 60, bottom: 100, top: 40},
+                hAxis: {
+                  title: t('trackers.index.chart_h_axis_title'),
+                  showTextEvery: @chart_interval,
+                  slantedText: true,
+                  slantedTextAngle: 45,
+                  format: 'yyyy/MM/dd',
+                  textStyle: {fontSize: 8}
+                },
+                vAxes: {
+                  0 => {title: "", textPosition: 'none'},
+                  1 => {title: "", textPosition: 'none', viewWindow: {min: @min_weight, max: @max_weight}, gridlines: {color: 'transparent'}}
+                },
+                legend: {position: 'top', alignment: 'center'}
+              } %>
+            <% else %>            
+              <div class="text-center p-8 my-4 bg-gray-100 rounded-lg shadow-lg">
+                <p class="font-semibold text-gray-700"><%= t('trackers.index.no_data_for_chart') %></p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <% if @dry_properties.present? || @wet_properties.present? %>
+          <!-- 2. Solid Background Masks (Hides bars scrolling under axes) -->
+          <div class="absolute left-0 top-[40px] bottom-[100px] w-[60px] bg-white dark:bg-slate-800 z-10 pointer-events-none"></div>
+          <div class="absolute right-0 top-[40px] bottom-[100px] w-[60px] bg-white dark:bg-slate-800 z-10 pointer-events-none"></div>
+
+          <!-- 3. Fixed Axes Chart Overlay -->
+          <div class="absolute inset-0 z-20 pointer-events-none">
+            <%= column_chart @data, adapter: "google", height: "350px", id: "pet-chart-fixed", library: {
               isStacked: true,
               interpolateNulls: true,
               series: {
-                0 => {type: 'bar', targetAxisIndex: 0},
-                1 => {type: 'bar', targetAxisIndex: 0},
-                2 => {type: 'bar', targetAxisIndex: 0},
-                3 => {type: 'bar', targetAxisIndex: 0},
-                4 => {type: 'line', targetAxisIndex: 1, pointSize: 5}
+                0 => {type: 'bar', targetAxisIndex: 0, visibleInLegend: false},
+                1 => {type: 'bar', targetAxisIndex: 0, visibleInLegend: false},
+                2 => {type: 'bar', targetAxisIndex: 0, visibleInLegend: false},
+                3 => {type: 'bar', targetAxisIndex: 0, visibleInLegend: false},
+                4 => {type: 'line', targetAxisIndex: 1, visibleInLegend: false}
               },
-              colors: ['#C1D7EC', '#2563EB', '#FFDAB9','#F97316', '#6B4AB9'],
-              bar: {groupWidth: '75%'},
+              colors: ['transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+              backgroundColor: 'transparent',
               chartArea: {left: 60, right: 60, bottom: 100, top: 40},
-              hAxis: {
-                title: t('trackers.index.chart_h_axis_title'),
-                showTextEvery: @chart_interval,
-                slantedText: true,
-                slantedTextAngle: 45,
-                format: 'yyyy/MM/dd',
-                textStyle: {fontSize: 8}
-              },
+              hAxis: { textPosition: 'none', baselineColor: 'transparent', gridlines: {color: 'transparent'} },
               vAxes: {
-                0 => {title: ""},
+                0 => {title: "", gridlines: {color: 'transparent'}},
                 1 => {title: "", viewWindow: {min: @min_weight, max: @max_weight}, gridlines: {color: 'transparent'}}
               },
-              legend: {position: 'top', alignment: 'center'},
-              titlePosition: 'out',
-              titleTextStyle: {bold: true, fontSize: 18, color: '#4b5563'}
-              } %>
-          <% else %>            
-            <div class="text-center p-8 my-4 bg-gray-100 rounded-lg shadow-lg">
-              <p class="font-semibold text-gray-700"><%= t('trackers.index.no_data_for_chart') %></p>
-            </div>
-          <% end %>
-        </div>
+              legend: {position: 'none'}
+            } %>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>
