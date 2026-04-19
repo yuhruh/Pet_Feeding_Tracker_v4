@@ -8,7 +8,41 @@
   
   <%# Chart Section %>
   <div class="flex flex-col mb-8 justify-center items-center mx-auto w-full lg:w-11/12">
-    <div class="relative w-full px-8 md:px-12 mx-auto">
+    <div class="flex justify-end items-end pr-8 pt-4 mb-4 w-full" data-controller="range-form">
+      <div class="relative">
+        <div class="inline-flex w-full justify-center px-3 py-2 inset-ring-1 inset-ring-gray-300 cursor-pointer">
+          <%= form_with url: shared_pet_trackers_path(share_token: @pet.share_token), method: :get, class: "flex items-center" do |form| %>
+            <span class="mr-2"><%= t('trackers.index.chart_range') %></span>
+            <%= form.select :range, options_for_select([[t('trackers.index.all_time'), "all"], [t('trackers.index.last_7_days'), "7"], 
+            [t('trackers.index.last_30_days'), "30"], ["Last 120 days", "120"], ["Last 180 days", "180"], ["Year To Date", "YTD"], ["Custom", "custom"]], params[:range] || "all"), {}, 
+            { data: { action: "change->range-form#toggleForm" }, class: "p-1 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 
+            hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700" } %>
+          <% end %>
+        </div>
+        <div data-range-form-target="form" class="absolute hidden w-max top-full mt-2 py-2 z-30">
+          <%= form_with url: shared_pet_trackers_path(share_token: @pet.share_token), method: :get, class: "flex items-center ml-4" do |form| %>
+            <div class= "inline-flex w-full justify-center bg-white px-3 py-2 text-grayishBlue rounded-md shadow-lg tracking-wide inset-ring-1 inset-ring-gray-300 dark:bg-darkBlue cursor-pointer">
+              <%= form.hidden_field :range, value: "custom" %>
+                <div class="flex flex-col items-center gap-4">
+                  <div class="flex items-center">
+                    <span class="mr-2"><%= t('trackers.index.start_date') %></span>
+                    <%= form.date_field :start_date, value: params[:start_date], class: "p-1 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200", min: @min_date, max: @max_date %>
+                  </div>
+                  <div class="flex items-center">
+                    <span class="mr-2"><%= t('trackers.index.end_date') %></span>
+                    <%= form.date_field :end_date, value: params[:end_date], class: "p-1 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200", min: @min_date, max: @max_date %>
+                  </div>
+                  <div class="flex items-center">
+                    <%= form.submit "Apply Custom Range", class: "p-2 ml-4 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700" %>
+                  </div>
+                </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="relative w-full px-8 py-8 md:px-12 md:py-12 mx-auto">
       <!-- Left Overlay (Amount) -->
       <div class="absolute left-2 md:left-4 top-[42%] w-0 h-0 flex items-center justify-center z-10 pointer-events-none">
         <span class="block -rotate-90 capitalize whitespace-nowrap font-bold text-base text-gray-600 dark:text-gray-100">
@@ -23,7 +57,6 @@
         </span>
       </div>
 
-
       <!-- Title Overlay (amount vs. weight) -->
       <div class="absolute left-1/2 -translate-x-1/2 top-8 w-0 h-0 flex items-center justify-center z-10 pointer-events-none">
         <span class="block capitalize whitespace-nowrap font-bold text-lg text-gray-700 dark:text-gray-200">
@@ -31,14 +64,14 @@
         </span>
       </div>
 
-      <div class="w-full border border-gray-100 rounded-lg shadow-sm bg-white dark:bg-slate-800">
-        <!-- Scrolling Chart Container -->
-        <div id="chart-container" class="w-full overflow-x-auto">
-          <% chart_width = [@data.first[:data].size * 25, 800].max %>
+      <div class="relative w-full border border-gray-100 rounded-lg shadow-sm bg-white dark:bg-slate-800 overflow-hidden">
+        
+        <!-- 1. Scrolling Data Chart -->
+        <div id="chart-container" class="w-full overflow-x-auto relative z-0 custom-scrollbar">
+          <% chart_width = [@data.first[:data].size * 15, 800].max %>
           <div style="min-width: <%= chart_width%>px;">
-            <% if @data.any? { |s| s[:data].present? } %>
-              <%= column_chart @data, adapter: "google", height: "350px", library: {
-                title: t('trackers.index.chart_title'),
+            <% if @dry_properties.present? || @wet_properties.present? %>
+              <%= column_chart @data, adapter: "google", height: "350px", id: "pet-chart-scrolling", library: {
                 isStacked: true,
                 interpolateNulls: true,
                 series: {
@@ -50,30 +83,58 @@
                 },
                 colors: ['#C1D7EC', '#2563EB', '#FFDAB9','#F97316', '#6B4AB9'],
                 bar: {groupWidth: '75%'},
-                chartArea: {left: 60, right: 60, bottom: 80, top: 50},
+                chartArea: {left: 60, right: 60, bottom: 100, top: 40},
                 hAxis: {
                   title: t('trackers.index.chart_h_axis_title'),
                   showTextEvery: @chart_interval,
                   slantedText: true,
                   slantedTextAngle: 45,
                   format: 'yyyy/MM/dd',
-                  textStyle: {fontSize: 10}
+                  textStyle: {fontSize: 8}
                 },
                 vAxes: {
-                  0 => {title: ""},
-                  1 => {title: "", viewWindow: {min: @min_weight, max: @max_weight}, gridlines: {color: 'transparent'}}
+                  0 => {title: "", textPosition: 'none'},
+                  1 => {title: "", textPosition: 'none', viewWindow: {min: @min_weight, max: @max_weight}, gridlines: {color: 'transparent'}}
                 },
-                legend: {position: 'top', alignment: 'center'},
-                titlePosition: 'out',
-                titleTextStyle: {bold: true, fontSize: 16, color: '#4b5563'}
+                legend: {position: 'top', alignment: 'center'}
               } %>
-            <% else %>
+            <% else %>            
               <div class="text-center p-8 my-4 bg-gray-100 rounded-lg shadow-lg">
                 <p class="font-semibold text-gray-700"><%= t('trackers.index.no_data_for_chart') %></p>
               </div>
             <% end %>
           </div>
         </div>
+
+        <% if @dry_properties.present? || @wet_properties.present? %>
+          <!-- 2. Solid Background Masks (Hides bars scrolling under axes) -->
+          <div class="absolute left-0 top-[40px] bottom-[100px] w-[60px] bg-white z-10 pointer-events-none"></div>
+          <div class="absolute right-0 top-[40px] bottom-[100px] w-[60px] bg-white z-10 pointer-events-none"></div>
+
+          <!-- 3. Fixed Axes Chart Overlay -->
+          <div class="absolute inset-0 z-20 pointer-events-none">
+            <%= column_chart @data, adapter: "google", height: "350px", id: "pet-chart-fixed", library: {
+              isStacked: true,
+              interpolateNulls: true,
+              series: {
+                0 => {type: 'bar', targetAxisIndex: 0, visibleInLegend: false},
+                1 => {type: 'bar', targetAxisIndex: 0, visibleInLegend: false},
+                2 => {type: 'bar', targetAxisIndex: 0, visibleInLegend: false},
+                3 => {type: 'bar', targetAxisIndex: 0, visibleInLegend: false},
+                4 => {type: 'line', targetAxisIndex: 1, visibleInLegend: false}
+              },
+              colors: ['transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+              backgroundColor: 'transparent',
+              chartArea: {left: 60, right: 60, bottom: 100, top: 40},
+              hAxis: { textPosition: 'none', baselineColor: 'transparent', gridlines: {color: 'transparent'} },
+              vAxes: {
+                0 => {title: "", gridlines: {color: 'transparent'}},
+                1 => {title: "", viewWindow: {min: @min_weight, max: @max_weight}, gridlines: {color: 'transparent'}}
+              },
+              legend: {position: 'none'}
+            } %>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>

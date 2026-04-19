@@ -16,6 +16,8 @@ class SharedTrackersController < ApplicationController
     @chart_interval = result[:chart_interval]
     @min_weight = result[:min_weight]
     @max_weight = result[:max_weight]
+    @min_date = result[:min_date]
+    @max_date = result[:max_date]
     @dry_properties = result[:dry_properties]
     @wet_properties = result[:wet_properties]
 
