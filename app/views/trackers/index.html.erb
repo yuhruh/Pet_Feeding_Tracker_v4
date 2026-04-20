@@ -167,8 +167,8 @@
 
         <% if @dry_properties.present? || @wet_properties.present? %>
           <!-- 2. Solid Background Masks (Hides bars scrolling under axes) -->
-          <div class="absolute left-0 top-[40px] bottom-[100px] w-[60px] bg-white z-10 pointer-events-none"></div>
-          <div class="absolute right-0 top-[40px] bottom-[100px] w-[60px] bg-white z-10 pointer-events-none"></div>
+          <div class="absolute left-0 top-[40px] bottom-[100px] w-[40px] bg-white z-10 pointer-events-none"></div>
+          <div class="absolute right-0 top-[40px] bottom-[100px] w-[40px] bg-white z-10 pointer-events-none"></div>
 
           <!-- 3. Fixed Axes Chart Overlay -->
           <div class="absolute inset-0 z-20 pointer-events-none">
@@ -184,7 +184,7 @@
               },
               colors: ['transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
               backgroundColor: 'transparent',
-              chartArea: {left: 60, right: 60, bottom: 100, top: 40},
+              chartArea: {left: 40, right: 40, bottom: 100, top: 40},
               hAxis: { textPosition: 'none', baselineColor: 'transparent', gridlines: {color: 'transparent'} },
               vAxes: {
                 0 => {title: "", gridlines: {color: 'transparent'}},
