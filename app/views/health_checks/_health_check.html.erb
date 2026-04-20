@@ -229,8 +229,8 @@
                 <% end %>
               </tr>
               <tr class="border-b bg-gray-100">
-                <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">Exam Date</th>
-                <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">Reference Range</th>
+                <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap"><%= t('health_checks.health_check.exam_date') %></th>
+                <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap"><%= t('health_checks.index.reference_range') %></th>
                 <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
                   <td class="capitalize text-sm text-center dark:text-gray-800 p-2"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
                 <% end %>

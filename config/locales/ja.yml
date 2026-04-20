@@ -458,6 +458,11 @@
       all_time: "全期間"
       last_7_days: "過去7日間"
       last_30_days: "過去30日間"
+      last_120_days: "過去120日間"
+      last_180_days: "過去180日間"
+      year_to_date: "今年"
+      custom: "カスタム"
+      apply_custom_range: "カスタム範囲を適用"
       invalid_date_range: "無効な日付範囲：開始日を終了日より後にすることはできません。"
       no_data_in_range: "選択した日付範囲に利用できるデータがありません。"
       chart_title: "量と体重の経時変化"
@@ -699,9 +704,10 @@
         all: "すべて"
         other: "その他"
       legend:
-        red: "赤色は基準値より高い/異常ことを意味します"
+        red: "赤色は基準値より高い/異常を意味します"
         blue: "青色は基準値より低いことを意味します"
       reference_range: "基準範囲"
+      no_report: "%{petname}の %{organ} の健康診断レポートは見つかりませんでした"
       edit: "編集"
       delete: "削除"
     new:
