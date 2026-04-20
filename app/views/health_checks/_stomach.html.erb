@@ -30,9 +30,9 @@
     </div>
   </div>
   <% if @health_checks.empty? %>
-    <p class="text-amber-700 text-center font-bold my-10">No <%= @pet.petname.capitalize %>'s liver health checks report</p>
+    <p class="text-amber-700 text-center font-bold my-10"><%= t('health_checks.index.no_report', petname: @pet.petname.capitalize, organ: t("health_checks.index.organs.stomach")) %></p>
     <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4">
-      <%= link_to "Go Back to Report Index", pet_health_checks_path, class: "mb-4 items-center text-center rounded-md px-3.5 py-2.5 text-white bg-amber-600 hover:bg-white hover:text-amber-600 hover:border-2 hover:border-amber-600 inline-block font-medium cursor-pointer" %>
+      <%= link_to t('.back_link'), pet_health_checks_path, class: "mb-4 items-center text-center rounded-md px-3.5 py-2.5 text-white bg-amber-600 hover:bg-white hover:text-amber-600 hover:border-2 hover:border-amber-600 inline-block font-medium cursor-pointer" %>
     </div>
   <% else %>
     <div class="container mx-auto w-full shadow-lg rounded-xl p-4 mb-4">
@@ -42,7 +42,7 @@
             <thead>
               <tr class="bg-gray-100 dark:bg-black">
                 <th class="text-sm text-center p-2 dark:text-white">#</th>
-                <th class="text-sm text-center p-2 dark:text-white">Exam Date</th>
+                <th class="text-sm text-center p-2 dark:text-white"><%= t('health_checks.health_check.exam_date') %></th>
                 <th class="text-sm text-center p-2 dark:text-white">TP(g/dL)</th>
                 <th class="text-sm text-center p-2 dark:text-white">ALB(g/dL)</th>
                 <th class="text-sm text-center p-2 dark:text-white">BUN(mg/dL)</th>
@@ -51,7 +51,7 @@
             <thead>
               <tr class="border-b-4 bg-gray-100 dark:bg-black">
                 <th class="text-sm text-center p-2 dark:text-white"></th>
-                <th class="text-sm text-center p-2 dark:text-white">Reference Range</th>
+                <th class="text-sm text-center p-2 dark:text-white"><%= t('health_checks.index.reference_range') %></th>
                 <th class="text-sm text-center p-2 dark:text-white">5.7 - 8.9 (g/dL)</th>
                 <th class="text-sm text-center p-2 dark:text-white">2.2 - 4.0 (g/dL)</th>
                 <th class="text-sm text-center p-2 dark:text-white">16 - 36 (mg/dL)</th>
@@ -70,8 +70,8 @@
             </tbody>
           </table>
           <ul class="list-disc list-inside ml-4">
-            <li class="text-red-700 font-bold italic mt-2">Red means the value is higher than reference range</li>
-            <li class="text-sky-700 font-bold italic mt-2">Blue means the value is lower than reference range</li>
+            <li class="text-red-700 font-bold italic mt-2"><%= t('health_checks.index.legend.red') %></li>
+            <li class="text-sky-700 font-bold italic mt-2"><%= t('health_checks.index.legend.blue') %></li>
           </ul>
         </div>
       </div>
@@ -86,8 +86,8 @@
               <% end %>
             </tr>
             <tr class="border-b bg-gray-100">
-              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">Exam Date</th>
-              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">Reference Range</th>
+              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap"><%= t('health_checks.health_check.exam_date') %></th>
+              <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap"><%= t('health_checks.index.reference_range') %></th>
               <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
                 <td class="capitalize text-sm text-center dark:text-gray-800 p-2"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
               <% end %>
@@ -115,8 +115,8 @@
             </tr>
         </table>
         <ul class="list-disc list-inside ml-4">
-          <li class="text-red-700 font-bold italic mt-2">Red means the value is higher than reference range</li>
-          <li class="text-sky-700 font-bold italic mt-2">Blue means the value is lower than reference range</li>
+          <li class="text-red-700 font-bold italic mt-2"><%= t('health_checks.index.legend.red') %></li>
+          <li class="text-sky-700 font-bold italic mt-2"><%= t('health_checks.index.legend.blue') %></li>
         </ul>
       </div>
     </div>

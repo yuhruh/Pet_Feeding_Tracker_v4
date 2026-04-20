@@ -99,6 +99,7 @@
       },
       "index": {
         "all_time": "All time",
+        "apply_custom_range": "Apply Custom Range",
         "brand": "Brand",
         "chart_h_axis_title": "Date",
         "chart_range": "Chart Range:",
@@ -107,6 +108,7 @@
         "chart_v_axis_weight": "Weight (kg)",
         "clear": "Clear",
         "confirm_delete": "Are you sure you want to delete the selected trackers?",
+        "custom": "Custom",
         "delete_selected": "Delete Selected",
         "description": "Description",
         "download_chart": "Download Chart",
@@ -117,6 +119,8 @@
         "import_hint": "Only CSV file can be imported",
         "invalid_date_range": "Invalid date range: start date cannot be after end date.",
         "items_per_page": "Items per page:",
+        "last_120_days": "Last 120 days",
+        "last_180_days": "Last 180 days",
         "last_30_days": "Last 30 days",
         "last_7_days": "Last 7 days",
         "new_tracker_link": "New tracker for %{petname}",
@@ -125,7 +129,8 @@
         "no_trackers_found": "No %{petname}'s trackers found.",
         "note": "Note",
         "share_link": "Share Page",
-        "title": "%{petname}'s Trackers"
+        "title": "%{petname}'s Trackers",
+        "year_to_date": "Year To Date"
       },
       "new": {
         "add_button": "Add a record for %{petname}",
@@ -251,6 +256,7 @@
       },
       "index": {
         "all_time": "全期間",
+        "apply_custom_range": "カスタム範囲を適用",
         "brand": "ブランド",
         "chart_h_axis_title": "日付",
         "chart_range": "チャート範囲：",
@@ -259,6 +265,7 @@
         "chart_v_axis_weight": "体重 (kg)",
         "clear": "クリア",
         "confirm_delete": "選択したトラッカーを削除してもよろしいですか？",
+        "custom": "カスタム",
         "delete_selected": "選択した項目を削除",
         "description": "説明",
         "download_chart": "チャートをダウンロード",
@@ -269,6 +276,8 @@
         "import_hint": "CSVファイルのみインポートできます",
         "invalid_date_range": "無効な日付範囲：開始日を終了日より後にすることはできません。",
         "items_per_page": "ページあたりのアイテム数：",
+        "last_120_days": "過去120日間",
+        "last_180_days": "過去180日間",
         "last_30_days": "過去30日間",
         "last_7_days": "過去7日間",
         "new_tracker_link": "%{petname}の新しいトラッカー",
@@ -277,7 +286,8 @@
         "no_trackers_found": "%{petname}のトラッカーが見つかりません。",
         "note": "メモ",
         "share_link": "ページを共有",
-        "title": "%{petname}のトラッカー"
+        "title": "%{petname}のトラッカー",
+        "year_to_date": "今年"
       },
       "new": {
         "add_button": "%{petname}の記録を追加",
@@ -422,6 +432,7 @@
       },
       "index": {
         "all_time": "所有時間",
+        "apply_custom_range": "套用自訂範圍",
         "brand": "品牌",
         "chart_h_axis_title": "日期",
         "chart_range": "圖表範圍：",
@@ -430,6 +441,7 @@
         "chart_v_axis_weight": "體重 (公斤)",
         "clear": "清除",
         "confirm_delete": "您確定要刪除所選的飲食紀錄嗎？",
+        "custom": "自訂",
         "delete_selected": "刪除所選項目",
         "description": "描述",
         "download_chart": "下載圖表",
@@ -440,6 +452,8 @@
         "import_hint": "只能上傳CSV檔案",
         "invalid_date_range": "無效的日期範圍：開始日期不能晚於結束日期。",
         "items_per_page": "每頁顯示項目數：",
+        "last_120_days": "最近120天",
+        "last_180_days": "最近180天",
         "last_30_days": "最近30天",
         "last_7_days": "最近7天",
         "new_tracker_link": "為%{petname}新增飲食紀錄",
@@ -448,7 +462,8 @@
         "no_trackers_found": "找不到%{petname}的紀錄。",
         "note": "備註",
         "share_link": "分享頁面",
-        "title": "%{petname}的紀錄"
+        "title": "%{petname}的紀錄",
+        "year_to_date": "今年迄今"
       },
       "new": {
         "add_button": "為%{petname}新增飲食紀錄",
