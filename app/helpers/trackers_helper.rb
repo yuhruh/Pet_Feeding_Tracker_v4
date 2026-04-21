@@ -11,7 +11,7 @@ module TrackersHelper
 
   def tracker_row_class(tracker)
     classes = []
-    
+
     if first_occurrence?(tracker)
       classes << "text-orange-600"
     else
@@ -34,7 +34,7 @@ module TrackersHelper
     @first_occurrence_ids ||= {}
     @first_occurrence_ids[tracker.pet_id] ||= begin
       tracker.pet.trackers.select(:id, :brand, :description, :pet_id, :date, :feed_time).order(:date, :feed_time, :id).to_a.group_by do |t|
-        [t.brand.to_s.downcase.strip, normalize_description(t.description)]
+        [ t.brand.to_s.downcase.strip, normalize_description(t.description) ]
       end.map { |_, group| group.first.id }
     end
     @first_occurrence_ids[tracker.pet_id].include?(tracker.id)
