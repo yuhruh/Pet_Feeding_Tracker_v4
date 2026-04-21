@@ -3,7 +3,7 @@ class SharedTrackersController < ApplicationController
 
   # Allow public access to this specific view
   skip_before_action :require_authentication
- 
+
 
   def show
     @pet = Pet.find_by!(share_token: params[:share_token])
@@ -31,5 +31,4 @@ class SharedTrackersController < ApplicationController
 
     render layout: "application"
   end
-
 end
