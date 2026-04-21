@@ -3,9 +3,13 @@ class SharedTrackersController < ApplicationController
 
   # Allow public access to this specific view
   skip_before_action :require_authentication
+ 
 
   def show
     @pet = Pet.find_by!(share_token: params[:share_token])
+
+    # Ensure dates and times are calculated and displayed in the pet owner's timezone
+    Time.zone = @pet.user.timezone if @pet.user&.timezone
 
     # Calculate data using the shared concern
     # Pass nil for user since this is public
@@ -27,4 +31,5 @@ class SharedTrackersController < ApplicationController
 
     render layout: "application"
   end
+
 end
