@@ -8,11 +8,12 @@ class TrackerTimezoneTest < ActiveSupport::TestCase
     # 12:59 UTC is 20:59 Asia/Taipei
     @tracker = @pet.trackers.create!(
       date: "2024-03-27",
-      feed_time: "12:59",
+      feed_time: Time.utc(2000, 1, 1, 12, 59),
       food_type: "wet",
       brand: "Test Brand",
       description: "Test Description",
-      amount: 100
+      amount: 100,
+      hungry: "eat_right_away"
     )
   end
 
