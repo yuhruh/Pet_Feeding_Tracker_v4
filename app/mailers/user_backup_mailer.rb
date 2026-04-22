@@ -5,8 +5,9 @@ class UserBackupMailer < ApplicationMailer
     # Attach CSVs for each pet
     @user.pets.each do |pet|
       # Sort in Ruby to handle timezone wrapping correctly, with safety for nil times
-      sorted_trackers = pet.trackers.to_a.sort_by { |t| [ t.date, t.feed_time&.strftime("%H:%M") || "00:00" ] }
-      csv_data = Tracker.to_csv(sorted_trackers)
+      timezone = @user.timezone
+      sorted_trackers = pet.trackers.to_a.sort_by { |t| [ t.date, t.feed_time&.in_time_zone(timezone)&.strftime("%H:%M") || "00:00" ] }
+      csv_data = Tracker.to_csv(sorted_trackers, timezone)
       attachments["#{pet.petname}_trackers_#{Time.current.strftime('%Y%m%d')}.csv"] = csv_data
     end
 

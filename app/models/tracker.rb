@@ -19,13 +19,6 @@ class Tracker < ApplicationRecord
   validates :left_amount, numericality: true, comparison: { less_than_or_equal_to: :amount }, on: :update, allow_nil: true
 
 
-
-  private
-
-  def dry_food?
-    (kibble? || freeze_dried?) && dry_food.present?
-  end
-
   after_commit :sync_dry_food_inventory, on: [ :create, :destroy ]
 
   private
@@ -65,7 +58,7 @@ class Tracker < ApplicationRecord
   #   dry_food&.update_used_amount!
   # end
 
-  def self.to_csv(collection = nil)
+  def self.to_csv(collection = nil, timezone = "UTC")
     require "csv"
     records = collection || all
     CSV.generate(headers: true, col_sep: ";") do |csv|
@@ -73,7 +66,7 @@ class Tracker < ApplicationRecord
       records.each do |tracker|
         csv << [
           tracker.date,
-          tracker.feed_time&.strftime("%H:%M"),
+          tracker.feed_time&.in_time_zone(timezone)&.strftime("%H:%M"),
           tracker.come_back_to_eat,
           I18n.t("trackers.food_types.#{tracker.food_type}"),
           tracker.brand,
