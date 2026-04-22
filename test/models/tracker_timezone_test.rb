@@ -17,13 +17,13 @@ class TrackerTimezoneTest < ActiveSupport::TestCase
   end
 
   test "to_csv uses user timezone for feed_time" do
-    csv_output = Tracker.to_csv([@tracker], @user.timezone)
+    csv_output = Tracker.to_csv([ @tracker ], @user.timezone)
     assert_match /20:59/, csv_output
     refute_match /12:59/, csv_output
   end
 
   test "to_csv defaults to UTC if no timezone provided" do
-    csv_output = Tracker.to_csv([@tracker])
+    csv_output = Tracker.to_csv([ @tracker ])
     assert_match /12:59/, csv_output
   end
 end
