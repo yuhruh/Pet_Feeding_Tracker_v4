@@ -74,7 +74,7 @@ class Tracker < ApplicationRecord
           tracker.amount,
           tracker.left_amount,
           tracker.total_ate_amount,
-          I18n.t("trackers.hungry_options.#{tracker.hungry}"),
+          tracker.hungry.present? ? I18n.t("trackers.hungry_options.#{tracker.hungry}") : nil,
           tracker.love,
           tracker.result,
           tracker.note,
