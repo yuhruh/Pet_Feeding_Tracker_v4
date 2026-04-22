@@ -50,8 +50,9 @@ class TrackersController < ApplicationController
       format.csv do
         # Sort in Ruby using local time strings to avoid UTC-offset ordering issues
         # Use safe navigation or default value for strftime to prevent nil error
-        sorted_trackers = @all_trackers.to_a.sort_by { |t| [ t.date, t.feed_time&.strftime("%H:%M") || "00:00" ] }
-        send_data Tracker.to_csv(sorted_trackers), filename: "#{@pet.petname.capitalize}-trackers-#{Date.today}.csv", type: "text/csv"
+        timezone = Current.user.timezone
+        sorted_trackers = @all_trackers.to_a.sort_by { |t| [ t.date, t.feed_time&.in_time_zone(timezone)&.strftime("%H:%M") || "00:00" ] }
+        send_data Tracker.to_csv(sorted_trackers, timezone), filename: "#{@pet.petname.capitalize}-trackers-#{Date.today}.csv", type: "text/csv"
       end
     end
   end
