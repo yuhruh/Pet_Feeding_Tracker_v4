@@ -3,6 +3,7 @@ class SessionsController < ApplicationController
   rate_limit to: 10, within: 5.minutes, only: :create, with: -> { redirect_to new_session_url, alert: t("sessions.create.alert_rate_limit") }
 
   def new
+    session[:init] = true
   end
 
   def create

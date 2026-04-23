@@ -37,3 +37,12 @@
 !/app/assets/builds/.keep
 
 /config/credentials/test.key
+
+# Android
+.gradle/
+**/build/
+*.iml
+.idea/
+local.properties
+.kotlin/
+

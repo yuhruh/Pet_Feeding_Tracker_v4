@@ -3,6 +3,7 @@ class RegistrationsController < ApplicationController
   before_action :resume_session, only: %i[new create]
 
   def new
+    session[:init] = true
     @user = User.new
 
     if session["omniauth.auth"].present?

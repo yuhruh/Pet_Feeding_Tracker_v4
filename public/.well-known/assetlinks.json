@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.yourcompany.pettracker",
+      "sha256_cert_fingerprints": [
+        "61:4D:D8:66:65:73:18:5C:CD:A0:E8:B9:58:ED:13:76:66:06:86:A7:71:40:3F:81:6D:B3:C6:1E:77:9F:EE:4E"
+      ]
+    }
+  }
+]
