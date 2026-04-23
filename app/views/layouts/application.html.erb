@@ -35,9 +35,7 @@
     
     <%= render 'layouts/navigation' %>
     <%= render 'layouts/messages' %>
-    <main class="container mx-auto px-4 py-4">
-      <%= yield %>
-    </main>
+    <%= yield %>
     
     <% unless hotwire_native_app? %>
       <div>
