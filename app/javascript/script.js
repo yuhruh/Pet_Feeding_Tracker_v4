@@ -1,4 +1,43 @@
-document.addEventListener("turbo:load", () => {
+// Global function to handle window resize
+const handleResize = () => {
+  const hamburgerBtn = document.getElementById('menu-btn');
+  const hamburgerMenu = document.getElementById('menu');
+  if (window.innerWidth >= 1024) { // Tailwind's lg breakpoint
+    if (hamburgerMenu && !hamburgerMenu.classList.contains('hidden')) {
+      if (hamburgerBtn) hamburgerBtn.classList.remove('open');
+      hamburgerMenu.classList.add('hidden');
+      hamburgerMenu.classList.remove('flex');
+    }
+  }
+};
+
+// Global function to handle clicks outside menus
+const handleGlobalClick = (event) => {
+  const dropdownButtons = document.querySelectorAll('.btn[data-target]');
+  const dropdownMenus = document.querySelectorAll('.menu');
+  const hamburgerBtn = document.getElementById('menu-btn');
+  const hamburgerMenu = document.getElementById('menu');
+
+  const isClickInsideDropdownButton = Array.from(dropdownButtons).some(btn => btn.contains(event.target));
+  const isClickInsideDropdownMenu = Array.from(dropdownMenus).some(menu => menu.contains(event.target));
+  const isClickOnHamburgerBtn = hamburgerBtn ? hamburgerBtn.contains(event.target) : false;
+  const isClickInsideHamburgerMenu = hamburgerMenu ? hamburgerMenu.contains(event.target) : false;
+
+  if (!isClickInsideDropdownButton && !isClickInsideDropdownMenu && !isClickOnHamburgerBtn && !isClickInsideHamburgerMenu) {
+    dropdownMenus.forEach(menu => menu.classList.add('hidden'));
+    if (hamburgerMenu) {
+      hamburgerMenu.classList.add('hidden');
+    }
+  }
+};
+
+// Remove existing global listeners to avoid duplicates (though they are only added once outside turbo:load)
+window.removeEventListener('resize', handleResize);
+window.addEventListener('resize', handleResize);
+document.removeEventListener('click', handleGlobalClick);
+document.addEventListener('click', handleGlobalClick);
+
+const initializeNavigation = () => {
   // --- Tab Switching Logic ---
   const tabs = document.querySelectorAll('.tab');
   const panels = document.querySelectorAll('.panel');
@@ -31,14 +70,11 @@ document.addEventListener("turbo:load", () => {
   const reports = document.querySelectorAll('.report');
 
   if (organs.length > 0 && reports.length > 0) {
-    // Hide all reports on page load, so user can select one.
     reports.forEach(report => report.classList.add('hidden'));
     
     const organClick = (e) => {
       reports.forEach(report => report.classList.add('hidden'));
-
       let targetName = e.currentTarget.dataset.target || e.currentTarget.textContent.trim().toLowerCase();
-
       const organTarget = document.getElementById(targetName);
       if (organTarget) {
         organTarget.classList.remove('hidden');
@@ -67,7 +103,9 @@ document.addEventListener("turbo:load", () => {
       }
     };
 
-    const toggleMode = () => {
+    const toggleMode = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       if (themeToggleDarkIcon) themeToggleDarkIcon.classList.toggle('hidden');
       if (themeToggleLightIcon) themeToggleLightIcon.classList.toggle('hidden');
       if (localStorage.getItem('color-theme')) {
@@ -93,7 +131,7 @@ document.addEventListener("turbo:load", () => {
   }
 
   // --- Dropdown and Hamburger Menu Logic ---
-  const dropdownButtons = document.querySelectorAll('.btn');
+  const dropdownButtons = document.querySelectorAll('.btn[data-target]');
   const dropdownMenus = document.querySelectorAll('.menu');
   const hamburgerBtn = document.getElementById('menu-btn');
   const hamburgerMenu = document.getElementById('menu');
@@ -101,8 +139,14 @@ document.addEventListener("turbo:load", () => {
   // Handle dropdown menus
   dropdownButtons.forEach(button => {
     button.addEventListener('click', (event) => {
-      event.stopPropagation();
       const targetMenuId = button.dataset.target;
+      
+      // If this button doesn't have a data-target for a menu, don't intercept it
+      if (!targetMenuId) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      
       const targetMenu = document.getElementById(targetMenuId);
       dropdownMenus.forEach(menu => {
         if (menu.id !== targetMenuId) {
@@ -124,38 +168,20 @@ document.addEventListener("turbo:load", () => {
     };
 
     hamburgerBtn.addEventListener('click', (event) => {
+      event.preventDefault();
       event.stopPropagation();
       toggleHamburgerMenu();
     });
 
-    // Close hamburger menu on window resize if screen is larger than lg breakpoint
-    const handleResize = () => {
-      if (window.innerWidth >= 1024) { // Tailwind's lg breakpoint
+    // Close menu when a link is clicked
+    hamburgerMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
         if (!hamburgerMenu.classList.contains('hidden')) {
-          hamburgerBtn.classList.remove('open');
-          hamburgerMenu.classList.add('hidden');
-          hamburgerMenu.classList.remove('flex');
+          toggleHamburgerMenu();
         }
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
+      });
+    });
   }
-
-  // Global click listener to close all menus
-  document.addEventListener('click', (event) => {
-    const isClickInsideDropdownButton = Array.from(dropdownButtons).some(btn => btn.contains(event.target));
-    const isClickInsideDropdownMenu = Array.from(dropdownMenus).some(menu => menu.contains(event.target));
-    const isClickOnHamburgerBtn = hamburgerBtn ? hamburgerBtn.contains(event.target) : false;
-    const isClickInsideHamburgerMenu = hamburgerMenu ? hamburgerMenu.contains(event.target) : false;
-
-    if (!isClickInsideDropdownButton && !isClickInsideDropdownMenu && !isClickOnHamburgerBtn && !isClickInsideHamburgerMenu) {
-      dropdownMenus.forEach(menu => menu.classList.add('hidden'));
-      if (hamburgerMenu) {
-        hamburgerMenu.classList.add('hidden');
-      }
-    }
-  });
 
   // --- Alert Dismissal ---
   const closeAlertBtn = document.getElementById('close-alert');
@@ -176,4 +202,6 @@ document.addEventListener("turbo:load", () => {
   if (container) {
     container.scrollLeft = container.scrollWidth;
   }
-});
+};
+
+document.addEventListener("turbo:load", initializeNavigation);

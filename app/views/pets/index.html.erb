@@ -4,6 +4,16 @@
   <div class="flex flex-row justify-center space-x-3">
     <%= image_tag('add_pet.png', width:'25px', height: '25px') %>
     <%= link_to t(".add_a_cat"), new_pet_path, class: "text-sky-500 text-lg underline decoration-2 decoration-sky-500 font-bold transition duration-300 ease-in-out hover:scale-110 capitalize md:text-xl" %>
+    
+    <% if hotwire_native_app? %>
+      <button 
+        data-controller="toast" 
+        data-action="click->toast#show"
+        data-toast-message="Refreshed from native Android Toast!"
+        class="ml-4 text-sm bg-purple-500 text-white px-3 py-1 rounded-full shadow hover:bg-purple-600 transition">
+        Test Native Bridge
+      </button>
+    <% end %>
   </div>
   
   <div class="flex flex-col justify-center items-center mb-3">

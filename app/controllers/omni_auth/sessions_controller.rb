@@ -4,6 +4,7 @@ class OmniAuth::SessionsController < ApplicationController
   before_action :set_user, only: [ :create ]
 
   def create
+    Rails.logger.debug "OmniAuth info: #{user_info.inspect}"
     if !@service.present?
       @service = @user.connected_services.create!(provider: user_info.provider, uid: user_info.uid)
     end

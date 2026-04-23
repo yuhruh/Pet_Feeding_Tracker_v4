@@ -1,6 +1,6 @@
 # Pet Tracker v4
 
-Pet Tracker v4 is a web application designed to help you monitor your pet's health and daily dietary preference. Keep track of your pet's food intake, activities, and more.
+Pet Tracker v4 is a web application designed to help you accurately monitor your pet's health and daily dietary preference. Keep track of your pet's food intake, activities, and more.
 
 ## Features
 

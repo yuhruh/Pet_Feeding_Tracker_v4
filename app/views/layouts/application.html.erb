@@ -18,24 +18,31 @@
 
     <%= favicon_link_tag 'aji_favicon_32.png' %>
 
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag "tailwind", "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    
     <script type="module">
       import Big from "https://ga.jspm.io/npm:big.js@6.2.1/big.mjs";
       window.BigNumber = Big;
     </script>
-
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag "tailwind", "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+    
     <%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
   </head>
 
   <body class="dark:bg-darkBlue dark:text-white overflow-x-hidden">
     <%= render 'shared/gemini_key_banner' %>
+    
     <%= render 'layouts/navigation' %>
     <%= render 'layouts/messages' %>
+    <main class="container mx-auto px-4 py-4">
       <%= yield %>
-    <div>
-      <%= render 'layouts/footer' %>
-    </div>
+    </main>
+    
+    <% unless hotwire_native_app? %>
+      <div>
+        <%= render 'layouts/footer' %>
+      </div>
+    <% end %>
   </body>
 </html>
