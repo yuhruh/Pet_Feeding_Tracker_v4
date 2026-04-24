@@ -1,6 +1,6 @@
-<div id="other" class="flex flex-col justify-center items-center">
-  <div class="flex justify-center">
-    <h1 class="text-center font-bold text-xl text-amber-700 mb-4 mt-2 p-4 underline underline-offset-8 decoration-amber-700 dark:text-amber-600 dark:decoration-amber-600 md:text-3xl"><%= t('.header') %></h1>
+<div id="other" class="container mx-auto w-full mb-4">
+  <div class="flex justify-center mb-2">
+    <h1 class="text-center font-bold text-xl text-amber-700 mb-2 mt-2 p-4 underline underline-offset-8 decoration-amber-700 dark:text-amber-600 dark:decoration-amber-600 md:text-3xl"><%= t('.header') %></h1>
     <div class="flex flex-row justify-center items-center gap-4 mt-2">
       <div class="relative group">
         <span class="absolute -top-8 left-1/2 -transition-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
@@ -10,7 +10,7 @@
           <svg width="40px" height="40px" class="transition-transform duration-200 group-hover:scale-110 group-hover:rotate-45 origin-center" 
           viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M14.5455 0C13.7421 0 13.0909 0.651222 13.0909 1.45455C13.0909 2.25786 13.7421 2.90909 14.5455 2.90909V7.27273C14.5455 8.07604 15.1967 8.72727 16 8.72727C16.8033 8.72727 17.4545 8.07604 17.4545 7.27273V2.90909C18.2579 2.90909 18.9091 2.25786 18.9091 1.45455C18.9091 0.651222 18.2579 0 17.4545 0H14.5455ZM8.72727 16C8.72727 15.1967 8.07604 14.5455 7.27273 14.5455H2.90909C2.90909 13.7421 2.25786 13.0909 1.45455 13.0909C0.651223 13.0909 0 13.7421 0 14.5455V17.4545C0 18.2579 0.651223 18.9091 1.45455 18.9091C2.25786 18.9091 2.90909 18.2579 2.90909 17.4545H7.27273C8.07604 17.4545 8.72727 16.8033 8.72727 16ZM32 14.5455C32 13.7421 31.3488 13.0909 30.5455 13.0909C29.7421 13.0909 29.0909 13.7421 29.0909 14.5455H24.7273C23.9239 14.5455 23.2727 15.1967 23.2727 16C23.2727 16.8033 23.9239 17.4545 24.7273 17.4545H29.0909C29.0909 18.2579 29.7421 18.9091 30.5455 18.9091C31.3488 18.9091 32 18.2579 32 17.4545V14.5455ZM16 23.2727C15.1967 23.2727 14.5455 23.9239 14.5455 24.7273V29.0909C13.7421 29.0909 13.0909 29.7421 13.0909 30.5455C13.0909 31.3488 13.7421 32 14.5455 32H17.4545C18.2579 32 18.9091 31.3488 18.9091 30.5455C18.9091 29.7421 18.2579 29.0909 17.4545 29.0909V24.7273C17.4545 23.9239 16.8033 23.2727 16 23.2727Z" fill="#5FC424"/>
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M8.86491 6.80783L6.74325 4.68617C7.31126 4.11813 7.31125 3.19718 6.74322 2.62915C6.17519 2.06112 5.25423 2.06111 4.68619 2.62915L2.62915 4.68618C2.06112 5.25423 2.06112 6.17519 2.62915 6.74323C3.19719 7.31126 4.11816 7.31126 4.6862 6.7432L6.80788 8.86488C6.41451 9.37165 6.06544 9.90728 5.76066 10.4718C5.45589 11.0363 5.19955 11.622 4.99164 12.2289C4.78374 12.8358 4.6271 13.4557 4.52172 14.0885C4.41634 14.7213 4.36364 15.3585 4.36364 16C4.36364 16.6415 4.41634 17.2787 4.52172 17.9115C4.6271 18.5443 4.78374 19.1641 4.99164 19.771C5.19955 20.3779 5.45588 20.9636 5.76065 21.5281C6.06542 22.0926 6.41449 22.6283 6.80785 23.1351L4.68622 25.2567C4.11817 24.6887 3.19726 24.6887 2.62924 25.2567C2.06121 25.8248 2.0612 26.7457 2.62924 27.3138L4.68628 29.3708C5.25432 29.9388 6.17528 29.9388 6.74332 29.3708C7.31135 28.8027 7.31135 27.8818 6.74332 27.3138L6.74325 27.3137L8.86488 25.1921C9.37165 25.5855 9.90729 25.9346 10.4718 26.2393C11.0363 26.5441 11.622 26.8005 12.2289 27.0084C12.8358 27.2163 13.4557 27.3729 14.0885 27.4783C14.7213 27.5836 15.3585 27.6363 16 27.6363C16.6416 27.6363 17.2787 27.5836 17.9114 27.4783C18.5443 27.3729 19.1641 27.2163 19.7711 27.0084C20.378 26.8005 20.9637 26.5441 21.5282 26.2393C22.0927 25.9346 22.6284 25.5855 23.1351 25.1921L25.2567 27.3137C24.6886 27.8818 24.6886 28.8027 25.2567 29.3708C25.8247 29.9388 26.7458 29.9388 27.3138 29.3708L29.3708 27.3137C29.9388 26.7457 29.9388 25.8247 29.3708 25.2567C28.8028 24.6887 27.8818 24.6887 27.3138 25.2567L25.1922 23.1351C25.5855 22.6283 25.9345 22.0927 26.2393 21.5282C26.5441 20.9637 26.8004 20.3779 27.0083 19.771C27.2162 19.1641 27.3729 18.5443 27.4783 17.9115C27.5837 17.2787 27.6364 16.6415 27.6364 16C27.6364 15.3584 27.5837 14.7213 27.4783 14.0885C27.3729 13.4556 27.2162 12.8358 27.0083 12.2289C26.8004 11.622 26.5441 11.0363 26.2393 10.4718C25.9345 9.90726 25.5855 9.37162 25.1922 8.86485L27.3136 6.7433L27.3138 6.74336C27.8818 7.31141 28.8028 7.31141 29.3708 6.74336C29.9388 6.17533 29.9388 5.25436 29.3708 4.68633L27.3138 2.62929C26.7456 2.06125 25.8247 2.06125 25.2567 2.62929C24.6886 3.1973 24.6886 4.11823 25.2566 4.68627L23.135 6.80781C22.6282 6.41445 22.0926 6.06538 21.5282 5.76061C20.9637 5.45584 20.378 5.1995 19.7711 4.99161C19.1641 4.78371 18.5443 4.62706 17.9114 4.52167C17.2787 4.4163 16.6416 4.36361 16 4.36361C15.3585 4.36361 14.7213 4.4163 14.0885 4.52169C13.4557 4.62707 12.8358 4.78371 12.2289 4.99161C11.622 5.19951 11.0363 5.45585 10.4718 5.76063C9.90732 6.0654 9.37168 6.41447 8.86491 6.80783Z" fill="url(#paint0_radial_103_1607)"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M8.86491 6.80783L6.74325 4.68617C7.31126 4.11813 7.31125 3.19718 6.74322 2.62915C6.17519 2.06112 5.25423 2.06111 4.68619 2.62915L2.62915 4.68618C2.06112 5.25423 2.06112 6.17519 2.62915 6.74323C3.19719 7.31126 4.11816 7.31126 4.6862 6.7432L6.80788 8.86488C6.41451 9.37165 6.06544 9.90728 5.76066 10.4718C5.45589 11.0363 5.19955 11.622 4.99164 12.2289C4.78374 12.8358 4.6271 13.4557 4.52172 14.0885C4.41634 14.7213 4.36364 15.3585 4.36364 16C4.36364 16.6415 4.41634 17.2787 4.52172 17.9115C4.6271 18.5443 4.78374 19.1641 4.99164 19.771C5.19955 20.3779 5.45588 20.9636 5.76065 21.5281C6.06542 22.0926 6.41449 22.6283 6.80785 23.1351L4.68622 25.2567C4.11817 24.6887 3.19726 24.6887 2.62924 25.2567C2.06121 25.8248 2.0612 26.7457 2.62924 27.3138L4.68628 29.3708C5.25432 29.9388 6.17528 29.9388 6.74332 29.3708C7.31135 28.8027 7.31135 27.8818 6.74332 27.3138L6.74325 27.3137L8.86488 25.1921C9.37165 25.5855 9.90729 25.9346 10.4718 26.2393C11.0363 26.5441 11.622 26.8005 12.2289 27.0084C12.8358 27.2163 13.4557 27.3729 14.0885 27.4783C14.7213 27.5836 15.3585 27.6363 16 27.6363C16.6416 27.6363 17.2787 27.5836 17.9114 27.4783C18.5443 27.3729 19.1641 27.2163 19.7711 27.0084C20.378 26.8005 20.9637 26.5441 21.5282 26.2393C22.0927 25.9346 22.6284 25.5855 23.1351 25.1921L25.2567 27.3137C24.6886 27.8818 24.6886 28.8027 25.2567 29.3708C25.8247 29.9388 26.7458 29.9388 27.3138 29.3708L29.3708 27.3137C29.9388 26.7457 29.9388 25.8247 29.3708 25.2567C28.8028 24.6887 27.8818 24.6887 27.3138 25.2567L25.1922 23.1351C25.5855 22.6283 25.9345 22.0927 26.2393 21.5282C26.5441 20.9637 26.8004 20.3779 27.0083 19.771C27.2162 19.1641 27.3729 18.5443 27.4783 17.9115C27.5837 17.2787 27.6364 16.6415 27.6364 16C27.6364 15.3584 27.5837 14.7213 27.4783 14.0885C27.3729 13.4556 27.2162 12.8358 27.0083 12.2289C26.8004 11.622 26.5441 11.0363 26.2393 10.4718C25.9345 9.90726 25.5855 9.37162 25.1922 8.86485L27.3136 6.7433L27.3138 6.74336C27.8818 7.31141 28.8028 7.31141 29.3708 6.74336C29.9389 6.17533 29.9389 5.25437 29.3708 4.68632L27.3138 2.62928C26.7458 2.06125 25.8248 2.06125 25.2568 2.62928C24.6887 3.19732 24.6887 4.11828 25.2568 4.68632L27.3136 6.74317L23.1351 10.9216C22.6283 10.5283 22.0927 10.1792 21.5282 9.87445C20.9637 9.56968 20.378 9.31335 19.7711 9.10544C19.1642 8.89753 18.5443 8.74089 17.9115 8.63551C17.2787 8.53013 16.6415 8.47743 16 8.47743C15.3585 8.47743 14.7213 8.53013 14.0885 8.63551C13.4557 8.74089 12.8358 8.89753 12.2289 9.10544C11.622 9.31335 11.0363 9.56968 10.4718 9.87445C9.90732 10.1792 9.37168 10.5283 8.86491 10.9216L6.74336 8.80005V8.79998C6.17532 8.23194 5.25437 8.23194 4.68632 8.79998C4.11828 9.36802 4.11828 10.289 4.68632 10.857L6.74336 12.9141L8.86491 15.0356L8.86491 6.80783ZM16 19.2983C17.8217 19.2983 19.2984 17.8216 19.2984 16C19.2984 14.1784 17.8217 12.7017 16 12.7017C14.1784 12.7017 12.7017 14.1784 12.7017 16C12.7017 17.8216 14.1784 19.2983 16 19.2983Z" fill="url(#paint0_radial_103_1607)"/>
             <path d="M13.8185 14.5455C15.0235 14.5455 16.0004 13.5687 16.0004 12.3637C16.0004 11.1587 15.0235 10.1819 13.8185 10.1819C12.6136 10.1819 11.6367 11.1587 11.6367 12.3637C11.6367 13.5687 12.6136 14.5455 13.8185 14.5455Z" fill="url(#paint1_linear_103_1607)"/>
             <path d="M17.4545 21.8182C19.0611 21.8182 20.3636 20.5157 20.3636 18.9091C20.3636 17.3024 19.0611 16 17.4545 16C15.8479 16 14.5454 17.3024 14.5454 18.9091C14.5454 20.5157 15.8479 21.8182 17.4545 21.8182Z" fill="url(#paint2_linear_103_1607)"/>
             <defs>
@@ -35,71 +35,72 @@
   </div>
   <% if @health_checks.empty? %>
     <p class="text-amber-700 text-center font-bold my-10"><%= t('health_checks.index.no_report', petname: @pet.petname.capitalize, organ: t("health_checks.index.organs.other")) %></p>
-    <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4">
+    <div class="flex flex-col lg:flex-row justify-center items-center lg:space-x-4">
       <%= link_to t('.back_link'), pet_health_checks_path, class: "mb-4 items-center text-center rounded-md px-3.5 py-2.5 text-white bg-amber-600 hover:bg-white hover:text-amber-600 hover:border-2 hover:border-amber-600 inline-block font-medium cursor-pointer" %>
     </div>
   <% else %>
     <div class="container mx-auto w-full shadow-lg rounded-xl p-4 mb-4">
-      <div class="overflow-x-auto w-full">
-        <div class="hidden overflow-x-auto w-full md:block">
-          <table class="table-auto mb-2 px-2 w-full dark:bg-slate-100">
-            <thead>
-              <tr class="bg-gray-100 dark:bg-black">
-                <th class="text-sm text-center p-2 dark:text-white">#</th>
-                <th class="text-sm text-center p-2 dark:text-white"><%= t('health_checks.health_check.exam_date') %></th>
-                <th class="text-sm text-center p-2 dark:text-white">FeLV</th>
-                <th class="text-sm text-center p-2 dark:text-white">FIV</th>
+      <div class="hidden overflow-x-auto lg:block">
+        <table class="table-auto mb-2 mx-auto min-w-full dark:bg-slate-100">
+          <thead>
+            <tr class="bg-gray-100 dark:bg-black">
+              <th class="text-sm text-center p-2 dark:text-white">#</th>
+              <th class="text-sm text-center p-2 dark:text-white"><%= t('health_checks.health_check.exam_date') %></th>
+              <th class="text-sm text-center p-2 dark:text-white">FeLV</th>
+              <th class="text-sm text-center p-2 dark:text-white">FIV</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+              <tr id="<%= dom_id(health_check) %>" class="border-b bg-gray-100">
+                <td class="text-sm text-center p-2 font-semibold dark:text-gray-800"><%= idx+1 %></td>
+                <td class="text-sm text-center p-2 dark:text-gray-800"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
+                <td class="text-sm capitalize font-normal text-center p-2 dark:text-gray-800"><%= health_check.felv %></td>
+                <td class="text-sm capitalize font-normal text-center p-2 dark:text-gray-800"><%= health_check.fiv %></td>
               </tr>
-            </thead>
-            <tbody>
-              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
-                <tr id="<%= dom_id(health_check) %>" class="border-b bg-gray-100">
-                  <td class="text-sm text-center p-2 font-semibold dark:text-gray-800"><%= idx+1 %></td>
-                  <td class="text-sm text-center p-2 dark:text-gray-800"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
-                  <td class="text-sm capitalize font-normal text-center p-2 dark:text-gray-800"><%= health_check.felv %></td>
-                  <td class="text-sm capitalize font-normal text-center p-2 dark:text-gray-800"><%= health_check.fiv %></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-          <ul class="list-disc list-inside ml-4">
-            <li class="text-red-700 font-bold italic mt-2">Red means the value is abnormal</li>
-          </ul>
-        </div>
-        <!-- Transposed Table for Small Screens -->
-        <div class="md:hidden overflow-x-auto">
-          <table class="table-auto mb-2">
-            <tr class="border-b bg-gray-100">
-              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">#</th>
-              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
-                <td class="capitalize text-sm text-center p-2 font-semibold dark:text-gray-800"><%= idx+1 %></td>
-              <% end %>
-            </tr>
-            <tr class="border-b bg-gray-100">
-              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap"><%= t('health_checks.health_check.exam_date') %></th>
-              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
-                <td class="capitalize text-sm text-center dark:text-gray-800 p-2"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
-              <% end %>
-            </tr>
-            <tr class="border-b bg-gray-100">
-              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">FeLV</th>
-              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
-                <td class="capitalize font-normal text-sm text-center dark:text-gray-800 p-2"><%= health_check.felv %></td>
-              <% end %>
-            </tr>
-            <tr class="border-b bg-gray-100">
-              <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">FIV</th>
-              <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
-                <td class="capitalize font-normal text-sm text-center dark:text-gray-800 p-2"><%= health_check.fiv %></td>
-              <% end %>
-            </tr>
-          </table>
-          <ul class="list-disc list-inside ml-4">
-            <li class="text-red-700 font-bold italic mt-2">Red means the value is abnormal</li>
-          </ul>
-        </div>
-        
+            <% end %>
+          </tbody>
+        </table>
+        <ul class="list-disc list-inside ml-4">
+          <li class="text-red-700 font-bold italic mt-2">Red means the value is abnormal</li>
+        </ul>
       </div>
+      <!-- Transposed Table for Small Screens -->
+      <div class="overflow-x-auto lg:hidden">
+        <table class="table-auto mb-2 mx-auto min-w-full">
+          <tr class="border-b bg-gray-100">
+            <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">#</th>
+            <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap"></th>
+            <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+              <td class="capitalize text-sm text-center p-2 font-semibold dark:text-gray-800"><%= idx+1 %></td>
+            <% end %>
+          </tr>
+          <tr class="border-b bg-gray-100">
+            <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap"><%= t('health_checks.health_check.exam_date') %></th>
+            <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap"></th>
+            <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+              <td class="capitalize text-sm text-center dark:text-gray-800 p-2"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
+            <% end %>
+          </tr>
+          <tr class="border-b bg-gray-100">
+            <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">FeLV</th>
+            <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap"></th>
+            <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+              <td class="capitalize font-normal text-sm text-center dark:text-gray-800 p-2"><%= health_check.felv %></td>
+            <% end %>
+          </tr>
+          <tr class="border-b bg-gray-100">
+            <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">FIV</th>
+            <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap"></th>
+            <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
+              <td class="capitalize font-normal text-sm text-center dark:text-gray-800 p-2"><%= health_check.fiv %></td>
+            <% end %>
+          </tr>
+        </table>
+        <ul class="list-disc list-inside ml-4">
+          <li class="text-red-700 font-bold italic mt-2">Red means the value is abnormal</li>
+        </ul>
+      </div>  
     </div>
   <% end %>
 </div>
