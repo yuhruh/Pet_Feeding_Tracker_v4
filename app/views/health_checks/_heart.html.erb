@@ -71,22 +71,22 @@
       <div class="lg:hidden overflow-x-auto">
         <table class="table-auto mb-2 mx-auto min-w-full">
           <tr class="border-b bg-gray-100">
-            <th class="sticky left-0 z-10 bg-gray-100 dark:bg-black capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">#</th>
-            <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap"></th>
+            <th class="sticky left-0 z-10 bg-gray-100 capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">#</th>
+            <th class="sticky left-32 z-10 bg-gray-100 capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap"></th>
             <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
               <td class="capitalize text-sm text-center p-2 font-semibold dark:text-gray-800"><%= idx+1 %></td>
             <% end %>
           </tr>
           <tr class="border-b bg-gray-100">
-            <th class="sticky left-0 z-10 bg-gray-100 dark:bg-black capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap"><%= t('health_checks.health_check.exam_date') %></th>
-            <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap"><%= t('health_checks.index.reference_range') %></th>
+            <th class="sticky left-0 z-10 bg-gray-100 capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap w-32 min-w-[8rem]"><%= t('health_checks.health_check.exam_date') %></th>
+            <th class="sticky left-32 z-10 bg-gray-100 capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap"><%= t('health_checks.index.reference_range') %></th>
             <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
               <td class="capitalize text-sm text-center dark:text-gray-800 p-2"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
             <% end %>
           </tr>
           <tr class="border-b bg-gray-100">
-            <th class="sticky left-0 z-10 bg-gray-100 dark:bg-black capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">FBNP</th>
-            <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">-</th>
+            <th class="sticky left-0 z-10 bg-gray-100 capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap w-32 min-w-[8rem]">FBNP</th>
+            <th class="sticky left-32 z-10 bg-gray-100 capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">-</th>
             <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
               <td class="capitalize text-sm font-normal text-center dark:text-gray-800 p-2"><%= health_check.fbnp %></td>
             <% end %>
