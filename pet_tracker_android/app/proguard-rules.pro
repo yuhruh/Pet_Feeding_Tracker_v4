@@ -10,3 +10,4 @@
 
 # Keep your model classes if they are used for JSON serialization
 -keep class com.pettracker.v4.models.** { *; }
+-dontwarn javax.lang.model.element.Modifier

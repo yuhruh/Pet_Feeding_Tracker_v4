@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("org.jetbrains.kotlin.android")
     id("com.android.application")
@@ -20,12 +23,12 @@ android {
     signingConfigs {
         create("release") {
             val keystorePropertiesFile = rootProject.file("keystore.properties")
-            val keystoreProperties = java.util.Properties()
+            val keystoreProperties = Properties()
             
             if (keystorePropertiesFile.exists()) {
-                keystoreProperties.load(java.io.FileInputStream(keystorePropertiesFile))
+                keystoreProperties.load(FileInputStream(keystorePropertiesFile))
                 
-                storeFile = file(keystoreProperties["RELEASE_STORE_FILE"] ?: "pet-tracker-key.jks")
+                storeFile = rootProject.file(keystoreProperties["RELEASE_STORE_FILE"] ?: "pet-tracker-key.jks")
                 storePassword = keystoreProperties["RELEASE_STORE_PASSWORD"]?.toString()
                 keyAlias = keystoreProperties["RELEASE_KEY_ALIAS"]?.toString()
                 keyPassword = keystoreProperties["RELEASE_KEY_PASSWORD"]?.toString()
