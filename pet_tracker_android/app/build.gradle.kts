@@ -17,10 +17,27 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            val keystorePropertiesFile = rootProject.file("keystore.properties")
+            val keystoreProperties = java.util.Properties()
+            
+            if (keystorePropertiesFile.exists()) {
+                keystoreProperties.load(java.io.FileInputStream(keystorePropertiesFile))
+                
+                storeFile = file(keystoreProperties["RELEASE_STORE_FILE"] ?: "pet-tracker-key.jks")
+                storePassword = keystoreProperties["RELEASE_STORE_PASSWORD"]?.toString()
+                keyAlias = keystoreProperties["RELEASE_KEY_ALIAS"]?.toString()
+                keyPassword = keystoreProperties["RELEASE_KEY_PASSWORD"]?.toString()
+            }
+        }
+    }
+
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {

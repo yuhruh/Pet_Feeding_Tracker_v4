@@ -46,3 +46,5 @@
 local.properties
 .kotlin/
 
+\n# Android Signing Configuration\nkeystore.properties
+\n# Android Keystore\n*.jks\n*.keystore

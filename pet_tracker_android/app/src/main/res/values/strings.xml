@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Cat Tracker App</string>
-    <string name="home_url">http://192.168.68.64:3000/</string>
+    <string name="home_url">https://pet-feeding-tracker-v4.up.railway.app/</string>
 </resources>
