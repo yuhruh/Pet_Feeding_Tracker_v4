@@ -48,3 +48,4 @@ local.properties
 
 \n# Android Signing Configuration\nkeystore.properties
 \n# Android Keystore\n*.jks\n*.keystore
+\n# OS generated files\n.DS_Store\n.DS_Store?
