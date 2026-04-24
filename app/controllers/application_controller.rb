@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   include Authentication
   helper SvgHelper
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
-  allow_browser versions: :modern, block: -> { 
+  allow_browser versions: :modern, block: -> {
     # Allow the request if it's from our Native app even if the engine version is technically "old"
     return if hotwire_native_app?
     render file: Rails.root.join("public/406-unsupported-browser.html"), layout: false, status: :not_acceptable
