@@ -27,10 +27,10 @@ open class WebFragment : HotwireWebFragment() {
             javaScriptEnabled = true // Explicitly enable for redirects
         }
         
-        // Modify User Agent to avoid Google/LINE blocking WebViews
+        // Modify User Agent to identify as Hotwire Native and avoid blocking
         val currentUserAgent = webView.settings.userAgentString
         val newUserAgent = currentUserAgent.replace("; wv", "")
-            .replace("Version/\\d+\\.\\d+\\s+".toRegex(), "")
+            .replace("Version/\\d+\\.\\d+\\s+".toRegex(), "") + " Hotwire Native"
         
         webView.settings.userAgentString = newUserAgent
     }
