@@ -45,38 +45,38 @@
     </div>
   <% else %>
     <div class="container mx-auto w-full shadow-lg rounded-xl p-4 mb-4">
-      <div class="hidden overflow-x-auto w-full lg:block">
-        <table class="table-auto mb-2 px-2 w-full dark:bg-slate-100">
+      <div class="hidden lg:block overflow-auto max-h-[70vh] w-full shadow-inner">
+        <table class="table-auto mb-2 px-2 w-full dark:bg-slate-100 border-separate border-spacing-0">
           <thead>
             <tr class="bg-gray-100 dark:bg-black">
-              <th class="text-sm text-center p-2 dark:text-white">#</th>
-              <th class="text-sm text-center p-2 dark:text-white"><%= t('health_checks.health_check.exam_date') %></th>
-              <th class="text-sm text-center p-2 dark:text-white">CREA(mg/dL)</th>
-              <th class="text-sm text-center p-2 dark:text-white">BUN(mg/dL)</th>
-              <th class="text-sm text-center p-2 dark:text-white">PHOS(mg/dL)</th>
-              <th class="text-sm text-center p-2 dark:text-white">CA(mg/dL)</th>
-              <th class="text-sm text-center p-2 dark:text-white">ALB(g/dL)</th>
-              <th class="text-sm text-center p-2 dark:text-white">GLOB(g/dL)</th>
-              <th class="text-sm text-center p-2 dark:text-white">CHOL(mg/dL)</th>
+              <th class="sticky top-0 left-0 z-30 bg-gray-100 dark:bg-black dark:border-gray-800 text-sm text-center p-2 dark:text-white">#</th>
+              <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black dark:border-gray-800 text-sm text-center p-2 dark:text-white"><%= t('health_checks.health_check.exam_date') %></th>
+              <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black dark:border-gray-800 text-sm text-center p-2 dark:text-white">CREA(mg/dL)</th>
+              <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black dark:border-gray-800 text-sm text-center p-2 dark:text-white">BUN(mg/dL)</th>
+              <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black dark:border-gray-800 text-sm text-center p-2 dark:text-white">PHOS(mg/dL)</th>
+              <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black dark:border-gray-800 text-sm text-center p-2 dark:text-white">CA(mg/dL)</th>
+              <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black dark:border-gray-800 text-sm text-center p-2 dark:text-white">ALB(g/dL)</th>
+              <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black dark:border-gray-800 text-sm text-center p-2 dark:text-white">GLOB(g/dL)</th>
+              <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black dark:border-gray-800 text-sm text-center p-2 dark:text-white">CHOL(mg/dL)</th>
             </tr>
           </thead>
           <thead>
             <tr class="border-b-4 bg-gray-100 dark:bg-black">
-              <th class="text-sm text-center p-2 dark:text-white"></th>
-              <th class="text-sm text-center p-2 dark:text-white"><%= t('health_checks.index.reference_range') %></th>
-              <th class="text-sm text-center p-2 dark:text-white">0.8 - 2.4 (mg/dL)</th>
-              <th class="text-sm text-center p-2 dark:text-white">16 - 36 (mg/dL)</th>
-              <th class="text-sm text-center p-2 dark:text-white">3.1 - 7.5 (mg/dL)</th>
-              <th class="text-sm text-center p-2 dark:text-white">7.8 - 11.3 (mg/dL)</th>
-              <th class="text-sm text-center p-2 dark:text-white">2.2 - 4.0 (g/dL)</th>
-              <th class="text-sm text-center p-2 dark:text-white">2.8 - 5.1 (g/dL)</th>
-              <th class="text-sm text-center p-2 dark:text-white">65 - 225 (mg/dL)</th>
+              <th class="sticky top-[44px] left-0 z-30 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 text-sm text-center p-2 dark:text-white"></th>
+              <th class="sticky top-[44px] z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 text-sm text-center p-2 dark:text-white"><%= t('health_checks.index.reference_range') %></th>
+              <th class="sticky top-[44px] z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 text-sm text-center p-2 dark:text-white">0.8 - 2.4 (mg/dL)</th>
+              <th class="sticky top-[44px] z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 text-sm text-center p-2 dark:text-white">16 - 36 (mg/dL)</th>
+              <th class="sticky top-[44px] z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 text-sm text-center p-2 dark:text-white">3.1 - 7.5 (mg/dL)</th>
+              <th class="sticky top-[44px] z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 text-sm text-center p-2 dark:text-white">7.8 - 11.3 (mg/dL)</th>
+              <th class="sticky top-[44px] z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 text-sm text-center p-2 dark:text-white">2.2 - 4.0 (g/dL)</th>
+              <th class="sticky top-[44px] z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 text-sm text-center p-2 dark:text-white">2.8 - 5.1 (g/dL)</th>
+              <th class="sticky top-[44px] z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 text-sm text-center p-2 dark:text-white">65 - 225 (mg/dL)</th>
             </tr>
           </thead>
           <tbody>
             <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
               <tr id="<%= dom_id(health_check) %>" class="border-b bg-gray-100">
-                <td class="text-sm text-center p-2 font-semibold dark:text-gray-800"><%= idx+1 %></td>
+                <td class="sticky left-0 z-10 bg-gray-100 dark:bg-black text-sm text-center p-2 font-semibold dark:text-gray-800"><%= idx+1 %></td>
                 <td class="text-sm text-center p-2 dark:text-gray-800"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
                 <td class="text-sm <%=range_row_class(health_check.crea, 2.4, 0.8)%> p-2"><%= health_check.crea %></td>
                 <td class="text-sm text-center <%=range_row_class(health_check.bun, 36, 16)%> p-2"><%= health_check.bun %></td>
@@ -94,63 +94,63 @@
       <div class="lg:hidden overflow-x-auto">
         <table class="table-auto mb-2 mx-auto min-w-full">
             <tr class="border-b bg-gray-100">
-            <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">#</th>
+            <th class="sticky left-0 z-10 bg-gray-100 dark:bg-black capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">#</th>
             <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap"></th>
             <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
               <td class="capitalize text-sm text-center p-2 font-semibold dark:text-gray-800"><%= idx+1 %></td>
             <% end %>
           </tr>
           <tr class="border-b bg-gray-100">
-            <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap"><%= t('health_checks.health_check.exam_date') %></th>
+            <th class="sticky left-0 z-10 bg-gray-100 dark:bg-black capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap"><%= t('health_checks.health_check.exam_date') %></th>
             <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap"><%= t('health_checks.index.reference_range') %></th>
             <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
               <td class="capitalize text-sm text-center dark:text-gray-800 p-2"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
             <% end %>
           </tr>
           <tr class="border-b bg-gray-100">
-            <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">CREA(mg/dL)</th>
+            <th class="sticky left-0 z-10 bg-gray-100 dark:bg-black capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">CREA(mg/dL)</th>
             <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">0.8 - 2.4 (mg/dL)</th>
             <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
               <td class="text-sm <%=range_row_class(health_check.crea, 2.4, 0.8)%> p-2"><%= health_check.crea %></td>
             <% end %>
           </tr>
           <tr class="border-b bg-gray-100">
-            <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">BUN(mg/dL)</th>
+            <th class="sticky left-0 z-10 bg-gray-100 dark:bg-black capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">BUN(mg/dL)</th>
             <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">16 - 36 (mg/dL)</th>
             <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
               <td class="text-sm <%=range_row_class(health_check.bun, 36, 16)%> p-2"><%= health_check.bun %></td>
             <% end %>
           </tr>
           <tr class="border-b bg-gray-100">
-            <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">PHOS(mg/dL)</th>
+            <th class="sticky left-0 z-10 bg-gray-100 dark:bg-black capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">PHOS(mg/dL)</th>
             <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">3.1 - 7.5 (mg/dL)</th>
             <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
               <td class="text-sm <%=range_row_class(health_check.phos, 7.5, 3.1)%> p-2"><%= health_check.phos %></td>
             <% end %>
           </tr>
           <tr class="border-b bg-gray-100">
-            <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">CA(mg/dL)</th>
+            <th class="sticky left-0 z-10 bg-gray-100 dark:bg-black capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">CA(mg/dL)</th>
             <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">7.8 - 11.3 (mg/dL)</th>
             <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
               <td class="text-sm <%=range_row_class(health_check.ca, 11.3, 7.8)%> p-2"><%= health_check.ca %></td>
             <% end %>
           </tr>
           <tr class="border-b bg-gray-100">
-            <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">ALB(g/dL)</th>
+            <th class="sticky left-0 z-10 bg-gray-100 dark:bg-black capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">ALB(g/dL)</th>
             <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">2.2 - 4.0 (g/dL)</th>
             <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
               <td class="text-sm <%=range_row_class(health_check.alb, 4.0, 2.2)%> p-2"><%= health_check.alb %></td>
             <% end %>
           </tr>
           <tr class="border-b bg-gray-100">
-            <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">GLOB(g/dL)</th>
+            <th class="sticky left-0 z-10 bg-gray-100 dark:bg-black capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">GLOB(g/dL)</th>
             <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">2.8 - 5.1 (g/dL)</th>
             <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
               <td class="text-sm <%=range_row_class(health_check.glob, 5.1, 2.8)%> p-2"><%= health_check.glob %></td>
             <% end %>
           </tr>
           <tr class="border-b bg-gray-100">
-            <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">CHOL(mg/dL)</th>
+            <th class="sticky left-0 z-10 bg-gray-100 dark:bg-black capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">CHOL(mg/dL)</th>
             <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">65 - 225 (mg/dL)</th>
             <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
               <td class="text-sm <%=range_row_class(health_check.chol, 225, 65)%> p-2"><%= health_check.chol %></td>
