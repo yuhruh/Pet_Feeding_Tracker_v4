@@ -47,19 +47,19 @@
     </div>
   <% else %>
     <div class="container mx-auto w-full shadow-lg rounded-xl p-4 mb-4">
-      <div class="hidden overflow-x-auto w-full lg:block">
-        <table class="table-auto mb-2 px-2 w-full dark:bg-slate-100">
+      <div class="hidden lg:block overflow-auto max-h-[70vh] w-full shadow-inner">
+        <table class="table-auto mb-2 px-2 w-full dark:bg-slate-100 border-separate border-spacing-0">
           <thead>
             <tr class="bg-gray-100 dark:bg-black">
-              <th class="text-sm text-center font-normal capitalize p-2 dark:text-white">#</th>
-              <th class="text-sm text-center p-2 dark:text-white"><%= t('health_checks.health_check.exam_date') %></th>
-              <th class="text-sm text-center p-2 dark:text-white">fBNP</th>
+              <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 text-sm text-center font-normal capitalize p-2 dark:text-white">#</th>
+              <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 text-sm text-center p-2 dark:text-white"><%= t('health_checks.health_check.exam_date') %></th>
+              <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 text-sm text-center p-2 dark:text-white">fBNP</th>
             </tr>
           </thead>
           <tbody>
             <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
               <tr id="<%= dom_id(health_check) %>" class="border-b bg-gray-100">
-                <td class="text-sm text-center p-2 font-semibold dark:text-gray-800"><%= idx+1 %></td>
+                <td class="sticky left-0 z-10 bg-gray-100 dark:bg-black text-sm text-center p-2 font-semibold dark:text-gray-800"><%= idx+1 %></td>
                 <td class="text-sm text-center p-2 dark:text-gray-800"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
                 <td class="text-sm text-center font-normal capitalize p-2 dark:text-gray-800"><%= health_check.fbnp %></td>
               </tr>
@@ -71,21 +71,21 @@
       <div class="lg:hidden overflow-x-auto">
         <table class="table-auto mb-2 mx-auto min-w-full">
           <tr class="border-b bg-gray-100">
-            <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">#</th>
+            <th class="sticky left-0 z-10 bg-gray-100 dark:bg-black capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">#</th>
             <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap"></th>
             <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
               <td class="capitalize text-sm text-center p-2 font-semibold dark:text-gray-800"><%= idx+1 %></td>
             <% end %>
           </tr>
           <tr class="border-b bg-gray-100">
-            <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap"><%= t('health_checks.health_check.exam_date') %></th>
+            <th class="sticky left-0 z-10 bg-gray-100 dark:bg-black capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap"><%= t('health_checks.health_check.exam_date') %></th>
             <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap"><%= t('health_checks.index.reference_range') %></th>
             <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
               <td class="capitalize text-sm text-center dark:text-gray-800 p-2"><%= health_check.exam_date&.strftime("%Y-%m-%d") %></td>
             <% end %>
           </tr>
           <tr class="border-b bg-gray-100">
-            <th class="capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">FBNP</th>
+            <th class="sticky left-0 z-10 bg-gray-100 dark:bg-black capitalize text-sm text-left p-2 border-r dark:bg-black whitespace-nowrap">FBNP</th>
             <th class="capitalize text-sm text-left p-2 border-r-4 dark:bg-black whitespace-nowrap">-</th>
             <% @health_checks.select(&:persisted?).each_with_index do |health_check, idx| %>
               <td class="capitalize text-sm font-normal text-center dark:text-gray-800 p-2"><%= health_check.fbnp %></td>
