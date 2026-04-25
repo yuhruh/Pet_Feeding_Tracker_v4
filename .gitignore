@@ -47,6 +47,9 @@ local.properties
 .kotlin/
 
 \n# Android Signing Configuration\nkeystore.properties
-\n# Android Keystore\n*.jks\n*.keystore
+# Android Keystore
+*.jks
+*.keystore
+*.pem
 \n# OS generated files\n.DS_Store\n.DS_Store?
 .DS_Store
