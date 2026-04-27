@@ -108,8 +108,8 @@
 
         <% if @dry_properties.present? || @wet_properties.present? %>
           <!-- 2. Solid Background Masks (Hides bars scrolling under axes) -->
-          <div class="absolute left-0 top-[40px] bottom-[100px] w-[60px] bg-white z-10 pointer-events-none"></div>
-          <div class="absolute right-0 top-[40px] bottom-[100px] w-[60px] bg-white z-10 pointer-events-none"></div>
+          <div class="absolute left-0 top-[40px] bottom-[100px] w-[60px] z-10 pointer-events-none"></div>
+          <div class="absolute right-0 top-[40px] bottom-[100px] w-[60px] z-10 pointer-events-none"></div>
 
           <!-- 3. Fixed Axes Chart Overlay -->
           <div class="absolute inset-0 z-20 pointer-events-none">
@@ -140,24 +140,24 @@
   </div>
 
   <%# Data Table %>
-  <div class="overflow-x-auto shadow-lg rounded-xl">
+  <div class="overflow-x-auto shadow-lg rounded-xl max-h-[80vh] w-full">
     <table class="table-auto w-full dark:bg-slate-100">
       <thead>
         <tr class="bg-gray-100 dark:bg-black">
-          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.number') %></th>
-          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.date') %></th>
-          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.time') %></th>
-          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.hungry') %></th>
-          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.come_back_to_eat') %></th>
-          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.food_type') %></th>
-          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.brand') %></th>
-          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.description') %></th>
-          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.amount') %></th>
-          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.left_amount') %></th>
-          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.total_ate_amount') %></th>
-          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.result') %></th>
-          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.weight') %></th>
-          <th class="capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.note') %></th>
+          <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.number') %></th>
+          <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.date') %></th>
+          <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.time') %></th>
+          <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.hungry') %></th>
+          <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.come_back_to_eat') %></th>
+          <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.food_type') %></th>
+          <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.brand') %></th>
+          <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.description') %></th>
+          <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.amount') %></th>
+          <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.left_amount') %></th>
+          <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.total_ate_amount') %></th>
+          <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.result') %></th>
+          <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.weight') %></th>
+          <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.note') %></th>
         </tr>
       </thead>
       <tbody>
@@ -165,20 +165,20 @@
           <% next_record = @trackers[idx + 1] %>
           <% date_changed = (next_record && next_record.date != record.date) %>
           <tr class="border-b <%= tracker_row_class(record) %> <%= 'border-b-2 border-gray-400' if date_changed %>">
-            <td class="text-sm text-center p-2 font-semibold"><%= idx + 1 %></td>
-            <td class="text-sm text-center p-2"><%= record.date.strftime("%Y-%m-%d") %></td>
-            <td class="text-sm text-center p-2"><%= record.feed_time&.strftime("%H:%M") %></td>
-            <td class="text-sm text-center p-2"><%= record.hungry.present? ? t("trackers.hungry_options.#{record.hungry}") : "" %></td>
-            <td class="text-sm text-center p-2"><%= record.come_back_to_eat %></td>
-            <td class="text-sm text-center p-2"><%= t("trackers.food_types.#{record.food_type.downcase}") %></td>
-            <td class="text-sm text-center p-2"><%= record.brand %></td>
-            <td class="text-sm text-center p-2"><%= record.description %></td>
-            <td class="text-sm text-center p-2"><%= record.amount %></td>
-            <td class="text-sm text-center p-2"><%= record.left_amount %></td>
-            <td class="text-sm text-center p-2"><%= record.total_ate_amount %></td>
-            <td class="text-sm text-center p-2"><%= record.result %></td>
-            <td class="text-sm text-center p-2"><%= record.weight %></td>
-            <td class="text-sm text-center p-2"><%= record.note %></td>
+            <td class="capitalize text-sm text-center p-2 font-semibold"><%= idx + 1 %></td>
+            <td class="capitalize text-sm text-center p-2"><%= record.date.strftime("%Y-%m-%d") %></td>
+            <td class="capitalize text-sm text-center p-2"><%= record.feed_time&.strftime("%H:%M") %></td>
+            <td class="capitalize text-sm text-center p-2"><%= record.hungry.present? ? t("trackers.hungry_options.#{record.hungry}") : "" %></td>
+            <td class="capitalize text-sm text-center p-2"><%= record.come_back_to_eat %></td>
+            <td class="capitalize text-sm text-center p-2"><%= t("trackers.food_types.#{record.food_type.downcase}") %></td>
+            <td class="capitalize text-sm text-center p-2"><%= record.brand %></td>
+            <td class="capitalize text-sm text-center p-2"><%= record.description %></td>
+            <td class="capitalize text-sm text-center p-2"><%= record.amount %></td>
+            <td class="capitalize text-sm text-center p-2"><%= record.left_amount %></td>
+            <td class="capitalize text-sm text-center p-2"><%= record.total_ate_amount %></td>
+            <td class="capitalize text-sm text-center p-2"><%= record.result %></td>
+            <td class="capitalize text-sm text-center p-2"><%= record.weight %></td>
+            <td class="capitalize text-sm text-center p-2"><%= record.note %></td>
           </tr>
         <% end %>
       </tbody>
