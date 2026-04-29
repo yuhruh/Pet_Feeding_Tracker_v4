@@ -12,7 +12,28 @@ class CsvImportTrackersService
     ActiveRecord::Base.transaction do
       begin
         file = File.open(file)
-        csv = CSV.parse(file, headers: true, col_sep: ";")
+        header_converter = lambda do |header|
+          return header if header.nil?
+          mapping = {
+            Tracker.human_attribute_name(:date) => "date",
+            Tracker.human_attribute_name(:feed_time) => "feed_time",
+            Tracker.human_attribute_name(:come_back_to_eat) => "come_back_to_eat",
+            Tracker.human_attribute_name(:food_type) => "food_type",
+            Tracker.human_attribute_name(:brand) => "brand",
+            Tracker.human_attribute_name(:description) => "description",
+            Tracker.human_attribute_name(:amount) => "amount",
+            Tracker.human_attribute_name(:left_amount) => "left_amount",
+            Tracker.human_attribute_name(:total_ate_amount) => "total_ate_amount",
+            Tracker.human_attribute_name(:hungry) => "hungry",
+            Tracker.human_attribute_name(:love) => "love",
+            Tracker.human_attribute_name(:result) => "result",
+            Tracker.human_attribute_name(:note) => "note",
+            Tracker.human_attribute_name(:weight) => "weight"
+          }
+          mapping[header] || header.to_s.downcase.gsub(/\(.*\)/, "").strip.gsub(" ", "_")
+        end
+
+        csv = CSV.parse(file, headers: true, col_sep: ";", header_converters: header_converter)
         csv.each_with_index do |row, i|
           tracker_hash = {}
 
@@ -23,10 +44,10 @@ class CsvImportTrackersService
           raise ActiveRecord::Rollback if @errors.any?
 
           tracker_hash[:come_back_to_eat] = row["come_back_to_eat"]
-          tracker_hash[:food_type] = row["food_type"]
+          tracker_hash[:food_type] = normalize_food_type(row["food_type"])
           tracker_hash[:brand] = row["brand"]
           tracker_hash[:description] = row["description"]
-          tracker_hash[:hungry] = Tracker::HUNGRY_MAP.key(row["hungry"])
+          tracker_hash[:hungry] = normalize_hungry(row["hungry"])
           tracker_hash[:love] = row["love"]
           tracker_hash[:note] = row["note"]
 
@@ -56,6 +77,30 @@ class CsvImportTrackersService
   end
 
   private
+
+    def normalize_food_type(value)
+      return nil if value.blank?
+
+      # Try to match localized values or internal keys
+      Tracker.food_types.keys.each do |key|
+        if value == I18n.t("trackers.food_types.#{key}") || value.downcase == key.to_s.downcase || value == Tracker.food_types[key]
+          return key
+        end
+      end
+      value
+    end
+
+    def normalize_hungry(value)
+      return nil if value.blank?
+
+      # Try to match labels in HUNGRY_MAP or localized values
+      Tracker::HUNGRY_MAP.each do |key, label|
+        if value == label || value == I18n.t("trackers.hungry_options.#{key}")
+          return key
+        end
+      end
+      nil
+    end
 
     def validate_and_convert(row, row_index, tracker_hash)
       begin

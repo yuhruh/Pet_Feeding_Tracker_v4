@@ -52,7 +52,7 @@
         <%= form.label :exam_date, HealthCheck.human_attribute_name(:exam_date), class: "text-sm font-bold text-gray-700 dark:text-gray-100 capitalize md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.date_field :exam_date, value: @health_check.exam_date || set_current_date, max: set_current_date, min: @pet.birthday, class: ["block shadow-sm rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:exam_date].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:exam_date].any?}] %>
+        <%= form.date_field :exam_date, value: @health_check.exam_date || set_current_date, max: set_current_date, min: @pet.birthday, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
       </div>
     </div>
     <h2 class="text-center font-bold text-red-600 text-3xl capitalize md:text-lg"><%= t('.blood_test') %></h2>
@@ -62,7 +62,7 @@
           <%= form.label :rbc, HealthCheck.human_attribute_name(:rbc), class: "text-sm font-bold text-gray-700 md:text-base" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.number_field :rbc, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:rbc].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:rbc].any?}] %>
+          <%= form.number_field :rbc, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
         </div>
       </div>
 
@@ -71,7 +71,7 @@
           <%= form.label :hct, HealthCheck.human_attribute_name(:hct), class: "text-sm font-bold text-gray-700 md:text-base" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.number_field :hct, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:hct].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:hct].any?}] %>
+          <%= form.number_field :hct, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
         </div>
       </div>
 
@@ -80,7 +80,7 @@
           <%= form.label :hgb, HealthCheck.human_attribute_name(:hgb), class: "text-sm font-bold text-gray-700 md:text-base" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.number_field :hgb, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:hgb].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:hgb].any?}] %>
+          <%= form.number_field :hgb, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
         </div>
       </div>
 
@@ -89,7 +89,7 @@
           <%= form.label :mcv, HealthCheck.human_attribute_name(:mcv), class: "text-sm font-bold text-gray-700 md:text-base" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.number_field :mcv, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:mcv].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:mcv].any?}] %>
+          <%= form.number_field :mcv, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
         </div>
       </div>
 
@@ -98,7 +98,7 @@
           <%= form.label :mch, HealthCheck.human_attribute_name(:mch), class: "text-sm font-bold text-gray-700 md:text-base" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.number_field :mch, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:mch].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:mch].any?}] %>
+          <%= form.number_field :mch, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
         </div>
       </div>
 
@@ -107,7 +107,7 @@
           <%= form.label :mchc, HealthCheck.human_attribute_name(:mchc), class: "text-sm font-bold text-gray-700 md:text-base" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.number_field :mchc, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:mchc].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:mchc].any?}] %>
+          <%= form.number_field :mchc, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
         </div>
       </div>
 
@@ -116,7 +116,7 @@
           <%= form.label :rdw, HealthCheck.human_attribute_name(:rdw), class: "text-sm font-bold text-gray-700 md:text-base" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.number_field :rdw, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:rdw].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:rdw].any?}] %>
+          <%= form.number_field :rdw, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
         </div>
       </div>
 
@@ -125,7 +125,7 @@
           <%= form.label :retic, HealthCheck.human_attribute_name(:retic), class: "text-sm font-bold text-gray-700 md:text-base" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.number_field :retic, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:retic].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:retic].any?}] %>
+          <%= form.number_field :retic, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
         </div>
       </div>
 
@@ -134,7 +134,7 @@
           <%= form.label :retic_hgb, HealthCheck.human_attribute_name(:retic_hgb), class: "text-sm font-bold text-gray-700 md:text-base" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.number_field :retic_hgb, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:retic_hgb].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:retic_hgb].any?}] %>
+          <%= form.number_field :retic_hgb, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
         </div>
       </div>
 
@@ -143,7 +143,7 @@
           <%= form.label :wbc, HealthCheck.human_attribute_name(:wbc), class: "text-sm font-bold text-gray-700 md:text-base" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.number_field :wbc, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:wbc].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:wbc].any?}] %>
+          <%= form.number_field :wbc, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
         </div>
       </div>
 
@@ -152,7 +152,7 @@
           <%= form.label :neu, HealthCheck.human_attribute_name(:neu), class: "text-sm font-bold text-gray-700 md:text-base" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.number_field :neu, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:neu].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:neu].any?}] %>
+          <%= form.number_field :neu, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
         </div>
       </div>
 
@@ -161,7 +161,7 @@
           <%= form.label :lym, HealthCheck.human_attribute_name(:lym), class: "text-sm font-bold text-gray-700 md:text-base" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.number_field :lym, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:lym].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:lym].any?}] %>
+          <%= form.number_field :lym, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
         </div>
       </div>
 
@@ -170,7 +170,7 @@
           <%= form.label :mono, HealthCheck.human_attribute_name(:mono), class: "text-sm font-bold text-gray-700 md:text-base" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.number_field :mono, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:mono].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:mono].any?}] %>
+          <%= form.number_field :mono, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
         </div>
       </div>
 
@@ -179,7 +179,7 @@
           <%= form.label :eos, HealthCheck.human_attribute_name(:eos), class: "text-sm font-bold text-gray-700 md:text-base" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.number_field :eos, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:eos].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:eos].any?}] %>
+          <%= form.number_field :eos, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
         </div>
       </div>
 
@@ -188,7 +188,7 @@
           <%= form.label :baso, HealthCheck.human_attribute_name(:baso), class: "text-sm font-bold text-gray-700 md:text-base" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.number_field :baso, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:baso].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:baso].any?}] %>
+          <%= form.number_field :baso, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
         </div>
       </div>
 
@@ -197,7 +197,7 @@
           <%= form.label :plt, HealthCheck.human_attribute_name(:plt), class: "text-sm font-bold text-gray-700 md:text-base" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.number_field :plt, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:plt].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:plt].any?}] %>
+          <%= form.number_field :plt, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
         </div>
       </div>
 
@@ -206,7 +206,7 @@
           <%= form.label :mpv, HealthCheck.human_attribute_name(:mpv), class: "text-sm font-bold text-gray-700 md:text-base" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.number_field :mpv, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:mpv].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:mpv].any?}] %>
+          <%= form.number_field :mpv, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
         </div>
       </div>
 
@@ -215,7 +215,7 @@
           <%= form.label :pct, HealthCheck.human_attribute_name(:pct), class: "text-sm font-bold text-gray-700 md:text-base" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.number_field :pct, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:pct].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:pct].any?}] %>
+          <%= form.number_field :pct, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
         </div>
       </div>
     </div>
@@ -225,7 +225,7 @@
         <%= form.label :glu, HealthCheck.human_attribute_name(:glu), class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.number_field :glu, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:glu].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:glu].any?}] %>
+        <%= form.number_field :glu, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
       </div>
     </div>
 
@@ -237,7 +237,7 @@
           <%= form.label :crea, HealthCheck.human_attribute_name(:crea), class: "text-sm font-bold text-gray-700 md:text-base" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.number_field :crea, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:crea].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:crea].any?}] %>
+          <%= form.number_field :crea, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
         </div>
       </div>
 
@@ -246,7 +246,7 @@
           <%= form.label :bun, HealthCheck.human_attribute_name(:bun), class: "text-sm font-bold text-gray-700 md:text-base" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.number_field :bun, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:bun].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:bun].any?}] %>
+          <%= form.number_field :bun, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
         </div>
       </div>
 
@@ -255,7 +255,7 @@
           <%= form.label :phos, HealthCheck.human_attribute_name(:phos), class: "text-sm font-bold text-gray-700 md:text-base" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.number_field :phos, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:phos].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:phos].any?}] %>
+          <%= form.number_field :phos, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
         </div>
       </div>
     </div>
@@ -265,7 +265,7 @@
         <%= form.label :tp, HealthCheck.human_attribute_name(:tp), class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.number_field :tp, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:tp].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:tp].any?}] %>
+        <%= form.number_field :tp, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
       </div>
     </div>
 
@@ -274,7 +274,7 @@
         <%= form.label :alb, HealthCheck.human_attribute_name(:alb), class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.number_field :alb, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:alb].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:alb].any?}] %>
+        <%= form.number_field :alb, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
       </div>
     </div>
 
@@ -283,7 +283,7 @@
         <%= form.label :glob, HealthCheck.human_attribute_name(:glob), class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.number_field :glob, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:glob].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:glob].any?}] %>
+        <%= form.number_field :glob, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
       </div>
     </div>
 
@@ -292,7 +292,7 @@
         <%= form.label :alt, HealthCheck.human_attribute_name(:alt), class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.number_field :alt, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:alt].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:alt].any?}] %>
+        <%= form.number_field :alt, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
       </div>
     </div>
 
@@ -301,7 +301,7 @@
         <%= form.label :alkp, HealthCheck.human_attribute_name(:alkp), class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.number_field :alkp, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:alkp].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:alkp].any?}] %>
+        <%= form.number_field :alkp, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
       </div>
     </div>
 
@@ -310,7 +310,7 @@
         <%= form.label :na, HealthCheck.human_attribute_name(:na), class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.number_field :na, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:na].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:na].any?}] %>
+        <%= form.number_field :na, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
       </div>
     </div>
 
@@ -319,7 +319,7 @@
         <%= form.label :k, HealthCheck.human_attribute_name(:k), class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.number_field :k, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:k].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:k].any?}] %>
+        <%= form.number_field :k, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
       </div>
     </div>
 
@@ -328,7 +328,7 @@
         <%= form.label :cl, HealthCheck.human_attribute_name(:cl), class: "text-sm font-bold text-gray-700 dark:text-gray-100 capitalize md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.number_field :cl, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:cl].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:cl].any?}] %>
+        <%= form.number_field :cl, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
       </div>
     </div>
 
@@ -337,7 +337,7 @@
         <%= form.label :ca, HealthCheck.human_attribute_name(:ca), class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.number_field :ca, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:ca].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:ca].any?}] %>
+        <%= form.number_field :ca, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
       </div>
     </div>
 
@@ -347,7 +347,7 @@
         <%= form.label :chol, HealthCheck.human_attribute_name(:chol), class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.number_field :chol, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:chol].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:chol].any?}] %>
+        <%= form.number_field :chol, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
       </div>
     </div>
 
@@ -356,7 +356,7 @@
         <%= form.label :ggt, HealthCheck.human_attribute_name(:ggt), class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.number_field :ggt, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:ggt].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:ggt].any?}] %>
+        <%= form.number_field :ggt, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
       </div>
     </div>
 
@@ -365,7 +365,7 @@
         <%= form.label :tbil, HealthCheck.human_attribute_name(:tbil), class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.number_field :tbil, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:tbil].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:tbil].any?}] %>
+        <%= form.number_field :tbil, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
       </div>
     </div>
 
@@ -374,7 +374,7 @@
         <%= form.label :amyl, HealthCheck.human_attribute_name(:amyl), class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.number_field :amyl, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:amyl].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:amyl].any?}] %>
+        <%= form.number_field :amyl, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
       </div>
     </div>
     <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
@@ -382,7 +382,7 @@
         <%= form.label :fpl2, HealthCheck.human_attribute_name(:fpl2), class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.number_field :fpl2, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:fpl2].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:fpl2].any?}] %>
+        <%= form.number_field :fpl2, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
       </div>
     </div>
 
@@ -391,7 +391,7 @@
         <%= form.label :lipa, HealthCheck.human_attribute_name(:lipa), class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.number_field :lipa, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:lipa].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:lipa].any?}] %>
+        <%= form.number_field :lipa, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
       </div>
     </div>
 
@@ -400,7 +400,7 @@
         <%= form.label :osm_cal, HealthCheck.human_attribute_name(:osm_cal), class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.number_field :osm_cal, step: :any, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:osm_cal].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:osm_cal].any?}] %>
+        <%= form.number_field :osm_cal, step: :any, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
       </div>
     </div>
 
@@ -409,7 +409,7 @@
         <%= form.label :fbnp, HealthCheck.human_attribute_name(:fbnp), class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.text_field :fbnp, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:fbnp].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:fbnp].any?}] %>
+        <%= form.text_field :fbnp, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
       </div>
     </div>
     <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
@@ -417,7 +417,7 @@
         <%= form.label :felv, HealthCheck.human_attribute_name(:felv), class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.text_field :felv, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:felv].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:felv].any?}] %>
+        <%= form.text_field :felv, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
       </div>
     </div>
     <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
@@ -425,7 +425,7 @@
         <%= form.label :fiv, HealthCheck.human_attribute_name(:fiv), class: "text-sm font-bold text-gray-700 dark:text-gray-100 md:text-base" %>
       </div>
       <div class="flex flex-col items-center md:items-start md:w-5/6">
-        <%= form.text_field :fiv, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full bg-white text-gray-900", {"border-gray-400 focus:outline-blue-600": @health_check.errors[:fiv].none?, "border-red-400 focus:outline-red-600": @health_check.errors[:fiv].any?}] %>
+        <%= form.text_field :fiv, class: "input-field mt-2 outline-none bg-white text-gray-900" %>
       </div>
     </div>
   <% end %>
