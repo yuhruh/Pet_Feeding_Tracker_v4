@@ -13,7 +13,7 @@ class CsvImportTrackersServiceTest < ActiveSupport::TestCase
       2026-04-26;10:00;-;Wet;Brand A;Description A;100;20;80;💖 Yes, eat right away;💕 Love it So Much;💖 - 💕;Some note;5.5
     CSV
 
-    file = Tempfile.new(["trackers", ".csv"])
+    file = Tempfile.new([ "trackers", ".csv" ])
     file.write(csv_content)
     file.rewind
 
@@ -32,7 +32,7 @@ class CsvImportTrackersServiceTest < ActiveSupport::TestCase
       2026-04-26;10:00;-;Wet;Brand B;Description B;100;20;💖 Yes, eat right away;💕 Love it So Much;Some note;5.5
     CSV
 
-    file = Tempfile.new(["trackers", ".csv"])
+    file = Tempfile.new([ "trackers", ".csv" ])
     file.write(csv_content)
     file.rewind
 
@@ -52,8 +52,8 @@ class CsvImportTrackersServiceTest < ActiveSupport::TestCase
         日期;餵食時間;回頭吃;食物類型;品牌;描述;量(克);剩餘量(克);總共食用量(克);飢餓狀態;喜愛程度;結果;備註;體重(公斤)
         2026-04-26;10:00;-;濕食;品牌A;描述A;100;20;80;💖 是，很餓，馬上吃;💕 非常喜歡;💖 - 💕;一些筆記;5.5
       CSV
-      
-      file = Tempfile.new(["trackers_zh", ".csv"])
+
+      file = Tempfile.new([ "trackers_zh", ".csv" ])
       file.write(csv_content)
       file.rewind
 
@@ -61,7 +61,7 @@ class CsvImportTrackersServiceTest < ActiveSupport::TestCase
         result = @service.call(file.path)
         assert result, "Import should be successful for Chinese. Errors: #{@service.errors.join(", ")}"
       end
-      
+
       tracker = @pet.trackers.last
       assert_equal "wet", tracker.food_type
       assert_equal "eat_right_away", tracker.hungry
