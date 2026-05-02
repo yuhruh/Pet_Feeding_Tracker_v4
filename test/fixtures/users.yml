@@ -5,8 +5,10 @@ one:
   email_address: one@example.com
   password_digest: <%= password_digest %>
   sign_in_count: 2
+  timezone: "Asia/Taipei"
 
 two:
   username: usertwo
   email_address: two@example.com
   password_digest: <%= password_digest %>
+  timezone: "Asia/Taipei"

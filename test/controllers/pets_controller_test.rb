@@ -2,8 +2,9 @@ require "test_helper"
 
 class PetsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @user = User.create(email_address: "example@email.com", password: "password", password_confirmation: "password", username: "John Doe", timezone: "Asia/Taiper")
-    post session_url, params: { email_address: @user.email_address, password: "password" }
+    log_in_as(users(:one))
+    # @user = User.create(email_address: "example@email.com", password: "password", password_confirmation: "password", username: "John Doe", timezone: "Asia/Taiper")
+    # post session_url, params: { email_address: @user.email_address, password: "password" }
     @pet = pets(:one)
     @pet.user = users(:one)
   end

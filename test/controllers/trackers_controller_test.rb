@@ -2,12 +2,13 @@ require "test_helper"
 
 class TrackersControllerTest < ActionDispatch::IntegrationTest
   setup do
+    log_in_as(users(:one))
     @pet = pets(:one)
     @tracker = @pet.trackers.create(date: "2026-01-01", feed_time: "10:02", hungry: "💖 Yes, eat right away",
     come_back_to_eat: "21:29, 00:24, 4:46", food_type: "Wet", brand: "Ciao", description: "imc-222 果凍杯 鮪魚+雞肉+干貝 x3",
     amount: 105, left_amount: 40, total_ate_amount: 65)
-    @user = User.create(email_address: "example@email.com", password: "password", password_confirmation: "password", username: "John Doe", timezone: "Asia/Taipei")
-    post session_url, params: { email_address: @user.email_address, password: "password" }
+    # @user = User.create(email_address: "example@email.com", password: "password", password_confirmation: "password", username: "John Doe", timezone: "Asia/Taipei")
+    # post session_url, params: { email_address: @user.email_address, password: "password" }
   end
 
   test "should get index" do
