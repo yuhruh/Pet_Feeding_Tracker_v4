@@ -2,10 +2,11 @@ require "test_helper"
 
 class HealthChecksControllerTest < ActionDispatch::IntegrationTest
   setup do
+    log_in_as(users(:one))
     @pet = pets(:one)
     @health_check = health_checks(:one)
-    @user = User.create(email_address: "example@email.com", password: "password", password_confirmation: "password", username: "John Doe", timezone: "Asia/Taipei")
-    post session_url, params: { email_address: @user.email_address, password: "password" }
+    # @user = User.create(email_address: "example@email.com", password: "password", password_confirmation: "password", username: "John Doe", timezone: "Asia/Taipei")
+    # post session_url, params: { email_address: @user.email_address, password: "password" }
     # log_in_as(users(:one))
   end
 
