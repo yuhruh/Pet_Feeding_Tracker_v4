@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["leftAmount", "leftAmountAlert", "totalAteAmount", "separator", "submitButton", "pencilBrand", "pencilDescription", "brand", "description", "feed_time"];
+  static targets = ["leftAmount", "leftAmountAlert", "totalAteAmount", "separator", "submitButton", "pencilBrand", "pencilDescription", "pencilAmount", "brand", "description", "amount", "feed_time"];
 
   connect() {
     console.log("LeftAmount controller connected and ready");
