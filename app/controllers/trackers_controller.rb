@@ -142,7 +142,7 @@ class TrackersController < ApplicationController
     end
 
     @favorite_foods = trackers.group_by do |tracker|
-      clean_description = tracker.description.to_s.gsub("（", "(").gsub("）", ")").gsub(/\s*[xX]\d+\z/, "").squish.downcase
+      clean_description = tracker.description.to_s.gsub("（", "(").gsub("）", ")").gsub(/\s*[\(\s]*[xX×]\s*\d+[\)\s]*\z/, "").squish.downcase
 
       [ tracker.food_type.to_s.squish.downcase, tracker.brand.to_s.squish.downcase, clean_description ]
     end.map do |(food_type, brand, description), group_trackers|
