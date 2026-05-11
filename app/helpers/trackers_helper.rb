@@ -41,7 +41,7 @@ module TrackersHelper
   end
 
   def normalize_description(desc)
-    # Ignore x2, x3, etc. at the end of the description and normalize parentheses
-    desc.to_s.gsub("（", "(").gsub("）", ")").gsub(/\s*[xX]\d+\z/, "").squish.downcase
+    # Ignore x2, x3, etc. (including the × symbol, spaces, and parentheses) at the end of the description
+    desc.to_s.gsub("（", "(").gsub("）", ")").gsub(/\s*[\(\s]*[xX×]\s*\d+[\)\s]*\z/, "").squish.downcase
   end
 end
