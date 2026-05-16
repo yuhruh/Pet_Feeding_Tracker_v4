@@ -1,6 +1,7 @@
 class Pet < ApplicationRecord
   has_one_attached :pet_avatar
   belongs_to :user
+  delegate :timezone, to: :user, allow_nil: true
   has_many :trackers, dependent: :destroy
   has_many :health_checks, dependent: :destroy
   validates :petname, presence: true,
