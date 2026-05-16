@@ -33,7 +33,7 @@
       </div>
     </div>
   </div>
-  <% if @health_checks.empty? %>
+  <% if @health_checks.blank? %>
     <p class="text-amber-700 text-center font-bold my-10"><%= t('health_checks.index.no_report', petname: @pet.petname.capitalize, organ: t("health_checks.index.organs.other")) %></p>
     <div class="flex flex-col lg:flex-row justify-center items-center lg:space-x-4">
       <%= link_to t('.back_link'), pet_health_checks_path, class: "mb-4 items-center text-center rounded-md px-3.5 py-2.5 text-white bg-amber-600 hover:bg-white hover:text-amber-600 hover:border-2 hover:border-amber-600 inline-block font-medium cursor-pointer" %>
