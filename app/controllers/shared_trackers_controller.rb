@@ -9,7 +9,8 @@ class SharedTrackersController < ApplicationController
     @pet = Pet.find_by!(share_token: params[:share_token])
 
     # Ensure dates and times are calculated and displayed in the pet owner's timezone
-    Time.zone = @pet.user.timezone if @pet.user&.timezone
+    # Time.zone = @pet.user.timezone if @pet.user&.timezone
+    Time.zone = @pet.timezone if @pet.timezone
 
     # Calculate data using the shared concern
     # Pass nil for user since this is public
