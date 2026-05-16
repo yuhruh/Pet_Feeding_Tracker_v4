@@ -7,7 +7,7 @@ class TrackersController < ApplicationController
 
   def import
     file = params[:file]
-    if file.nil? || file.content_type != "text/csv"
+    if file.blank? || file.content_type != "text/csv"
       return redirect_to pet_trackers_path(@pet, page: params[:page], per_page: params[:per_page]), alert: t(".import.alert")
     end
 
@@ -97,7 +97,7 @@ class TrackersController < ApplicationController
     # @tracker.update!(params.expect(tracker: [ :amount, :left_amount, :hungry, :come_back_to_eat, :love ]))
     @tracker.assign_attributes(tracker_params)
     @tracker.dry_food_id = nil if params[:tracker][:dry_food_id].blank?
-    if @tracker.left_amount.nil?
+    if @tracker.left_amount.blank?
       @tracker.total_ate_amount = nil
     else
       @tracker.total_ate_amount = @tracker.amount.to_f - @tracker.left_amount.to_f
