@@ -17,6 +17,6 @@ class CreateVetVisits < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :vet_visit_members, [:vet_visit_id, :user_id], unique: true
+    add_index :vet_visit_members, [ :vet_visit_id, :user_id ], unique: true
   end
 end

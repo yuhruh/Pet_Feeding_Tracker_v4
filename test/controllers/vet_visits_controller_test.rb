@@ -50,12 +50,12 @@ class VetVisitsControllerTest < ActionDispatch::IntegrationTest
         vet_visit: {
           question: "How often should I feed dry food?",
           visit_date: Date.today,
-          member_emails: [@non_owner.email_address]
+          member_emails: [ @non_owner.email_address ]
         }
       }
     end
     assert_redirected_to pet_vet_visits_url(@pet, locale: I18n.default_locale)
-    
+
     new_visit = VetVisit.last
     assert_includes new_visit.members, @non_owner
   end
