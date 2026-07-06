@@ -4,6 +4,7 @@ class Pet < ApplicationRecord
   delegate :timezone, to: :user, allow_nil: true
   has_many :trackers, dependent: :destroy
   has_many :health_checks, dependent: :destroy
+  has_many :vet_visits, dependent: :destroy
   validates :petname, presence: true,
                       length: { minimum: 2, maximum: 25 }
 

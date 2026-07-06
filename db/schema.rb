@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_15_031314) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_06_120000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -307,6 +307,27 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_15_031314) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  create_table "vet_visit_members", force: :cascade do |t|
+    t.integer "vet_visit_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_vet_visit_members_on_user_id"
+    t.index ["vet_visit_id", "user_id"], name: "index_vet_visit_members_on_vet_visit_id_and_user_id", unique: true
+    t.index ["vet_visit_id"], name: "index_vet_visit_members_on_vet_visit_id"
+  end
+
+  create_table "vet_visits", force: :cascade do |t|
+    t.integer "pet_id", null: false
+    t.text "question", null: false
+    t.text "answer"
+    t.date "visit_date", null: false
+    t.date "answered_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pet_id"], name: "index_vet_visits_on_pet_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "connected_services", "users"
@@ -322,4 +343,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_15_031314) do
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "trackers", "dry_foods"
   add_foreign_key "trackers", "pets"
+  add_foreign_key "vet_visit_members", "users"
+  add_foreign_key "vet_visit_members", "vet_visits"
+  add_foreign_key "vet_visits", "pets"
 end

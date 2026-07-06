@@ -288,6 +288,8 @@
       add_record: "記録を追加"
       destroy_profile: "プロフィールと記録を破棄"
       no_pets: "まだペットがいません。今すぐ追加しませんか？上のボタンを押してください"
+      shared_vet_visits_header: "共有された獣医の質問・記録"
+      edit_shared_visit: "共有された記録を編集"
     new:
       title: "新しいペット"
       header: "🐾 猫を追加 🐾"
@@ -299,6 +301,7 @@
       back_to_cat_list: "%{username}の猫リストに移動"
       destroy_profile: "%{petname}のプロフィールと記録を破棄"
       confirm: "よろしいですか？"
+      vet_visits: "獣医の質問・記録"
     create:
       notice: "猫は正常に作成されました。"
     update:
@@ -771,3 +774,59 @@
       failure:
         cancelled: "サインインプロセスをキャンセルしました。もう一度お試しください。"
         issue: "サインインプロセスに問題が発生しました。もう一度お試しください。"
+
+  vet_visits:
+    index:
+      title: "%{petname}の獣医の質問・記録"
+      header: "%{petname}の獣医訪問と準備した質問"
+      add_new_visit: "新しい質問を準備"
+      visit_date: "訪問日"
+      created_date: "作成日"
+      answered_date: "回答日"
+      question_label: "準備した質問"
+      answer_label: "獣医の回答"
+      no_answer_yet: "回答はまだありません"
+      shared_members: "共有されたメンバー"
+      edit: "編集"
+      delete: "削除"
+      confirm_delete: "この質問・記録を削除してもよろしいですか？"
+      no_visits: "%{petname}の獣医の質問・記録が見つかりません。"
+      back_to_pet: "%{petname}のプロフィールに戻る"
+    new:
+      title: "%{petname}の新しい質問"
+      header: "獣医訪問のための質問を準備"
+      add_button: "準備した質問を保存"
+      back_link: "質問・記録一覧に戻る"
+    edit:
+      title: "%{petname}の質問を編集"
+      header: "質問を更新 / 回答を記録"
+      update_button: "変更・回答を保存"
+      back_link: "質問・記録一覧に戻る"
+    form:
+      errors_header: "%{count}個のエラーにより、この記録を保存できませんでした："
+      visit_date: "予定される訪問日"
+      question: "獣医に聞くために準備した質問"
+      question_placeholder: "獣医に聞きたい質問を入力してください..."
+      answer: "獣医の回答"
+      answer_placeholder: "獣医から得られた回答を入力してください..."
+      share_with_members: "他のユーザーと共有（メンバー）"
+      share_instructions: "登録されている他のユーザーのメールアドレスを追加して、この記録の編集を許可します。"
+      add_member_btn: "メンバーのメールアドレスを追加"
+    show:
+      title: "獣医訪問の詳細"
+      visit_details: "獣医訪問の詳細"
+      visit_date: "訪問日"
+      question: "質問"
+      answer: "回答"
+      no_answer_yet: "回答はまだありません"
+      edit: "この記録を編集"
+      back: "一覧に戻る"
+    create:
+      notice: "記録が正常に作成されました。"
+    update:
+      notice: "記録が正常に更新されました。"
+    destroy:
+      notice: "記録が正常に削除されました。"
+    unauthorized: "この記録を表示または編集する権限がありません。"
+    unauthorized_owner: "ペットの飼い主のみがこの操作を実行できます。"
+    emails_not_found: "以下のメールアドレスはシステム内に見つからず、メンバーとして追加できませんでした：%{emails}"

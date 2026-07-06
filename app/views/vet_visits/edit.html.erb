@@ -1,0 +1,21 @@
+<% content_for :title, t('.title', petname: @pet.petname.capitalize) %>
+
+<div class="container mx-auto md:w-2/3 w-full p-4">
+  <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4 space-y-2 md:space-y-0 mb-6 font-bold text-center">
+    <h1 class="font-bold text-4xl text-amber-700 dark:text-amber-500"><%= t('.header') %></h1>
+  </div>
+
+  <div class="bg-white dark:bg-gray-900 border-4 border-amber-600 rounded-lg shadow-2xl p-6 mb-6">
+    <%= render "form", vet_visit: @vet_visit %>
+  </div>
+
+  <div class="flex flex-col justify-center items-center gap-4 mb-4 pt-4 md:flex-row">
+    <div class="flex justify-center">
+      <%= button_tag t('.update_button'), type: "submit", form: "vet-visit-form", class: "text-center rounded-md px-5 py-2.5 text-white bg-amber-600 hover:bg-white hover:text-amber-600 border-2 border-amber-600 inline-block font-semibold cursor-pointer capitalize transition duration-300" %>
+    </div>
+
+    <div class="flex justify-center">
+      <%= link_to t('.back_link', petname: @pet.petname.capitalize), pet_vet_visits_path(@pet), class: "text-center rounded-md px-5 py-2.5 text-white bg-gray-500 hover:bg-white hover:text-gray-500 border-2 border-gray-500 inline-block font-semibold cursor-pointer capitalize transition duration-300" %>
+    </div>
+  </div>
+</div>
