@@ -288,6 +288,8 @@ zh-TW:
       add_record: "新增記錄"
       destroy_profile: "刪除個人資料和記錄"
       no_pets: "您目前沒有任何寵物。立即新增一隻？請按上方按鈕"
+      shared_vet_visits_header: "與我分享的獸醫門診提問"
+      edit_shared_visit: "編輯分享的提問"
     new:
       title: "新增寵物"
       header: "🐾 新增寵物 🐾"
@@ -299,6 +301,7 @@ zh-TW:
       back_to_cat_list: "前往 %{username} 的寵物清單"
       destroy_profile: "刪除 %{petname} 的個人資料和記錄"
       confirm: "您確定嗎？"
+      vet_visits: "門診提問 & 記錄"
     create:
       notice: "寵物已成功建立。"
     update:
@@ -771,3 +774,59 @@ zh-TW:
       failure:
         cancelled: "您已取消登入程序。請再試一次。"
         issue: "登入程序發生問題。請再試一次。"
+
+  vet_visits:
+    index:
+      title: "%{petname} 的門診提問 & 記錄"
+      header: "%{petname} 的門診提問與準備提問"
+      add_new_visit: "準備新門診提問"
+      visit_date: "門診日期"
+      created_date: "建立日期"
+      answered_date: "回答日期"
+      question_label: "準備的提問"
+      answer_label: "獸醫的回答"
+      no_answer_yet: "尚未回答"
+      shared_members: "分享給成員"
+      edit: "編輯"
+      delete: "刪除"
+      confirm_delete: "您確定要刪除這筆門診提問記錄嗎？"
+      no_visits: "找不到 %{petname} 的門診提問記錄。"
+      back_to_pet: "返回 %{petname} 的個人資料"
+    new:
+      title: "為 %{petname} 準備新提問"
+      header: "準備門診提問"
+      add_button: "儲存準備提問"
+      back_link: "返回門診提問列表"
+    edit:
+      title: "編輯 %{petname} 的門診提問"
+      header: "更新門診提問 / 記錄回答"
+      update_button: "儲存變更 / 回答"
+      back_link: "返回門診提問列表"
+    form:
+      errors_header: "%{count} 個錯誤導致無法儲存此門診提問："
+      visit_date: "預定門診日期"
+      question: "準備向獸醫提問的問題"
+      question_placeholder: "輸入您想向獸醫提問的問題..."
+      answer: "獸醫的回答"
+      answer_placeholder: "輸入從獸醫那裡得到的回答..."
+      share_with_members: "與其他使用者分享（成員）"
+      share_instructions: "新增其他已註冊使用者的電子郵件，以允許他們編輯此記錄。"
+      add_member_btn: "新增成員電子郵件"
+    show:
+      title: "門診提問詳情"
+      visit_details: "門診提問詳情"
+      visit_date: "門診日期"
+      question: "問題"
+      answer: "回答"
+      no_answer_yet: "尚未回答"
+      edit: "編輯此記錄"
+      back: "返回列表"
+    create:
+      notice: "門診提問已成功建立。"
+    update:
+      notice: "門診提問已成功更新。"
+    destroy:
+      notice: "門診提問已成功刪除。"
+    unauthorized: "您無權檢視或編輯此門診提問。"
+    unauthorized_owner: "只有寵物的主人才能執行此操作。"
+    emails_not_found: "系統中找不到以下電子郵件，無法新增為成員：%{emails}"

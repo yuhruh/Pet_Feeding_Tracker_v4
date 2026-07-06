@@ -288,6 +288,8 @@ en:
       add_record: "Add record"
       destroy_profile: "Destroy profile and records"
       no_pets: "You do not have any pets yet. Why would you add it right now? Press above button"
+      shared_vet_visits_header: "Vet Visits Shared With Me"
+      edit_shared_visit: "Edit Shared Visit"
     new:
       title: "New pet"
       header: "🐾 Add a cat 🐾"
@@ -299,6 +301,7 @@ en:
       back_to_cat_list: "Go to %{username}'s cats list"
       destroy_profile: "Destroy %{petname}'s profile and records"
       confirm: "Are you sure?"
+      vet_visits: "Vet Visits & Questions"
     create:
       notice: "Cat was successfully created."
     update:
@@ -771,3 +774,59 @@ en:
       failure:
         cancelled: "You cancelled the sign in process. Please try again."
         issue: "There was an issue with the sign in process. Please try again."
+
+  vet_visits:
+    index:
+      title: "%{petname}'s Vet Visits & Questions"
+      header: "%{petname}'s Vet Visits & Prepared Questions"
+      add_new_visit: "Prepare New Vet Visit/Question"
+      visit_date: "Visit Date"
+      created_date: "Created Date"
+      answered_date: "Answered Date"
+      question_label: "Prepared Question"
+      answer_label: "Vet's Answer"
+      no_answer_yet: "No answer yet"
+      shared_members: "Shared with members"
+      edit: "Edit"
+      delete: "Delete"
+      confirm_delete: "Are you sure you want to delete this vet visit record?"
+      no_visits: "No vet visits/prepared questions found for %{petname}."
+      back_to_pet: "Back to %{petname}'s Profile"
+    new:
+      title: "New Vet Visit for %{petname}"
+      header: "Prepare Questions for Vet Visit"
+      add_button: "Save Prepared Questions"
+      back_link: "Back to Vet Visits List"
+    edit:
+      title: "Edit Vet Visit for %{petname}"
+      header: "Update Vet Visit / Record Answer"
+      update_button: "Save Changes / Answer"
+      back_link: "Back to Vet Visits List"
+    form:
+      errors_header: "%{count} error(s) prohibited this vet visit from being saved:"
+      visit_date: "When to see the vet"
+      question: "Questions prepared to ask the vet"
+      question_placeholder: "Type the questions you want to ask the vet..."
+      answer: "Vet's Answer"
+      answer_placeholder: "Type the answers received from the vet..."
+      share_with_members: "Share with other users (Members)"
+      share_instructions: "Add emails of other registered users to let them edit this record."
+      add_member_btn: "Add Member Email"
+    show:
+      title: "Vet Visit Details"
+      visit_details: "Vet Visit Details"
+      visit_date: "Visit Date"
+      question: "Question"
+      answer: "Answer"
+      no_answer_yet: "No answer yet"
+      edit: "Edit this record"
+      back: "Back to list"
+    create:
+      notice: "Vet visit was successfully created."
+    update:
+      notice: "Vet visit was successfully updated."
+    destroy:
+      notice: "Vet visit was successfully deleted."
+    unauthorized: "You are not authorized to view or edit this vet visit."
+    unauthorized_owner: "Only the pet's owner can perform this action."
+    emails_not_found: "The following email(s) were not found in the system and could not be added as members: %{emails}"

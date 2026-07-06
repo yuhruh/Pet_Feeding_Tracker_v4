@@ -1,0 +1,62 @@
+<%= form_with(model: [@pet, vet_visit], id: "vet-visit-form", class: "space-y-6") do |form| %>
+  <% if vet_visit.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 border-l-4 border-red-500 p-4 mb-4 text-red-700 rounded-lg">
+      <h2 class="font-bold mb-2"><%= t('.errors_header', count: vet_visit.errors.count) %></h2>
+      <ul class="list-disc pl-5">
+        <% vet_visit.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="space-y-4">
+    <!-- Visit Date -->
+    <div>
+      <%= form.label :visit_date, t('.visit_date'), class: "block font-bold text-gray-700 dark:text-gray-200 mb-1" %>
+      <%= form.date_field :visit_date, class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
+    </div>
+
+    <!-- Question -->
+    <div>
+      <%= form.label :question, t('.question'), class: "block font-bold text-gray-700 dark:text-gray-200 mb-1" %>
+      <%= form.text_area :question, rows: 4, placeholder: t('.question_placeholder'), class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
+    </div>
+
+    <!-- Answer -->
+    <div>
+      <%= form.label :answer, t('.answer'), class: "block font-bold text-gray-700 dark:text-gray-200 mb-1" %>
+      <%= form.text_area :answer, rows: 4, placeholder: t('.answer_placeholder'), class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
+    </div>
+
+    <!-- Members Sharing (Only for Owner) -->
+    <% if @pet.user == Current.user %>
+      <div class="border-t border-gray-200 pt-6" data-controller="dynamic-emails">
+        <h3 class="font-bold text-lg text-amber-700 dark:text-amber-500 mb-2"><%= t('.share_with_members') %></h3>
+        <p class="text-sm text-gray-500 mb-4"><%= t('.share_instructions') %></p>
+
+        <div data-dynamic-emails-target="container" class="space-y-2 mb-4">
+          <!-- Existing Members -->
+          <% vet_visit.members.each do |member| %>
+            <div class="flex items-center space-x-2 email-input-wrapper mb-2">
+              <input type="email" name="vet_visit[member_emails][]" value="<%= member.email_address %>" class="w-full border-2 border-gray-300 rounded-lg p-2 focus:ring-amber-500 focus:border-amber-500 dark:text-black" readonly>
+              <button type="button" data-action="click->dynamic-emails#remove" class="px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-bold">✕</button>
+            </div>
+          <% end %>
+
+          <!-- Show one blank input by default if no members -->
+          <% if vet_visit.members.empty? %>
+            <div class="flex items-center space-x-2 email-input-wrapper mb-2">
+              <input type="email" name="vet_visit[member_emails][]" placeholder="member@example.com" class="w-full border-2 border-gray-300 rounded-lg p-2 focus:ring-amber-500 focus:border-amber-500 dark:text-black">
+              <button type="button" data-action="click->dynamic-emails#remove" class="px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-bold">✕</button>
+            </div>
+          <% end %>
+        </div>
+
+        <button type="button" data-action="click->dynamic-emails#add" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg transition duration-300 shadow">
+          + <%= t('.add_member_btn') %>
+        </button>
+      </div>
+    <% end %>
+  </div>
+<% end %>

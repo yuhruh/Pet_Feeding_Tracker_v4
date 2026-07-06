@@ -1,6 +1,7 @@
 package com.pettracker.v4
 
 import android.widget.Toast
+import com.posthog.PostHog
 import dev.hotwire.core.bridge.BridgeComponent
 import dev.hotwire.core.bridge.BridgeDelegate
 import dev.hotwire.core.bridge.Message
@@ -20,6 +21,11 @@ class ToastComponent(
     private fun showToast(message: Message) {
         val json = org.json.JSONObject(message.jsonData)
         val text = json.optString("message", "Default Toast message")
+
+        PostHog.capture(
+            event = "toast_shown",
+            properties = mapOf("message" to text)
+        )
 
         replyWith(message)
 

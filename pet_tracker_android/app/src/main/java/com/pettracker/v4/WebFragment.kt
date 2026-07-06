@@ -4,6 +4,7 @@ import android.view.View
 import android.webkit.WebView
 import android.widget.Button
 import android.widget.TextView
+import com.posthog.PostHog
 import dev.hotwire.navigation.destinations.HotwireDestinationDeepLink
 import dev.hotwire.navigation.fragments.HotwireWebFragment
 import dev.hotwire.core.turbo.errors.VisitError
@@ -36,12 +37,40 @@ open class WebFragment : HotwireWebFragment() {
     }
 
     override fun createErrorView(error: VisitError): View {
+        PostHog.capture(
+            event = "web_page_error",
+            properties = mapOf("error_description" to error.description())
+        )
+        val errorDescription = error.description()
         return layoutInflater.inflate(R.layout.view_error, null).apply {
-            findViewById<TextView>(R.id.error_message).text = error.description()
+            findViewById<TextView>(R.id.error_message).text = errorDescription
             findViewById<Button>(R.id.error_retry_button).setOnClickListener {
+                PostHog.capture(
+                    event = "error_retry_tapped",
+                    properties = mapOf("error_description" to errorDescription)
+                )
                 refresh()
             }
         }
+    }
+
+    override fun onVisitCompleted(location: String, completedOffline: Boolean) {
+        super.onVisitCompleted(location, completedOffline)
+        PostHog.capture(
+            event = "web_visit_completed",
+            properties = mapOf(
+                "location" to location,
+                "completed_offline" to completedOffline
+            )
+        )
+    }
+
+    override fun onFormSubmissionStarted(location: String) {
+        super.onFormSubmissionStarted(location)
+        PostHog.capture(
+            event = "web_form_submitted",
+            properties = mapOf("location" to location)
+        )
     }
 }
 

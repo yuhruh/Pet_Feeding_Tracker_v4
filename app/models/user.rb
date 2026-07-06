@@ -4,6 +4,8 @@ class User < ApplicationRecord
   has_many :sessions, dependent: :destroy
   has_many :pets, dependent: :destroy
   has_many :dry_foods, dependent: :destroy
+  has_many :vet_visit_members, dependent: :destroy
+  has_many :shared_vet_visits, through: :vet_visit_members, source: :vet_visit
   validates_associated :pets
   encrypts :gemini_api_key
 

@@ -18,7 +18,7 @@ production:
     schedule: every day at 9am
   user_backups:
     class: UserBackupJob
-    schedule: every 5 days at 3am
+    schedule: every day at 3am
   db_backup:
     command: "Rails.application.load_tasks; Rake::Task['db:backup'].invoke"
     schedule: every day at 4am
