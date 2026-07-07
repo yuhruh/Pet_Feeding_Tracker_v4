@@ -274,7 +274,7 @@ zh-TW:
       weight: "體重（公斤）"
       gender: "性別"
       breed: "品種"
-      cat_owner: "寵物飼主"
+      cat_parent: "寵物飼主"
     edit:
       title: "編輯 %{petname} 的個人資料"
       show_profile: "顯示 %{petname} 的個人資料"

@@ -274,7 +274,7 @@
       weight: "体重（kg）"
       gender: "性別"
       breed: "品種"
-      cat_owner: "猫の飼い主"
+      cat_parent: "猫の飼い主"
     edit:
       title: "%{petname}のプロフィールを編集"
       show_profile: "%{petname}のプロフィールを表示"
