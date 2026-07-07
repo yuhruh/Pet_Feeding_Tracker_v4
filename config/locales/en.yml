@@ -274,7 +274,7 @@ en:
       weight: "Weight (kg)"
       gender: "Gender"
       breed: "Breed"
-      cat_owner: "Cat owner"
+      cat_parent: "Cat parent"
     edit:
       title: "Edit %{petname}'s profile"
       show_profile: "Show %{petname}'s profile"
