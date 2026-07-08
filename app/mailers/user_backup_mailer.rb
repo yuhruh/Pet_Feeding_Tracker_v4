@@ -8,7 +8,11 @@ class UserBackupMailer < ApplicationMailer
       timezone = @user.timezone
       sorted_trackers = pet.trackers.to_a.sort_by { |t| [ t.date, t.feed_time&.in_time_zone(timezone)&.strftime("%H:%M") || "00:00" ] }
       csv_data = Tracker.to_csv(sorted_trackers, timezone)
-      attachments["#{pet.petname}_trackers_#{Time.current.strftime('%Y%m%d')}.csv"] = csv_data
+      
+      # Sanitize pet name to prevent directory traversal / invalid character issues
+      safe_petname = pet.petname.gsub(/[\/\\?%*:|"<>]/, "_")
+      filename = "#{safe_petname}_trackers_#{pet.id}_#{Time.current.strftime('%Y%m%d')}.csv"
+      attachments[filename] = csv_data
     end
 
     mail(to: @user.email_address, cc: "ajicaretracker@gmail.com", subject: I18n.t("mailers.user_backup.subject"))
