@@ -9,7 +9,7 @@ class UserBackupJobTest < ActiveJob::TestCase
 
     user = users(:one)
     pet = pets(:one)
-    
+
     # Create a tracker that is within the last 25 hours
     Tracker.create!(
       pet: pet,
@@ -33,7 +33,7 @@ class UserBackupJobTest < ActiveJob::TestCase
 
     user = users(:one)
     tracker = Tracker.first
-    
+
     # Update tracker to have recently updated_at
     tracker.update_columns(updated_at: 12.hours.ago)
 
