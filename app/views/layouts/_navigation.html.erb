@@ -51,9 +51,23 @@
               <div>
                 <%= link_to t('layouts.navigation.add_a_cat'), new_pet_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
                 <% Current.user.pets.select(&:persisted?).each do |pet| %>
-                  <%= link_to t('layouts.navigation.view_pet_profile', petname: pet.petname.split(" ").map(&:capitalize).join(" ")), pet_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+                  <%= link_to t('layouts.navigation.view_pet_profile', petname: pet.petname.split(" ").map(&:capitalize).join(" ")), pet_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden font-semibold" %>
+                  <%= link_to "🏥 Vet Visits (#{pet.petname.capitalize})", pet_vet_visits_path(pet), class: "block px-4 py-2 text-xs text-amber-700 hover:bg-amber-100 hover:text-amber-800 focus:bg-amber-100 focus:text-softRed focus:outline-hidden pl-6 italic font-medium" %>
                 <% end %>
               </div>
+
+              <%# Shared Vet Visits for co-owners/members %>
+              <% shared_pets = Pet.joins(vet_visits: :vet_visit_members).where(vet_visit_members: { user_id: Current.user.id }).distinct %>
+              <% if shared_pets.any? %>
+                <div class="px-4 py-2 text-sm text-gray-700 font-semibold border-t-2 border-b-2 border-gray-200 mt-2">
+                  <%= t('layouts.navigation.shared_vet_visits', default: "Shared Vet Visits") %>
+                </div>
+                <div>
+                  <% shared_pets.each do |pet| %>
+                    <%= link_to "📋 " + pet.petname.capitalize + " (Shared)", pet_vet_visits_path(pet), class: "block px-4 py-2 text-xs text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden pl-6" %>
+                  <% end %>
+                </div>
+              <% end %>
             </div>
           </div>
 
@@ -254,9 +268,21 @@
           </div>
         </div>
         <%= link_to t('layouts.navigation.mobile.add_a_cat'), new_pet_path, class: "block px-2 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
-          <% Current.user.pets.select(&:persisted?).each do |pet| %>
-            <%= link_to t('layouts.navigation.mobile.view_pet_profile', petname: pet.petname.split(" ").map(&:capitalize).join(" ")), pet_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+        <% Current.user.pets.select(&:persisted?).each do |pet| %>
+          <%= link_to t('layouts.navigation.mobile.view_pet_profile', petname: pet.petname.split(" ").map(&:capitalize).join(" ")), pet_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+          <%= link_to "🏥 Vet Visits (#{pet.petname.capitalize})", pet_vet_visits_path(pet), class: "block px-2 py-1.5 text-xs text-amber-300 hover:bg-amber-100 hover:text-amber-800 focus:bg-gray-100 focus:text-softRed focus:outline-hidden italic font-medium" %>
+        <% end %>
+
+        <%# Mobile Shared Vet Visits for co-owners %>
+        <% mobile_shared_pets = Pet.joins(vet_visits: :vet_visit_members).where(vet_visit_members: { user_id: Current.user.id }).distinct %>
+        <% if mobile_shared_pets.any? %>
+          <div class="font-bold border-t border-gray-600 mt-2 pt-2 text-sm text-gray-300">
+            <%= t('layouts.navigation.shared_vet_visits', default: "Shared Vet Visits") %>
+          </div>
+          <% mobile_shared_pets.each do |pet| %>
+            <%= link_to "📋 " + pet.petname.capitalize + " (Shared)", pet_vet_visits_path(pet), class: "block px-2 py-1.5 text-xs text-blue-300 hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
           <% end %>
+        <% end %>
       </div>
       <div class="w-full py-3 text-center">
         <div class="flex flex-row justify-center gap-3">
