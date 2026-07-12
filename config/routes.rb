@@ -22,7 +22,11 @@ Rails.application.routes.draw do
           delete :bulk_delete
         end
       end
-      resources :vet_visits
+      resources :vet_visits do
+        collection do
+          patch :batch_update
+        end
+      end
     end
     get "shared/:share_token", to: "shared_trackers#show", as: :shared_pet_trackers
     resource :session, except: [ :new ]

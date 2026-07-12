@@ -46,6 +46,49 @@ class VetVisitsController < ApplicationController
     end
   end
 
+  def batch_update
+    visits_data = params[:vet_visits] || {}
+    @errors = []
+
+    ActiveRecord::Base.transaction do
+      visits_data.each do |visit_id, visit_params|
+        visit = @pet.vet_visits.find_by(id: visit_id)
+        unless visit
+          @errors << t("vet_visits.not_found", default: "Vet visit not found")
+          raise ActiveRecord::Rollback
+        end
+
+        unless @pet.user == Current.user || visit.members.include?(Current.user)
+          @errors << t("vet_visits.unauthorized")
+          raise ActiveRecord::Rollback
+        end
+
+        permitted = if @pet.user == Current.user
+                      visit_params.permit(:question, :answer, :visit_date)
+        else
+                      visit_params.permit(:answer)
+        end
+
+        unless visit.update(permitted)
+          @errors += visit.errors.full_messages.map { |msg| "#{visit.visit_date}: #{msg}" }
+          raise ActiveRecord::Rollback
+        end
+      end
+    end
+
+    if @errors.empty?
+      redirect_to pet_vet_visits_path(@pet), notice: t(".notice", default: "All changes saved successfully!")
+    else
+      if @pet.user == Current.user
+        @vet_visits = @pet.vet_visits.order(visit_date: :desc)
+      else
+        @vet_visits = @pet.vet_visits.joins(:vet_visit_members).where(vet_visit_members: { user_id: Current.user.id }).order(visit_date: :desc)
+      end
+      flash.now[:alert] = @errors.uniq.join(", ")
+      render :index, status: :unprocessable_entity
+    end
+  end
+
   def destroy
     @vet_visit.destroy
     redirect_to pet_vet_visits_path(@pet), notice: t(".notice")

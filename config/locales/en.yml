@@ -792,6 +792,9 @@ en:
       confirm_delete: "Are you sure you want to delete this vet visit record?"
       no_visits: "No vet visits/prepared questions found for %{petname}."
       back_to_pet: "Back to %{petname}'s Profile"
+      edit_all_visits: "Edit All"
+      save_all_changes: "Save Changes"
+      cancel: "Cancel"
     new:
       title: "New Vet Visit for %{petname}"
       header: "Prepare Questions for Vet Visit"
