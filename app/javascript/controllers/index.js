@@ -7,6 +7,9 @@ import { application } from "controllers/application"
 import BulkDeleteController from "controllers/bulk_delete_controller"
 application.register("bulk-delete", BulkDeleteController)
 
+import BulkEditController from "controllers/bulk_edit_controller"
+application.register("bulk-edit", BulkEditController)
+
 import DynamicEmailsController from "controllers/dynamic_emails_controller"
 application.register("dynamic-emails", DynamicEmailsController)
 

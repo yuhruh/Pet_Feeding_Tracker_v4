@@ -792,6 +792,9 @@
       confirm_delete: "この質問・記録を削除してもよろしいですか？"
       no_visits: "%{petname}の獣医の質問・記録が見つかりません。"
       back_to_pet: "%{petname}のプロフィールに戻る"
+      edit_all_visits: "一括編集"
+      save_all_changes: "変更を保存"
+      cancel: "キャンセル"
     new:
       title: "%{petname}の新しい質問"
       header: "獣医訪問のための質問を準備"

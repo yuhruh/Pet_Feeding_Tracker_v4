@@ -1,86 +1,137 @@
 <% content_for :title, t('.title', petname: @pet.petname.capitalize) %>
 
-<div class="container mx-auto border-4 border-amber-600 rounded-lg shadow-2xl mb-6 p-6 w-full md:w-4/5 bg-white dark:bg-gray-900">
-  <div class="flex flex-col justify-center items-center mb-6">
-    <h1 class="text-center font-bold text-3xl text-amber-700 dark:text-amber-500 underline underline-offset-8 decoration-amber-700 decoration-2 capitalize md:text-4xl">
-      <%= t('.header', petname: @pet.petname.capitalize) %>
-    </h1>
-  </div>
+<%= form_with url: batch_update_pet_vet_visits_path(@pet), method: :patch, local: true, data: { controller: "bulk-edit" } do |form| %>
 
-  <% if @pet.user == Current.user %>
-    <div class="flex justify-center mb-6">
-      <%= link_to t('.add_new_visit'), new_pet_vet_visit_path(@pet), class: "text-center rounded-md px-5 py-2.5 text-white bg-amber-600 hover:bg-white hover:text-amber-600 border-2 border-amber-600 inline-block font-semibold cursor-pointer transition duration-300" %>
+  <div class="container mx-auto border-4 border-amber-600 rounded-lg shadow-2xl mb-6 p-6 w-full md:w-4/5 bg-white dark:bg-gray-900">
+    <div class="flex flex-col justify-center items-center mb-6">
+      <h1 class="text-center font-bold text-3xl text-amber-700 dark:text-amber-500 underline underline-offset-8 decoration-amber-700 decoration-2 capitalize md:text-4xl">
+        <%= t('.header', petname: @pet.petname.capitalize) %>
+      </h1>
     </div>
-  <% end %>
 
-  <div id="vet_visits" class="space-y-6">
-    <% if @vet_visits.any? %>
-      <% @vet_visits.each do |visit| %>
-        <div class="border-2 border-amber-200 rounded-xl p-6 shadow-md bg-amber-50/30 dark:bg-gray-800/50 space-y-4">
-          <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-amber-200 pb-3 gap-2">
-            <div>
-              <span class="text-sm font-semibold text-amber-800 dark:text-amber-400 uppercase tracking-wider"><%= t('.visit_date') %>:</span>
-              <span class="ml-1 text-lg font-bold text-gray-800 dark:text-white"><%= visit.visit_date %></span>
-            </div>
-            <div class="text-sm text-gray-500 space-y-1 md:text-right">
-              <div><%= t('.created_date') %>: <%= visit.created_at.to_date %></div>
-              <% if visit.answered_date.present? %>
-                <div><%= t('.answered_date') %>: <%= visit.answered_date %></div>
-              <% end %>
-            </div>
-          </div>
+    <div class="flex flex-col md:flex-row justify-center items-center gap-4 mb-6">
+      <% if @pet.user == Current.user %>
+        <%= link_to t('.add_new_visit'), new_pet_vet_visit_path(@pet), class: "text-center rounded-md px-5 py-2.5 text-white bg-amber-600 hover:bg-white hover:text-amber-600 border-2 border-amber-600 font-semibold cursor-pointer transition duration-300 w-full md:w-auto" %>
+      <% end %>
 
-          <div class="space-y-3">
-            <div>
-              <h3 class="font-bold text-lg text-amber-900 dark:text-amber-400"><%= t('.question_label') %>:</h3>
-              <p class="text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 italic">
-                <%= visit.question %>
-              </p>
-            </div>
+      <% if @vet_visits.any? %>
+        <button type="button"
+                data-bulk-edit-target="editButton"
+                data-action="click->bulk-edit#toggleEdit"
+                class="text-center rounded-md px-5 py-2.5 text-white bg-green-600 hover:bg-white hover:text-green-600 border-2 border-green-600 font-semibold cursor-pointer transition duration-300 w-full md:w-auto">
+          <%= t('.edit_all_visits', default: "Edit All") %>
+        </button>
 
-            <div>
-              <h3 class="font-bold text-lg text-amber-900 dark:text-amber-400"><%= t('.answer_label') %>:</h3>
-              <% if visit.answer.present? %>
-                <p class="text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <%= visit.answer %>
-                </p>
-              <% else %>
-                <p class="text-gray-400 bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 italic">
-                  <%= t('.no_answer_yet') %>
-                </p>
-              <% end %>
-            </div>
+        <%= form.submit t('.save_all_changes', default: "Save Changes"),
+                        data: { bulk_edit_target: "saveButton" },
+                        class: "hidden text-center rounded-md px-5 py-2.5 text-white bg-green-600 hover:bg-white hover:text-green-600 border-2 border-green-600 font-semibold cursor-pointer transition duration-300 w-full md:w-auto" %>
 
-            <% if @pet.user == Current.user && visit.members.any? %>
-              <div class="pt-2">
-                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider"><%= t('.shared_members') %>:</span>
-                <div class="flex flex-wrap gap-2 mt-1">
-                  <% visit.members.each do |member| %>
-                    <span class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full font-medium">
-                      <%= member.username %> (<%= member.email_address %>)
-                    </span>
+        <button type="button"
+                data-bulk-edit-target="cancelButton"
+                data-action="click->bulk-edit#toggleEdit"
+                class="hidden text-center rounded-md px-5 py-2.5 text-white bg-gray-500 hover:bg-white hover:text-gray-500 border-2 border-gray-500 font-semibold cursor-pointer transition duration-300 w-full md:w-auto">
+          <%= t('.cancel', default: "Cancel") %>
+        </button>
+      <% end %>
+    </div>
+
+    <div id="vet_visits" class="space-y-6">
+      <% if @vet_visits.any? %>
+        <% @vet_visits.each do |visit| %>
+          <div class="border-2 border-amber-200 rounded-xl p-6 shadow-md bg-amber-50/30 dark:bg-gray-800/50 space-y-4">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-amber-200 pb-3 gap-2">
+              <div>
+                <span class="text-sm font-semibold text-amber-800 dark:text-amber-400 uppercase tracking-wider"><%= t('.visit_date') %>:</span>
+                
+                <span data-bulk-edit-target="viewState" class="ml-1 text-lg font-bold text-gray-800 dark:text-white">
+                  <%= visit.visit_date %>
+                </span>
+
+                <div data-bulk-edit-target="editState" class="hidden ml-1">
+                  <% if @pet.user == Current.user %>
+                    <%= form.date_field "vet_visits[#{visit.id}][visit_date]", value: visit.visit_date, class: "rounded-md border border-gray-300 dark:border-gray-700 px-3 py-1 bg-white dark:bg-gray-800 text-gray-800 dark:text-white font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500" %>
+                  <% else %>
+                    <span class="text-lg font-bold text-gray-800 dark:text-white"><%= visit.visit_date %></span>
                   <% end %>
                 </div>
               </div>
-            <% end %>
-          </div>
+              <div class="text-sm text-gray-500 space-y-1 md:text-right">
+                <div><%= t('.created_date') %>: <%= visit.created_at.to_date %></div>
+                <% if visit.answered_date.present? %>
+                  <div><%= t('.answered_date') %>: <%= visit.answered_date %></div>
+                <% end %>
+              </div>
+            </div>
 
-          <div class="flex flex-wrap items-center gap-3 pt-3 border-t border-amber-100">
-            <%= link_to t('.edit'), edit_pet_vet_visit_path(@pet, visit), class: "text-center rounded-md px-4 py-2 text-green-600 bg-green-100 hover:bg-green-200 font-bold text-sm transition duration-300" %>
-            <% if @pet.user == Current.user %>
-              <%= button_to t('.delete'), pet_vet_visit_path(@pet, visit), method: :delete, class: "text-center rounded-md px-4 py-2 text-red-600 bg-red-100 hover:bg-red-200 font-bold text-sm transition duration-300", data: { turbo_confirm: t('.confirm_delete') } %>
-            <% end %>
+            <div class="space-y-3">
+              <div>
+                <h3 class="font-bold text-lg text-amber-900 dark:text-amber-400"><%= t('.question_label') %>:</h3>
+                
+                <p data-bulk-edit-target="viewState" class="text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 italic">
+                  <%= visit.question %>
+                </p>
+
+                <div data-bulk-edit-target="editState" class="hidden">
+                  <% if @pet.user == Current.user %>
+                    <%= form.text_area "vet_visits[#{visit.id}][question]", value: visit.question, rows: 2, class: "w-full rounded-md border border-gray-300 dark:border-gray-700 p-3 bg-white dark:bg-gray-800 text-gray-800 dark:text-white font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500" %>
+                  <% else %>
+                    <p class="text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800/80 p-3 rounded-lg border border-gray-200 dark:border-gray-700 italic">
+                      <%= visit.question %>
+                    </p>
+                  <% end %>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="font-bold text-lg text-amber-900 dark:text-amber-400"><%= t('.answer_label') %>:</h3>
+                
+                <% if visit.answer.present? %>
+                  <p data-bulk-edit-target="viewState" class="text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
+                    <%= visit.answer %>
+                  </p>
+                <% else %>
+                  <p data-bulk-edit-target="viewState" class="text-gray-400 bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 italic">
+                    <%= t('.no_answer_yet') %>
+                  </p>
+                <% end %>
+
+                <div data-bulk-edit-target="editState" class="hidden">
+                  <%= form.text_area "vet_visits[#{visit.id}][answer]", value: visit.answer, rows: 2, class: "w-full rounded-md border border-gray-300 dark:border-gray-700 p-3 bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:ring-2 focus:ring-amber-500 focus:border-amber-500" %>
+                </div>
+              </div>
+
+              <% if @pet.user == Current.user && visit.members.any? %>
+                <div class="pt-2">
+                  <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider"><%= t('.shared_members') %>:</span>
+                  <div class="flex flex-wrap gap-2 mt-1">
+                    <% visit.members.each do |member| %>
+                      <span class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full font-medium">
+                        <%= member.username %> (<%= member.email_address %>)
+                      </span>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+
+            <div data-bulk-edit-target="viewState" class="flex flex-wrap items-center gap-3 pt-3 border-t border-amber-100">
+              <%= link_to t('.edit'), edit_pet_vet_visit_path(@pet, visit), class: "text-center rounded-md px-4 py-2 text-green-600 bg-green-100 hover:bg-green-200 font-bold text-sm transition duration-300" %>
+              <% if @pet.user == Current.user %>
+                <%= link_to t('.delete'), pet_vet_visit_path(@pet, visit), data: { turbo_method: :delete, turbo_confirm: t('.confirm_delete') }, class: "text-center rounded-md px-4 py-2 text-red-600 bg-red-100 hover:bg-red-200 font-bold text-sm transition duration-300" %>
+              <% end %>
+            </div>
           </div>
+        <% end %>
+      <% else %>
+        <div class="text-center py-4">
+          <p class="text-gray-500 text-lg mb-4"><%= t('.no_visits', petname: @pet.petname.capitalize) %></p>
         </div>
       <% end %>
-    <% else %>
-      <div class="text-center py-4">
-        <p class="text-gray-500 text-lg mb-4"><%= t('.no_visits', petname: @pet.petname.capitalize) %></p>
-      </div>
-    <% end %>
+    </div>
+
+    <div class="flex justify-center mt-6">
+      <%= link_to t('.back_to_pet', petname: @pet.petname.capitalize), pet_path(@pet), class: "text-center rounded-md px-5 py-2.5 text-white bg-gray-500 hover:bg-white hover:text-gray-500 border-2 border-gray-500 inline-block font-semibold cursor-pointer transition duration-300" %>
+    </div>
   </div>
 
-  <div class="flex justify-center mt-6">
-    <%= link_to t('.back_to_pet', petname: @pet.petname.capitalize), pet_path(@pet), class: "text-center rounded-md px-5 py-2.5 text-white bg-gray-500 hover:bg-white hover:text-gray-500 border-2 border-gray-500 inline-block font-semibold cursor-pointer transition duration-300" %>
-  </div>
-</div>
+<% end %>

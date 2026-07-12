@@ -110,4 +110,54 @@ class VetVisitsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to pets_url(locale: I18n.default_locale)
   end
+
+  test "owner should batch update questions and answers" do
+    log_in_as(@owner)
+    patch batch_update_pet_vet_visits_url(@pet), params: {
+      vet_visits: {
+        @vet_visit.id => {
+          question: "New bulk question?",
+          answer: "New bulk answer."
+        }
+      }
+    }
+    assert_redirected_to pet_vet_visits_url(@pet)
+    @vet_visit.reload
+    assert_equal "New bulk question?", @vet_visit.question
+    assert_equal "New bulk answer.", @vet_visit.answer
+  end
+
+  test "member should batch update answers but question update is ignored" do
+    @vet_visit.members << @non_owner
+    log_in_as(@non_owner)
+    patch batch_update_pet_vet_visits_url(@pet), params: {
+      vet_visits: {
+        @vet_visit.id => {
+          question: "Member changed question?",
+          answer: "Member provided answer."
+        }
+      }
+    }
+    assert_redirected_to pet_vet_visits_url(@pet)
+    @vet_visit.reload
+    # Member answer is updated
+    assert_equal "Member provided answer.", @vet_visit.answer
+    # Member question change is ignored / not permitted
+    assert_equal "What is my cat's weight trend?", @vet_visit.question
+  end
+
+  test "unauthorized user should not batch update" do
+    log_in_as(@non_owner)
+    patch batch_update_pet_vet_visits_url(@pet), params: {
+      vet_visits: {
+        @vet_visit.id => {
+          answer: "Hacker answer."
+        }
+      }
+    }
+    # Should fail transaction and rollback, showing unauthorized or redirecting
+    # Since it rolled back, database won't have the answer
+    @vet_visit.reload
+    assert_nil @vet_visit.answer
+  end
 end

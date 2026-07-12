@@ -792,6 +792,9 @@ zh-TW:
       confirm_delete: "您確定要刪除這筆門診提問記錄嗎？"
       no_visits: "找不到 %{petname} 的門診提問記錄。"
       back_to_pet: "返回 %{petname} 的個人資料"
+      edit_all_visits: "批次編輯"
+      save_all_changes: "儲存變更"
+      cancel: "取消"
     new:
       title: "為 %{petname} 準備新提問"
       header: "準備門診提問"
