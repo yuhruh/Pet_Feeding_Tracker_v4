@@ -56,27 +56,15 @@
     </div>
   </div>
 
-  <% shared_vet_visits = Current.user.shared_vet_visits.includes(:pet) %>
-  <% if shared_vet_visits.any? %>
-    <div class="mt-8 border-t-4 border-amber-600 pt-6">
-      <h2 class="text-2xl font-bold text-amber-700 dark:text-amber-500 mb-4"><%= t('.shared_vet_visits_header') %></h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <% shared_vet_visits.each do |visit| %>
-          <div class="bg-amber-50/50 dark:bg-gray-800/50 border border-amber-200 dark:border-amber-700 rounded-lg p-4 shadow-md space-y-2">
-            <div class="flex justify-between items-center border-b border-amber-200 dark:border-amber-700 pb-2">
-              <span class="font-bold text-amber-800 dark:text-amber-400 text-lg"><%= visit.pet.petname.capitalize %></span>
-              <span class="text-sm text-gray-500"><%= visit.visit_date %></span>
-            </div>
-            <p class="text-sm text-gray-700 dark:text-gray-200"><strong>Q:</strong> <span class="italic"><%= visit.question %></span></p>
-            <% if visit.answer.present? %>
-              <p class="text-sm text-gray-700 dark:text-gray-200"><strong>A:</strong> <%= visit.answer %></p>
-            <% end %>
-            <div class="pt-2">
-              <%= link_to t('.edit_shared_visit'), edit_pet_vet_visit_path(visit.pet, visit), class: "inline-block text-xs bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded-md font-bold transition duration-300" %>
-            </div>
-          </div>
-        <% end %>
+  <% shared_pets = Pet.joins(vet_visits: :vet_visit_members).where(vet_visit_members: { user_id: Current.user.id }).distinct %>
+    <% if shared_pets.any? %>
+      <div class="mt-8 border-t-4 border-amber-600 pt-6">
+        <h2 class="text-2xl font-bold text-amber-700 dark:text-amber-500 mb-4"><%= t('.shared_vet_visits_header') %></h2>
+        <div>
+          <% shared_pets.each do |pet| %>
+            <%= link_to "📋 " + pet.petname.capitalize + " (Shared)", pet_vet_visits_path(pet), class: "block text-normal text-grayishBlue hover:underline-offset-4 hover:underline hover:text-blue-400 pl-6" %>
+          <% end %>
+        </div>
       </div>
-    </div>
-  <% end %>
+    <% end %>
 </div>
