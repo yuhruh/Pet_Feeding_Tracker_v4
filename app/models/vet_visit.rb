@@ -10,8 +10,16 @@ class VetVisit < ApplicationRecord
   validates :visit_date, presence: true
 
   before_save :set_answered_date
+  after_save :sync_vet_metadata, if: -> { saved_change_to_vet_name? || saved_change_to_consultation_time? }
 
   private
+
+  def sync_vet_metadata
+    pet.vet_visits.where(visit_date: visit_date).where.not(id: id).update_all(
+      vet_name: vet_name,
+      consultation_time: consultation_time
+    )
+  end
 
   def set_answered_date
     if answer.present? && answered_date.blank?

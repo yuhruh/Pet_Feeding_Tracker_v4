@@ -160,4 +160,37 @@ class VetVisitsControllerTest < ActionDispatch::IntegrationTest
     @vet_visit.reload
     assert_nil @vet_visit.answer
   end
+
+  test "owner can create vet_visit with vet_name and consultation_time" do
+    log_in_as(@owner)
+    assert_difference("VetVisit.count") do
+      post pet_vet_visits_url(@pet), params: {
+        vet_visit: {
+          question: "New Question",
+          visit_date: Date.today,
+          vet_name: "Dr. Watson",
+          consultation_time: 25
+        }
+      }
+    end
+    assert_redirected_to pet_vet_visits_url(@pet, locale: I18n.default_locale)
+    assert_equal "Dr. Watson", VetVisit.last.vet_name
+    assert_equal 25, VetVisit.last.consultation_time
+  end
+
+  test "owner can batch update vet_name and consultation_time" do
+    log_in_as(@owner)
+    patch batch_update_pet_vet_visits_url(@pet), params: {
+      vet_visits: {
+        @vet_visit.id => {
+          vet_name: "Dr. Adams",
+          consultation_time: 40
+        }
+      }
+    }
+    assert_redirected_to pet_vet_visits_url(@pet)
+    @vet_visit.reload
+    assert_equal "Dr. Adams", @vet_visit.vet_name
+    assert_equal 40, @vet_visit.consultation_time
+  end
 end

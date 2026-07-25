@@ -64,4 +64,26 @@ class VetVisitTest < ActiveSupport::TestCase
     visit.members << @other_user
     assert_includes visit.reload.members, @other_user
   end
+
+  test "syncs vet_name and consultation_time to other visits on the same date for the same pet" do
+    visit1 = VetVisit.create!(
+      pet: @pet,
+      question: "Question 1",
+      visit_date: Date.today,
+      vet_name: "Dr. Smith",
+      consultation_time: 20
+    )
+    visit2 = VetVisit.create!(
+      pet: @pet,
+      question: "Question 2",
+      visit_date: Date.today,
+      vet_name: "Dr. Smith",
+      consultation_time: 20
+    )
+
+    visit1.update!(vet_name: "Dr. Watson", consultation_time: 45)
+
+    assert_equal "Dr. Watson", visit2.reload.vet_name
+    assert_equal 45, visit2.consultation_time
+  end
 end
