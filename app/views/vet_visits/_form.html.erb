@@ -17,6 +17,18 @@
       <%= form.date_field :visit_date, class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
     </div>
 
+    <!-- Vet's Name -->
+    <div>
+      <%= form.label :vet_name, t('.vet_name', default: "Vet's Name"), class: "block font-bold text-gray-700 dark:text-gray-200 mb-1" %>
+      <%= form.text_field :vet_name, placeholder: t('.vet_name_placeholder', default: "Dr. Smith"), class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
+    </div>
+
+    <!-- Consultation Time -->
+    <div>
+      <%= form.label :consultation_time, t('.consultation_time', default: "Consultation Time (minutes)"), class: "block font-bold text-gray-700 dark:text-gray-200 mb-1" %>
+      <%= form.number_field :consultation_time, min: 1, placeholder: t('.consultation_time_placeholder', default: "e.g., 30"), class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
+    </div>
+
     <!-- Question -->
     <div>
       <%= form.label :question, t('.question'), class: "block font-bold text-gray-700 dark:text-gray-200 mb-1" %>
