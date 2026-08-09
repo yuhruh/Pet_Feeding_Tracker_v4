@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "8.0.3"
+gem "rails", "8.1.3.1"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use pg as the database for Active Record
@@ -24,7 +24,7 @@ gem "csv"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem "bcrypt", "~> 3.1.7"
-gem "rails-i18n", "~> 8.0.0"
+gem "rails-i18n", "~> 8.0"
 gem "i18n-js"
 gem "redis"
 gem "hiredis"
@@ -80,7 +80,7 @@ group :development do
 end
 
 group :test do
-  gem "minitest", "5.22.3"
+  gem "minitest", "~> 5.22"
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
