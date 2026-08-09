@@ -20,7 +20,12 @@ jobs:
           bundler-cache: true
 
       - name: Scan for common Rails security vulnerabilities using static analysis
-        run: bin/brakeman --no-pager
+        # -w2 reports medium and high confidence only. Brakeman's EOLRails check
+        # raises a weak-confidence warning 60 days before a Rails series goes EOL,
+        # which fails the build long before action is needed. It escalates to
+        # medium at 30 days and high once support actually ends, so both of those
+        # still break CI. Rails 8.0 EOL: 2026-10-07.
+        run: bin/brakeman --no-pager -w2
 
   scan_js:
     runs-on: ubuntu-latest
