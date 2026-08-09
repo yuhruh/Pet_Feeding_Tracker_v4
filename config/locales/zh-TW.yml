@@ -603,7 +603,37 @@ zh-TW:
       last_feed_date: "上次餵食日期:"
     hello_controller:
       hello_world: "你好，世界！"
+  will_paginate:
+    previous_label: "&#8592; 上一頁"
+    previous_aria_label: "上一頁"
+    next_label: "下一頁 &#8594;"
+    next_aria_label: "下一頁"
+    page_gap: "&hellip;"
+    container_aria_label: "分頁"
+    page_aria_label: "第 %{page} 頁"
+    page_entries_info:
+      single_page:
+        zero: "找不到%{model}"
+        one: "顯示 1 筆%{model}"
+        other: "顯示全部 %{count} 筆%{model}"
+      single_page_html:
+        zero: "找不到%{model}"
+        one: "顯示 <b>1</b> 筆%{model}"
+        other: "顯示全部 <b>%{count}</b> 筆%{model}"
+      multi_page: "顯示第 %{from} - %{to} 筆%{model}，共 %{count} 筆"
+      multi_page_html: "顯示第 <b>%{from}&nbsp;-&nbsp;%{to}</b> 筆%{model}，共 <b>%{count}</b> 筆"
+    models:
+      # 喜愛食物列表分頁的是 Hash 陣列，
+      # 因此 will_paginate 取得的模型鍵為 "hash"。
+      hash: "喜愛食物"
   activerecord:
+    models:
+      tracker: "餵食記錄"
+      pet: "寵物"
+      user: "使用者"
+      dry_food: "乾飼料"
+      health_check: "健康檢查"
+      vet_visit: "門診記錄"
     attributes:
       tracker:
         date: "日期"
