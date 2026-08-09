@@ -588,7 +588,7 @@
         以下のキーの数値を抽出してください：
         exam_date (形式: YYYY-MM-DD), rbc, hct, hgb, mcv, mch, mchc, rdw, retic, retic_hgb, wbc, neu, lym, mono, eos, baso, plt, mpv, pct, glu, crea, bun, phos, tp, alb, glob, alt, alkp, na, k, cl, ca, chol, ggt, tbil, amyl, fpl2, lipa, osm_cal, fbnp, felv, fiv.
         JSONオブジェクトのみを返してください。すべての画像で値が見つからない場合は、nullを使用してください。
-    javascript:
+  javascript:
     left_amount_controller:
       greater_than_alert: "%{amount}g を超えることはできません。"
       valid_amount: "%{amount}g は有効です。"
@@ -603,7 +603,37 @@
       last_feed_date: "最終給餌日:"
     hello_controller:
       hello_world: "こんにちは、世界！"
+  will_paginate:
+    previous_label: "&#8592; 前へ"
+    previous_aria_label: "前のページ"
+    next_label: "次へ &#8594;"
+    next_aria_label: "次のページ"
+    page_gap: "&hellip;"
+    container_aria_label: "ページ送り"
+    page_aria_label: "%{page} ページ目"
+    page_entries_info:
+      single_page:
+        zero: "%{model}は見つかりませんでした"
+        one: "%{model}を 1 件表示中"
+        other: "全 %{count} 件の%{model}を表示中"
+      single_page_html:
+        zero: "%{model}は見つかりませんでした"
+        one: "%{model}を <b>1</b> 件表示中"
+        other: "全 <b>%{count}</b> 件の%{model}を表示中"
+      multi_page: "全 %{count} 件の%{model}のうち %{from} - %{to} 件目を表示中"
+      multi_page_html: "全 <b>%{count}</b> 件の%{model}のうち <b>%{from}&nbsp;-&nbsp;%{to}</b> 件目を表示中"
+    models:
+      # お気に入りフード一覧は Hash の配列をページングするため、
+      # will_paginate はモデル名として "hash" を使用します。
+      hash: "お気に入りフード"
   activerecord:
+    models:
+      tracker: "給餌記録"
+      pet: "ペット"
+      user: "ユーザー"
+      dry_food: "ドライフード"
+      health_check: "健康診断"
+      vet_visit: "通院記録"
     attributes:
       tracker:
         date: "日付"

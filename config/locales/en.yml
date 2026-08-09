@@ -603,7 +603,52 @@ en:
       last_feed_date: "Last Feed Date:"
     hello_controller:
       hello_world: "Hello World!"
+  will_paginate:
+    previous_label: "&#8592; Previous"
+    previous_aria_label: "Previous page"
+    next_label: "Next &#8594;"
+    next_aria_label: "Next page"
+    page_gap: "&hellip;"
+    container_aria_label: "Pagination"
+    page_aria_label: "Page %{page}"
+    page_entries_info:
+      single_page:
+        zero: "No %{model} found"
+        one: "Displaying 1 %{model}"
+        other: "Displaying all %{count} %{model}"
+      single_page_html:
+        zero: "No %{model} found"
+        one: "Displaying <b>1</b> %{model}"
+        other: "Displaying <b>all&nbsp;%{count}</b> %{model}"
+      multi_page: "Displaying %{model} %{from} - %{to} of %{count} in total"
+      multi_page_html: "Displaying %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> of <b>%{count}</b> in total"
+    models:
+      # The favorite food list paginates an Array of Hashes, so will_paginate
+      # derives the model key "hash" instead of an ActiveRecord model name.
+      hash:
+        zero: "favorite foods"
+        one: "favorite food"
+        other: "favorite foods"
   activerecord:
+    models:
+      tracker:
+        one: "Tracker"
+        other: "Trackers"
+      pet:
+        one: "Pet"
+        other: "Pets"
+      user:
+        one: "User"
+        other: "Users"
+      dry_food:
+        one: "Dry Food"
+        other: "Dry Foods"
+      health_check:
+        one: "Health Check"
+        other: "Health Checks"
+      vet_visit:
+        one: "Vet Visit"
+        other: "Vet Visits"
     attributes:
       tracker:
         date: "Date"
