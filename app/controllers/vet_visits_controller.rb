@@ -64,7 +64,7 @@ class VetVisitsController < ApplicationController
         end
 
         permitted = if @pet.user == Current.user
-                      visit_params.permit(:question, :answer, :visit_date, :vet_name, :consultation_time)
+                      visit_params.permit(:question, :answer, :visit_date, :vet_name, :consultation_time, :waiting_time, :purpose)
         else
                       visit_params.permit(:answer)
         end
@@ -117,7 +117,7 @@ class VetVisitsController < ApplicationController
   end
 
   def vet_visit_params
-    params.expect(vet_visit: [ :question, :answer, :visit_date, :answered_date, :vet_name, :consultation_time, { member_emails: [] } ])
+    params.expect(vet_visit: [ :question, :answer, :visit_date, :answered_date, :vet_name, :consultation_time, :waiting_time, :purpose, { member_emails: [] } ])
   end
 
   def sync_members

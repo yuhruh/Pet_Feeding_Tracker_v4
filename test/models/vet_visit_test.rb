@@ -86,4 +86,70 @@ class VetVisitTest < ActiveSupport::TestCase
     assert_equal "Dr. Watson", visit2.reload.vet_name
     assert_equal 45, visit2.consultation_time
   end
+
+  test "syncs waiting_time and purpose to other visits on the same date for the same pet" do
+    visit1 = VetVisit.create!(
+      pet: @pet,
+      question: "Question 1",
+      visit_date: Date.today,
+      waiting_time: 10,
+      purpose: "checkup"
+    )
+    visit2 = VetVisit.create!(
+      pet: @pet,
+      question: "Question 2",
+      visit_date: Date.today,
+      waiting_time: 10,
+      purpose: "checkup"
+    )
+
+    visit1.update!(waiting_time: 25, purpose: "vaccination")
+
+    assert_equal 25, visit2.reload.waiting_time
+    assert_equal "vaccination", visit2.purpose
+  end
+
+  test "waiting_time must be less than or equal to consultation_time" do
+    visit = VetVisit.new(
+      pet: @pet,
+      question: "Is this cat eating enough?",
+      visit_date: Date.today,
+      consultation_time: 20,
+      waiting_time: 30
+    )
+    assert_not visit.valid?
+    assert_includes visit.errors[:waiting_time], I18n.t("activerecord.errors.models.vet_visit.attributes.waiting_time.greater_than_consultation_time")
+  end
+
+  test "waiting_time equal to consultation_time is valid" do
+    visit = VetVisit.new(
+      pet: @pet,
+      question: "Is this cat eating enough?",
+      visit_date: Date.today,
+      consultation_time: 20,
+      waiting_time: 20
+    )
+    assert visit.valid?
+  end
+
+  test "waiting_time cannot be negative" do
+    visit = VetVisit.new(
+      pet: @pet,
+      question: "Is this cat eating enough?",
+      visit_date: Date.today,
+      waiting_time: -5
+    )
+    assert_not visit.valid?
+  end
+
+  test "purpose must be one of the allowed values" do
+    visit = VetVisit.new(
+      pet: @pet,
+      question: "Is this cat eating enough?",
+      visit_date: Date.today,
+      purpose: "not_a_real_purpose"
+    )
+    assert_not visit.valid?
+    assert_includes visit.errors[:purpose], "is not included in the list"
+  end
 end

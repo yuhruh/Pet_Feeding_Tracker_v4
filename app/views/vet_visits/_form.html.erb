@@ -23,10 +23,23 @@
       <%= form.text_field :vet_name, placeholder: t('.vet_name_placeholder', default: "Dr. Smith"), class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
     </div>
 
+    <!-- Purpose -->
+    <div>
+      <%= form.label :purpose, t('.purpose', default: "Purpose of Visit"), class: "block font-bold text-gray-700 dark:text-gray-200 mb-1" %>
+      <%= form.select :purpose, VetVisit.purposes.keys.map { |p| [t("vet_visits.purpose_options.#{p}"), p.to_s] }, { include_blank: t('.purpose_placeholder', default: "Select a purpose") }, class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
+    </div>
+
     <!-- Consultation Time -->
     <div>
       <%= form.label :consultation_time, t('.consultation_time', default: "Consultation Time (minutes)"), class: "block font-bold text-gray-700 dark:text-gray-200 mb-1" %>
       <%= form.number_field :consultation_time, min: 1, placeholder: t('.consultation_time_placeholder', default: "e.g., 30"), class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
+    </div>
+
+    <!-- Waiting Time -->
+    <div>
+      <%= form.label :waiting_time, t('.waiting_time', default: "Waiting Time (minutes)"), class: "block font-bold text-gray-700 dark:text-gray-200 mb-1" %>
+      <%= form.number_field :waiting_time, min: 0, placeholder: t('.waiting_time_placeholder', default: "e.g., 15"), class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
+      <p class="text-xs text-gray-500 mt-1"><%= t('.waiting_time_hint', default: "How long you waited before being seen. This is part of the total consultation time above, not extra time.") %></p>
     </div>
 
     <!-- Question -->

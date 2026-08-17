@@ -8,21 +8,30 @@
         <%= t('.header', petname: @pet.petname.capitalize) %>
       </h1>
 
-      <% # Show Vet Name & Consultation Time at the very top of the entire questions list %>
-      <% latest_visit = @vet_visits.detect { |v| v.vet_name.present? || v.consultation_time.present? } || @vet_visits.first %>
-      <% if latest_visit && (latest_visit.vet_name.present? || latest_visit.consultation_time.present?) %>
+      <% # Show Vet Name, Purpose, Consultation Time & Waiting Time at the very top of the entire questions list %>
+      <% latest_visit = @vet_visits.detect { |v| v.vet_name.present? || v.consultation_time.present? || v.waiting_time.present? || v.purpose.present? } || @vet_visits.first %>
+      <% if latest_visit && (latest_visit.vet_name.present? || latest_visit.consultation_time.present? || latest_visit.waiting_time.present? || latest_visit.purpose.present?) %>
         <div class="mt-4 p-4 bg-amber-50/55 dark:bg-gray-800/50 border-2 border-amber-200 dark:border-gray-700 rounded-xl text-center max-w-md w-full shadow-sm">
           <h2 class="font-bold text-xs text-amber-800 dark:text-amber-400 mb-1 tracking-wider uppercase">
             <%= t('.latest_visit_info', default: "Vet Visit Info") %> (<%= latest_visit.visit_date %>)
           </h2>
-          <div class="flex justify-center items-center gap-6 text-sm text-gray-700 dark:text-gray-300 font-medium">
+          <div class="flex flex-wrap justify-center items-center gap-x-6 gap-y-1 text-sm text-gray-700 dark:text-gray-300 font-medium">
             <% if latest_visit.vet_name.present? %>
               <div>👨‍⚕️ <%= t('.vet_name_label') %>: <span class="text-gray-900 dark:text-white font-bold"><%= latest_visit.vet_name %></span></div>
+            <% end %>
+            <% if latest_visit.purpose.present? %>
+              <div>📋 <%= t('.purpose_label', default: 'Purpose') %>: <span class="text-gray-900 dark:text-white font-bold"><%= t("vet_visits.purpose_options.#{latest_visit.purpose}") %></span></div>
             <% end %>
             <% if latest_visit.consultation_time.present? %>
               <div>⏱️ <%= t('.duration_label') %>: <span class="text-gray-900 dark:text-white font-bold"><%= latest_visit.consultation_time %> <%= t('.minutes', default: 'mins') %></span></div>
             <% end %>
+            <% if latest_visit.waiting_time.present? %>
+              <div>⏳ <%= t('.waiting_label', default: 'Waiting') %>: <span class="text-gray-900 dark:text-white font-bold"><%= latest_visit.waiting_time %> <%= t('.minutes', default: 'mins') %></span></div>
+            <% end %>
           </div>
+          <% if latest_visit.waiting_time.present? && latest_visit.consultation_time.present? %>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1"><%= t('.waiting_time_note', default: 'Waiting time is included in the total consultation time above.') %></p>
+          <% end %>
         </div>
       <% end %>
     </div>

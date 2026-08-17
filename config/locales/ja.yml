@@ -713,12 +713,24 @@
         felv: "FeLV"
         fiv: "FIV"
         fpl2: "fPL2(ng/mL)"
+      vet_visit:
+        vet_name: "獣医の名前"
+        purpose: "訪問の目的"
+        consultation_time: "診察時間"
+        waiting_time: "待ち時間"
+        question: "質問"
+        answer: "回答"
+        visit_date: "訪問日"
     errors:
       models:
         tracker:
           attributes:
             amount:
               greater_than_left_amount: "在庫の残量（%{left_amount}g）以下で入力してください。"
+        vet_visit:
+          attributes:
+            waiting_time:
+              greater_than_consultation_time: "待ち時間は診察時間に含まれるため、診察時間以下にしてください。"
   authentication:
     required: "このページにアクセスするにはログインしてください"
   health_checks:
@@ -806,13 +818,25 @@
         issue: "サインインプロセスに問題が発生しました。もう一度お試しください。"
 
   vet_visits:
+    purpose_options:
+      vaccination: "ワクチン接種"
+      checkup: "健康診断"
+      dental_cleaning: "歯石除去"
+      surgery: "手術"
+      grooming: "トリミング"
+      emergency: "緊急"
+      follow_up: "経過観察"
+      other: "その他"
     index:
       title: "%{petname}の獣医の質問・記録"
       header: "%{petname}の獣医訪問と準備した質問"
       add_new_visit: "新しい質問を準備"
       visit_date: "訪問日"
       vet_name_label: "獣医"
+      purpose_label: "目的"
       duration_label: "診察時間"
+      waiting_label: "待ち時間"
+      waiting_time_note: "待ち時間は上記の診察時間に含まれています。"
       created_date: "作成日"
       answered_date: "回答日"
       question_label: "準備した質問"
@@ -842,8 +866,13 @@
       visit_date: "予定される訪問日"
       vet_name: "獣医の名前"
       vet_name_placeholder: "例：山田先生"
+      purpose: "訪問の目的"
+      purpose_placeholder: "目的を選択してください"
       consultation_time: "診察時間 (分)"
       consultation_time_placeholder: "例：30"
+      waiting_time: "待ち時間 (分)"
+      waiting_time_placeholder: "例：15"
+      waiting_time_hint: "診察を受けるまでに待った時間です。上記の診察時間に含まれており、追加の時間ではありません。"
       question: "獣医に聞くために準備した質問"
       question_placeholder: "獣医に聞きたい質問を入力してください..."
       answer: "獣医の回答"
@@ -856,7 +885,10 @@
       visit_details: "獣医訪問の詳細"
       visit_date: "訪問日"
       vet_name: "獣医の名前"
+      purpose: "目的"
       consultation_time: "診察時間"
+      waiting_time: "待ち時間"
+      waiting_time_note: "診察時間に含まれます"
       question: "質問"
       answer: "回答"
       no_answer_yet: "回答はまだありません"

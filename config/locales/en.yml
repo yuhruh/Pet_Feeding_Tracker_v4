@@ -728,12 +728,24 @@ en:
         felv: "FeLV"
         fiv: "FIV"
         fpl2: "fPL2(ng/mL)"
+      vet_visit:
+        vet_name: "Vet's Name"
+        purpose: "Purpose of Visit"
+        consultation_time: "Consultation Time"
+        waiting_time: "Waiting Time"
+        question: "Question"
+        answer: "Answer"
+        visit_date: "Visit Date"
     errors:
       models:
         tracker:
           attributes:
             amount:
               greater_than_left_amount: "must be less than or equal to the amount left in storage, which is %{left_amount}g."
+        vet_visit:
+          attributes:
+            waiting_time:
+              greater_than_consultation_time: "must be less than or equal to the consultation time, since waiting time is part of it."
   authentication:
     required: "You must be logged in to access this page"
   health_checks:
@@ -821,13 +833,25 @@ en:
         issue: "There was an issue with the sign in process. Please try again."
 
   vet_visits:
+    purpose_options:
+      vaccination: "Vaccination"
+      checkup: "Checkup / Wellness Exam"
+      dental_cleaning: "Dental Cleaning"
+      surgery: "Surgery"
+      grooming: "Grooming"
+      emergency: "Emergency"
+      follow_up: "Follow-up"
+      other: "Other"
     index:
       title: "%{petname}'s Vet Visits & Questions"
       header: "%{petname}'s Vet Visits & Prepared Questions"
       add_new_visit: "Prepare New Vet Visit/Question"
       visit_date: "Visit Date"
       vet_name_label: "Vet"
+      purpose_label: "Purpose"
       duration_label: "Duration"
+      waiting_label: "Waiting"
+      waiting_time_note: "Waiting time is included in the total consultation time above."
       created_date: "Created Date"
       answered_date: "Answered Date"
       question_label: "Prepared Question"
@@ -857,8 +881,13 @@ en:
       visit_date: "When to see the vet"
       vet_name: "Vet's Name"
       vet_name_placeholder: "e.g., Dr. Smith"
+      purpose: "Purpose of Visit"
+      purpose_placeholder: "Select a purpose"
       consultation_time: "Consultation Time (minutes)"
       consultation_time_placeholder: "e.g., 30"
+      waiting_time: "Waiting Time (minutes)"
+      waiting_time_placeholder: "e.g., 15"
+      waiting_time_hint: "How long you waited before being seen. This is part of the total consultation time above, not extra time."
       question: "Questions prepared to ask the vet"
       question_placeholder: "Type the questions you want to ask the vet..."
       answer: "Vet's Answer"
@@ -871,7 +900,10 @@ en:
       visit_details: "Vet Visit Details"
       visit_date: "Visit Date"
       vet_name: "Vet's Name"
+      purpose: "Purpose"
       consultation_time: "Consultation Time"
+      waiting_time: "Waiting Time"
+      waiting_time_note: "included in consultation time"
       question: "Question"
       answer: "Answer"
       no_answer_yet: "No answer yet"

@@ -9,8 +9,14 @@
       <% if @vet_visit.vet_name.present? %>
         <p><strong><%= t('.vet_name', default: "Vet's Name") %>:</strong> <%= @vet_visit.vet_name %></p>
       <% end %>
+      <% if @vet_visit.purpose.present? %>
+        <p><strong><%= t('.purpose', default: "Purpose") %>:</strong> <%= t("vet_visits.purpose_options.#{@vet_visit.purpose}") %></p>
+      <% end %>
       <% if @vet_visit.consultation_time.present? %>
         <p><strong><%= t('.consultation_time', default: "Consultation Time") %>:</strong> <%= @vet_visit.consultation_time %> <%= t('.minutes', default: "minutes") %></p>
+      <% end %>
+      <% if @vet_visit.waiting_time.present? %>
+        <p><strong><%= t('.waiting_time', default: "Waiting Time") %>:</strong> <%= @vet_visit.waiting_time %> <%= t('.minutes', default: "minutes") %> <span class="text-sm text-gray-500">(<%= t('.waiting_time_note', default: "included in consultation time") %>)</span></p>
       <% end %>
       <p><strong><%= t('.question') %>:</strong> <%= @vet_visit.question %></p>
       <p><strong><%= t('.answer') %>:</strong> <%= @vet_visit.answer.presence || t('.no_answer_yet') %></p>
