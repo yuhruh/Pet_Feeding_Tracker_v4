@@ -10,7 +10,8 @@ Pet Tracker v4 is a web application designed to help you accurately monitor your
 *   **Smart Inventory Management:** Track dry food inventory with automatic calculation of remaining food and predicted run-out dates based on consumption patterns.
 *   **Dietary Tracking & Preference Analysis:** Log daily feeding records and identify your pet's favorite foods using a custom scoring algorithm based on their reactions and intake.
 *   **Comprehensive Data Visualization:** Interactive charts for monitoring food consumption (dry/wet) and weight trends over time, including specialized tracking for boarding stays.
-*   **Sharing:** Generate shareable links to let others (like vets or sitters) view your pet's records.
+*   **Vet Visit Preparation & Q&A:** Prepare questions ahead of a vet visit and record the vet's answers afterward. Track the vet's name, the purpose of the visit (vaccination, checkup, dental cleaning, surgery, and more), and how the appointment time broke down between waiting and consultation, so you always know how much of the visit was spent waiting versus with the vet.
+*   **Sharing:** Generate shareable links to let others (like vets or sitters) view your pet's records, or invite specific members to view and answer prepared vet questions.
 *   **User Authentication:** Secure accounts with email/password or third-party providers (Google, LINE).
 *   **Data Portability & Bulk Operations:** Import/export tracker data from CSV and efficiently manage large datasets with bulk deletion features.
 *   **Automated Backups:** Receive automated CSV backups via email every 5 days.
@@ -61,7 +62,8 @@ To get started with Pet Tracker v4, you'll need to have the following installed:
 4.  **Track health:** In the "Health Checks" section, upload lab results and use Gemini AI to automatically populate your pet's medical data.
 5.  **Monitor diet:** Use the "Trackers" section to log daily feeding records. View interactive charts to monitor intake trends and use the **Favorite Food** analysis to identify your pet's most loved meals.
 6.  **Manage food storage:** Use the "Dry Foods" section to track inventory. The system automatically predicts when you'll run out of food based on current feeding habits.
-7.  **Share records:** Generate a shareable link for your pet to allow others (like vets or sitters) to view their dietary and health history.
+7.  **Prepare for vet visits:** In the "Vet Visits" section, jot down questions before an appointment, then fill in the vet's answers, the vet's name, visit purpose, consultation time, and waiting time once you're done. Share the record with other members so they can help prepare questions or record answers too.
+8.  **Share records:** Generate a shareable link for your pet to allow others (like vets or sitters) to view their dietary and health history.
 
 ## Contributing
 
