@@ -134,7 +134,7 @@
                   <div data-bulk-edit-target="viewState" class="flex flex-wrap items-center gap-3 pt-2 border-t border-amber-50 dark:border-gray-800">
                     <%= link_to t('.edit'), edit_pet_vet_visit_path(@pet, visit), class: "text-center rounded-md px-4 py-2 text-green-600 bg-green-100 hover:bg-green-200 font-bold text-sm transition duration-300" %>
                     <% if @pet.user == Current.user %>
-                      <%= link_to t('.delete'), pet_vet_visit_path(@pet, visit), data: { turbo_method: :delete, turbo_confirm: t('.confirm_delete') }, class: "text-red-600 hover:text-red-700 font-bold text-xs" %>
+                      <%= link_to t('.delete'), pet_vet_visit_path(@pet, visit), data: { turbo_method: :delete, turbo_confirm: t('.confirm_delete') }, class: "text-center rounded-md px-4 py-2 text-red-600 bg-red-100 hover:bg-red-200 font-bold text-sm transition duration-300" %>
                     <% end %>
                   </div>
                 </div>
