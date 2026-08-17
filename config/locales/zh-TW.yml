@@ -713,12 +713,24 @@ zh-TW:
         felv: "貓白血病 FeLV"
         fiv: "貓愛滋 FIV"
         fpl2: "胰脂肪酶 fPL2(ng/mL)"
+      vet_visit:
+        vet_name: "獸醫姓名"
+        purpose: "看診目的"
+        consultation_time: "看診時間"
+        waiting_time: "等待時間"
+        question: "問題"
+        answer: "回答"
+        visit_date: "門診日期"
     errors:
       models:
         tracker:
           attributes:
             amount:
               greater_than_left_amount: "必須小於或等於庫存剩餘量，目前庫存剩餘 %{left_amount}g。"
+        vet_visit:
+          attributes:
+            waiting_time:
+              greater_than_consultation_time: "等待時間已包含在看診時間內，數值必須小於或等於看診時間。"
   authentication:
     required: "您必須登入才能存取此頁面"
   health_checks:
@@ -806,13 +818,25 @@ zh-TW:
         issue: "登入程序發生問題。請再試一次。"
 
   vet_visits:
+    purpose_options:
+      vaccination: "疫苗接種"
+      checkup: "健康檢查"
+      dental_cleaning: "洗牙"
+      surgery: "手術"
+      grooming: "美容"
+      emergency: "緊急"
+      follow_up: "回診追蹤"
+      other: "其他"
     index:
       title: "%{petname} 的門診提問 & 記錄"
       header: "%{petname} 的門診提問與準備提問"
       add_new_visit: "準備新門診提問"
       visit_date: "門診日期"
       vet_name_label: "獸醫"
+      purpose_label: "看診目的"
       duration_label: "看診時間"
+      waiting_label: "等待時間"
+      waiting_time_note: "等待時間已包含在上方的看診時間內。"
       created_date: "建立日期"
       answered_date: "回答日期"
       question_label: "準備的提問"
@@ -842,8 +866,13 @@ zh-TW:
       visit_date: "預定門診日期"
       vet_name: "獸醫姓名"
       vet_name_placeholder: "例：張醫生"
+      purpose: "看診目的"
+      purpose_placeholder: "請選擇看診目的"
       consultation_time: "看診時間 (分鐘)"
       consultation_time_placeholder: "例：30"
+      waiting_time: "等待時間 (分鐘)"
+      waiting_time_placeholder: "例：15"
+      waiting_time_hint: "看診前等待的時間，已包含在上方的看診時間內，不是額外的時間。"
       question: "準備向獸醫提問的問題"
       question_placeholder: "輸入您想向獸醫提問的問題..."
       answer: "獸醫的回答"
@@ -856,7 +885,10 @@ zh-TW:
       visit_details: "門診提問詳情"
       visit_date: "門診日期"
       vet_name: "獸醫姓名"
+      purpose: "看診目的"
       consultation_time: "看診時間"
+      waiting_time: "等待時間"
+      waiting_time_note: "已包含在看診時間內"
       question: "問題"
       answer: "回答"
       no_answer_yet: "尚未回答"
