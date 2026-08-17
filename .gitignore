@@ -38,6 +38,11 @@
 
 /config/credentials/test.key
 
+# Ignore SQLite test databases (base file plus parallel-testing worker copies).
+/pet_tracker_v4_test
+/pet_tracker_v4_test-*
+/pet_tracker_v4_test_*
+
 # Android
 .gradle/
 **/build/
