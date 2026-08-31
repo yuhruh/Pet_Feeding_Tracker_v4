@@ -24,7 +24,7 @@ class TrackersTest < ApplicationSystemTestCase
 
     fill_in "tracker_amount", with: @tracker.amount
     fill_in "tracker_brand", with: @tracker.brand
-    fill_in "tracker_date", with: @tracker.date
+    fill_in "tracker_date", with: Time.use_zone(@user.timezone) { Date.current }
     fill_in "tracker_description", with: @tracker.description
     fill_in "tracker_feed_time", with: @tracker.feed_time
     select @tracker.food_type.capitalize, from: "tracker_food_type"
