@@ -254,6 +254,7 @@
     set_user_by_token:
       alert: "パスワードリセットリンクが無効か、有効期限が切れています。"
   pets:
+    not_found: "ペットが見つかりません。"
     form:
       pet_avatar: "ペットのアバター"
       petname: "ペットの名前"

@@ -1,6 +1,5 @@
 class PetsController < ApplicationController
   before_action :set_pet, only: %i[ show edit update destroy ]
-  before_action :require_authentication
 
   # GET /pets or /pets.json
   def index
@@ -61,8 +60,14 @@ class PetsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    # Only the signed-in user's own pets; anyone else's pet is treated as not found.
     def set_pet
-      @pet = Pet.find(params.expect(:id))
+      @pet = Current.user.pets.find(params.expect(:id))
+    rescue ActiveRecord::RecordNotFound
+      respond_to do |format|
+        format.html { redirect_to pets_path, alert: t("pets.not_found") }
+        format.any { head :not_found }
+      end
     end
 
     # Only allow a list of trusted parameters through.

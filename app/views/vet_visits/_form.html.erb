@@ -1,3 +1,4 @@
+<% owner = @pet.user == Current.user %>
 <%= form_with(model: [@pet, vet_visit], id: "vet-visit-form", class: "space-y-6") do |form| %>
   <% if vet_visit.errors.any? %>
     <div id="error_explanation" class="bg-red-50 border-l-4 border-red-500 p-4 mb-4 text-red-700 rounded-lg">
@@ -11,42 +12,50 @@
   <% end %>
 
   <div class="space-y-4">
-    <!-- Visit Date -->
-    <div>
-      <%= form.label :visit_date, t('.visit_date'), class: "block font-bold text-gray-700 dark:text-gray-200 mb-1" %>
-      <%= form.date_field :visit_date, class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
-    </div>
+    <% if owner %>
+      <!-- Visit Date -->
+      <div>
+        <%= form.label :visit_date, t('.visit_date'), class: "block font-bold text-gray-700 dark:text-gray-200 mb-1" %>
+        <%= form.date_field :visit_date, class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
+      </div>
 
-    <!-- Vet's Name -->
-    <div>
-      <%= form.label :vet_name, t('.vet_name', default: "Vet's Name"), class: "block font-bold text-gray-700 dark:text-gray-200 mb-1" %>
-      <%= form.text_field :vet_name, placeholder: t('.vet_name_placeholder', default: "Dr. Smith"), class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
-    </div>
+      <!-- Vet's Name -->
+      <div>
+        <%= form.label :vet_name, t('.vet_name', default: "Vet's Name"), class: "block font-bold text-gray-700 dark:text-gray-200 mb-1" %>
+        <%= form.text_field :vet_name, placeholder: t('.vet_name_placeholder', default: "Dr. Smith"), class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
+      </div>
 
-    <!-- Purpose -->
-    <div>
-      <%= form.label :purpose, t('.purpose', default: "Purpose of Visit"), class: "block font-bold text-gray-700 dark:text-gray-200 mb-1" %>
-      <%= form.select :purpose, VetVisit.purposes.keys.map { |p| [t("vet_visits.purpose_options.#{p}"), p.to_s] }, { include_blank: t('.purpose_placeholder', default: "Select a purpose") }, class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
-    </div>
+      <!-- Purpose -->
+      <div>
+        <%= form.label :purpose, t('.purpose', default: "Purpose of Visit"), class: "block font-bold text-gray-700 dark:text-gray-200 mb-1" %>
+        <%= form.select :purpose, VetVisit.purposes.keys.map { |p| [t("vet_visits.purpose_options.#{p}"), p.to_s] }, { include_blank: t('.purpose_placeholder', default: "Select a purpose") }, class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
+      </div>
 
-    <!-- Consultation Time -->
-    <div>
-      <%= form.label :consultation_time, t('.consultation_time', default: "Consultation Time (minutes)"), class: "block font-bold text-gray-700 dark:text-gray-200 mb-1" %>
-      <%= form.number_field :consultation_time, min: 1, placeholder: t('.consultation_time_placeholder', default: "e.g., 30"), class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
-    </div>
+      <!-- Consultation Time -->
+      <div>
+        <%= form.label :consultation_time, t('.consultation_time', default: "Consultation Time (minutes)"), class: "block font-bold text-gray-700 dark:text-gray-200 mb-1" %>
+        <%= form.number_field :consultation_time, min: 1, placeholder: t('.consultation_time_placeholder', default: "e.g., 30"), class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
+      </div>
 
-    <!-- Waiting Time -->
-    <div>
-      <%= form.label :waiting_time, t('.waiting_time', default: "Waiting Time (minutes)"), class: "block font-bold text-gray-700 dark:text-gray-200 mb-1" %>
-      <%= form.number_field :waiting_time, min: 0, placeholder: t('.waiting_time_placeholder', default: "e.g., 15"), class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
-      <p class="text-xs text-gray-500 mt-1"><%= t('.waiting_time_hint', default: "How long you waited before being seen. This is part of the total consultation time above, not extra time.") %></p>
-    </div>
+      <!-- Waiting Time -->
+      <div>
+        <%= form.label :waiting_time, t('.waiting_time', default: "Waiting Time (minutes)"), class: "block font-bold text-gray-700 dark:text-gray-200 mb-1" %>
+        <%= form.number_field :waiting_time, min: 0, placeholder: t('.waiting_time_placeholder', default: "e.g., 15"), class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
+        <p class="text-xs text-gray-500 mt-1"><%= t('.waiting_time_hint', default: "How long you waited before being seen. This is part of the total consultation time above, not extra time.") %></p>
+      </div>
 
-    <!-- Question -->
-    <div>
-      <%= form.label :question, t('.question'), class: "block font-bold text-gray-700 dark:text-gray-200 mb-1" %>
-      <%= form.text_area :question, rows: 4, placeholder: t('.question_placeholder'), class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
-    </div>
+      <!-- Question -->
+      <div>
+        <%= form.label :question, t('.question'), class: "block font-bold text-gray-700 dark:text-gray-200 mb-1" %>
+        <%= form.text_area :question, rows: 4, placeholder: t('.question_placeholder'), class: "w-full border-2 border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 dark:text-black" %>
+      </div>
+    <% else %>
+      <!-- Question (read-only for members, who may only answer) -->
+      <div>
+        <p class="block font-bold text-gray-700 dark:text-gray-200 mb-1"><%= t('.question') %></p>
+        <p class="w-full border-2 border-gray-200 rounded-lg p-2.5 bg-gray-50 text-gray-800 whitespace-pre-line"><%= vet_visit.question %></p>
+      </div>
+    <% end %>
 
     <!-- Answer -->
     <div>
@@ -55,7 +64,7 @@
     </div>
 
     <!-- Members Sharing (Only for Owner) -->
-    <% if @pet.user == Current.user %>
+    <% if owner %>
       <div class="border-t border-gray-200 pt-6" data-controller="dynamic-emails">
         <h3 class="font-bold text-lg text-amber-700 dark:text-amber-500 mb-2"><%= t('.share_with_members') %></h3>
         <p class="text-sm text-gray-500 mb-4"><%= t('.share_instructions') %></p>
