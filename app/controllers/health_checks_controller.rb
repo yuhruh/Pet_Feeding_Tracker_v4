@@ -1,7 +1,6 @@
 class HealthChecksController < ApplicationController
   before_action :set_pet
   before_action :set_health_check, only: %i[ show edit update destroy ]
-  before_action :require_authentication
   before_action :set_current_date
 
 
@@ -94,8 +93,14 @@ class HealthChecksController < ApplicationController
   end
 
   private
+    # Only the signed-in user's own pets; anyone else's pet is treated as not found.
     def set_pet
-      @pet = Pet.find(params[:pet_id])
+      @pet = Current.user.pets.find(params[:pet_id])
+    rescue ActiveRecord::RecordNotFound
+      respond_to do |format|
+        format.html { redirect_to pets_path, alert: t("pets.not_found") }
+        format.any { head :not_found }
+      end
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_health_check

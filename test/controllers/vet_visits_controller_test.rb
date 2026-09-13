@@ -79,20 +79,48 @@ class VetVisitsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to pets_url(locale: I18n.default_locale)
   end
 
-  test "member should be able to update answer and question" do
+  test "member can update answer but not question or visit details" do
     @vet_visit.members << @non_owner
     log_in_as(@non_owner)
     patch pet_vet_visit_url(@pet, @vet_visit), params: {
       vet_visit: {
         question: "Updated question?",
-        answer: "This is the vet's answer."
+        answer: "This is the vet's answer.",
+        vet_name: "Dr. Mallory",
+        visit_date: Date.today - 1
       }
     }
     assert_redirected_to pet_vet_visits_url(@pet, locale: I18n.default_locale)
     @vet_visit.reload
-    assert_equal "Updated question?", @vet_visit.question
+    assert_equal "What is my cat's weight trend?", @vet_visit.question
     assert_equal "This is the vet's answer.", @vet_visit.answer
     assert_not_nil @vet_visit.answered_date
+    assert_nil @vet_visit.vet_name
+    assert_equal Date.today, @vet_visit.visit_date
+  end
+
+  test "member cannot overwrite details of visits not shared with them" do
+    unshared = VetVisit.create!(pet: @pet, question: "Private question", visit_date: Date.today, vet_name: "Dr. Owner")
+    @vet_visit.members << @non_owner
+    log_in_as(@non_owner)
+    patch pet_vet_visit_url(@pet, @vet_visit), params: {
+      vet_visit: { answer: "Noted.", vet_name: "Dr. Mallory", purpose: "surgery" }
+    }
+    unshared.reload
+    assert_equal "Dr. Owner", unshared.vet_name
+    assert_nil unshared.purpose
+  end
+
+  test "owner can update question and visit details" do
+    log_in_as(@owner)
+    patch pet_vet_visit_url(@pet, @vet_visit), params: {
+      vet_visit: { question: "Owner question?", vet_name: "Dr. Watson", purpose: "checkup" }
+    }
+    assert_redirected_to pet_vet_visits_url(@pet, locale: I18n.default_locale)
+    @vet_visit.reload
+    assert_equal "Owner question?", @vet_visit.question
+    assert_equal "Dr. Watson", @vet_visit.vet_name
+    assert_equal "checkup", @vet_visit.purpose
   end
 
   test "owner should destroy vet_visit" do

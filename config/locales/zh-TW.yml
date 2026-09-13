@@ -254,6 +254,7 @@ zh-TW:
     set_user_by_token:
       alert: "密碼重設連結無效或已過期。"
   pets:
+    not_found: "找不到寵物。"
     form:
       pet_avatar: "寵物頭像"
       petname: "寵物名稱"

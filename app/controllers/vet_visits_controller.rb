@@ -38,7 +38,7 @@ class VetVisitsController < ApplicationController
   end
 
   def update
-    if @vet_visit.update(vet_visit_params)
+    if @vet_visit.update(@pet.user == Current.user ? vet_visit_params : member_vet_visit_params)
       sync_members if @pet.user == Current.user # Only owner can modify members
       redirect_to pet_vet_visits_path(@pet), notice: t(".notice")
     else
@@ -118,6 +118,12 @@ class VetVisitsController < ApplicationController
 
   def vet_visit_params
     params.expect(vet_visit: [ :question, :answer, :visit_date, :answered_date, :vet_name, :consultation_time, :waiting_time, :purpose, { member_emails: [] } ])
+  end
+
+  # Members may only answer. Visit details sync to every visit on the same date,
+  # including ones not shared with the member, so they stay owner-only.
+  def member_vet_visit_params
+    params.expect(vet_visit: [ :answer ])
   end
 
   def sync_members

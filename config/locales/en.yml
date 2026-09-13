@@ -254,6 +254,7 @@ en:
     set_user_by_token:
       alert: "Password reset link is invalid or has expired."
   pets:
+    not_found: "Pet not found."
     form:
       pet_avatar: "Pet avatar"
       petname: "Petname"
