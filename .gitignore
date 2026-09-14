@@ -51,10 +51,17 @@
 local.properties
 .kotlin/
 
-\n# Android Signing Configuration\nkeystore.properties
+# Android Signing Configuration
+keystore.properties
 # Android Keystore
 *.jks
 *.keystore
 *.pem
-\n# OS generated files\n.DS_Store\n.DS_Store?
+
+# Database dumps and backups (db/structure.sql is not affected)
+/*.sql
+/*.dump
+
+# OS generated files
 .DS_Store
+.DS_Store?
