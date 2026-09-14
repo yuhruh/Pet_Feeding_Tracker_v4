@@ -28,7 +28,7 @@ class SharedTrackersController < ApplicationController
 
     # For public view, we usually show a fixed number of recent records or allow pagination
     page = params[:page].blank? ? 1 : params[:page]
-    @trackers = @all_trackers.order(date: :desc, feed_time: :desc).paginate(page: page, per_page: 150)
+    @trackers = @all_trackers.order(Arel.sql("date DESC, #{Tracker.local_feed_time_sql(@pet.timezone)} DESC")).paginate(page: page, per_page: 150)
 
     render layout: "application"
   end

@@ -22,12 +22,25 @@ class Tracker < ApplicationRecord
 
   after_commit :sync_dry_food_inventory, on: [ :create, :destroy ]
 
-  # Feed time shifted into the given zone, for ordering trackers on PostgreSQL.
-  # The zone is resolved to a known IANA name (UTC if unknown) and quoted, so
-  # user input never reaches the SQL string directly.
+  # UTC offset, in seconds, that the app uses to display feed_time in this zone.
+  # Rails stores time columns on 2000-01-01 and converts them with that date's
+  # offset, so the same offset is used here. Unknown zones fall back to UTC.
+  def self.feed_time_offset(timezone)
+    zone = ActiveSupport::TimeZone[timezone.to_s] || ActiveSupport::TimeZone["UTC"]
+    Time.utc(2000, 1, 1).in_time_zone(zone).utc_offset
+  end
+
+  # SQL for feed_time as the local time of day the app shows, for ordering.
+  # feed_time is stored in UTC, so without this a 00:20 Taipei feed (16:20 UTC)
+  # sorts after 09:25 (01:25 UTC). The shift wraps past midnight, and the offset
+  # is an integer computed here, never text from the user.
   def self.local_feed_time_sql(timezone)
-    zone = ActiveSupport::TimeZone[timezone.to_s]&.tzinfo&.name || "UTC"
-    "(feed_time AT TIME ZONE 'UTC' AT TIME ZONE #{connection.quote(zone)})"
+    offset = Integer(feed_time_offset(timezone))
+    if connection_db_config.adapter.start_with?("sqlite")
+      format("time(feed_time, '%+d seconds')", offset)
+    else
+      "(feed_time + INTERVAL '#{offset} seconds')"
+    end
   end
 
   private

@@ -36,12 +36,8 @@ class TrackersController < ApplicationController
     page = params[:page].blank? ? 1 : params[:page]
     session[:per_page] = params[:per_page] if params[:per_page].present?
     per_page = session[:per_page] || 10
-    adapter_type = Rails.configuration.database_configuration[Rails.env]["adapter"]
-    order_sql = if adapter_type == "sqlite3"
-      "CASE WHEN come_back_to_eat = '' OR left_amount IS NULL THEN 0 ELSE 1 END ASC, date DESC, feed_time DESC"
-    else
-      "CASE WHEN come_back_to_eat = '' OR left_amount IS NULL THEN 0 ELSE 1 END ASC, date DESC, feed_time DESC, #{Tracker.local_feed_time_sql(Current.user.timezone)} DESC"
-    end
+    # Unfinished rows first, then newest date, then latest feed time on the user's clock.
+    order_sql = "CASE WHEN come_back_to_eat = '' OR left_amount IS NULL THEN 0 ELSE 1 END ASC, date DESC, #{Tracker.local_feed_time_sql(Current.user.timezone)} DESC"
     @trackers = @all_trackers.reorder(Arel.sql(order_sql)).paginate(page: page, per_page: per_page)
 
     respond_to do |format|

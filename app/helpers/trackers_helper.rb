@@ -33,7 +33,8 @@ module TrackersHelper
   def first_occurrence?(tracker)
     @first_occurrence_ids ||= {}
     @first_occurrence_ids[tracker.pet_id] ||= begin
-      tracker.pet.trackers.select(:id, :brand, :description, :pet_id, :date, :feed_time).order(:date, :feed_time, :id).to_a.group_by do |t|
+      local_feed_time = Tracker.local_feed_time_sql(tracker.pet.timezone)
+      tracker.pet.trackers.select(:id, :brand, :description, :pet_id, :date, :feed_time).order(Arel.sql("date ASC, #{local_feed_time} ASC, id ASC")).to_a.group_by do |t|
         [ t.brand.to_s.downcase.strip, normalize_description(t.description) ]
       end.map { |_, group| group.first.id }
     end

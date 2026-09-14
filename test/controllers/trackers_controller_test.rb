@@ -66,4 +66,33 @@ class TrackersControllerTest < ActionDispatch::IntegrationTest
     tracker = Tracker.last
     assert_equal Time.zone.parse("10:00").utc.strftime("%H:%M"), tracker.feed_time.utc.strftime("%H:%M")
   end
+
+  # users(:one) is in Asia/Taipei: 00:20 is stored as 16:20 UTC and 09:25 as 01:25 UTC.
+  test "index lists a day's feedings by local feed time, latest first" do
+    create_finished_feedings_at("00:20", "09:25")
+    get pet_trackers_url(@pet)
+    assert_local_order "09:25", "00:20"
+  end
+
+  test "shared page lists a day's feedings by local feed time, latest first" do
+    create_finished_feedings_at("00:20", "09:25")
+    get shared_pet_trackers_url(share_token: @pet.share_token)
+    assert_local_order "09:25", "00:20"
+  end
+
+  private
+    def create_finished_feedings_at(*times)
+      Time.use_zone(users(:one).timezone) do
+        times.each do |time|
+          @pet.trackers.create!(date: "2026-05-01", feed_time: time, food_type: "wet", brand: "Ciao", description: "Tuna", amount: 40, left_amount: 5, come_back_to_eat: "-")
+        end
+      end
+    end
+
+    def assert_local_order(earlier, later)
+      assert_response :success
+      assert_includes response.body, "#{earlier}</td>"
+      assert_includes response.body, "#{later}</td>"
+      assert_operator response.body.index("#{earlier}</td>"), :<, response.body.index("#{later}</td>"), "#{earlier} should be listed before #{later}"
+    end
 end
