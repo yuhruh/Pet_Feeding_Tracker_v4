@@ -40,7 +40,7 @@ class TrackersController < ApplicationController
     order_sql = if adapter_type == "sqlite3"
       "CASE WHEN come_back_to_eat = '' OR left_amount IS NULL THEN 0 ELSE 1 END ASC, date DESC, feed_time DESC"
     else
-      "CASE WHEN come_back_to_eat = '' OR left_amount IS NULL THEN 0 ELSE 1 END ASC, date DESC, feed_time DESC, (feed_time AT TIME ZONE 'UTC' AT TIME ZONE '#{Current.user.timezone}') DESC"
+      "CASE WHEN come_back_to_eat = '' OR left_amount IS NULL THEN 0 ELSE 1 END ASC, date DESC, feed_time DESC, #{Tracker.local_feed_time_sql(Current.user.timezone)} DESC"
     end
     @trackers = @all_trackers.reorder(Arel.sql(order_sql)).paginate(page: page, per_page: per_page)
 

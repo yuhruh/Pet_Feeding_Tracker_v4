@@ -22,6 +22,14 @@ class Tracker < ApplicationRecord
 
   after_commit :sync_dry_food_inventory, on: [ :create, :destroy ]
 
+  # Feed time shifted into the given zone, for ordering trackers on PostgreSQL.
+  # The zone is resolved to a known IANA name (UTC if unknown) and quoted, so
+  # user input never reaches the SQL string directly.
+  def self.local_feed_time_sql(timezone)
+    zone = ActiveSupport::TimeZone[timezone.to_s]&.tzinfo&.name || "UTC"
+    "(feed_time AT TIME ZONE 'UTC' AT TIME ZONE #{connection.quote(zone)})"
+  end
+
   private
 
   # A tracker may only draw from a dry-food bag owned by the pet's owner.

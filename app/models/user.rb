@@ -20,6 +20,7 @@ class User < ApplicationRecord
   validates :password, length: { maximum: 105 }, allow_blank: true, on: :update
   validates :password_confirmation, presence: true, if: -> { password.present? }, on: :update
   validates :timezone, presence: true, on: :create
+  validate :timezone_must_be_known, if: :will_save_change_to_timezone?
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
@@ -49,5 +50,14 @@ class User < ApplicationRecord
 
     user.save
     user
+  end
+
+  private
+
+  # Only zones Rails can resolve: IANA names ("Asia/Taipei") or Rails names ("Taipei").
+  def timezone_must_be_known
+    return if timezone.blank? # presence is checked on create
+
+    errors.add(:timezone, :invalid) unless ActiveSupport::TimeZone[timezone]
   end
 end

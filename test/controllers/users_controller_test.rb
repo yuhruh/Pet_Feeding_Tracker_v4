@@ -43,4 +43,11 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to new_session_url
   end
+
+  test "should not update user with an unknown or crafted time zone" do
+    post session_url, params: { email_address: @user.email_address, password: "password" }
+    patch users_url, params: { user: { timezone: "Asia/Taipei') DESC; DROP TABLE users; --" } }
+    assert_response :unprocessable_entity
+    assert_equal "Asia/Taipei", @user.reload.timezone
+  end
 end
