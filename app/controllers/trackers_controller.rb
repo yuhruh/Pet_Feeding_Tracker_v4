@@ -229,7 +229,7 @@ class TrackersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def tracker_params
-      params.expect(tracker: [ :date, :feed_time, :come_back_to_eat, :food_type, :brand, :description, :hungry, :amount, :left_amount, :love, :total_ate_amount, :frequency, :result, :favorite_score, :note, :weight, :pet_id, :dry_food_id ])
+      params.expect(tracker: [ :date, :feed_time, :come_back_to_eat, :food_type, :brand, :description, :hungry, :amount, :left_amount, :love, :total_ate_amount, :frequency, :result, :favorite_score, :note, :weight, :dry_food_id ])
     end
 
     def calculate_frequency(time_string)

@@ -17,11 +17,20 @@ class Tracker < ApplicationRecord
   validates :description, presence: true, length: { minimum: 2, maximum: 100 }
   validates :amount, numericality: true, comparison: { greater_than: 0 }
   validates :left_amount, numericality: true, comparison: { less_than_or_equal_to: :amount }, on: :update, allow_nil: true
+  validate :dry_food_belongs_to_pet_owner, if: :will_save_change_to_dry_food_id?
 
 
   after_commit :sync_dry_food_inventory, on: [ :create, :destroy ]
 
   private
+
+  # A tracker may only draw from a dry-food bag owned by the pet's owner.
+  # Another user's bag gets the same error as a missing one.
+  def dry_food_belongs_to_pet_owner
+    return if dry_food_id.blank?
+
+    errors.add(:dry_food_id, :invalid) unless DryFood.exists?(id: dry_food_id, user_id: pet&.user_id)
+  end
 
   def dry_food?
     (kibble? || freeze_dried?) && dry_food.present?

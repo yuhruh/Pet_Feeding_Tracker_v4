@@ -82,6 +82,6 @@ class DryFoodsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def dry_food_params
-      params.require(:dry_food).permit(:brand, :food_type, :description, :amount, :used_amount, :user_id)
+      params.require(:dry_food).permit(:brand, :food_type, :description, :amount, :used_amount)
     end
 end
