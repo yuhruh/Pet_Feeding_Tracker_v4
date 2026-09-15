@@ -22,13 +22,13 @@
     <%= stylesheet_link_tag "tailwind", "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
     
-    <script type="module">
+    <script type="module" nonce="<%= content_security_policy_nonce %>">
       // import Big from "https://ga.jspm.io/npm:big.js@6.2.1/big.mjs";
       import Big from "big.js";
       window.BigNumber = Big;
     </script>
-    
-    <%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
+
+    <%= javascript_include_tag "https://www.gstatic.com/charts/loader.js", nonce: true %>
   </head>
 
   <body class="dark:bg-darkBlue dark:text-white overflow-x-hidden">

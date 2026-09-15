@@ -1,5 +1,5 @@
 <% if authenticated? && Current.user.gemini_api_key.blank? %>
-  <div id="gemini-key-banner" class="bg-amber-600 text-white p-4 shadow-lg sticky top-0 z-50 transition-all duration-500">
+  <div id="gemini-key-banner" class="bg-amber-600 text-white p-4 shadow-lg sticky top-0 z-50 transition-all duration-500" data-controller="dismiss">
     <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
       <div class="flex items-center mb-4 md:mb-0">
         <span class="text-2xl mr-3">💎</span>
@@ -14,7 +14,7 @@
         <% end %>
         <button type="button" 
                 class="text-white hover:text-amber-200 transition-colors" 
-                onclick="document.getElementById('gemini-key-banner').classList.add('hidden')"
+                data-action="dismiss#close"
                 aria-label="Dismiss">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />

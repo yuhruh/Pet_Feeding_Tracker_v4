@@ -14,12 +14,12 @@
     <%= javascript_importmap_tags %>
 
     
-    <script type="module">
+    <script type="module" nonce="<%= content_security_policy_nonce %>">
       import Big from "https://ga.jspm.io/npm:big.js@6.2.1/big.mjs";
       window.BigNumber = Big;
     </script>
-    
-    <%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
+
+    <%= javascript_include_tag "https://www.gstatic.com/charts/loader.js", nonce: true %>
   </head>
 
   <body class="dark:bg-darkBlue dark:text-white">
