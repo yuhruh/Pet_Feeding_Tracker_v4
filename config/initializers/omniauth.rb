@@ -21,7 +21,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
           { scope: "email, profile",
             callback_path: "/auth/google_oauth2/callback",
             request_path: "/auth/google_oauth2",
-            provider_ignores_state: true,
             setup: lambda { |env|
               env["rack.input"] ||= StringIO.new("")
             }
@@ -32,7 +31,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
           { scope: "profile openid email",
             callback_path: "/auth/line/callback",
             request_path: "/auth/line",
-            provider_ignores_state: true,
             setup: lambda { |env|
               env["rack.input"] ||= StringIO.new("")
             }
@@ -43,7 +41,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
           { scope: "user:email",
             callback_path: "/auth/github/callback",
             request_path: "/auth/github",
-            provider_ignores_state: true,
             setup: lambda { |env|
               env["rack.input"] ||= StringIO.new("")
             }
@@ -53,7 +50,8 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     exception = env["omniauth.error"]
     if exception
       Rails.logger.error "OmniAuth Error: #{exception.class} - #{exception.message}"
-      Rails.logger.error exception.backtrace.join("\n")
+      # Errors such as csrf_detected and access_denied are built, not raised, so they have no backtrace.
+      Rails.logger.error exception.backtrace.join("\n") if exception.backtrace
     end
     OmniAuth::FailureEndpoint.new(env).redirect_to_failure
   end
