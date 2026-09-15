@@ -346,9 +346,7 @@ zh-TW:
       alert_rate_limit: "登入嘗試次數過多。請稍候再試。"
       notice_new_user: "您好，%{username} 👋。這是您第一次登入，請先新增一隻寵物以便進一步紀錄。"
       notice_welcome_back: "歡迎回到寵物餵食紀錄應用程式，%{username}"
-      alert_with_connected_services: "您之前曾使用您的 %{services} 帳戶登入。請使用該帳戶登入。"
-      alert_wrong_password: "密碼不正確"
-      alert_unregistered_email: "此電子郵件尚未註冊。請先註冊"
+      alert_invalid_credentials: "電子郵件或密碼不正確。請檢查這兩欄，或使用「忘記密碼？」重設密碼。如果您是使用 Google、LINE 或 GitHub 註冊，請使用該按鈕登入。第一次使用？請先註冊。"
     destroy:
       alert: "您已登出。"
     new:
@@ -359,6 +357,10 @@ zh-TW:
       password_placeholder: "輸入您的密碼"
       submit_button: "登入"
       forgot_password_link: "忘記密碼？"
+      show_password: "顯示"
+      hide_password: "隱藏"
+      caps_lock_on: "大寫鎖定 (Caps Lock) 已開啟"
+      email_suggestion: "您是不是要輸入 %{email}？"
       or_sign_in_with: "或使用以下方式登入"
       google_button: "Google"
       line_button: "Line"

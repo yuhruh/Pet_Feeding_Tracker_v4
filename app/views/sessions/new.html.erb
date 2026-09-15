@@ -3,15 +3,34 @@
     <h1 class="text-center font-semibold text-xl md:text-2xl lg:text-4xl"><%= t(".title") %></h1>
   </div>
 
+  <%# After a failed sign-in both fields are marked together: marking only one would reveal whether the email has an account. %>
+  <% field_border = @sign_in_failed ? "border-red-500" : "border-gray-400" %>
   <%= form_with url: session_url, class: "contents" do |form| %>
     <div class="flex flex-col justify-center items-center space-x-3 mb-4 md:flex-row">
-      <label for="" class="text-base font-medium mx-4 text-gray-700 required dark:text-gray-100"><%= t(".email") %></label>
-      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: t(".email_placeholder"), value: params[:email_address], class: "shadow-md rounded-md border border-gray-400 focus:outline-softBlue px-3 py-2 w-1/2 dark:text-black" %>
+      <label for="email_address" class="text-base font-medium mx-4 text-gray-700 required dark:text-gray-100"><%= t(".email") %></label>
+      <div class="flex flex-col w-1/2" data-controller="email-suggestion" data-email-suggestion-template-value="<%= t(".email_suggestion") %>">
+        <%= form.email_field :email_address, required: true, autofocus: !@sign_in_failed, autocomplete: "username", placeholder: t(".email_placeholder"), value: params[:email_address],
+              aria: { invalid: @sign_in_failed || nil, describedby: "email_suggestion" },
+              data: { email_suggestion_target: "input", action: "blur->email-suggestion#check input->email-suggestion#clear" },
+              class: "shadow-md rounded-md border #{field_border} focus:outline-softBlue px-3 py-2 w-full dark:text-black" %>
+        <button type="button" id="email_suggestion" hidden data-email-suggestion-target="suggestion" data-action="email-suggestion#apply" class="mt-1 text-sm text-left text-softBlue underline dark:text-sky-300"></button>
+      </div>
     </div>
 
     <div class="flex flex-col justify-center items-center space-x-3 mb-4 md:flex-row">
-      <label for="" class="text-base font-medium text-gray-700 required dark:text-gray-100"><%= t(".password") %></label>
-      <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: t(".password_placeholder"), maxlength: 72, class: "shadow-md rounded-md border border-gray-400 focus:outline-blue-400 px-3 py-2 w-1/2 dark:text-black" %>
+      <label for="password" class="text-base font-medium text-gray-700 required dark:text-gray-100"><%= t(".password") %></label>
+      <div class="flex flex-col w-1/2" data-controller="password-field"
+           data-password-field-show-label-value="<%= t(".show_password") %>"
+           data-password-field-hide-label-value="<%= t(".hide_password") %>">
+        <div class="flex items-center gap-2">
+          <%= form.password_field :password, required: true, autofocus: @sign_in_failed, autocomplete: "current-password", placeholder: t(".password_placeholder"), maxlength: 72,
+                aria: { invalid: @sign_in_failed || nil, describedby: "caps_lock_warning" },
+                data: { password_field_target: "input", action: "keydown->password-field#checkCapsLock keyup->password-field#checkCapsLock blur->password-field#hideCapsLock" },
+                class: "shadow-md rounded-md border #{field_border} focus:outline-blue-400 px-3 py-2 w-full dark:text-black" %>
+          <button type="button" aria-controls="password" aria-pressed="false" data-password-field-target="toggle" data-action="password-field#toggle" class="text-sm text-softBlue underline whitespace-nowrap dark:text-sky-300"><%= t(".show_password") %></button>
+        </div>
+        <p id="caps_lock_warning" hidden data-password-field-target="capsWarning" class="mt-1 text-sm text-amber-700 dark:text-amber-400">⇪ <%= t(".caps_lock_on") %></p>
+      </div>
     </div>
 
     <div class="flex flex-col justify-center items-center space-x-4 md:flex-row">

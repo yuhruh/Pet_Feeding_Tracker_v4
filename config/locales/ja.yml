@@ -346,9 +346,7 @@
       alert_rate_limit: "サインインの試行回数が多すぎます。しばらく待ってからもう一度お試しください。"
       notice_new_user: "こんにちは、%{username}さん 👋。初めてのサインインです。今後のトラッカーのために、まず新しい猫を追加してください。"
       notice_welcome_back: "猫の給餌トラッカーへようこそ、%{username}さん"
-      alert_with_connected_services: "以前に%{services}アカウントを使用してサインインしています。そちらを使用してサインインしてください。"
-      alert_wrong_password: "パスワードが正しくありません"
-      alert_unregistered_email: "このメールアドレスはまだサインアップされていません。まずサインアップしてください"
+      alert_invalid_credentials: "メールアドレスまたはパスワードが正しくありません。両方を確認するか、「パスワードをお忘れですか？」から再設定してください。Google、LINE、GitHubで登録した場合は、そのボタンからサインインしてください。初めての方は、まずサインアップしてください。"
     destroy:
       alert: "サインアウトしました。"
     new:
@@ -359,6 +357,10 @@
       password_placeholder: "パスワードを入力してください"
       submit_button: "サインイン"
       forgot_password_link: "パスワードをお忘れですか？"
+      show_password: "表示"
+      hide_password: "非表示"
+      caps_lock_on: "Caps Lock がオンになっています"
+      email_suggestion: "%{email} ではありませんか？"
       or_sign_in_with: "または、以下でサインイン"
       google_button: "Google"
       line_button: "Line"

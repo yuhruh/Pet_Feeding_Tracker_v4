@@ -19,6 +19,9 @@ application.register("dismiss", DismissController)
 import DynamicEmailsController from "controllers/dynamic_emails_controller"
 application.register("dynamic-emails", DynamicEmailsController)
 
+import EmailSuggestionController from "controllers/email_suggestion_controller"
+application.register("email-suggestion", EmailSuggestionController)
+
 import FilterFormController from "controllers/filter_form_controller"
 application.register("filter-form", FilterFormController)
 
@@ -30,6 +33,9 @@ application.register("left-amount", LeftAmountController)
 
 import OcrUploadController from "controllers/ocr_upload_controller"
 application.register("ocr-upload", OcrUploadController)
+
+import PasswordFieldController from "controllers/password_field_controller"
+application.register("password-field", PasswordFieldController)
 
 import RangeFormController from "controllers/range_form_controller"
 application.register("range-form", RangeFormController)
