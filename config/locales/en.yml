@@ -376,7 +376,7 @@ en:
       dismiss: "Dismiss"
     ocr_auto_fill:
       title: "AI Auto-Fill Report"
-      description: "Upload your laboratory report (PNG/JPG) and let Gemini AI fill out the numbers for you automatically!"
+      description: "Upload up to %{max_files} images of your lab report (PNG, JPEG, WebP or HEIC · up to %{max_file_size} each, %{max_total_size} in total) and let Gemini AI fill out the numbers for you automatically!"
       select_button: "Select Report Image"
       status_reading: "Reading %{count} report %{pages} with AI..."
       status_success: "Data extracted successfully!"
@@ -586,6 +586,12 @@ en:
       service_error: "Service Error: %{message}"
       no_text_returned: "No text returned from Gemini"
       extraction_failed: "Data extraction failed: %{message}"
+      no_files: "No files provided"
+      too_many_files: "Please upload at most %{max} images at a time."
+      file_too_large: "Each image must be %{max} or smaller."
+      total_too_large: "The images together must be %{max} or smaller."
+      unsupported_type: "Only PNG, JPEG, WebP or HEIC images can be read."
+      rate_limited: "Too many uploads. Please wait a minute and try again."
       prompt: |
         Act as a specialized veterinary lab result data extraction tool.
         Analyze the provided health checkup report image(s). If multiple images are provided, combine the data from all of them into a single consolidated report.

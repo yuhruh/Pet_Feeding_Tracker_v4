@@ -1,4 +1,7 @@
 class HealthChecksController < ApplicationController
+  # Each extraction holds a server thread while Gemini reads the images.
+  rate_limit to: 10, within: 1.minute, only: :extract_data, by: -> { Current.user&.id || request.remote_ip },
+             with: -> { render json: { error: t("services.gemini_ocr.rate_limited") }, status: :too_many_requests }
   before_action :set_pet
   before_action :set_health_check, only: %i[ show edit update destroy ]
   before_action :set_current_date
@@ -18,14 +21,12 @@ class HealthChecksController < ApplicationController
   end
 
   def extract_data
-    files = params[:files]
-    if files.present?
-      file_paths = Array(files).map(&:path)
-      ocr_service = GeminiOcrService.new(file_paths, Current.user)
-      result = ocr_service.call
-      render json: result
+    file_paths = Array(params[:files]).grep(ActionDispatch::Http::UploadedFile).map(&:path)
+    # Too many, too large or not an image: reject before anything is sent to Gemini.
+    if (upload_error = GeminiOcrService.upload_error(file_paths))
+      render json: { error: upload_error }, status: :unprocessable_entity
     else
-      render json: { error: "No files provided" }, status: :unprocessable_entity
+      render json: GeminiOcrService.new(file_paths, Current.user).call
     end
   end
 

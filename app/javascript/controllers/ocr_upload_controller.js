@@ -3,16 +3,41 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["fileInput", "loader", "status", "form"]
   static values = {
-    petId: String
+    petId: String,
+    // Limits and messages from GeminiOcrService, rendered by the view
+    maxFiles: Number,
+    maxFileSize: Number,
+    maxTotalSize: Number,
+    tooManyMessage: String,
+    fileTooLargeMessage: String,
+    totalTooLargeMessage: String
   }
 
   connect() {
     console.log("OCR Upload Controller connected")
   }
 
+  // The same count and size limits the server enforces, checked before uploading so
+  // the user doesn't wait for an upload that will be refused. The file type is only
+  // checked on the server, from each file's contents.
+  limitError(files) {
+    if (this.hasMaxFilesValue && files.length > this.maxFilesValue) return this.tooManyMessageValue
+    const sizes = Array.from(files, file => file.size)
+    if (this.hasMaxFileSizeValue && sizes.some(size => size > this.maxFileSizeValue)) return this.fileTooLargeMessageValue
+    if (this.hasMaxTotalSizeValue && sizes.reduce((sum, size) => sum + size, 0) > this.maxTotalSizeValue) return this.totalTooLargeMessageValue
+    return null
+  }
+
   upload(event) {
     const files = event.target.files
     if (files.length === 0) return
+
+    const limitError = this.limitError(files)
+    if (limitError) {
+      this.setStatus(this.element.dataset.ocrUploadStatusErrorValue.replace("%{error}", limitError), "text-red-500")
+      event.target.value = "" // lets the user choose again, even the same files
+      return
+    }
 
     this.showLoader()
     const fileCount = files.length
@@ -29,14 +54,14 @@ export default class extends Controller {
     }
 
     // Get CSRF token and current locale from URL or HTML lang attribute
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').content
+    // Rails omits the CSRF meta tag when forgery protection is off (as in tests),
+    // so don't assume it exists: reading .content of null would stop the upload.
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content
     const currentLocale = document.documentElement.lang || "en"
 
     fetch(`/pets/${this.petIdValue}/health_checks/extract_data?locale=${currentLocale}`, {
       method: "POST",
-      headers: {
-        "X-CSRF-Token": csrfToken
-      },
+      headers: csrfToken ? { "X-CSRF-Token": csrfToken } : {},
       body: formData
     })
     .then(response => response.json())

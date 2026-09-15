@@ -5,14 +5,21 @@
      data-ocr-upload-status-error-value="<%= t('shared.ocr_auto_fill.status_error') %>"
      data-ocr-upload-status-failed-value="<%= t('shared.ocr_auto_fill.status_failed') %>"
      data-ocr-upload-page-singular-value="<%= t('shared.ocr_auto_fill.page_singular') %>"
-     data-ocr-upload-page-plural-value="<%= t('shared.ocr_auto_fill.page_plural') %>">
+     data-ocr-upload-page-plural-value="<%= t('shared.ocr_auto_fill.page_plural') %>"
+     <%# The same limits the server enforces (GeminiOcrService), so the browser can check before uploading %>
+     data-ocr-upload-max-files-value="<%= GeminiOcrService::MAX_FILES %>"
+     data-ocr-upload-max-file-size-value="<%= GeminiOcrService::MAX_FILE_SIZE %>"
+     data-ocr-upload-max-total-size-value="<%= GeminiOcrService::MAX_TOTAL_SIZE %>"
+     data-ocr-upload-too-many-message-value="<%= t('services.gemini_ocr.too_many_files', max: GeminiOcrService::MAX_FILES) %>"
+     data-ocr-upload-file-too-large-message-value="<%= t('services.gemini_ocr.file_too_large', max: GeminiOcrService.human_size(GeminiOcrService::MAX_FILE_SIZE)) %>"
+     data-ocr-upload-total-too-large-message-value="<%= t('services.gemini_ocr.total_too_large', max: GeminiOcrService.human_size(GeminiOcrService::MAX_TOTAL_SIZE)) %>">
   <div class="container mx-auto mb-8 p-6 bg-amber-50 border-2 border-dashed border-amber-400 rounded-xl shadow-inner">
     <div class="flex flex-col items-center justify-center space-y-4">
       <div class="flex items-center space-x-2">
         <%= image_tag('aji_icon_512.png', width: '40px', class: 'opacity-80') %>
         <h3 class="text-lg font-bold text-amber-800 uppercase tracking-wide"><%= t('shared.ocr_auto_fill.title') %></h3>
       </div>
-      <p class="text-sm text-amber-700 text-center max-w-full italic"><%= t('shared.ocr_auto_fill.description') %></p>
+      <p id="ocr_upload_hint" class="text-sm text-amber-700 text-center max-w-full italic"><%= t('shared.ocr_auto_fill.description', max_files: GeminiOcrService::MAX_FILES, max_file_size: GeminiOcrService.human_size(GeminiOcrService::MAX_FILE_SIZE), max_total_size: GeminiOcrService.human_size(GeminiOcrService::MAX_TOTAL_SIZE)) %></p>
       
       <div class="relative group">
         <input type="file" 

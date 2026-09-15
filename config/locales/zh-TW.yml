@@ -376,7 +376,7 @@ zh-TW:
       dismiss: "關閉"
     ocr_auto_fill:
       title: "AI 自動填寫報告"
-      description: "上傳您的寵物的體檢報告 (PNG/JPG)，讓 Gemini AI 自動為您填寫數據！"
+      description: "上傳最多 %{max_files} 張寵物體檢報告圖片（PNG、JPEG、WebP 或 HEIC，每張不超過 %{max_file_size}，合計不超過 %{max_total_size}），讓 Gemini AI 自動為您填寫數據！"
       select_button: "選擇報告圖片"
       status_reading: "正在使用 AI 讀取 %{count} 頁報告..."
       status_success: "數據提取成功！"
@@ -586,6 +586,12 @@ zh-TW:
       service_error: "服務錯誤：%{message}"
       no_text_returned: "Gemini 沒有返回任何文本"
       extraction_failed: "數據提取失敗：%{message}"
+      no_files: "未提供檔案"
+      too_many_files: "一次最多上傳 %{max} 張圖片。"
+      file_too_large: "每張圖片不得超過 %{max}。"
+      total_too_large: "所有圖片合計不得超過 %{max}。"
+      unsupported_type: "僅支援 PNG、JPEG、WebP 或 HEIC 圖片。"
+      rate_limited: "上傳次數過多，請稍候一分鐘再試。"
       prompt: |
         擔任專業的獸醫檢驗結果數據提取工具。
         分析提供的健康檢查報告圖片。如果提供多張圖片，請將所有圖片中的數據合併為一份統一的報告。
