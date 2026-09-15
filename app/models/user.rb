@@ -17,8 +17,14 @@ class User < ApplicationRecord
                     length: { maximum: 105 },
                     format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
   validates :email_address, confirmation: true, on: :create
-  validates :password, length: { maximum: 105 }, allow_blank: true, on: :update
+  MINIMUM_PASSWORD_LENGTH = 8
+
+  # has_secure_password already requires a password on create and rejects ones
+  # over 72 bytes (bcrypt's limit). A blank password on update keeps the current one.
+  validates :password, length: { minimum: MINIMUM_PASSWORD_LENGTH }, allow_blank: true
   validates :password_confirmation, presence: true, if: -> { password.present? }, on: :update
+  # A new password typed only in the confirmation box must not look like a successful change.
+  validates :password, presence: true, if: -> { password_confirmation.present? }, on: :update
   validates :timezone, presence: true, on: :create
   validate :timezone_must_be_known, if: :will_save_change_to_timezone?
 

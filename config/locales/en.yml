@@ -240,6 +240,7 @@ en:
     edit:
       title: "Update your password"
       new_password_placeholder: "Enter new password"
+      password_hint: "At least %{count} characters"
       repeat_new_password_placeholder: "Repeat new password"
       save_button: "Save"
     new:
@@ -329,6 +330,7 @@ en:
       email_confirmation_placeholder: "Enter your email address again"
       password: "Password"
       password_placeholder: "Enter your password"
+      password_hint: "At least %{count} characters"
       password_confirmation: "Password confirmation"
       password_confirmation_placeholder: "Enter your password again"
       submit_button: "Sign Up"
@@ -527,6 +529,7 @@ en:
       email: "Email"
       password: "Password"
       password_placeholder: "Enter new password"
+      password_hint: "At least %{count} characters. Leave blank to keep your current password."
       password_confirmation: "Password confirmation"
       password_confirmation_placeholder: "Enter new password again"
       timezone: "TimeZone: "

@@ -17,11 +17,12 @@ class PasswordsController < ApplicationController
   end
 
   def update
-    if @user.update(params.permit(:password, :password_confirmation))
+    # A blank password would otherwise "succeed" without changing anything.
+    if params[:password].present? && @user.update(params.permit(:password, :password_confirmation))
       redirect_to new_session_path, notice: t(".notice")
     else
-      error_messages = @user.errors.full_messages.join(", ")
-      redirect_to edit_password_path(params[:token]), alert: t(".alert")
+      @user.errors.add(:password, :blank) if params[:password].blank?
+      redirect_to edit_password_path(params[:token]), alert: @user.errors.full_messages.to_sentence
     end
   end
 

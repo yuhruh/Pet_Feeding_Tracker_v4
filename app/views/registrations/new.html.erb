@@ -47,7 +47,8 @@
           <label for="" class="text-base font-medium text-gray-700 dark:text-gray-100 capitalize required"><%= t(".password") %></label>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.password_field :password, required: true, placeholder: t(".password_placeholder"), class: "shadow-md rounded-md border border-gray-400 focus:outline-blue-400 px-3 py-2 w-1/2 #{'border-red-500' if form.object.errors[:password].any?} dark:text-slate-800" %>
+          <%= form.password_field :password, required: true, minlength: User::MINIMUM_PASSWORD_LENGTH, aria: { describedby: "password_hint" }, placeholder: t(".password_placeholder"), class: "shadow-md rounded-md border border-gray-400 focus:outline-blue-400 px-3 py-2 w-1/2 #{'border-red-500' if form.object.errors[:password].any?} dark:text-slate-800" %>
+          <span id="password_hint" class="mt-2 text-sm italic"><%= t(".password_hint", count: User::MINIMUM_PASSWORD_LENGTH) %></span>
           <% form.object.errors.full_messages_for(:password).each do |message| %>
             <p class="text-red-500 text-sm italic mt-1">
               <%= message %>

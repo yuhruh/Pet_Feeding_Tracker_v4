@@ -240,6 +240,7 @@ zh-TW:
     edit:
       title: "更新您的密碼"
       new_password_placeholder: "輸入新密碼"
+      password_hint: "至少 %{count} 個字元"
       repeat_new_password_placeholder: "重複輸入新密碼"
       save_button: "儲存"
     new:
@@ -329,6 +330,7 @@ zh-TW:
       email_confirmation_placeholder: "再次輸入您的電子郵件地址"
       password: "密碼"
       password_placeholder: "輸入您的密碼"
+      password_hint: "至少 %{count} 個字元"
       password_confirmation: "密碼確認"
       password_confirmation_placeholder: "再次輸入您的密碼"
       submit_button: "註冊"
@@ -527,6 +529,7 @@ zh-TW:
       email: "電子郵件"
       password: "密碼"
       password_placeholder: "輸入新密碼"
+      password_hint: "至少 %{count} 個字元。留空則保留目前的密碼。"
       password_confirmation: "密碼確認"
       password_confirmation_placeholder: "再次輸入新密碼"
       timezone: "時區："

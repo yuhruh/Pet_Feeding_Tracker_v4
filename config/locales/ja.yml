@@ -240,6 +240,7 @@
     edit:
       title: "パスワードを更新"
       new_password_placeholder: "新しいパスワードを入力"
+      password_hint: "%{count}文字以上"
       repeat_new_password_placeholder: "新しいパスワードを再入力"
       save_button: "保存"
     new:
@@ -329,6 +330,7 @@
       email_confirmation_placeholder: "メールアドレスを再入力してください"
       password: "パスワード"
       password_placeholder: "パスワードを入力してください"
+      password_hint: "%{count}文字以上"
       password_confirmation: "パスワードの確認"
       password_confirmation_placeholder: "パスワードを再入力してください"
       submit_button: "サインアップ"
@@ -527,6 +529,7 @@
       email: "メールアドレス"
       password: "パスワード"
       password_placeholder: "新しいパスワードを入力"
+      password_hint: "%{count}文字以上。空欄のままにすると現在のパスワードが維持されます。"
       password_confirmation: "パスワードの確認"
       password_confirmation_placeholder: "新しいパスワードを再入力"
       timezone: "タイムゾーン："
