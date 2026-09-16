@@ -58,6 +58,9 @@ keystore.properties
 *.keystore
 *.pem
 
+# OAuth client files downloaded from the Google console (they contain a client secret)
+client_secret*.json
+
 # Database dumps and backups (db/structure.sql is not affected)
 /*.sql
 /*.dump

@@ -25,10 +25,42 @@ namespace :gmail do
     SCOPE = "https://www.googleapis.com/auth/gmail.send".freeze
 
     def ask(prompt)
+      abort <<~NO_INPUT unless $stdin.tty?
+        This terminal cannot accept typed input, so pass the credentials instead. Either:
+
+          Download the client's JSON from the Google console (Clients -> the download icon),
+          save it in this folder or ~/Downloads, and run again. It is picked up automatically,
+          or point at it directly:
+
+            bin/rails gmail:refresh_token CLIENT_JSON=/path/to/client_secret_xxx.json
+
+          Or pass them on the command line (they stay in your shell history):
+
+            GMAIL_CLIENT_ID=... GMAIL_CLIENT_SECRET=... bin/rails gmail:refresh_token
+      NO_INPUT
+
       print "#{prompt}: "
       value = $stdin.gets.to_s.strip
       abort "Nothing entered, stopping." if value.empty?
       value
+    end
+
+    # The JSON Google offers for download holds both values, so nothing has to be typed.
+    def credentials_from_json
+      path = ENV["CLIENT_JSON"].presence ||
+        Dir[File.expand_path("client_secret*.json"), File.expand_path("~/Downloads/client_secret*.json")].max_by { |f| File.mtime(f) }
+      return nil if path.blank?
+
+      abort "CLIENT_JSON=#{path} does not exist" unless File.exist?(path)
+      data = JSON.parse(File.read(path))
+      section = data["web"] || data["installed"] or abort "#{path} is not an OAuth client file (no \"web\" or \"installed\" section)"
+      redirects = Array(section["redirect_uris"])
+      if redirects.any? && redirects.none? { |uri| uri.to_s.start_with?(REDIRECT_URI) }
+        puts "  Note: #{File.basename(path)} lists #{redirects.join(', ')}; add #{REDIRECT_URI} to the client if Google rejects the redirect."
+      end
+
+      puts "Using the client credentials from #{path}"
+      [ section["client_id"], section["client_secret"] ]
     end
 
     puts <<~SETUP
@@ -44,8 +76,9 @@ namespace :gmail do
 
     SETUP
 
-    client_id = ENV["GMAIL_CLIENT_ID"] || ask("Client ID")
-    client_secret = ENV["GMAIL_CLIENT_SECRET"] || ask("Client secret (not printed again)")
+    from_json = credentials_from_json
+    client_id = ENV["GMAIL_CLIENT_ID"] || from_json&.first || ask("Client ID")
+    client_secret = ENV["GMAIL_CLIENT_SECRET"] || from_json&.last || ask("Client secret (not printed again)")
     state = SecureRandom.hex(16)
 
     authorize_url = "https://accounts.google.com/o/oauth2/v2/auth?" + URI.encode_www_form(
@@ -56,13 +89,27 @@ namespace :gmail do
     puts "\nOpen this URL, sign in as the sending account and approve:\n\n#{authorize_url}\n\n"
     puts "Waiting for Google to redirect back to #{REDIRECT_URI} ..."
 
+    # Keep listening until Google's redirect arrives: browsers also open other
+    # connections to the same port (favicon, preconnect), and answering one of those
+    # as if it were the reply would end the flow with "No code received".
     server = TCPServer.new("127.0.0.1", PORT)
-    socket = server.accept
-    request_line = socket.gets.to_s
-    params = URI.decode_www_form(URI(request_line.split(" ")[1].to_s).query.to_s).to_h
-    socket.print "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n"
-    socket.print(params["code"] ? "Done. You can close this tab and return to the terminal." : "No code received.")
-    socket.close
+    params = {}
+    loop do
+      socket = server.accept
+      path = socket.gets.to_s.split(" ")[1].to_s
+      params = URI.decode_www_form(URI(path).query.to_s).to_h
+
+      if params["code"] || params["error"]
+        socket.print "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n"
+        socket.print(params["code"] ? "Done. You can close this tab and return to the terminal." : "Google reported: #{params['error']}")
+        socket.close
+        break
+      end
+
+      puts "  (ignoring a request to #{path.empty? ? '/' : path} with no code, still waiting)"
+      socket.print "HTTP/1.1 204 No Content\r\n\r\n"
+      socket.close
+    end
     server.close
 
     abort "Google returned an error: #{params['error']}" if params["error"]
