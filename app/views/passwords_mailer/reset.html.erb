@@ -1,4 +1,5 @@
 <p class="text-l font-semibold">
   <%= t(".greeting", username: @user.username) %>
-  <%= t(".instruction_html", password_reset_link: link_to(t(".password_reset_link"), edit_password_url(@user.password_reset_token))) %>
+  <%# Name the token: the routes have an optional /:locale prefix, so a positional argument fills that slot instead. %>
+  <%= t(".instruction_html", password_reset_link: link_to(t(".password_reset_link"), edit_password_url(token: @user.password_reset_token, locale: I18n.locale))) %>
 </p>

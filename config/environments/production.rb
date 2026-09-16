@@ -100,11 +100,20 @@ Rails.application.configure do
   #   open_timeout:    5,
   #   read_timeout:    5 }
 
-  config.action_mailer.delivery_method = :sendgrid_actionmailer
-  config.action_mailer.sendgrid_actionmailer_settings = {
-    api_key: Rails.application.credentials.dig(:sendgrid, :api_key),
-    raise_delivery_errors: true
-  }
+  # Send through the Gmail API (HTTPS) once a refresh token is configured, otherwise
+  # keep using SendGrid. The Gmail API works on hosts that block SMTP ports, and mail
+  # sent from the Gmail account itself passes Gmail's authenticity checks, while mail
+  # sent "from gmail.com" through a third party tends to land in spam.
+  # See config/initializers/gmail_api_delivery.rb and `bin/rails gmail:refresh_token`.
+  if (ENV["GMAIL_REFRESH_TOKEN"] || Rails.application.credentials.dig(:gmail_api, :refresh_token)).present?
+    config.action_mailer.delivery_method = :gmail_api
+  else
+    config.action_mailer.delivery_method = :sendgrid_actionmailer
+    config.action_mailer.sendgrid_actionmailer_settings = {
+      api_key: Rails.application.credentials.dig(:sendgrid, :api_key),
+      raise_delivery_errors: true
+    }
+  end
 
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
