@@ -33,7 +33,7 @@
           <label for="" class="text-base font-medium text-gray-700 dark:text-gray-100 optional capitalize md:text-right"><%= t(".password") %></label>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.password_field :password, minlength: User::MINIMUM_PASSWORD_LENGTH, aria: { describedby: "password_hint" }, placeholder: t(".password_placeholder"), class: "dark:text-black shadow-md rounded-md border border-gray-400 focus:outline-blue-400 px-3 py-2 w-1/2 #{'border-red-500' if form.object.errors[:password].any?}" %>
+          <%= form.password_field :password, autocomplete: "new-password", minlength: User::MINIMUM_PASSWORD_LENGTH, aria: { describedby: "password_hint" }, placeholder: t(".password_placeholder"), class: "dark:text-black shadow-md rounded-md border border-gray-400 focus:outline-blue-400 px-3 py-2 w-1/2 #{'border-red-500' if form.object.errors[:password].any?}" %>
           <span id="password_hint" class="mt-2 text-sm italic"><%= t(".password_hint", count: User::MINIMUM_PASSWORD_LENGTH) %></span>
           <% form.object.errors.full_messages_for(:password).each do |message| %>
             <p class="text-red-500 text-sm italic mt-1">
@@ -48,11 +48,29 @@
           <label for="" class="text-base font-medium text-gray-700 dark:text-gray-100 optional capitalize md:text-right"><%= t(".password_confirmation") %></label>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.password_field :password_confirmation, autocomplete: "current-password", placeholder: t(".password_confirmation_placeholder"), class: "dark:text-black shadow-md rounded-md border border-gray-400 focus:outline-blue-400 px-3 py-2 w-1/2 #{'border-red-500' if form.object.errors[:password_confirmation].any?}" %>
+          <%= form.password_field :password_confirmation, autocomplete: "new-password", placeholder: t(".password_confirmation_placeholder"), class: "dark:text-black shadow-md rounded-md border border-gray-400 focus:outline-blue-400 px-3 py-2 w-1/2 #{'border-red-500' if form.object.errors[:password_confirmation].any?}" %>
           <% form.object.errors.full_messages_for(:password_confirmation).each do |message| %>
             <p class="text-red-500 text-sm italic mt-1">
               <%= message %>
             </p>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">
+        <div class="flex justify-center md:justify-end md:w-1/3">
+          <%= form.label :current_password, t(".current_password"), class: "text-base font-medium text-gray-700 dark:text-gray-100 optional capitalize md:text-right" %>
+        </div>
+        <div class="flex flex-col items-center md:items-start md:w-5/6">
+          <%= form.password_field :current_password, autocomplete: "current-password", placeholder: t(".current_password_placeholder"),
+                aria: { describedby: "current_password_hint", invalid: form.object.errors[:current_password].any? },
+                class: "dark:text-black shadow-md rounded-md border border-gray-400 focus:outline-blue-400 px-3 py-2 w-1/2 #{'border-red-500' if form.object.errors[:current_password].any?}" %>
+          <span id="current_password_hint" class="mt-2 text-sm italic w-1/2">
+            <%= t(".current_password_hint") %>
+            <%= link_to t(".current_password_forgot_link"), new_password_path, class: "underline text-softBlue" %>
+          </span>
+          <% form.object.errors[:current_password].each do |message| %>
+            <p class="text-red-500 text-sm italic mt-1"><%= message %></p>
           <% end %>
         </div>
       </div>

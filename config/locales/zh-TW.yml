@@ -557,6 +557,10 @@ zh-TW:
       confirm: "您確定嗎？"
   users:
     edit:
+      current_password: "目前的密碼"
+      current_password_placeholder: "輸入您目前的密碼"
+      current_password_hint: "只有變更電子郵件或密碼時才需要。使用 Google、LINE 或 GitHub 註冊而從未設定過密碼嗎？"
+      current_password_forgot_link: "請透過「忘記密碼」設定密碼。"
       title: "🐾 編輯 %{username} 的個人資料 🐾"
       username: "使用者名稱"
       email: "電子郵件"
@@ -595,6 +599,8 @@ zh-TW:
       delete_profile_button: "刪除個人資料"
       delete_confirm: "您確定要刪除此使用者帳戶嗎？使用者和相關的飲食紀錄將全部被刪除.."
     update:
+      current_password_incorrect: "目前的密碼不正確。變更電子郵件或密碼時，請輸入目前的密碼。"
+      alert_rate_limit: "更新個人資料的次數過多。請稍候幾分鐘再試。"
       notice: "帳戶已成功更新。"
     destroy:
       alert: "%{name}及其所有相關紀錄已成功刪除。"

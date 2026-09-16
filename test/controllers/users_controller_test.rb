@@ -18,7 +18,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   test "should update user" do
     post session_url, params: { email_address: @user.email_address, password: "password" }
-    patch users_url, params: { user: { username: "new_username", password: "password", password_confirmation: "password" } }
+    patch users_url, params: { user: { username: "new_username", password: "password", password_confirmation: "password", current_password: "password" } }
     assert_redirected_to users_path
     @user.reload
     assert_equal "new_username", @user.username

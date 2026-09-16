@@ -38,7 +38,7 @@ class PasswordPolicyTest < ActionDispatch::IntegrationTest
   test "profile edit rejects a short password and keeps the old one" do
     user = users(:one)
     log_in_as(user)
-    patch users_url, params: { user: { password: SHORT, password_confirmation: SHORT } }
+    patch users_url, params: { user: { password: SHORT, password_confirmation: SHORT, current_password: "password123" } }
     assert_response :unprocessable_entity
     assert_includes response.body, too_short_message
     assert user.reload.authenticate("password123")
@@ -56,7 +56,7 @@ class PasswordPolicyTest < ActionDispatch::IntegrationTest
   test "profile edit rejects a new password typed only in the confirmation box" do
     user = users(:one)
     log_in_as(user)
-    patch users_url, params: { user: { password: "", password_confirmation: LONG_ENOUGH } }
+    patch users_url, params: { user: { password: "", password_confirmation: LONG_ENOUGH, current_password: "password123" } }
     assert_response :unprocessable_entity
     assert_select "p", text: blank_message
     assert user.reload.authenticate("password123")

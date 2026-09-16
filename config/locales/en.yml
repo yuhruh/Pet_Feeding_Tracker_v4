@@ -557,6 +557,10 @@ en:
       confirm: "Are you sure?"
   users:
     edit:
+      current_password: "Current password"
+      current_password_placeholder: "Enter your current password"
+      current_password_hint: "Needed only to change your email or password. Signed up with Google, LINE or GitHub and never set a password?"
+      current_password_forgot_link: "Set one with Forgot password."
       title: "🐾 Edit %{username}'s Profile 🐾"
       username: "Username"
       email: "Email"
@@ -595,6 +599,8 @@ en:
       delete_profile_button: "Delete Profile"
       delete_confirm: "Are you sure to delete this user account? The user and associated trackers will all gone.."
     update:
+      current_password_incorrect: "Your current password is incorrect. Enter it to change your email or password."
+      alert_rate_limit: "Too many profile updates. Please wait a few minutes and try again."
       notice: "Account was successfully updated."
     destroy:
       alert: "%{name} and all associated records were successfully deleted."

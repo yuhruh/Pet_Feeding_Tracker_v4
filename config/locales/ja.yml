@@ -557,6 +557,10 @@
       confirm: "よろしいですか？"
   users:
     edit:
+      current_password: "現在のパスワード"
+      current_password_placeholder: "現在のパスワードを入力してください"
+      current_password_hint: "メールアドレスまたはパスワードを変更する場合のみ必要です。Google、LINE、GitHubで登録し、パスワードを設定したことがない場合は"
+      current_password_forgot_link: "「パスワードをお忘れですか」から設定してください。"
       title: "🐾 %{username}のプロフィールを編集 🐾"
       username: "ユーザー名"
       email: "メールアドレス"
@@ -595,6 +599,8 @@
       delete_profile_button: "プロフィールを削除"
       delete_confirm: "このユーザーアカウントを削除してもよろしいですか？ユーザーと関連するトラッカーはすべて削除されます。"
     update:
+      current_password_incorrect: "現在のパスワードが正しくありません。メールアドレスまたはパスワードを変更するには、現在のパスワードを入力してください。"
+      alert_rate_limit: "プロフィールの更新が多すぎます。数分待ってからもう一度お試しください。"
       notice: "アカウントは正常に更新されました。"
     destroy:
       alert: "%{name}および関連するすべての記録は正常に削除されました。"

@@ -99,7 +99,7 @@ class SessionExpiryTest < ActionDispatch::IntegrationTest
     other = @user.sessions.create!
     log_in_as @user
 
-    patch users_url, params: { user: { password: "new-password1", password_confirmation: "new-password1" } }
+    patch users_url, params: { user: { password: "new-password1", password_confirmation: "new-password1", current_password: "password123" } }
     assert_not Session.exists?(other.id)
     get users_url
     assert_response :success

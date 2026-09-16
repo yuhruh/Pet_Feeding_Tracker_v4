@@ -1,7 +1,7 @@
 class Session < ApplicationRecord
   # Signed out after this long without a request, and this long after signing in, whichever comes first.
   IDLE_TIMEOUT = 30.days
-  ABSOLUTE_TIMEOUT = 90.days
+  ABSOLUTE_TIMEOUT = 1.year
   # Keeps last_active_at close enough for the idle timeout without a write on every request.
   ACTIVITY_UPDATE_INTERVAL = 1.hour
 
