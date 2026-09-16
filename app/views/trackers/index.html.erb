@@ -17,12 +17,12 @@
     <h1 class="font-bold text-center text-2xl mt-5 md:text-4xl"><%= t('trackers.index.title', petname: @pet.petname.capitalize) %></h1>
     
     <%# Share and Download Section %>
-    <div class="flex flex-row gap-4 mt-4" data-controller="share-and-download" 
-         data-share-and-download-share-url-value="<%= @pet.share_token.present? ? shared_pet_trackers_url(share_token: @pet.share_token) : '' %>"
+    <div class="flex flex-row flex-wrap justify-center gap-4 mt-4" data-controller="share-and-download" 
+         data-share-and-download-share-url-value="<%= @pet.sharing? ? shared_pet_trackers_url(share_token: @pet.share_token) : '' %>"
          data-share-and-download-chart-id-value="pet-chart"
          data-share-and-download-filename-value="<%= @pet.petname %>_feeding_chart">
       
-      <% if @pet.share_token.present? %>
+      <% if @pet.sharing? %>
         <button data-controller="share-bridge" 
                 data-action="click->share-and-download#copy click->share-bridge#trigger" 
                 data-url="<%= shared_pet_trackers_url(share_token: @pet.share_token) %>"
@@ -42,6 +42,38 @@
         <span><%= t('trackers.index.download_chart') %></span>
       </button>
     </div>
+
+    <%# Share link settings: anyone with the link can see this pet's feeding records without signing in. %>
+    <details id="share_settings" class="mt-3 w-full max-w-md px-4 text-sm">
+      <summary class="text-center cursor-pointer font-semibold text-amber-800 dark:text-amber-400"><%= t('trackers.index.share_settings.title') %></summary>
+      <div class="flex flex-col items-center gap-3 mt-3 p-3 border border-amber-200 rounded-lg bg-amber-50 dark:bg-gray-700 dark:border-gray-600">
+        <p class="text-center">
+          <% if @pet.sharing? %>
+            <%= @pet.share_expires_at ? t('trackers.index.share_settings.status_expires', time: l(@pet.share_expires_at, format: :long)) : t('trackers.index.share_settings.status_no_expiry') %>
+          <% elsif @pet.share_expired? %>
+            <%= t('trackers.index.share_settings.status_expired') %>
+          <% else %>
+            <%= t('trackers.index.share_settings.status_off') %>
+          <% end %>
+        </p>
+        <p class="text-center italic text-gray-600 dark:text-gray-300"><%= t('trackers.index.share_settings.warning') %></p>
+
+        <%= form_with url: pet_share_path(@pet), method: :post, class: "flex flex-col items-center gap-2 sm:flex-row",
+              data: (@pet.sharing? ? { turbo_confirm: t('trackers.index.share_settings.new_link_confirm') } : {}) do |form| %>
+          <%= form.label :expires_in, t('trackers.index.share_settings.expires_in') %>
+          <%= form.select :expires_in, Pet::SHARE_DURATIONS.keys.map { |key| [ t("trackers.index.share_settings.durations.#{key}"), key ] }, { selected: "7_days" },
+                class: "p-1 rounded-md border border-gray-400 text-gray-700" %>
+          <%= form.button (@pet.sharing? ? t('trackers.index.share_settings.new_link_button') : t('trackers.index.share_settings.turn_on_button')),
+                class: "px-3 py-1 rounded-full border border-amber-300 bg-amber-100 text-amber-800 font-bold hover:bg-amber-200" %>
+        <% end %>
+
+        <% if @pet.share_token.present? %>
+          <%= button_to t('trackers.index.share_settings.turn_off_button'), pet_share_path(@pet), method: :delete,
+                form: { data: { turbo_confirm: t('trackers.index.share_settings.turn_off_confirm') } },
+                class: "px-3 py-1 rounded-full border border-red-300 bg-red-100 text-red-700 font-bold hover:bg-red-200" %>
+        <% end %>
+      </div>
+    </details>
   </div>
 
   <div class="flex flex-row justify-center space-x-3">

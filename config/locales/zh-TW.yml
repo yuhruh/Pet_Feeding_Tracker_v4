@@ -257,6 +257,12 @@ zh-TW:
       alert: "密碼不符。"
     set_user_by_token:
       alert: "密碼重設連結無效或已過期。"
+  pet_shares:
+    create:
+      notice: "分享連結已開啟，先前的連結已失效。"
+      invalid_duration: "請選擇連結的有效期間。"
+    destroy:
+      notice: "分享已關閉，連結已失效。"
   pets:
     not_found: "找不到寵物。"
     form:
@@ -459,6 +465,24 @@ zh-TW:
       description: "描述"
       favorite_score: "喜好分數 & 上次餵食日期"
     index:
+      share_settings:
+        title: "分享連結設定"
+        status_off: "分享已關閉，沒有人能開啟這隻寵物的分享頁面。"
+        status_expired: "分享連結已過期。請開啟新的連結以再次分享。"
+        status_no_expiry: "分享已開啟。連結會持續有效，直到您關閉分享或建立新連結。"
+        status_expires: "分享已開啟。連結將於 %{time} 失效。"
+        warning: "任何取得連結的人都可以不必登入就查看這隻寵物的餵食紀錄與圖表。"
+        expires_in: "連結有效期間"
+        durations:
+          never: "直到我關閉為止"
+          1_day: "1 天"
+          7_days: "7 天"
+          30_days: "30 天"
+        turn_on_button: "開啟分享連結"
+        new_link_button: "建立新連結"
+        new_link_confirm: "要建立新連結嗎？目前的連結將會失效。"
+        turn_off_button: "關閉分享"
+        turn_off_confirm: "要關閉分享嗎？目前的連結將會失效。"
       share_link: "分享頁面"
       download_chart: "下載圖表"
       import_csv: "上傳 CSV 檔案"
@@ -943,7 +967,7 @@ zh-TW:
       body: 僅用於顯示您自己的紀錄、繪製圖表，以及寄送您要求的電子郵件。您的資料絕不會出售、絕不會用於廣告，也絕不會分享給他人；唯一的例外是下列由您自行選擇的兩種情況。
     - heading: 由您選擇分享的內容
       body: |-
-        分享連結：若您為某隻寵物建立分享連結，任何取得該連結的人都可以不必登入就查看該寵物的餵食紀錄與圖表。請只分享給您信任的人，例如獸醫或寵物保姆。
+        分享連結：若您為某隻寵物建立分享連結，任何取得該連結的人都可以不必登入就查看該寵物的餵食紀錄與圖表。請只分享給您信任的人，例如獸醫或寵物保姆。您可以隨時在寵物的餵食紀錄頁面設定連結的有效期間、建立新連結或關閉分享。
         門診成員：若您以電子郵件邀請他人，對方可以查看並回答該次門診的提問。
     - heading: 本應用程式使用的服務
       body: |-

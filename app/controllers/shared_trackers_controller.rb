@@ -6,7 +6,8 @@ class SharedTrackersController < ApplicationController
 
 
   def show
-    @pet = Pet.find_by!(share_token: params[:share_token])
+    # A link that was turned off, replaced or has expired gets the same 404 as one that never existed.
+    @pet = Pet.find_shared!(params[:share_token])
 
     # Ensure dates and times are calculated and displayed in the pet owner's timezone
     # Time.zone = @pet.user.timezone if @pet.user&.timezone

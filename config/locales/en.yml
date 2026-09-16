@@ -257,6 +257,12 @@ en:
       alert: "Passwords did not match."
     set_user_by_token:
       alert: "Password reset link is invalid or has expired."
+  pet_shares:
+    create:
+      notice: "Share link is on. Any earlier link no longer works."
+      invalid_duration: "Please choose how long the link should work."
+    destroy:
+      notice: "Sharing is off. The link no longer works."
   pets:
     not_found: "Pet not found."
     form:
@@ -459,6 +465,24 @@ en:
       description: "description"
       favorite_score: "favorite score & Last Fed Date"
     index:
+      share_settings:
+        title: "Share link settings"
+        status_off: "Sharing is off. No one can open this pet's shared page."
+        status_expired: "The share link has expired. Turn on a new link to share again."
+        status_no_expiry: "Sharing is on. The link works until you turn it off or create a new one."
+        status_expires: "Sharing is on. The link stops working on %{time}."
+        warning: "Anyone with the link can see this pet's feeding records and charts without signing in."
+        expires_in: "Link works for"
+        durations:
+          never: "Until I turn it off"
+          1_day: "1 day"
+          7_days: "7 days"
+          30_days: "30 days"
+        turn_on_button: "Turn on share link"
+        new_link_button: "Create a new link"
+        new_link_confirm: "Create a new link? The current link will stop working."
+        turn_off_button: "Turn off sharing"
+        turn_off_confirm: "Turn off sharing? The current link will stop working."
       share_link: "Share Page"
       download_chart: "Download Chart"
       import_csv: "Import CSV File"
@@ -962,7 +986,7 @@ en:
         shared with anyone else, apart from the two cases below that you choose yourself.
     - heading: What you choose to share
       body: |-
-        Share links: if you create one for a pet, anyone with that link can see that pet's feeding records and charts without signing in. Share it only with people you trust, such as your vet or pet sitter.
+        Share links: if you create one for a pet, anyone with that link can see that pet's feeding records and charts without signing in. Share it only with people you trust, such as your vet or pet sitter. You can make a link expire, replace it, or turn it off at any time from the pet's feeding records page.
         Vet visit members: if you invite someone by email, they can see and answer the questions for that visit.
     - heading: Services the app uses
       body: |-

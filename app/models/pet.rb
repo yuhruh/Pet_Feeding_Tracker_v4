@@ -1,4 +1,7 @@
 class Pet < ApplicationRecord
+  # How long a new share link works. nil means until it is turned off or replaced.
+  SHARE_DURATIONS = { "never" => nil, "1_day" => 1.day, "7_days" => 7.days, "30_days" => 30.days }.freeze
+
   has_one_attached :pet_avatar
   belongs_to :user
   delegate :timezone, to: :user, allow_nil: true
@@ -8,22 +11,27 @@ class Pet < ApplicationRecord
   validates :petname, presence: true,
                       length: { minimum: 2, maximum: 25 }
 
-  before_create :generate_share_token
+  # New pets are not shared until the owner turns on a share link.
+  scope :shared, -> { where.not(share_token: nil).where("share_expires_at IS NULL OR share_expires_at > ?", Time.current) }
 
-  def share_token
-    # If the token is missing in the database, generate it, save it, and return it.
-    if read_attribute(:share_token).blank?
-      new_token = SecureRandom.urlsafe_base64(16)
-      update_column(:share_token, new_token)
-      new_token
-    else
-      read_attribute(:share_token)
-    end
+  def self.find_shared!(token)
+    shared.find_by!(share_token: token.to_s)
   end
 
-  private
+  def sharing?
+    share_token.present? && !share_expired?
+  end
 
-  def generate_share_token
-    self.share_token = SecureRandom.urlsafe_base64(16) if read_attribute(:share_token).blank?
+  def share_expired?
+    share_expires_at.present? && share_expires_at <= Time.current
+  end
+
+  # Creates a new link, so any earlier link stops working.
+  def share!(expires_in: nil)
+    update_columns(share_token: SecureRandom.urlsafe_base64(24), share_expires_at: expires_in&.from_now, updated_at: Time.current)
+  end
+
+  def stop_sharing!
+    update_columns(share_token: nil, share_expires_at: nil, updated_at: Time.current)
   end
 end
