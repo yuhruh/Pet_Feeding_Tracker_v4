@@ -30,6 +30,7 @@ Rails.application.routes.draw do
     end
     get "shared/:share_token", to: "shared_trackers#show", as: :shared_pet_trackers
     resource :session, except: [ :new ]
+    delete "session/others", to: "sessions#destroy_others", as: :other_sessions
     resource :registrations, only: [ :new, :create ]
     resource :timezone, only: [ :create ]
     resource :users, except: [ :new ]

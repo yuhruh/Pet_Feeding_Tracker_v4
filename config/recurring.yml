@@ -16,6 +16,9 @@ production:
   pet_weight_reminder:
     command: "Rails.application.load_tasks; Rake::Task['notifications:weigh_pets'].invoke"
     schedule: every day at 9am
+  purge_expired_sessions:
+    command: "Session.expired.delete_all"
+    schedule: every day at 4am
   user_backups:
     class: UserBackupJob
     schedule: every day at 3am

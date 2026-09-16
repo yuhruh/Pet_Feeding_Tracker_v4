@@ -346,6 +346,8 @@ zh-TW:
       github_button: "GitHub"
       help_text_html: "如果您使用 %{google_icon} 註冊，請使用 %{chrome_icon} Chrome / %{edge_icon} Edge / %{firefox_icon} FireFox 開啟連結"
   sessions:
+    destroy_others:
+      notice: "已登出您的其他裝置。"
     create:
       alert_rate_limit: "登入嘗試次數過多。請稍候再試。"
       notice_new_user: "您好，%{username} 👋。這是您第一次登入，請先新增一隻寵物以便進一步紀錄。"
@@ -551,6 +553,13 @@ zh-TW:
         step_3: "點擊「在新建專案中建立 API 金鑰 (Create API key in new project)」"
         step_4: "複製您的金鑰並貼在上方"
     show:
+      other_sessions:
+        zero: "您沒有在其他裝置上登入。"
+        one: "您也在另外 1 台裝置上登入。"
+        other: "您也在另外 %{count} 台裝置上登入。"
+      sign_out_other_devices_button: "登出其他裝置"
+      sign_out_other_devices_confirm: "要登出所有其他裝置嗎？此裝置會保持登入。"
+      session_timeout_note: "為了您的安全，%{idle_days} 天未使用應用程式，或登入 %{absolute_days} 天後，將會自動登出。"
       title: "%{username} 的個人資料"
       username: "使用者名稱："
       email: "電子郵件："

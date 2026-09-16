@@ -9,6 +9,8 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
+        # Whoever knew the old password may still be signed in on another device.
+        @user.sessions.where.not(id: Current.session.id).destroy_all if @user.saved_change_to_password_digest?
         format.html { redirect_to users_path, notice: t(".update.notice") }
         format.json { render :show, status: :ok, location: users_path }
       else

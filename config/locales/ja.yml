@@ -346,6 +346,8 @@
       github_button: "GitHub"
       help_text_html: "%{google_icon} を使用してサインアップする場合は、%{chrome_icon} Chrome / %{edge_icon} Edge / %{firefox_icon} FireFox を使用してリンクを開いてください"
   sessions:
+    destroy_others:
+      notice: "他のデバイスからサインアウトしました。"
     create:
       alert_rate_limit: "サインインの試行回数が多すぎます。しばらく待ってからもう一度お試しください。"
       notice_new_user: "こんにちは、%{username}さん 👋。初めてのサインインです。今後のトラッカーのために、まず新しい猫を追加してください。"
@@ -551,6 +553,13 @@
         step_3: "「新しいプロジェクトでAPIキーを作成 (Create API key in new project)」をクリック"
         step_4: "キーをコピーして上に貼り付けてください"
     show:
+      other_sessions:
+        zero: "他のデバイスではサインインしていません。"
+        one: "他に1台のデバイスでもサインインしています。"
+        other: "他に%{count}台のデバイスでもサインインしています。"
+      sign_out_other_devices_button: "他のデバイスからサインアウト"
+      sign_out_other_devices_confirm: "他のすべてのデバイスからサインアウトしますか？このデバイスはサインインしたままです。"
+      session_timeout_note: "セキュリティのため、%{idle_days}日間アプリを使用しない場合、またはサインインから%{absolute_days}日後に自動的にサインアウトされます。"
       title: "%{username}のプロフィール"
       username: "ユーザー名："
       email: "メールアドレス："

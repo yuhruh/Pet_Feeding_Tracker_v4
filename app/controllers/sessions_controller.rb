@@ -37,4 +37,9 @@ class SessionsController < ApplicationController
     terminate_session
     redirect_to new_session_path, alert: t(".alert"), status: :see_other
   end
+
+  def destroy_others
+    Current.user.sessions.where.not(id: Current.session.id).destroy_all
+    redirect_to users_path, notice: t(".notice"), status: :see_other
+  end
 end

@@ -346,6 +346,8 @@ en:
       github_button: "GitHub"
       help_text_html: "If you are using %{google_icon} to sign up, please use %{chrome_icon} Chrome / %{edge_icon} Edge / %{firefox_icon} FireFox to open the link"
   sessions:
+    destroy_others:
+      notice: "Signed out of your other devices."
     create:
       alert_rate_limit: "Too many sign-in attempts. Please wait a moment and try again later."
       notice_new_user: "Hello, %{username} 👋. This is your first time to sign in, please add a new cat first for further tracker."
@@ -551,6 +553,13 @@ en:
         step_3: "Click 'Create API key in new project'"
         step_4: "Copy your key and paste it above"
     show:
+      other_sessions:
+        zero: "You are not signed in on any other device."
+        one: "You are also signed in on 1 other device."
+        other: "You are also signed in on %{count} other devices."
+      sign_out_other_devices_button: "Sign out other devices"
+      sign_out_other_devices_confirm: "Sign out of every other device? This device stays signed in."
+      session_timeout_note: "For your security, you are signed out after %{idle_days} days without using the app, and %{absolute_days} days after signing in."
       title: "%{username}'s Profile"
       username: "user name:"
       email: "email:"

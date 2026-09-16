@@ -24,6 +24,8 @@ class PasswordsController < ApplicationController
   def update
     # A blank password would otherwise "succeed" without changing anything.
     if params[:password].present? && @user.update(params.permit(:password, :password_confirmation))
+      # Whoever knew the old password may still be signed in somewhere.
+      @user.sessions.destroy_all
       redirect_to new_session_path, notice: t(".notice")
     else
       @user.errors.add(:password, :blank) if params[:password].blank?
