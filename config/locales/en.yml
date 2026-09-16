@@ -323,7 +323,7 @@ en:
     password_reset_required:
       subject: "Action needed: set a new password for Aji Tracker"
       greeting: "Hi %{username},"
-      what_happened: "Between 9 April and 14 September 2026, a copy of the app's database could be downloaded by mistake from the app's public code repository on GitHub. It included your email address, username, your pets, feeding records and health check results, and a scrambled (bcrypt-hashed) version of your password. A hashed password can't be turned back into the password directly, but a weak or common one could be guessed from it."
+      what_happened: "Between 8 April and 14 September 2026, a copy of the app's database could be downloaded by mistake from the app's public code repository on GitHub. It included your email address, username, your pets, feeding records and health check results, and a scrambled (bcrypt-hashed) version of your password. A hashed password can't be turned back into the password directly, but a weak or common one could be guessed from it."
       what_we_did: "The copy has been removed from the repository, and we have asked GitHub to delete the copies it still keeps. As a precaution, we have replaced your password with a random one and signed you out on every device."
       what_to_do_html: "To sign in again, set a new password on %{forgot_password_link} using this email address. If you sign in with Google, LINE or GitHub, that still works as before."
       what_to_do_text: "To sign in again, set a new password on the Forgot password page using this email address. If you sign in with Google, LINE or GitHub, that still works as before:"
