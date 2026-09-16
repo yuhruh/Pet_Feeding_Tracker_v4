@@ -53,6 +53,7 @@ local.properties
 
 # Android Signing Configuration
 keystore.properties
+keystore*.properties
 # Android Keystore
 *.jks
 *.keystore

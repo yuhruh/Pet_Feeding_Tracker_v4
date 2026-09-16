@@ -37,11 +37,11 @@ open class WebFragment : HotwireWebFragment() {
     }
 
     override fun createErrorView(error: VisitError): View {
+        val errorDescription = error.description().orEmpty()
         PostHog.capture(
             event = "web_page_error",
-            properties = mapOf("error_description" to error.description())
+            properties = mapOf("error_description" to errorDescription)
         )
-        val errorDescription = error.description()
         return layoutInflater.inflate(R.layout.view_error, null).apply {
             findViewById<TextView>(R.id.error_message).text = errorDescription
             findViewById<Button>(R.id.error_retry_button).setOnClickListener {
