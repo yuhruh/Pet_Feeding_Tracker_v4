@@ -2,7 +2,7 @@
 
 | Item | Value |
 |---|---|
-| Document version | 1.10 (S1–S3, S5–S9 and S14 fixed; S4 partly fixed; feed-time ordering fixed) |
+| Document version | 1.11 (S1–S3 and S5–S14 fixed; S4 partly fixed; feed-time ordering fixed) |
 | Date | 2026-09-13 |
 | Source baseline | `main` @ `4d33dcc` |
 | Application | Pet Tracker v4 (Rails 8.1 monolith + Hotwire Native Android shell) |
@@ -101,7 +101,7 @@ flowchart LR
 |---|---|---|
 | **Controllers** | `app/controllers/` | HTTP handling, strong parameters, rendering and redirects. One controller per resource (`pets`, `trackers`, `health_checks`, `vet_visits`, `dry_foods`, `users`, `sessions`, `registrations`, `passwords`, `shared_trackers`, `timezones`, `pages`, `omni_auth/sessions`). |
 | **Controller concerns** | `app/controllers/concerns/` | `Authentication` (session cookie, `require_authentication`, `start_new_session_for`), and `TrackersCalculable` (date-range filtering, chart series, and the hotel/boarding split, shared by the private and public tracker views). |
-| **Models** | `app/models/` | Validations, enums, associations, and domain callbacks: dry-food inventory sync, share-token generation, vet-visit metadata sync, and `answered_date` stamping. `Current` holds the request-scoped session and user. |
+| **Models** | `app/models/` | Validations, enums, associations, and domain callbacks: dry-food inventory sync, share links (on, replace, expire, off), vet-visit metadata sync, and `answered_date` stamping. `Current` holds the request-scoped session and user. |
 | **Services** | `app/services/` | `CsvImportTrackersService` (transactional CSV import), `GeminiOcrService` (image → lab values JSON), `NotificationService` (LINE push or email fallback). |
 | **Jobs** | `app/jobs/` | `PetWeightReminderJob`, `UserBackupJob`. |
 | **Mailers** | `app/mailers/` | Welcome, password reset, weight reminder, CSV backup (delivered through SendGrid). |
@@ -181,7 +181,7 @@ OCR currently runs **synchronously inside the web request**. See §5.4 for the r
 | **Parameters** | Form and JSON bodies use the Rails envelope `resource[field]`, for example `tracker[amount]=40` or `{"tracker":{"amount":40}}`. Strong parameters (`params.expect` / `require.permit`) whitelist the fields. |
 | **Authentication** | Signed `session_id` cookie (see §4.1). Non-GET requests require a CSRF token (`authenticity_token` field or `X-CSRF-Token` header), which applies to JSON calls too. |
 | **Success responses** | HTML: `302`/`303` redirect with a flash message. JSON: `200 OK`, `201 Created` (resource body), or `204 No Content` (delete). |
-| **Error responses** | HTML: `422 Unprocessable Entity` re-renders the form with errors. JSON: `422` with body `{"field": ["message", …]}`. Not found: `404` (or a redirect with a flash alert on some HTML actions). Unauthenticated: redirect to `/login`. |
+| **Error responses** | HTML: `422 Unprocessable Entity` re-renders the form with errors. JSON: every error body is `{"error": "message"}`; validation errors (`422`) add `"details": {"field": ["message", …]}`. Not found: `404` (HTML redirects to the list with a flash alert). Unauthenticated: redirect to `/login`. |
 | **Pagination** | `?page=N&per_page=M` (will_paginate). `per_page` is remembered in the session for trackers. |
 
 **Ownership check** legend used in the tables below:
@@ -200,7 +200,7 @@ OCR currently runs **synchronously inside the web request**. See §5.4 for the r
 | GET | `/about` | `pages#about` | 🌐 | HTML | About page |
 | GET | `/doc` | `pages#doc` | 🌐 | HTML | User documentation |
 | GET | `/up` | `rails/health#show` | 🌐 | HTML | Liveness probe: 200 if the app boots, 500 otherwise |
-| GET | `/shared/:share_token` | `shared_trackers#show` | 🌐 token | HTML | Read-only feeding dashboard and charts for one pet (150 rows per page). Accepts the same `range`/filter params as trackers. Unknown token → 404. |
+| GET | `/shared/:share_token` | `shared_trackers#show` | 🌐 token | HTML | Read-only feeding dashboard and charts for one pet (150 rows per page). Accepts the same `range`/filter params as trackers. Unknown, turned-off, replaced or expired token → 404. |
 
 #### 2.2.2 Authentication
 
@@ -209,12 +209,13 @@ OCR currently runs **synchronously inside the web request**. See §5.4 for the r
 | GET | `/login` | `sessions#new` | 🌐 | Sign-in form |
 | POST | `/session` | `sessions#create` | 🌐 | Email/password sign-in. **Rate limit: 10 requests / 5 min.** |
 | DELETE | `/session` | `sessions#destroy` | Session | Sign out (destroys the session row, deletes the cookie) |
+| DELETE | `/session/others` | `sessions#destroy_others` | Session | Sign out every other device (keeps the current session) |
 | GET | `/registrations/new` | `registrations#new` | 🌐 | Sign-up form (pre-filled from the OAuth hash when coming from LINE without an email) |
-| POST | `/registrations` | `registrations#create` | 🌐 | Create account, link a pending OAuth identity, start session, send welcome email |
+| POST | `/registrations` | `registrations#create` | 🌐 | Create account, link a pending OAuth identity, start session, send welcome email. **Rate limit: 10 requests / hour per IP.** |
 | GET | `/passwords/new` | `passwords#new` | 🌐 | "Forgot password" form |
-| POST | `/passwords` | `passwords#create` | 🌐 | Email a reset link (same response whether or not the email exists) |
+| POST | `/passwords` | `passwords#create` | 🌐 | Email a reset link (same response whether or not the email exists). **Rate limit: 5 requests / 15 min per IP, and 3 / hour per email.** |
 | GET | `/passwords/:token/edit` | `passwords#edit` | 🌐 token | Reset form (invalid or expired token → redirect) |
-| PATCH/PUT | `/passwords/:token` | `passwords#update` | 🌐 token | Set a new password |
+| PATCH/PUT | `/passwords/:token` | `passwords#update` | 🌐 token | Set a new password and sign out every device |
 | POST | `/timezone` | `timezones#create` | 🌐 | Store the browser time zone in the session, then redirect to `/auth/:provider` |
 | GET/POST | `/auth/:provider` | OmniAuth middleware | 🌐 | Start OAuth (`google_oauth2`, `line`, `github`, and `developer` in dev) |
 | GET/POST | `/auth/:provider/callback` | `omni_auth/sessions#create` | 🌐 | Sign in, sign up, or connect a provider to the signed-in account |
@@ -235,11 +236,13 @@ OCR currently runs **synchronously inside the web request**. See §5.4 for the r
 |---|---|---|---|---|---|
 | GET | `/pets` | `index` | ✅ | HTML | Current user's pets (5 per page) |
 | GET | `/pets/new` | `new` | ✅ | HTML | New pet form |
-| POST | `/pets` | `create` | ✅ | HTML, JSON | Create pet (generates `share_token`) |
+| POST | `/pets` | `create` | ✅ | HTML, JSON | Create pet (not shared until a share link is turned on) |
 | GET | `/pets/:id` | `show` | ✅ | HTML | Pet profile |
 | GET | `/pets/:id/edit` | `edit` | ✅ | HTML | Edit form |
 | PATCH/PUT | `/pets/:id` | `update` | ✅ | HTML, JSON | Update pet (supports `pet_avatar` upload) |
 | DELETE | `/pets/:id` | `destroy` | ✅ | HTML, JSON | Delete pet and its trackers, health checks, and vet visits |
+| POST | `/pets/:pet_id/share` | `pet_shares#create` | ✅ | HTML | Turn on a new share link (any earlier link stops working). Param `expires_in`: `never`, `1_day`, `7_days` or `30_days`. |
+| DELETE | `/pets/:pet_id/share` | `pet_shares#destroy` | ✅ | HTML | Turn sharing off |
 
 #### 2.2.5 Trackers — `/pets/:pet_id/trackers`
 
@@ -413,7 +416,7 @@ The JSON response is the full ranked list without pagination. The HTML view pagi
 }
 ```
 
-**Errors:** `422 {"error":"…"}` with a translated message when there are no files, too many, a file or the total is too large, or a file isn't a supported image. None of these reach Gemini. Gemini, quota, or parse failures still return `{"error":"…"}` **with HTTP 200** (⚠️ recommend a 4xx/5xx status). If the user has not saved a Gemini key, the response asks them to add one in their profile.
+**Errors:** `422 {"error":"…"}` with a translated message when there are no files, too many, a file or the total is too large, or a file isn't a supported image. None of these reach Gemini. Gemini, quota, or parse failures also return `422 {"error":"…"}`. If the user has not saved a Gemini key, the response asks them to add one in their profile.
 
 #### 2.3.8 Batch update vet visits — `PATCH /pets/:pet_id/vet_visits/batch_update`
 
@@ -592,8 +595,9 @@ Indexes: `index_users_on_email_address` (unique).
 | `user_id` | integer | NO | FK → `users.id` |
 | `ip_address` | string | YES | Captured at sign-in |
 | `user_agent` | string | YES | Captured at sign-in |
+| `last_active_at` | datetime | NO | Last request, updated at most once an hour; drives the idle timeout |
 
-Indexes: `user_id`. A row represents one signed-in device and is referenced by the signed cookie.
+Indexes: `user_id`, `last_active_at`, `created_at`. A row represents one signed-in device and is referenced by the signed cookie. It expires after 30 days idle or 90 days after sign-in (§4.1).
 
 #### `connected_services`
 
@@ -615,9 +619,10 @@ Indexes: `user_id`.
 | `gender` | string | YES | |
 | `breed` | string | YES | |
 | `weight` | decimal | YES | kg |
-| `share_token` | string | YES | `SecureRandom.urlsafe_base64(16)`, generated on create or lazily |
+| `share_token` | string | YES | Public link token (`SecureRandom.urlsafe_base64(24)`); `NULL` = sharing off. New pets start with sharing off. |
+| `share_expires_at` | datetime | YES | When the link stops working; `NULL` = until turned off or replaced |
 
-Indexes: `user_id`, `share_token` (non-unique). Attachment: `pet_avatar` (Active Storage).
+Indexes: `user_id`, `share_token` (unique). Attachment: `pet_avatar` (Active Storage).
 
 #### `trackers` (feeding log)
 
@@ -732,7 +737,7 @@ Cascades are handled by Rails (`dependent:`). The database foreign keys have no 
 |---|---|---|
 | D1 | `add_foreign_key "dry_foods", "Users"` (capital **U**, `db/schema.rb:338`). PostgreSQL treats quoted identifiers as case-sensitive, so `db:schema:load` on a fresh PostgreSQL database may fail. | Add a migration that re-creates the FK against `users`. |
 | D2 | `schema.rb` is dumped from SQLite, so FK columns appear as `integer`, and the dev/test adapter differs from production. The code contains adapter-specific SQL branches. | Use PostgreSQL in development and CI. Keep FK columns `bigint`. |
-| D3 | `connected_services` has no unique index on `(provider, uid)`, and `pets.share_token` is indexed but not unique. | Add unique indexes. |
+| D3 | `connected_services` has no unique index on `(provider, uid)`. (`pets.share_token` is now unique, S12.) | Add a unique index. |
 | D4 | Common queries filter trackers by `pet_id` + `date` range, but only single-column indexes exist. | Add a composite index `trackers(pet_id, date)`. Consider `(dry_food_id, archived_dry_food)` as well. |
 | D5 | Required fields (`trackers.brand`, `trackers.food_type`, `pets.petname`, `users.username`) are enforced only in the model. `DryFood` and `HealthCheck` have **no** model validations; a bag without `amount` breaks the inventory calculation. | Add NOT NULL / CHECK constraints (for example `amount > 0`) and model validations. |
 | D6 | `dry_foods.days_remaining` stores a date; `dry_foods.used_amount` is unused. | Rename to `run_out_on`; drop `used_amount`. |
@@ -750,7 +755,7 @@ Cascades are handled by Rails (`dependent:`). The database foreign keys have no 
 
 - `has_secure_password` stores a **bcrypt** `password_digest`. Passwords are never stored or logged, because `filter_parameter_logging` masks `passw`, `email`, `token`, `_key`, `secret`, and similar parameters.
 - Email is normalized to `strip.downcase` and is unique regardless of case. Registration requires `email_address_confirmation`.
-- Sign-in is **rate-limited** to 10 attempts per 5 minutes (`SessionsController`).
+- Sign-in is **rate-limited** to 10 attempts per 5 minutes (`SessionsController`). Password-reset requests, sign-ups and CSV imports are rate-limited too (S10).
 - Passwords must be **at least 8 characters** (`User::MINIMUM_PASSWORD_LENGTH`) and at most 72 bytes (bcrypt's limit, enforced by `has_secure_password`).
 
 #### Sessions
@@ -758,9 +763,10 @@ Cascades are handled by Rails (`dependent:`). The database foreign keys have no 
 | Property | Implementation |
 |---|---|
 | Server state | One row in `sessions` per sign-in (records IP and User-Agent) |
-| Cookie | `session_id`, **signed** with `secret_key_base` (tamper-proof), `HttpOnly`, `SameSite=Lax`, `Secure` (via `force_ssl`), permanent |
+| Cookie | `session_id`, **signed** with `secret_key_base` (tamper-proof), `HttpOnly`, `SameSite=Lax`, `Secure` (via `force_ssl`), expires with the session |
+| Expiry | `Session::IDLE_TIMEOUT` (30 days without a request) and `Session::ABSOLUTE_TIMEOUT` (90 days after sign-in). An expired session is deleted when its cookie is next used; a daily task purges the rest. |
 | Lookup | `Authentication#resume_session` → `Current.session` → `Current.user` |
-| Sign-out | Destroys the session row and deletes the cookie |
+| Sign-out | Destroys the session row and deletes the cookie. The profile page can sign out every other device. A password reset signs out every device; a password change on the profile signs out every other device. |
 | Default policy | `require_authentication` runs on every controller. Public actions opt out with `allow_unauthenticated_access`. |
 
 #### Password reset
@@ -794,7 +800,7 @@ Design strengths: an OAuth identity is **never automatically merged** into an ex
 | Pets | Owner only | ✅ Every action uses `Current.user.pets` (S1 fixed) |
 | Trackers, health checks | Owner of the pet | ✅ `set_pet` uses `Current.user.pets.find(params[:pet_id])` (S1 fixed) |
 | Vet visits | Owner: full control. Member: read, and answer only. | ✅ `verify_owner!`, `verify_access!`; members limited to `answer` in both `update` and `batch_update` (S14 fixed) |
-| Shared dashboard | Anyone with the token (read-only) | ✅ `Pet.find_by!(share_token:)` with 128-bit random token |
+| Shared dashboard | Anyone with the token (read-only) | ✅ `Pet.find_shared!` with a random token (192-bit for new links); owner can set an expiry, replace or turn off the link (S12) |
 
 ### 4.3 Input Validation and Output Protection
 
@@ -813,7 +819,7 @@ Design strengths: an OAuth identity is **never automatically merged** into an ex
 
 ### 4.4 Security Findings and Gaps
 
-Ranked by severity. S1, S2, S3, S5, S6, S7, S8, S9 and S14 are fixed and S4 is partly fixed; finish S4 before any public growth.
+Ranked by severity. S1–S3 and S5–S14 are fixed and S4 is partly fixed; finish S4 before any public growth.
 
 | ID | Severity | Finding | Recommendation |
 |---|---|---|---|
@@ -830,10 +836,10 @@ Ranked by severity. S1, S2, S3, S5, S6, S7, S8, S9 and S14 are fixed and S4 is p
 - Both fields are marked together (`aria-invalid`).
 - There's a show/hide password toggle and a Caps Lock warning (Stimulus `password-field`).
 - Common email-domain typos get a "Did you mean …@gmail.com?" suggestion from a local list (Stimulus `email-suggestion`), with no server lookup. `User.authenticate_by` hashes the password even when the email is unknown, so timing matches too. Inputs are coerced to strings. The three old, revealing messages were removed from the locales. Covered by `test/controllers/sessions_controller_test.rb`. **Remaining, by design:** sign-up still says an email "has already been taken", which only an email-confirmation flow can hide. The OAuth callback's "email already registered" notice names the linked providers, but only to someone who controls an account with that email at the provider. |
-| **S10** | 🟡 Low | Only sign-in and photo extraction (`extract_data`, S8) are rate-limited. | Add `rate_limit` to `passwords#create`, `registrations#create` and `import`. |
-| **S11** | 🟡 Low | Sessions never expire (permanent cookie, no server-side TTL or cleanup). | Add idle and absolute timeouts, a "sign out other devices" option, and a recurring job that purges old sessions. |
-| **S12** | 🟡 Low | Share links cannot expire or be revoked, and anyone with the link sees the full feeding history. | Add a "regenerate link" action, optional expiry, and a unique index on `share_token`. |
-| **S13** | ℹ️ Info | `config.hosts` is not set (DNS-rebinding protection). JSON errors use inconsistent formats. `User.from_omniauth` is dead code that references a non-existent `name` attribute. | Set allowed hosts, standardize error bodies, and remove the dead code. |
+| **S10** | ✅ Fixed (was 🟡 Low) | Only sign-in and photo extraction (`extract_data`, S8) were rate-limited, so the reset form could flood an inbox, sign-up could create accounts in bulk, and CSV import could tie up web workers. | **Done:** `passwords#create` allows 5 requests per 15 minutes per IP and 3 per hour per email address, with the same response whether or not the email has an account. `registrations#create` allows 10 per hour per IP. `trackers#import` allows 5 per 10 minutes per user. Each limit shows a translated message. Covered by `test/controllers/rate_limit_test.rb`. |
+| **S11** | ✅ Fixed (was 🟡 Low) | Sessions never expired (permanent cookie, no server-side timeout or cleanup), so a stolen cookie or a forgotten device stayed signed in for good, even after a password change. | **Done:** a session ends after 30 days without a request or 90 days after sign-in (`Session::IDLE_TIMEOUT`, `ABSOLUTE_TIMEOUT`), checked on every request; activity is recorded in `sessions.last_active_at` at most once an hour, and the cookie expires with the session. The daily `purge_expired_sessions` task deletes expired rows. The profile page shows how many other devices are signed in, offers "Sign out other devices" and states the timeouts. A password reset signs out every device, and a password change on the profile signs out every other device. Covered by `test/controllers/session_expiry_test.rb`. |
+| **S12** | ✅ Fixed (was 🟡 Low) | Share links could not expire or be revoked, every pet got one automatically, and anyone with the link sees the full feeding history. | **Done:** the trackers page has "Share link settings": turn a link on for 1, 7 or 30 days or until turned off, create a new link (the old one stops working), or turn sharing off (`PetSharesController`). Off, replaced and expired links get the same 404 as unknown ones. New pets start with sharing off, matching the privacy policy; existing pets kept their links. `share_token` is unique and new tokens are 192-bit. Covered by `test/controllers/pet_shares_controller_test.rb`. **By design:** a working link still shows the pet's whole feeding history. |
+| **S13** | ✅ Fixed (was ℹ️ Info) | `config.hosts` was not set (DNS-rebinding protection). JSON errors used inconsistent formats (a field hash, `{"error"}`, an empty 404, or a redirect), and photo-extraction failures returned HTTP 200. A missing tracker redirected to its own URL in a loop. `User.from_omniauth` was dead code that referenced a non-existent `name` attribute. | **Done:** production allows only `pet-feeding-tracker-v4.up.railway.app`, `RAILS_HOST`, `RAILWAY_PUBLIC_DOMAIN` and any hosts in `RAILS_ALLOWED_HOSTS` (comma-separated); `/up` is exempt. **Add any custom domain to `RAILS_ALLOWED_HOSTS` before deploying**, or requests to it get a 403. Every JSON error is `{"error": "…"}`, with `"details"` by field for validation errors (`ApplicationController#render_json_error`); not-found pets, trackers, health checks and dry foods return a JSON 404, and extraction failures return 422. A missing tracker now redirects to the tracker list. Removed `User.from_omniauth`. Covered by `test/controllers/json_errors_test.rb`. |
 | **S14** | ✅ Fixed (was 🟡 Low) | **Vet-visit members could edit visit details.** Single-visit `update` accepted every field from members, while `batch_update` allowed only `answer`. Because `vet_name`, `purpose`, `consultation_time` and `waiting_time` are copied to every visit of the pet on the same date (`VetVisit#sync_vet_metadata`), a member could overwrite details on the owner's visits that were never shared with them. | **Done:** members may change only `answer` in `update` (matching `batch_update`), and the edit form shows them the question read-only. Covered by `test/controllers/vet_visits_controller_test.rb`. |
 
 ### 4.5 Authorization Pattern (implemented for S1)
@@ -909,6 +915,7 @@ flowchart TB
 | Task | Schedule* | What it does |
 |---|---|---|
 | `clear_solid_queue_finished_jobs` | hourly at :12 | Deletes finished job records |
+| `purge_expired_sessions` | daily 04:00 | `Session.expired.delete_all`: removes sessions past the idle or absolute timeout (S11) |
 | `user_backups` | daily 03:00 | `UserBackupJob`: emails a per-pet tracker CSV to each user who changed a tracker in the last 25 h. (The README says "every 5 days", but the code runs daily.) |
 | ~~`db_backup`~~ | **unscheduled** | Removed from the schedule: it failed every night (no `pg_dump` in the image; the worker has no persistent disk, so a dump would vanish on the next deploy). Full-database recovery comes from Railway's managed Postgres backups. `bin/rails db:backup` remains for manual runs and now reports why it can't run instead of exiting silently. |
 | `pet_weight_reminder` | daily 09:00 | `notifications:weigh_pets` → `PetWeightReminderJob` per user. Sends a reminder when a pet has not been weighed for ≥ 14 days (then every 7 days) and the user signed in within the last 3 days. Uses LINE push if linked, otherwise email. |
@@ -931,7 +938,7 @@ flowchart TB
 
 #### Phase 1 — Stabilize (current scale, hundreds of users)
 
-1. Finish **S4** (GitHub Support purge, signing-key and password rotation) first (S1–S3, S5–S9 and S14 are fixed), then the remaining low-severity items S10–S13.
+1. Finish **S4** (GitHub Support purge, signing-key and password rotation). Every other security finding (S1–S3, S5–S14) is fixed.
 2. Move Active Storage to object storage and backups off-site (§5.4).
 3. Split `web` and `worker` into separate services and set `SOLID_QUEUE_IN_PUMA=false`.
 4. Add error tracking, uptime checks, and PostgreSQL in CI.
