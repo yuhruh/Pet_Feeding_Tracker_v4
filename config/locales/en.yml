@@ -175,6 +175,8 @@ en:
       features: "Features"
       about: "About"
       docs: "Docs"
+      privacy: Privacy
+      terms: Terms
       sign_out: "Sign Out"
       get_started: "Get Started"
       copyright: "© 2025 AjiTracker"
@@ -930,3 +932,69 @@ en:
     unauthorized: "You are not authorized to view or edit this vet visit."
     unauthorized_owner: "Only the pet's owner can perform this action."
     emails_not_found: "The following email(s) were not found in the system and could not be added as members: %{emails}"
+  privacy_page:
+    title: Privacy Policy
+    intro: Cat Feeding Tracker is a small personal app for recording what your pets
+      eat and how their health changes. This page explains what it stores, why, and
+      what it never does.
+    sections:
+    - heading: What the app stores
+      body: |-
+        Your account: email address, username, time zone, and a scrambled (hashed) version of your password, which cannot be turned back into your password.
+        Your pets: name, birthday, breed, gender, weight and an optional photo.
+        Your records: feeding entries, weights, notes, health check results, and vet visit questions and answers.
+        If you sign in with Google, LINE or GitHub, only that account's identifier is stored, so the app can recognise you next time.
+    - heading: Why it stores it
+      body: Only to show you your own records, draw your charts, and send the emails
+        you ask for. Your data is never sold, never used for advertising, and never
+        shared with anyone else, apart from the two cases below that you choose yourself.
+    - heading: What you choose to share
+      body: |-
+        Share links: if you create one for a pet, anyone with that link can see that pet's feeding records and charts without signing in. Share it only with people you trust, such as your vet or pet sitter.
+        Vet visit members: if you invite someone by email, they can see and answer the questions for that visit.
+    - heading: Services the app uses
+      body: |-
+        Gmail: the app sends its own emails (password resets, welcome messages and your data backups) through the Gmail account ajicaretracker@gmail.com. It uses permission to send mail only. It never reads, searches or deletes any mailbox, including yours.
+        Google Gemini: only if you add your own Gemini key, and only when you upload a health report image to be read automatically. Images are sent to Google for that purpose alone.
+        LINE: only if you connect a LINE account, and only to send reminders.
+        Hosting: the app and its database run on Railway.
+    - heading: How long it is kept, and how to delete it
+      body: Your records stay until you delete them. Deleting your account from your
+        profile page removes it together with all of your pets, feeding records, health
+        checks and vet visits. You can also export your feeding records as a CSV file
+        at any time.
+    - heading: Cookies
+      body: The app uses one cookie to keep you signed in. There are no advertising
+        or tracking cookies.
+    contact_email: ajicaretracker@gmail.com
+    contact: Questions about this policy, or want your data removed? Email %{email}.
+    updated: 'Last updated: 16 September 2026'
+  terms_page:
+    title: Terms of Service
+    intro: Cat Feeding Tracker is a free, personal project offered as-is. By using it,
+      you agree to the points below.
+    sections:
+    - heading: Not veterinary advice
+      body: This app records information; it does not interpret it. Nothing in it, including
+        automatically read health check values and charts, is veterinary advice. Always
+        consult a qualified veterinarian about your pet's health. Values read automatically
+        from report photos can be wrong, so check them against the original report.
+    - heading: Your account
+      body: Keep your password to yourself, and use an email address you control. You
+        are responsible for what happens under your account, and for anyone you give
+        a share link to.
+    - heading: Acceptable use
+      body: Use the app for your own pets. Do not try to reach other people's accounts
+        or records, disrupt the app, or use it to send anything unlawful.
+    - heading: Availability and your data
+      body: |-
+        The app is run by one person as a hobby. It may be unavailable, and features may change or stop. Please keep your own copies of anything important: the app can export your feeding records as CSV files, and it emails backups to you.
+        The app is provided without warranty of any kind, and its author is not liable for any loss arising from its use.
+    - heading: Ending your use
+      body: You can delete your account at any time from your profile page, which deletes
+        your records too. Accounts that abuse the service may be removed.
+    - heading: Changes
+      body: These terms may change. The date at the top shows the most recent version.
+    contact_email: ajicaretracker@gmail.com
+    contact: Questions about these terms? Email %{email}.
+    updated: 'Last updated: 16 September 2026'

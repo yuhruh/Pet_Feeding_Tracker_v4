@@ -1,0 +1,17 @@
+<div class="container mx-auto mb-8 px-6 py-8 rounded-lg shadow-lg bg-gray-100 md:w-4/5 dark:bg-gray-700 dark:text-white">
+  <h1 class="py-4 text-2xl text-center font-bold underline underline-offset-4 lg:text-4xl">
+    <%= t("privacy_page.title") %>
+  </h1>
+  <p class="text-sm italic text-center text-gray-500 dark:text-gray-300"><%= t("privacy_page.updated") %></p>
+
+  <p class="mt-6 text-base leading-relaxed"><%= t("privacy_page.intro") %></p>
+
+  <% t("privacy_page.sections").each do |section| %>
+    <section class="mt-6">
+      <h2 class="text-lg font-semibold lg:text-xl"><%= section[:heading] %></h2>
+      <p class="mt-2 text-base leading-relaxed whitespace-pre-line"><%= section[:body] %></p>
+    </section>
+  <% end %>
+
+  <p class="mt-8 text-base leading-relaxed"><%= t("privacy_page.contact", email: t("privacy_page.contact_email")) %></p>
+</div>

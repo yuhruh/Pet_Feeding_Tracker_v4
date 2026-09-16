@@ -40,6 +40,8 @@ Rails.application.routes.draw do
     get "/home", to: "pages#hero_section"
     get "/about", to: "pages#about"
     get "/doc", to: "pages#doc"
+    get "/privacy", to: "pages#privacy"
+    get "/terms", to: "pages#terms"
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

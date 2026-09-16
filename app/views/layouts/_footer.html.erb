@@ -5,6 +5,8 @@
       <a href="/home#features" class="uppercase hover:text-softRed"><%= t('layouts.footer.features') %></a>
       <%= link_to t('layouts.footer.about'), about_path, class: 'uppercase hover:text-softRed'%>
       <%= link_to t('layouts.footer.docs'), doc_path, class: 'uppercase hover:text-softRed'%>
+      <%= link_to t('layouts.footer.privacy'), privacy_path, class: 'uppercase hover:text-softRed'%>
+      <%= link_to t('layouts.footer.terms'), terms_path, class: 'uppercase hover:text-softRed'%>
       <% if authenticated? %>
         <%= button_to t('layouts.footer.sign_out'), session_path, class: "px-8 py-2 uppercase text-white bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white", method: :delete %>
       <% else %>
