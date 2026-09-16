@@ -33,7 +33,7 @@ class DryFoodsController < ApplicationController
         format.json { render :show, status: :created, location: dry_foods_path }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @dry_food.errors, status: :unprocessable_entity }
+        format.json { render_json_validation_errors(@dry_food) }
       end
     end
   end
@@ -76,7 +76,7 @@ class DryFoodsController < ApplicationController
           flash[:alert] = t("dry_foods.not_found")
           redirect_to dry_foods_path
         end
-        format.json { render json: { error: t("dry_foods.not_found") }, status: :not_found }
+        format.json { render_json_error(t("dry_foods.not_found"), status: :not_found) }
       end
     end
 

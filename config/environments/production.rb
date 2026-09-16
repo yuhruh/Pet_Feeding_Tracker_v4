@@ -126,12 +126,15 @@ Rails.application.configure do
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [ :id ]
 
-  # Enable DNS rebinding protection and other `Host` header attacks.
-  # config.hosts = [
-  #   "example.com",     # Allow requests from example.com
-  #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
-  # ]
-  #
+  # Enable DNS rebinding protection and other `Host` header attacks: requests for any other
+  # host get a 403. Add a custom domain with RAILS_ALLOWED_HOSTS (comma-separated).
+  config.hosts = [
+    "pet-feeding-tracker-v4.up.railway.app", # the Android app's base URL
+    host,
+    ENV["RAILWAY_PUBLIC_DOMAIN"],
+    *ENV.fetch("RAILS_ALLOWED_HOSTS", "").split(",").map(&:strip)
+  ].compact_blank.uniq
+
   # Skip DNS rebinding protection for the default health check endpoint.
-  # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 end

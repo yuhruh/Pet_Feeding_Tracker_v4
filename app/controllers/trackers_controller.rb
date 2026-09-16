@@ -85,7 +85,7 @@ class TrackersController < ApplicationController
         format.json { render :show, status: :created, location: pet_trackers_path }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @tracker.errors, status: :unprocessable_entity }
+        format.json { render_json_validation_errors(@tracker) }
       end
     end
   end
@@ -116,7 +116,7 @@ class TrackersController < ApplicationController
         format.json { render :show, status: :ok, location: [ @pet, :trackers ] }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @tracker.errors, status: :unprocessable_entity }
+        format.json { render_json_validation_errors(@tracker) }
       end
     end
   end
@@ -204,6 +204,7 @@ class TrackersController < ApplicationController
     rescue ActiveRecord::RecordNotFound
       respond_to do |format|
         format.html { redirect_to pets_path, alert: t("pets.not_found") }
+        format.json { render_json_error(t("pets.not_found"), status: :not_found) }
         format.any { head :not_found }
       end
     end
@@ -212,8 +213,11 @@ class TrackersController < ApplicationController
       # @tracker = Tracker.find(params.expect(:id))
       @tracker = @pet.trackers.find(params[:id])
       rescue ActiveRecord::RecordNotFound
-        flash[:alert] = t(".set_tracker.alert")
-        redirect_to pet_tracker_path
+        respond_to do |format|
+          format.html { redirect_to pet_trackers_path(@pet), alert: t("trackers.set_tracker.alert") }
+          format.json { render_json_error(t("trackers.set_tracker.alert"), status: :not_found) }
+          format.any { head :not_found }
+        end
     end
 
     def set_current_time

@@ -22,6 +22,7 @@ class PetSharesController < ApplicationController
     rescue ActiveRecord::RecordNotFound
       respond_to do |format|
         format.html { redirect_to pets_path, alert: t("pets.not_found") }
+        format.json { render_json_error(t("pets.not_found"), status: :not_found) }
         format.any { head :not_found }
       end
     end

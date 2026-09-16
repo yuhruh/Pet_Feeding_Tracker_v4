@@ -29,7 +29,7 @@ class PetsController < ApplicationController
         format.json { render :show, status: :created, location: @pet }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @pet.errors, status: :unprocessable_entity }
+        format.json { render_json_validation_errors(@pet) }
       end
     end
   end
@@ -42,7 +42,7 @@ class PetsController < ApplicationController
         format.json { render :show, status: :ok, location: @pet }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @pet.errors, status: :unprocessable_entity }
+        format.json { render_json_validation_errors(@pet) }
       end
     end
   end
@@ -66,6 +66,7 @@ class PetsController < ApplicationController
     rescue ActiveRecord::RecordNotFound
       respond_to do |format|
         format.html { redirect_to pets_path, alert: t("pets.not_found") }
+        format.json { render_json_error(t("pets.not_found"), status: :not_found) }
         format.any { head :not_found }
       end
     end

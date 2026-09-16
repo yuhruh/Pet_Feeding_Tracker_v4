@@ -1,7 +1,7 @@
 class HealthChecksController < ApplicationController
   # Each extraction holds a server thread while Gemini reads the images.
   rate_limit to: 10, within: 1.minute, only: :extract_data, by: -> { Current.user&.id || request.remote_ip },
-             with: -> { render json: { error: t("services.gemini_ocr.rate_limited") }, status: :too_many_requests }
+             with: -> { render_json_error(t("services.gemini_ocr.rate_limited"), status: :too_many_requests) }
   before_action :set_pet
   before_action :set_health_check, only: %i[ show edit update destroy ]
   before_action :set_current_date
@@ -24,9 +24,15 @@ class HealthChecksController < ApplicationController
     file_paths = Array(params[:files]).grep(ActionDispatch::Http::UploadedFile).map(&:path)
     # Too many, too large or not an image: reject before anything is sent to Gemini.
     if (upload_error = GeminiOcrService.upload_error(file_paths))
-      render json: { error: upload_error }, status: :unprocessable_entity
+      render_json_error(upload_error, status: :unprocessable_entity)
     else
-      render json: GeminiOcrService.new(file_paths, Current.user).call
+      result = GeminiOcrService.new(file_paths, Current.user).call
+      # The service reports a missing key, quota or Gemini failure as { error: }; don't send that as a success.
+      if (error = result[:error] || result["error"])
+        render_json_error(error, status: :unprocessable_entity)
+      else
+        render json: result
+      end
     end
   end
 
@@ -56,7 +62,7 @@ class HealthChecksController < ApplicationController
         format.json { render :show, status: :created, location: pet_health_checks_path(@pet) }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @health_check.errors, status: :unprocessable_entity }
+        format.json { render_json_validation_errors(@health_check) }
       end
     end
   end
@@ -70,7 +76,7 @@ class HealthChecksController < ApplicationController
         format.json { render :show, status: :ok, location: pet_health_checks_path(@pet) }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @health_check.errors, status: :unprocessable_entity }
+        format.json { render_json_validation_errors(@health_check) }
       end
     end
   end
@@ -100,6 +106,7 @@ class HealthChecksController < ApplicationController
     rescue ActiveRecord::RecordNotFound
       respond_to do |format|
         format.html { redirect_to pets_path, alert: t("pets.not_found") }
+        format.json { render_json_error(t("pets.not_found"), status: :not_found) }
         format.any { head :not_found }
       end
     end
@@ -107,8 +114,11 @@ class HealthChecksController < ApplicationController
     def set_health_check
       @health_check = @pet.health_checks.find(params[:id])
       rescue ActiveRecord::RecordNotFound
-        flash[:alert] = t("health_checks.not_found")
-        redirect_to pet_health_checks_url
+        respond_to do |format|
+          format.html { redirect_to pet_health_checks_url(@pet), alert: t("health_checks.not_found") }
+          format.json { render_json_error(t("health_checks.not_found"), status: :not_found) }
+          format.any { head :not_found }
+        end
       # @health_check = HealthCheck.find(params.expect(:id))
     end
 

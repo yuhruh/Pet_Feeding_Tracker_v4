@@ -17,6 +17,16 @@ class ApplicationController < ActionController::Base
 
   private
 
+  # Every JSON error has the same shape: { "error": "message" }, plus "details"
+  # (messages by field) when a record failed validation.
+  def render_json_error(message, status:, details: nil)
+    render json: { error: message, details: details }.compact, status: status
+  end
+
+  def render_json_validation_errors(record)
+    render_json_error(record.errors.full_messages.to_sentence, status: :unprocessable_entity, details: record.errors.to_hash)
+  end
+
   def set_variant
     request.variant = :native if hotwire_native_app?
   end
