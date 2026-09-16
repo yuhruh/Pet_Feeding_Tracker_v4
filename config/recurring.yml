@@ -19,6 +19,7 @@ production:
   user_backups:
     class: UserBackupJob
     schedule: every day at 3am
-  db_backup:
-    command: "Rails.application.load_tasks; Rake::Task['db:backup'].invoke"
-    schedule: every day at 4am
+  # db_backup is deliberately not scheduled. It failed every night: the image has no
+  # pg_dump, and the worker has no persistent disk, so a dump would be deleted on the
+  # next deploy anyway. Full-database recovery comes from Railway's managed Postgres
+  # backups; `bin/rails db:backup` is still there to run by hand.
