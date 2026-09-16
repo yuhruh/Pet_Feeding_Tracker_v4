@@ -250,6 +250,7 @@ en:
       email_placeholder: "Enter your email address"
       submit_button: "Email reset instructions"
     create:
+      alert_rate_limit: "Too many password reset requests. Please wait a while and try again."
       notice: "Password reset instructions sent (if user with that email address exists)."
     update:
       notice: "Password has been reset."
@@ -321,6 +322,7 @@ en:
       password_reset_link: "this password reset page"
   registrations:
     create:
+      alert_rate_limit: "Too many sign-up attempts. Please wait a while and try again."
       notice: "Hello, %{username} 👋. You've successfully signed up to Cat Feeding Tracker App and this is your first time to sign in, please add a new cat first for further tracker. Welcome %{username}!"
     new:
       title: "🐾 Sign up Cat Trackers App 🐾"
@@ -489,6 +491,7 @@ en:
       clear: "Clear"
       no_trackers_found: "No %{petname}'s trackers found."
     import:
+      alert_rate_limit: "Too many imports. Please wait a few minutes and try again."
       alert: "Only CSV please"
       notice: "%{petname}'s trackers imported!"
     create:

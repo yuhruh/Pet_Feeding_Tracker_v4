@@ -250,6 +250,7 @@
       email_placeholder: "メールアドレスを入力"
       submit_button: "リセット手順をメールで送信"
     create:
+      alert_rate_limit: "パスワード再設定のリクエストが多すぎます。しばらく待ってからもう一度お試しください。"
       notice: "パスワードのリセット手順が送信されました（そのメールアドレスのユーザーが存在する場合）。"
     update:
       notice: "パスワードがリセットされました。"
@@ -321,6 +322,7 @@
       password_reset_link: "このパスワードリセットページ"
   registrations:
     create:
+      alert_rate_limit: "サインアップの試行回数が多すぎます。しばらく待ってからもう一度お試しください。"
       notice: "こんにちは、%{username}さん 👋。猫の給餌トラッカーアプリへのサインアップが完了しました。初めてのサインインですので、今後のトラッカーのためにまず新しい猫を追加してください。ようこそ、%{username}さん！"
     new:
       title: "🐾 猫トラッカーアプリにサインアップ 🐾"
@@ -489,6 +491,7 @@
       clear: "クリア"
       no_trackers_found: "%{petname}のトラッカーが見つかりません。"
     import:
+      alert_rate_limit: "インポートが多すぎます。数分待ってからもう一度お試しください。"
       alert: "CSVファイルのみお願いします"
       notice: "%{petname}のトラッカーがインポートされました！"
     create:

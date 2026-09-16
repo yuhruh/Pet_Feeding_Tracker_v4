@@ -1,5 +1,8 @@
 class TrackersController < ApplicationController
   include TrackersCalculable
+  # Imports parse a whole CSV file inside the request, so limit them per user.
+  rate_limit to: 5, within: 10.minutes, only: :import, by: -> { Current.user.id },
+             with: -> { redirect_to pet_trackers_url(params[:pet_id]), alert: t("trackers.import.alert_rate_limit") }
   before_action :set_pet
   before_action :set_tracker, only: %i[ show edit update destroy ]
   before_action :set_current_date, :set_current_time

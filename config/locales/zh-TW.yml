@@ -250,6 +250,7 @@ zh-TW:
       email_placeholder: "輸入您的電子郵件地址"
       submit_button: "以電子郵件傳送重設說明"
     create:
+      alert_rate_limit: "重設密碼的請求次數過多。請稍候再試。"
       notice: "密碼重設說明已傳送（如果存在使用該電子郵件地址的使用者）。"
     update:
       notice: "密碼已重設。"
@@ -321,6 +322,7 @@ zh-TW:
       password_reset_link: "密碼重設頁面"
   registrations:
     create:
+      alert_rate_limit: "註冊嘗試次數過多。請稍候再試。"
       notice: "您好，%{username} 👋。您已成功註冊寵物飲食紀錄應用程式，這是您第一次登入，請先新增一隻寵物以便進一步紀錄。歡迎您，%{username}！"
     new:
       title: "🐾 註冊寵物飲食紀錄應用程式 🐾"
@@ -489,6 +491,7 @@ zh-TW:
       clear: "清除"
       no_trackers_found: "找不到%{petname}的紀錄。"
     import:
+      alert_rate_limit: "匯入次數過多。請稍候幾分鐘再試。"
       alert: "只能使用CSV檔案"
       notice: "%{petname}的飲食紀錄已匯入！"
     create:

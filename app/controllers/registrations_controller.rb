@@ -1,5 +1,6 @@
 class RegistrationsController < ApplicationController
   allow_unauthenticated_access only: %i[new create]
+  rate_limit to: 10, within: 1.hour, only: :create, with: -> { redirect_to new_registrations_url, alert: t("registrations.create.alert_rate_limit") }
   before_action :resume_session, only: %i[new create]
 
   def new

@@ -1,5 +1,10 @@
 class PasswordsController < ApplicationController
   allow_unauthenticated_access
+  # Each request sends an email, so limit both the sender and the inbox being mailed.
+  # The same response is used whether or not the email has an account.
+  rate_limit to: 5, within: 15.minutes, only: :create, with: -> { redirect_to new_password_url, alert: t("passwords.create.alert_rate_limit") }
+  rate_limit to: 3, within: 1.hour, only: :create, name: "per_email", by: -> { params[:email_address].to_s.strip.downcase },
+             with: -> { redirect_to new_password_url, alert: t("passwords.create.alert_rate_limit") }
   before_action :set_user_by_token, only: %i[ edit update ]
 
   def new
