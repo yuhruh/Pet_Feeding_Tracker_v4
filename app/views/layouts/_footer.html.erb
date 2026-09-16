@@ -1,6 +1,6 @@
 <footer class="py-16 bg-veryDarkBlue">
-  <div class="container flex flex-col items-center justify-between mx-auto space-y-16 px-6 md:flex-row md:space-y-0">
-    <div class="flex flex-col items-center justify-between space-y-8 text-lg font-light md:flex-row md:space-y-0 md:space-x-14 text-grayishBlue">
+  <div class="container flex flex-col items-center justify-between gap-16 mx-auto px-6 md:flex-row md:gap-12">
+    <div class="flex flex-col items-center gap-8 min-w-0 text-lg font-light md:flex-row md:flex-wrap md:gap-x-14 md:gap-y-6 text-grayishBlue">
       <%= image_tag('footer_aji_logo.png', width: "80px") %>
       <a href="/home#features" class="uppercase hover:text-softRed"><%= t('layouts.footer.features') %></a>
       <%= link_to t('layouts.footer.about'), about_path, class: 'uppercase hover:text-softRed'%>
@@ -13,6 +13,9 @@
         <%= link_to t('layouts.footer.get_started'), new_registrations_path, class: 'uppercase hover:text-softRed'%>
       <% end %>
 
+    </div>
+
+    <div class="flex flex-col items-center gap-8 shrink-0">
       <div class="flex flex-row justify-center space-x-10">
         <a href="https://www.linkedin.com/in/yuruhuang/" target="_blank" class='h-6 ficon'>
           <svg stroke-width="0" viewBox="0 0 25 25" height="35px" width="35px" xmlns="http://www.w3.org/2000/svg">
@@ -51,10 +54,6 @@
         </a>
       </div>
       <div class="flex flex-col justify-center text-white font-bold"><%= t('layouts.footer.copyright') %></div>
-
-    </div>
-
-    <div class="flex flex-col items-center space-x-10 space-y-8">
       
     </div>
   </div>
