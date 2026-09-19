@@ -23,7 +23,7 @@ class UserBackupMailerTest < ActionMailer::TestCase
     attachment_names = mail.attachments.map(&:filename)
 
     # Expected sanitized string is "Mimi_Momo"
-    assert_includes attachment_names, "Mimi_Momo_trackers_#{pet_with_slash.id}_#{Time.current.strftime('%Y%m%d')}.csv"
-    assert_includes attachment_names, "Mimi_Momo_trackers_#{pet_with_duplicate.id}_#{Time.current.strftime('%Y%m%d')}.csv"
+    assert_includes attachment_names, "Mimi_Momo_trackers_petid_#{pet_with_slash.id}_#{Time.current.strftime('%Y%m%d')}.csv"
+    assert_includes attachment_names, "Mimi_Momo_trackers_petid_#{pet_with_duplicate.id}_#{Time.current.strftime('%Y%m%d')}.csv"
   end
 end
