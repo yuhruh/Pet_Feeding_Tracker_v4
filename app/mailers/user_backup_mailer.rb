@@ -11,7 +11,7 @@ class UserBackupMailer < ApplicationMailer
 
       # Sanitize pet name to prevent directory traversal / invalid character issues
       safe_petname = pet.petname.gsub(/[\/\\?%*:|"<>]/, "_")
-      filename = "#{safe_petname}_trackers_#{pet.id}_#{Time.current.strftime('%Y%m%d')}.csv"
+      filename = "#{safe_petname}_trackers_#{Time.current.strftime('%Y%m%d')}.csv"
       attachments[filename] = csv_data
     end
 
