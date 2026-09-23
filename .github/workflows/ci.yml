@@ -71,6 +71,14 @@ jobs:
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config google-chrome-stable
 
+      # The runner image ships a chromedriver that is pinned to its own Chrome,
+      # but the step above upgrades Chrome to the current stable release. When
+      # the two drift apart, every system test dies with SessionNotCreatedError.
+      # Removing the stale binary lets Selenium Manager fetch the driver that
+      # matches whichever Chrome is installed.
+      - name: Remove the runner's pinned chromedriver
+        run: sudo rm -f /usr/bin/chromedriver /usr/local/bin/chromedriver
+
       - name: Checkout code
         uses: actions/checkout@v4
 
