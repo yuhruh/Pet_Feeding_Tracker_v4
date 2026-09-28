@@ -10,4 +10,13 @@ class DiagnosticsMailerTest < ActionMailer::TestCase
     assert_equal "Pet Tracker test email (2026-09-16 05:30 UTC)", mail.subject
     assert_match "outgoing mail works", mail.body.decoded
   end
+
+  test "price_source_alert goes to the app's own address and names the source" do
+    mail = DiagnosticsMailer.price_source_alert(source: "BigGo", query: "璞斯 貓飼料", detail: "no listings")
+
+    assert_equal [ "ajicaretracker@gmail.com" ], mail.to
+    assert_equal "Pet Tracker: BigGo kibble prices need attention", mail.subject
+    assert_match "璞斯 貓飼料", mail.body.decoded
+    assert_match "app/services/kibble_prices/", mail.body.decoded
+  end
 end
