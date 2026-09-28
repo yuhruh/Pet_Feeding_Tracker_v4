@@ -147,7 +147,7 @@ Before the protein rule, 曙光's list wrongly included the chicken (雞肉) and
 - Test fixtures are trimmed real BigGo pages (`test/fixtures/files/kibble_prices/`); no test touches the network.
 
 **⏳ Review questions for you:**
-1. **Time window:** `favorite_kibbles` defaults to kibbles fed in the last **3 months**. The local database's latest kibble feeding is 2026-04-09, so the default finds nothing there. Is 3 months right for production, or should it be longer (e.g. 12 months)?
+1. **Time window:** `favorite_kibbles` defaults to kibbles fed in the last **3 months**. In the local database, Aji's latest kibble tracker is dated 2026-04-26 and the latest tracker of any food 2026-04-29 (the local copy seems to stop there), so the default window (from 2026-06-28) finds nothing locally. Is 3 months right for production, or should it be longer (e.g. 12 months)?
 2. **Small bags rank first:** the cheapest-per-kg can be a tiny bag, e.g. 吶一口 at NT$460/kg for 150g × 2 from Coupang. Keep ranking purely by NT$/kg, or show a minimum bag size (e.g. ≥ 1 kg) first?
 3. **Series listings:** PChome's 曙光 12LB listing covers four flavors (`雞肉/鴨肉/白鮭魚/火雞肉`) at one price. It's kept because duck is among them. Keep, or reject listings that name several other proteins without a priced variant?
 4. **No results:** 天然密碼 鴨肉&火雞肉 found nothing on BigGo or PChome. At checkpoint C, Gemini (the user's key) is tried for such kibbles, labelled "unverified". Still what you want?
