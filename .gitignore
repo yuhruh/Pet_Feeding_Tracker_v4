@@ -69,3 +69,6 @@ client_secret*.json
 # OS generated files
 .DS_Store
 .DS_Store?
+
+# Personal Claude Code settings
+/.claude/settings.local.json

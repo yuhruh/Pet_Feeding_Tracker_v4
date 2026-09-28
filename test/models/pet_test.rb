@@ -18,10 +18,12 @@ class PetTest < ActiveSupport::TestCase
 
   test "favorite_kibbles leaves out low scores, old feedings and anything past the limit" do
     feed(food_type: "Kibble", brand: "Low", description: "Score", favorite_score: 29)
-    feed(food_type: "Kibble", brand: "Old", description: "Feeding", favorite_score: 60, date: 4.months.ago.to_date)
+    feed(food_type: "Kibble", brand: "Old", description: "Feeding", favorite_score: 60, date: 5.months.ago.to_date)
+    feed(food_type: "Kibble", brand: "Recent", description: "Feeding", favorite_score: 31, date: (3.months.ago - 2.weeks).to_date)
     (1..6).each { |n| feed(food_type: "Kibble", brand: "Brand #{n}", description: "Kibble", favorite_score: 30 + n) }
 
     assert_equal (2..6).map { |n| "brand #{n}" }.reverse, @pet.favorite_kibbles.map { |f| f[:brand] }
+    assert_includes @pet.favorite_kibbles(limit: 10).map { |f| f[:brand] }, "recent", "fed three and a half months ago is within the four-month window"
     assert_equal [ "old" ], @pet.favorite_kibbles(min_score: 60, since: 6.months.ago).map { |f| f[:brand] }
     assert_equal 2, @pet.favorite_kibbles(limit: 2).size
   end

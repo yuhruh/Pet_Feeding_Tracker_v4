@@ -1,6 +1,8 @@
 class Pet < ApplicationRecord
   # How long a new share link works. nil means until it is turned off or replaced.
   SHARE_DURATIONS = { "never" => nil, "1_day" => 1.day, "7_days" => 7.days, "30_days" => 30.days }.freeze
+  # How far back a kibble counts as a current favorite for the monthly price check.
+  FAVORITE_KIBBLE_WINDOW = 4.months
 
   has_one_attached :pet_avatar
   belongs_to :user
@@ -47,7 +49,7 @@ class Pet < ApplicationRecord
 
   # The kibbles this pet has loved lately, most loved first, each with the
   # dry-food bag it was last fed from (nil when none was recorded).
-  def favorite_kibbles(min_score: 30, since: 3.months.ago, limit: 5)
+  def favorite_kibbles(min_score: 30, since: FAVORITE_KIBBLE_WINDOW.ago, limit: 5)
     trackers = rated_trackers.kibble.where(date: since.to_date..).includes(:dry_food)
 
     group_favorites(trackers).map { |key, group| favorite_summary(key, group).merge(dry_food: group.find(&:dry_food)&.dry_food) }
