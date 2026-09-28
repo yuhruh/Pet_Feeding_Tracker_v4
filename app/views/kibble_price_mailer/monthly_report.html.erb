@@ -4,7 +4,6 @@
 
   <% @check.kibbles.each do |kibble| %>
     <% prices = @check.prices_for(kibble["brand"], kibble["description"]) %>
-    <% flagged_count = @check.kibble_prices.flagged.where(brand: kibble["brand"], description: kibble["description"]).count %>
     <h3 style="margin: 24px 0 8px; font-size: 16px;"><%= kibble["brand"] %> · <%= kibble["description"] %></h3>
 
     <% if prices.empty? %>
@@ -26,17 +25,10 @@
             <td style="padding: 6px; text-align: right; white-space: nowrap;"><%= kibble_twd(price.price_twd) %></td>
             <td style="padding: 6px; text-align: right; white-space: nowrap;"><%= kibble_bag_size(price) %></td>
             <td style="padding: 6px; text-align: right; white-space: nowrap; font-weight: bold;"><%= kibble_twd(price.price_per_kg, precision: 1) %></td>
-            <td style="padding: 6px; text-align: center; white-space: nowrap;"><%= price.verified? ? "✔ #{t('kibble_prices.index.listed', source: price.source_before_type_cast)}" : t("kibble_prices.index.unverified") %></td>
+            <td style="padding: 6px; text-align: center; white-space: nowrap;">✔ <%= t("kibble_prices.index.listed", source: price.source_before_type_cast) %></td>
           </tr>
         <% end %>
       </table>
-      <% if prices.any?(&:gemini?) %>
-        <p style="margin: 4px 0 0; font-size: 12px; color: #6b7280;"><%= t("kibble_prices.index.unverified_note") %></p>
-      <% end %>
-    <% end %>
-
-    <% if flagged_count.positive? %>
-      <p style="margin: 4px 0 0; font-size: 12px; color: #b45309;"><%= t(".suspicious_hidden", count: flagged_count) %></p>
     <% end %>
   <% end %>
 

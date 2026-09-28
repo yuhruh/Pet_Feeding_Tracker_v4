@@ -630,7 +630,7 @@
       failed: "前回の価格確認は完了しませんでした。明日「今すぐ更新」をお試しください。"
       no_favorites: "%{petname}には過去%{months}か月に確認できるお気に入りのドライフードがありません。記録でスコア30以上になるとお気に入りになります。"
       favorite_score: "お気に入りスコア %{score}"
-      no_listings: "今回はショップの掲載が見つかりませんでした。"
+      no_listings: "今回はショップでこのフードが見つかりませんでした。"
       store: "ショップ"
       product: "商品"
       price: "価格"
@@ -639,13 +639,6 @@
       source: "出典"
       listed: "掲載価格 · %{source}"
       listed_note: "%{date}に%{source}で見つけた掲載価格です。価格はよく変わるため、購入前にショップでご確認ください。"
-      unverified: "未確認"
-      unverified_note: "GeminiがGoogle検索結果から見つけた価格で、古い可能性があります。購入前にショップでご確認ください。"
-      gemini_no_key_html: "%{profile_link}でGemini APIキーを追加すると、ショップに掲載がないときもGoogleで検索します。"
-      profile: "プロフィール"
-      suspicious:
-        one: "⚠ 通常価格から大きく外れた価格が1件あります"
-        other: "⚠ 通常価格から大きく外れた価格が%{count}件あります"
       disclaimer: "価格はおおよそで、変わっている場合があります。Pet Trackerは販売を行っておらず、これらのショップから報酬も受け取っていません。"
     create:
       queued: "価格を確認中です。1分後にこのページを再読み込みしてください。"
@@ -656,9 +649,6 @@
       subject: "%{petname}の今月のドライフード価格"
       greeting: "%{username}さん、こんにちは。"
       intro: "%{petname}が最近気に入っているドライフードの今月の価格です（1kgあたりの安い順、%{date}確認）。"
-      suspicious_hidden:
-        one: "大きく外れた価格1件はここに表示していません。ページでご確認ください。"
-        other: "大きく外れた価格%{count}件はここに表示していません。ページでご確認ください。"
       see_page: "%{petname}のドライフード価格を見る"
   mailers:
     user_backup:

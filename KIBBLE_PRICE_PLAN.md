@@ -12,7 +12,7 @@
 | C — Gemini backup, models, jobs | ✅ Done (2026-09-28). Committed on `feature/kibble-prices` and pushed. See [Checkpoint C result](#checkpoint-c-result-2026-09-28). |
 | D — Page, email, translations | ✅ Done (2026-09-28). Committed on `feature/kibble-prices` and pushed. See [Checkpoint D result](#checkpoint-d-result-2026-09-28). |
 | E — Tests, lint, CI, merge | ✅ Done (2026-09-28). Merged into `main` directly (no pull request, at your request) as `8d34a86`; tests, lint and CI passed. **The first monthly run is 2026-10-01 at 06:00 UTC (14:00 Taiwan).** |
-| F — Drop Gemini | ⏳ Planned 2026-09-28, not implemented yet. See [Change F](#change-f-drop-gemini-2026-09-28). |
+| F — Drop Gemini | ✅ Done (2026-09-28). Committed on `feature/kibble-prices` and pushed; **not merged into `main` yet**. See [Change F](#change-f-drop-gemini-2026-09-28). |
 
 **Decisions**
 
@@ -67,6 +67,12 @@ Rejected options:
 | Unchanged | BigGo and PChome searches, matching rules, bag sizes, ranking, jobs, schedule, "Refresh now", email rules, languages. The user's own Gemini key stays in their profile, as the health-check reader (`GeminiOcrService`) still uses it |
 
 **Checks before committing:** `bin/rails test`, `bin/rails test:system`, rubocop, brakeman; the new migration on a throwaway PostgreSQL database too; a screenshot of a "can't find" kibble on the page.
+
+**Result (implemented 2026-09-28):**
+- Done as listed above. The new migration is `db/migrate/20260928150000_remove_gemini_from_kibble_prices.rb`.
+- Tests: the Gemini and suspicious tests were removed; new or changed tests cover "can't find" on the page, in the email and in the browser test, a kibble neither source lists (both searches made, no prices), and `source` rejecting `Gemini`. `bin/rails test` 282 runs and `bin/rails test:system` 32 runs, 0 failures; rubocop and brakeman clean.
+- **Migration clean-up checked by hand, not by a committed test** (a test for it would need the old schema): on a throwaway PostgreSQL 15 database with the schema from before this change plus one BigGo and one Gemini price, `db:migrate` deleted only the Gemini price and removed both `suspicious` columns; `db:rollback` put the columns back and migrating again worked. The database was then dropped.
+- Screenshot reviewed: 天然密碼 shows "Can't find this kibble in shops right now."; every price shows "✔ Listed · BigGo / PChome".
 
 ## Checkpoint 0 result (2026-09-28)
 
@@ -418,7 +424,7 @@ For each kibble: collect BigGo and PChome listings (exact name, then brand). *Ch
 | C | Step 6 (Gemini backup), then Steps 2 and 8 | ✅ Done — job ran end to end locally; Gemini path taken only for the kibble with nothing listed |
 | D | Steps 9, 10, 11 | ✅ Done — screenshots of the page (desktop, phone, 2 languages) and the email reviewed; 2 layout fixes made |
 | E | Step 12 + `bin/rubocop` + CI | ✅ Done — 290 tests and 29 browser tests pass on the merged `main`; GitHub CI on `main` passed (scan_ruby, test, scan_js, lint) |
-| F | Change F: drop Gemini | ⏳ Planned — tests, PostgreSQL migration check, screenshot of a "can't find" kibble |
+| F | Change F: drop Gemini | ✅ Done — 282 tests and 32 browser tests pass; migration and rollback checked on PostgreSQL; "can't find" screenshot reviewed |
 
 ## Risks and how the plan handles them
 
