@@ -241,6 +241,20 @@ To try the Gemini path yourself, add your Gemini API key in your local user prof
 - `bin/rails test:system`: 29 runs, 0 failures.
 - `bin/rubocop`: no offenses. `bin/brakeman -w2`: no warnings.
 
+## After merging: extra checks (2026-09-28)
+
+| Check | Result |
+|---|---|
+| **Migration on PostgreSQL** (production's database; development, tests and CI use SQLite) | ✅ On a throwaway local PostgreSQL 15 database: loaded the schema from before this feature (`main` at `e1c5fb4`), ran `db:migrate` → both tables, the unique `(pet_id, checked_on)` index and the foreign keys were created. |
+| **Whole test suite on PostgreSQL** | ✅ 290 runs, 0 failures (single process, against that database). The throwaway database was then dropped. |
+| **Browser test for the page** (`test/system/kibble_prices_test.rb`, committed) | ✅ Profile → "Kibble Prices" → ranked table, badges, "no listings" and Gemini-key notes, opening the suspicious section; "Refresh now" queues a check and is replaced after a check that day; phones get cards instead of the table. |
+| **"Refresh now" rate limit** (`test/controllers/rate_limit_test.rb`) | ✅ Over the limit: no search queued, redirected with the "Too many refreshes" alert. |
+| **Gemini with a real API key** | ⏳ **Not run yet**: the local user has no Gemini key. Add one in the local profile, then run the lookup for 天然密碼 (the kibble BigGo and PChome found nothing for) to see a real Gemini answer. |
+
+Totals after these: `bin/rails test` 291 runs and `bin/rails test:system` 32 runs, 0 failures; rubocop clean.
+
+**Found along the way (older than this feature, not changed):** `db/schema.rb` has `add_foreign_key "dry_foods", "Users", column: "user_id"` with a capital `U`. SQLite ignores the case; PostgreSQL treats `"Users"` as a different table, so `db:schema:load` (or `db:prepare` on an **empty** PostgreSQL database, e.g. a new environment) fails with `relation "Users" does not exist`. Existing production isn't affected, as it's updated by migrations, not by loading the schema.
+
 ## How it works
 
 ```
