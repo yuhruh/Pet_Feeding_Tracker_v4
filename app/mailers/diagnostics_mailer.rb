@@ -7,4 +7,22 @@ class DiagnosticsMailer < ApplicationMailer
       format.text { render plain: "Sent from #{Rails.env} at #{sent_at.utc}. If you can read this, outgoing mail works." }
     end
   end
+
+  # A kibble price source (BigGo, PChome) answered, but not in the shape the parser
+  # expects: its page layout or API has probably changed.
+  def price_source_alert(source:, query:, detail:)
+    mail(to: ApplicationMailer.default[:from], subject: "Pet Tracker: #{source} kibble prices need attention") do |format|
+      format.text do
+        render plain: <<~TEXT
+          #{source} returned nothing the kibble price parser could read (#{Rails.env}, #{Time.current.utc}).
+
+          Search: #{query}
+          Detail: #{detail}
+
+          Its page layout or API has probably changed. Check the selectors in app/services/kibble_prices/.
+          This alert is sent at most once a day per source.
+        TEXT
+      end
+    end
+  end
 end
