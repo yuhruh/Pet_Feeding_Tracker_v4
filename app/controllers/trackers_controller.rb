@@ -132,37 +132,7 @@ class TrackersController < ApplicationController
   end
 
   def favorite_food
-    trackers = @pet.trackers.where.not(hungry: [ nil, "" ], love: [ nil, "" ]).order(date: :desc)
-
-    if params[:food_type].present?
-      trackers_table = Tracker.arel_table
-      trackers = trackers.where(trackers_table[:food_type].matches("%#{params[:food_type].strip}%"))
-    end
-
-    @favorite_foods = trackers.group_by do |tracker|
-      clean_description = tracker.description.to_s.gsub("（", "(").gsub("）", ")").gsub(/\s*[\(\s]*[xX×]\s*\d+[\)\s]*\z/, "").squish.downcase
-
-      [ tracker.food_type.to_s.squish.downcase, tracker.brand.to_s.squish.downcase, clean_description ]
-    end.map do |(food_type, brand, description), group_trackers|
-      unique_daily_results = group_trackers.sort_by { |t| t.favorite_score }.reverse
-                                          .uniq { |t| t.date }
-      {
-        food_type: food_type,
-        brand: brand,
-        description: description,
-        count: group_trackers.size,
-        results: unique_daily_results.first(5).sort_by { |t| t.date }.reverse.map do |t|
-          {
-            id: t.id,
-            date: t.date.strftime("%Y/%m/%d"),
-            result: t.result,
-            favorite_score: t.favorite_score
-          }
-        end
-      }
-    end
-
-    all_favorite_foods = @favorite_foods.sort_by { |f| f[:results].first[:favorite_score] }.reverse
+    all_favorite_foods = @pet.favorite_foods(food_type: params[:food_type])
 
     require "will_paginate/array"
     session[:per_page] = params[:per_page] if params[:per_page].present?

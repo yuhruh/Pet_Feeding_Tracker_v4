@@ -1,0 +1,247 @@
+# Monthly Kibble Price Ranking — Implementation Plan (v4)
+
+**Goal:** On the 1st of each month, find current Taiwan prices for the kibbles each pet loves, rank them by **NT$ per kg from cheapest to most expensive**, and show the list **in the app and in an email**. Gemini, using **each user's own key**, is only a backup.
+
+## Status
+
+| Checkpoint | Status |
+|---|---|
+| 0 — Terms check | ✅ Done (2026-09-28). **feebee rejected** (its terms forbid automated collection). **BigGo confirmed as the main source.** See [Checkpoint 0 result](#checkpoint-0-result-2026-09-28). |
+| A — Refactor | ✅ Done (2026-09-28) on branch `feature/kibble-prices`, not committed yet. See [Checkpoint A result](#checkpoint-a-result-2026-09-28). |
+| B — Price sources and lookup | Not started |
+| C — Gemini backup, models, jobs | Not started |
+| D — Page, email, translations | Not started |
+| E — Tests, lint, CI, commit | Not started |
+
+**Decisions**
+
+| Topic | Decision |
+|---|---|
+| Ranking | Price per kg, cheapest first |
+| Region / currency | Taiwan, TWD |
+| Delivery | In-app page + monthly email |
+| Gemini key | Each user's own key (backup source only) |
+| Main price source | **BigGo** price-comparison site read with Nokogiri (confirmed 2026-09-28; was feebee until checkpoint 0) |
+
+## Background: why this approach
+
+Findings from plain HTTP requests (no JavaScript), the way Nokogiri sees a page:
+
+| Site | Result |
+|---|---|
+| Shopee | 200, 173 KB, **0 prices**. The page is an empty shell; prices come from an anti-bot-protected internal API. No JSON-LD or built-in page data. |
+| PChome (HTML) | **429** on the first request. Its JSON search endpoint works, though. |
+| momo | 200, JSON-LD and prices in the HTML. |
+| **feebee / BigGo / FindPrice** | 200, **prices in the HTML, Shopee listings included**. feebee page 1 had 36 `li.items` listings from momo, ETMall, Yahoo, Shopee, Rakuten, SKM. |
+
+Rejected options:
+- **Visiting each store page with Nokogiri** — fails on Shopee and PChome, and needs selectors for every store.
+- **Headless browser** — heavy on Railway and still blocked by anti-bot measures.
+- **Shopee Affiliate Open API** — not available to individual accounts.
+- **Gemini as the main source** — prices come from Google's index and may be outdated or made up.
+- **feebee** — its terms forbid automated collection and storing its data (see below).
+
+## Checkpoint 0 result (2026-09-28)
+
+I read each site's full published terms and its robots.txt. This is a reading of the terms, not legal advice.
+
+### feebee — ❌ rejected
+[Terms](https://feebee.com.tw/terms/), last updated 2026-08-19:
+- **§4.1.15:** 「不得以自動化登入及操作方式蒐集本服務提供的資訊」 — no collecting the service's information by automated means.
+- **§12.5:** without prior written consent, no use of the service's data for commercial purposes, and no "copying or storing any part of the service in any other system" (our monthly cache and `kibble_prices` table would do exactly that).
+- **§12.8:** 「請勿未經本公司事先書面同意，大量、有系統地抓取本服務相關資訊」 — no systematic scraping without prior written consent, with a **NT$1,000,000 penalty**.
+- robots.txt disallows `/rd/` (its store redirect links), `/product/`, `/query/`, `/compare/` and others. `/s/` (search) is not disallowed, but the terms override that.
+- **The only way back in:** feebee's written permission (service@firstweb.com.tw). Not worth waiting on for now.
+
+### BigGo — ✅ confirmed main source
+[Terms page](https://biggo.com.tw/official/disclaimers) (用戶條款 / privacy / disclaimer / cashback terms), last updated 2026-01-09:
+- **No clause about automated access, scraping or storing data** in the published text. The disclaimer says its own data is collected "via Datafeed, API and other technologies" and may be inaccurate or outdated.
+- robots.txt: `Allow: /`, only `Disallow: /r/` (its store redirect links). The search pages are allowed.
+- No explicit ban isn't the same as permission. So the plan keeps the load tiny (see Step 4), never fetches `/r/` links, and shows BigGo as the source on the page.
+
+### PChome JSON endpoint — ✅ keep as optional
+[Member terms](https://member.pchome.com.tw/law.html):
+- No explicit scraping clause. They forbid disrupting or interfering with the system (§7), which the plan's low volume avoids.
+- robots.txt only disallows `v3.3` category and `.com` queries. The `v4.3` search endpoint isn't listed.
+- The endpoint is undocumented and may change without notice. It stays optional.
+
+### FindPrice — not used
+Its terms page couldn't be found. robots.txt disallows `/go/` and `/json/`. Not needed while BigGo works.
+
+### Decision
+- **BigGo confirmed as the main source** (2026-09-28). feebee is not used and not contacted.
+- Checkpoint B starts by inspecting BigGo's listing HTML to write the selectors. Only BigGo's page-level data has been checked so far (200 OK, prices present, Shopee and momo listings included).
+
+## Checkpoint A result (2026-09-28)
+
+**Changed files** (branch `feature/kibble-prices`, not committed):
+- `app/models/pet.rb` — adds `favorite_foods`, `favorite_kibbles` and the private helpers they share (`rated_trackers`, `group_favorites`, `favorite_summary`).
+- `app/controllers/trackers_controller.rb` — `favorite_food` calls `@pet.favorite_foods`; about 30 lines removed.
+- `test/controllers/favorite_food_test.rb` (new) — pins down the favorite-food JSON and page. **Written and passing before the refactor**, then still passing after it:
+  - grouping, with trailing counts like `x2` / `（x3）` joining the same food;
+  - five best-scored days per food, one per day, latest first;
+  - most-loved-first order;
+  - the `food_type` filter;
+  - the HTML page renders.
+- `test/models/pet_test.rb` — `favorite_kibbles`: kibble only, order, `min_score`, `since`, `limit`, and the linked bag.
+
+**Results:**
+- `bin/rails test`: 226 runs, 0 failures.
+- `bin/rails test:system`: 29 runs, 0 failures.
+- `bin/rubocop` on the changed files: no offenses.
+
+**Found while writing the tests (existing behavior, kept as is):**
+- The favorite-food list leaves a feeding out only when **both** its hungry and love ratings are blank. A feeding with just one of them still counts. The test pins this.
+- "Most loved" means the score of the food's **latest** listed day, not its best day. `favorite_kibbles` uses the same score for `min_score`, so the ranking matches the favorite-food page.
+
+## How it works
+
+```
+MonthlyKibblePriceJob (1st of month, 6am)
+  └─ per pet → PetKibblePriceJob   (one at a time across all users)
+        1. Pet#favorite_kibbles                → top 5 kibbles by favorite score
+        2. For each kibble, build a search query, e.g. "皇家 室內成貓 IN27"
+        3. BigGoSearchService     (Nokogiri)   → listings: title, price, store, link   [cached for the month]
+        4. PchomeSearchService    (JSON.parse) → listings (optional)                   [cached for the month]
+        5. GeminiKibbleSearchService (backup)  → only if steps 3 and 4 found nothing
+        6. KibblePriceLookup                   → match, check bag size, flag suspicious prices, calculate NT$/kg, rank
+        7. Save KibblePriceCheck + KibblePrices → email + in-app page
+```
+
+| Source | How it's read | Badge | When it's used |
+|---|---|---|---|
+| **BigGo** search page | Nokogiri (selectors set in checkpoint B) | ✔ Listed price | Always, the main source |
+| **PChome** `ecshweb.pchome.com.tw/search/v4.3/all/results` | `JSON.parse` | ✔ Listed price | Always, optional extra |
+| **Gemini** + Google Search | `JSON.parse` on its reply | Unverified | Only when both of the above found nothing for that kibble |
+| Any unverified price ±40% from the listed prices | — | ⚠ Suspicious, not ranked | — |
+
+---
+
+## Steps
+
+### 1. Share the "favorite kibble" logic ✅
+- The grouping and scoring moved out of `TrackersController#favorite_food` into `Pet` (`app/models/pet.rb`):
+  - `Pet#favorite_foods(food_type: nil)` — the full list the favorite-food page and its JSON use, unchanged.
+  - `Pet#favorite_kibbles(min_score: 30, since: 3.months.ago, limit: 5)` — kibble only (`Tracker.kibble`), fed on or after `since`, latest-day score ≥ `min_score`, most loved first. Each entry is the same hash as `favorite_foods` plus `dry_food:` — the bag it was last fed from, or `nil`.
+- The controller now calls `@pet.favorite_foods(food_type: params[:food_type])`. Its output is unchanged.
+
+### 2. Migration and models
+- **`kibble_price_checks`**: `pet_id`, `checked_on` (date), `status` (pending / done / failed), `error_message`, timestamps.
+  - Unique index on `[pet_id, checked_on]` to prevent a duplicate run for the same date.
+- **`kibble_prices`**: `kibble_price_check_id`, `brand`, `description`, `favorite_score`, `store`, `url`, `product_title`, `price_twd`, `bag_size_label`, `bag_size_kg`, `price_per_kg`, `source` (enum: `biggo` / `pchome` / `gemini`), `suspicious` (boolean), `suspicious_reason`, timestamps.
+  - `bag_size_label` (string) is the exact size the shop sells, as written in the listing (e.g. `"2kg x 2"`, `"3.3lb"`, `"4KG"`), for display.
+  - `bag_size_kg` (decimal) is the total in kg (e.g. `4.0`, `1.5`), used only to calculate NT$/kg.
+  - "Verified" is derived from `source`: biggo and pchome rows count as verified.
+- Associations: `Pet has_many :kibble_price_checks`, `KibblePriceCheck has_many :kibble_prices`, both `dependent: :destroy`.
+- Scopes:
+  - `ranked` — not suspicious, ordered by `price_per_kg ASC`.
+  - `flagged` — suspicious.
+
+### 3. Shared helpers
+- **`KibbleQuery.for(kibble)`** builds the search text from a `favorite_kibbles` entry: the linked bag's brand and description when `dry_food` is present, otherwise the tracker's. Strips noise ("x2", brackets, full-width characters — same cleanup as the current `favorite_food`) and keeps product-line codes like `IN27`.
+- **`KibbleMatcher.match?(title, kibble)`** requires the brand (Chinese **or** English name, e.g. 皇家 / Royal Canin) **and** the product line or code to appear in the listing title.
+- **`BagSize.parse(title)`** returns `{ kg:, label: }` — the total in kg plus the exact text matched in the title (`"1.5kg"` → 1.5, `"2公斤"` → 2, `"500g"` → 0.5, `"3.3lb"` → 1.5, `"2kg x 2"` → 4) — or **nil if the title has several different sizes** (multi-variant listings).
+- **`PoliteHttp`**: small Net::HTTP wrapper — fixed User-Agent, 10-second timeouts, 2 MB read limit, no retries, and **only allows fixed host + path pairs** (`biggo.com.tw` search pages, `ecshweb.pchome.com.tw/search/v4.3/`). Paths disallowed by robots.txt (BigGo `/r/`) are rejected.
+
+### 4. `BigGoSearchService` (Nokogiri, main source)
+- Request BigGo's search page for `{query}` (exact URL pattern confirmed in checkpoint B), **page 1 only**.
+- For each listing: title, price (digits only → integer), store name, link. The link is BigGo's `/r/…` redirect, which is **stored and shown to the user but never fetched** by the server.
+- Selectors are written in checkpoint B from a saved copy of a real page and kept in constants so they're easy to fix.
+- **Cache:** `Rails.cache.fetch("biggo:#{query}:#{month}", expires_in: 35.days)` (Solid Cache, database-backed), so many users feeding the same kibble cause **one request per month**.
+- **0 listings with HTTP 200** (a sign the layout changed): log a warning and send at most one alert per day to the admin via the existing `DiagnosticsMailer`.
+
+### 5. `PchomeSearchService` (JSON, optional)
+- Request `ecshweb.pchome.com.tw/search/v4.3/all/results?q={query}&page=1`, read `Prods[]` → `Name`, `Price`, link built from `Id`.
+- Same monthly cache and empty-result alert.
+- Undocumented endpoint: any error means no PChome results, and the run carries on.
+
+### 6. `GeminiKibbleSearchService` (backup)
+- Follows `GeminiOcrService`: key in `x-goog-api-key`, timeouts.
+- Request uses `tools: [{ google_search: {} }]` and asks for **JSON only**: `[{store, url, price_twd, product_title}]`.
+- **Only called when steps 4 and 5 found nothing** for a kibble.
+- No user key: skip this step (with a note on the page); don't fail the run.
+
+### 7. `KibblePriceLookup` (combine and check)
+For each kibble: collect BigGo and PChome listings, then fall back to Gemini if both are empty.
+
+- **Filter:**
+  - `KibbleMatcher.match?` must pass.
+  - `BagSize.parse` must return one size.
+  - Price between NT$50 and NT$20,000.
+  - Gemini rows must also have a URL and a title.
+- **Remove duplicates:** keep the cheapest listing per store and bag size.
+- **Check Gemini rows:** if listed prices exist, an unverified row more than ±40% from the median listed NT$/kg is marked `suspicious`, with the reason saved.
+- **Calculate and rank:** `price_per_kg = price_twd / bag_size_kg` (1 decimal place), keep the **top 8** per kibble.
+
+### 8. Jobs and schedule
+- **`MonthlyKibblePriceJob`**: users with kibble trackers in the last 30 days → one `PetKibblePriceJob` per pet. Logs a count, like `UserBackupJob`. No Gemini key required.
+- **`PetKibblePriceJob`**:
+  - `limits_concurrency to: 1, key: "kibble_price_search"` — only one search at a time across all users; about 2 seconds between uncached requests.
+  - Creates the check (skips if one already exists for that date), runs the lookup, saves the results.
+  - Marks the check done or failed; sends the email when done and there are results.
+- `config/recurring.yml` under `production:`:
+  ```yaml
+  monthly_kibble_prices:
+    class: MonthlyKibblePriceJob
+    schedule: at 6am on the 1st of every month
+  ```
+
+### 9. In-app page
+- Route: `resources :pets { resources :kibble_prices, only: [:index, :create] }`.
+- **`index`** — latest check, grouped by kibble with its favorite score:
+  - **Ranked table**, cheapest NT$/kg first: store, product title (linked), price, bag size (shop's label with the kg total, e.g. "2kg x 2 (4 kg)"), NT$/kg, source badge (✔ Listed price — BigGo/PChome, or Unverified).
+  - Source note: "Listed price via BigGo on {date}" or "From Google search results, may be outdated".
+  - Collapsed **"⚠ Suspicious prices"** section with reasons.
+  - "No listings found" for kibbles with no results.
+- **`create`** — "Refresh now" button, limited to once a day per pet, queues `PetKibblePriceJob` (monthly cache still applies).
+- Links from the pet page and the favorite-food page.
+- Owner-only access, like the other pet pages. Tailwind styling to match.
+
+### 10. Email
+- `KibblePriceMailer#monthly_report(check)`: HTML ranked table in the user's locale with source badges. Suspicious rows only as a count, with a link to the in-app page.
+- Follows the `UserBackupMailer` pattern.
+
+### 11. Translations
+- Keys in `config/locales/en.yml`, `ja.yml`, `zh-TW.yml` for the page, badges, source notes and email.
+
+### 12. Tests (no real network calls; saved copies of real pages)
+- **Model:** `Pet#favorite_kibbles`; existing `favorite_food` tests still pass.
+- **Helpers:**
+  - `KibbleQuery` cleanup.
+  - `KibbleMatcher`: Chinese and English brand names; rejects a different product line.
+  - `BagSize`: kg, g, 公斤, lb, multi-packs, several sizes (nil), no size; label keeps the shop's original text.
+  - `PoliteHttp` rejects hosts and paths not on its list, including BigGo `/r/`.
+- **`BigGoSearchService`:** parses a saved real BigGo page into rows (title, price, store, link); cache prevents a second request; empty page triggers the alert.
+- **`PchomeSearchService`:** saved JSON response; error returns an empty list.
+- **`GeminiKibbleSearchService`:** stubbed reply, JSON in a code block, missing fields.
+- **Lookup:** matching and filters; multi-variant rows dropped; duplicates removed; Gemini only called when nothing is listed; ±40% suspicious flag; NT$/kg math and top-8 ranking.
+- **Jobs:** which users qualify, unique check per date, concurrency limit, one failure doesn't stop the others.
+- **Controller:** index sections, owner-only access, once-a-day refresh limit.
+- **Mailer:** subject, locale, badges, suspicious count.
+
+---
+
+## Build order and checkpoints
+
+| # | Build | Checkpoint |
+|---|---|---|
+| 0 | Terms review | ✅ Done — feebee rejected; BigGo confirmed |
+| A | Step 1 (refactor) | ✅ Done — all tests pass and `favorite_food` behaves the same |
+| B | Inspect BigGo listing HTML, then Steps 3 → 4 → 5 → 7 (Gemini skipped for now) | **Run once in the console on real pets' kibbles.** Review matches, bag sizes and ranking |
+| C | Step 6 (Gemini backup), then Steps 2 and 8 | Job runs end to end locally; backup fires only when nothing is listed |
+| D | Steps 9, 10, 11 | Check the page and the email in the browser |
+| E | Step 12 + `bin/rubocop` + CI | Everything passes; commit on a feature branch (not `main`) |
+
+## Risks and how the plan handles them
+
+| Risk | How it's handled |
+|---|---|
+| Comparison site's terms | Checked at checkpoint 0: feebee dropped, BigGo has no scraping clause; re-check BigGo's terms before each release |
+| Being blocked | One request per query per month shared across users; one search at a time; never fetch disallowed paths (`/r/`) |
+| BigGo's layout changes | Selectors in constants; tests against a saved page; admin alert on 0 listings; Gemini fallback |
+| Wrong product matched | Brand plus product line must both appear in the title; product title shown |
+| Multi-variant or multi-pack listings | `BagSize` drops titles with several sizes and handles multiplied packs |
+| Comparison site's price slightly out of date | "Listed price via BigGo on {date}" shown, with a link to the store |
+| Wrong Gemini prices | Backup only, labelled unverified, ±40% suspicious check |
+| PChome endpoint changing | Optional; fails without breaking anything |
+| Security | Fixed list of allowed hosts and paths; owner-only pages; Gemini key sent in a header |
