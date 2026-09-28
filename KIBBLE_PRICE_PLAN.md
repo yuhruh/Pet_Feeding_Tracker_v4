@@ -11,7 +11,7 @@
 | B — Price sources and lookup | ✅ Done (2026-09-28). Committed on `feature/kibble-prices` and pushed. See [Checkpoint B result](#checkpoint-b-result-2026-09-28). Its four review questions were answered the same day. |
 | C — Gemini backup, models, jobs | ✅ Done (2026-09-28). Committed on `feature/kibble-prices` and pushed. See [Checkpoint C result](#checkpoint-c-result-2026-09-28). |
 | D — Page, email, translations | ✅ Done (2026-09-28). Committed on `feature/kibble-prices` and pushed. See [Checkpoint D result](#checkpoint-d-result-2026-09-28). |
-| E — Tests, lint, CI, pull request | Not started |
+| E — Tests, lint, CI, merge | ✅ Done (2026-09-28). Merged into `main` directly (no pull request, at your request) as `8d34a86`; tests, lint and CI passed. **The first monthly run is 2026-10-01 at 06:00 UTC (14:00 Taiwan).** |
 
 **Decisions**
 
@@ -378,7 +378,7 @@ For each kibble: collect BigGo and PChome listings, then fall back to Gemini if 
 | B | Inspect BigGo listing HTML, then Steps 3 → 4 → 5 → 7 (Gemini skipped for now) | ✅ Done — console run on Aji's 5 kibbles; 4 review questions answered |
 | C | Step 6 (Gemini backup), then Steps 2 and 8 | ✅ Done — job ran end to end locally; Gemini path taken only for the kibble with nothing listed |
 | D | Steps 9, 10, 11 | ✅ Done — screenshots of the page (desktop, phone, 2 languages) and the email reviewed; 2 layout fixes made |
-| E | Step 12 + `bin/rubocop` + CI | Everything passes locally; open a pull request from `feature/kibble-prices` so CI runs (CI only runs on pull requests and pushes to `main`) |
+| E | Step 12 + `bin/rubocop` + CI | ✅ Done — 290 tests and 29 browser tests pass on the merged `main`; GitHub CI on `main` passed (scan_ruby, test, scan_js, lint) |
 
 ## Risks and how the plan handles them
 
