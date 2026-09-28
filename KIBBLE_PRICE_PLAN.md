@@ -12,7 +12,7 @@
 | C — Gemini backup, models, jobs | ✅ Done (2026-09-28). Committed on `feature/kibble-prices` and pushed. See [Checkpoint C result](#checkpoint-c-result-2026-09-28). |
 | D — Page, email, translations | ✅ Done (2026-09-28). Committed on `feature/kibble-prices` and pushed. See [Checkpoint D result](#checkpoint-d-result-2026-09-28). |
 | E — Tests, lint, CI, merge | ✅ Done (2026-09-28). Merged into `main` directly (no pull request, at your request) as `8d34a86`; tests, lint and CI passed. **The first monthly run is 2026-10-01 at 06:00 UTC (14:00 Taiwan).** |
-| F — Drop Gemini | ✅ Done (2026-09-28). Committed on `feature/kibble-prices` and pushed; **not merged into `main` yet**. See [Change F](#change-f-drop-gemini-2026-09-28). |
+| F — Drop Gemini | ✅ Done (2026-09-28). Merged into `main` as `79b946f`; tests and GitHub CI passed. See [Change F](#change-f-drop-gemini-2026-09-28). |
 
 **Decisions**
 
