@@ -105,6 +105,7 @@ All code lives under `KibblePrices::` in `app/services/kibble_prices/`. It isn't
 | `bag_size.rb` | `BagSize.parse` → `{ kg:, label: }`. kg, g, 公斤, 公克, 克, lb, 磅; full-width digits; pack counts (`2包組`, `x 2`, `*2`, `【3包】`, `2入`); shipping limits (`超取最多2件`) are not packs; several sizes → nil |
 | `query.rb` | Search texts, most specific first: `"{brand} {description}"`, then `"{brand} 貓飼料"` (or `狗飼料` / `飼料`) |
 | `matcher.rb` | Decides whether a listing is the pet's kibble, and why not (see the rules below) |
+| `brand_names.rb` | The names each brand goes by, learned from the owner's own entries (added 2026-09-28, see below) |
 | `polite_http.rb` | The only network access: HTTPS GET to `biggo.com.tw/s/…` and `ecshweb.pchome.com.tw/search/v4.3/…` only, 2 s between requests per host, 10 s timeouts, 2 MB limit, no redirects, no retries, honest User-Agent `PetTrackerKibblePrices/1.0` |
 | `big_go_search.rb` | Reads BigGo's first result page (30 listings) with Nokogiri; cached for the month |
 | `pchome_search.rb` | Reads PChome's JSON search; cached for the month; any failure → no PChome rows |
@@ -121,12 +122,20 @@ All code lives under `KibblePrices::` in `app/services/kibble_prices/`. It isn't
 
 **Matching rules** (real shop wording differs from owners': 室內貓**雙響宴** vs 室內**雙饗宴**), in order:
 1. **Reject words:** 即期, 效期, 過期, 分裝, 二手, 試吃 (short-dated or repacked stock).
-2. **Brand** in the listing, including known Chinese/English pairs (皇家 / Royal Canin, 璞斯 / PURPOSE, 吶一口 / Neko, 曙光 / Spring Natural, …).
+2. **Brand** in the listing under any of its names (see *Brand names* below). Chinese names match anywhere; Latin names only as whole words, so `go` doesn't match "GoGo".
 3. **Species:** a dog-only listing is rejected for a cat and vice versa. The pet's species is inferred from its kibble names (貓 vs 犬/狗); pets don't store a species.
 4. **Protein:** every protein in the description (鴨, 火雞, 雞, 鮭, …) must be in the listing. 火雞 (turkey) never counts as 雞 (chicken).
 5. **Product code** (IN27, K36, …) must appear when the description has one.
 6. **Coverage:** ≥ 70% of the description's characters must appear in the listing (filler such as 貓, 配方, 食譜, 飼料 doesn't count).
 7. **Variant agreement:** when a listing prices a variant, ≥ 50% of the variant's characters must come from the kibble's name, so `(原野收穫)` or `L40` isn't taken for another food.
+
+**Brand names (changed 2026-09-28, at your request):** the first version had a hard-coded list of Chinese/English pairs taken from the local data (and it was already wrong for you: `希爾思` where you write `希爾斯`). It's replaced by `KibblePrices::BrandNames`, built per owner on each run:
+1. **Collect** the brand names on the owner's kibble trackers dated in the **last 4 months**, plus the bags (`DryFood`) those trackers used.
+2. **Split** each into its Chinese and Latin names: `喵皇奴 purrsuit` → 喵皇奴 / purrsuit; `mon petit 貓倍麗` → mon petit / 貓倍麗. A Chinese name split by a space stays one name (`加拿大 楓沛` → 加拿大楓沛), so a word like 加拿大 alone never counts as a brand.
+3. **Expand** by merging entries that share a name: `超躍` + `超躍 hyperr` → 超躍 / hyperr.
+4. A kibble older than 4 months still matches under the names in its own brand field.
+
+Locally the 4-month list is empty (the local copy ends 2026-04-29); from 2026-01-01 it has 21 brands. The real-data run below gave identical results after the change.
 
 **Console run on real data** (pet 1, Aji, local database, `since: 2.years.ago`; 24 s, live requests):
 

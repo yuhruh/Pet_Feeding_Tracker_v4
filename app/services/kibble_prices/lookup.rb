@@ -16,7 +16,8 @@ module KibblePrices
     def call
       kibbles = @pet.favorite_kibbles(**@favorite_options)
       species = self.class.species_of(kibbles)
-      kibbles.map { |kibble| prices_for(kibble, species) }
+      brand_groups = BrandNames.for_user(@pet.user)
+      kibbles.map { |kibble| prices_for(kibble, species, brand_groups) }
     end
 
     # :cat or :dog when the pet's kibble names say so, otherwise nil (no species filter).
@@ -29,8 +30,9 @@ module KibblePrices
 
     private
 
-    def prices_for(kibble, species)
-      matcher = Matcher.new(kibble, species: species)
+    def prices_for(kibble, species, brand_groups)
+      brand = kibble[:dry_food]&.brand.presence || kibble[:brand]
+      matcher = Matcher.new(kibble, species: species, brand_names: BrandNames.for_brand(brand, brand_groups))
       rejected = Hash.new(0)
       queries = []
       rows = []
