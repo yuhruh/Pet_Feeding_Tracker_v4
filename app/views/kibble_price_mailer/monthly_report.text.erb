@@ -1,0 +1,24 @@
+<%= t(".greeting", username: @user.username) %>
+
+<%= t(".intro", petname: @petname, date: l(@check.checked_on, format: :long)) %>
+<% @check.kibbles.each do |kibble| %>
+<% prices = @check.prices_for(kibble["brand"], kibble["description"]) %>
+<% flagged_count = @check.kibble_prices.flagged.where(brand: kibble["brand"], description: kibble["description"]).count %>
+
+== <%= kibble["brand"] %> · <%= kibble["description"] %>
+<% if prices.empty? %>
+<%= t("kibble_prices.index.no_listings") %>
+<% end %>
+<% prices.each_with_index do |price, index| %>
+<%= index + 1 %>. <%= kibble_twd(price.price_per_kg, precision: 1) %>/kg · <%= kibble_twd(price.price_twd) %> · <%= kibble_bag_size(price) %> · <%= price.store %><%= " (#{t('kibble_prices.index.unverified')})" unless price.verified? %>
+   <%= price.product_title %>
+   <%= price.url %>
+<% end %>
+<% if flagged_count.positive? %>
+<%= t(".suspicious_hidden", count: flagged_count) %>
+<% end %>
+<% end %>
+
+<%= t(".see_page", petname: @petname) %>: <%= @page_url %>
+
+<%= t("kibble_prices.index.disclaimer") %>

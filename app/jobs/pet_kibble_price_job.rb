@@ -6,13 +6,16 @@ class PetKibblePriceJob < ApplicationJob
   # trickle of requests. The lock is released after the duration if a run dies.
   limits_concurrency key: "kibble_price_search", duration: 15.minutes
 
-  def perform(pet, checked_on = Date.current)
+  # notify: email the owner the results (the monthly run); "Refresh now" doesn't,
+  # as the owner is already on the page.
+  def perform(pet, checked_on = Date.current, notify: false)
     # At most one check per pet a day: the unique index settles two runs racing.
     check = pet.kibble_price_checks.create!(checked_on: checked_on)
   rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique
     Rails.logger.info("[PetKibblePriceJob] pet #{pet.id} already checked on #{checked_on}")
   else
     run(check)
+    KibblePriceMailer.monthly_report(check).deliver_later if notify && check.kibble_prices.ranked.exists?
   end
 
   private
@@ -26,7 +29,6 @@ class PetKibblePriceJob < ApplicationJob
       end
       check.update!(status: :done, kibbles: results.map { |result| summary(result) })
     end
-    # The monthly email is sent from here once KibblePriceMailer exists (checkpoint D).
   rescue => e
     check.update_columns(status: "failed", error_message: "#{e.class}: #{e.message}".truncate(250), updated_at: Time.current)
     raise

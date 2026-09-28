@@ -18,6 +18,6 @@ class MonthlyKibblePriceJobTest < ActiveJob::TestCase
     assert_enqueued_jobs 1, only: PetKibblePriceJob do
       MonthlyKibblePriceJob.perform_now
     end
-    assert_enqueued_with job: PetKibblePriceJob, args: [ pets(:one), Date.current ]
+    assert_enqueued_with job: PetKibblePriceJob, args: [ pets(:one), Date.current, { notify: true } ]
   end
 end

@@ -2,6 +2,7 @@ require "test_helper"
 require "minitest/mock"
 
 class PetKibblePriceJobTest < ActiveJob::TestCase
+  include ActionMailer::TestHelper
   setup do
     @pet = pets(:one)
     @pet.trackers.destroy_all
@@ -24,7 +25,9 @@ class PetKibblePriceJobTest < ActiveJob::TestCase
     end
     KibblePrices::BigGoSearch.stub(:call, big_go) do
       KibblePrices::PchomeSearch.stub(:call, []) do
-        KibblePrices::GeminiSearch.stub(:call, gemini_offers) { PetKibblePriceJob.perform_now(@pet, *args.values) }
+        KibblePrices::GeminiSearch.stub(:call, gemini_offers) do
+          PetKibblePriceJob.perform_now(@pet, args.fetch(:checked_on, Date.current), notify: args.fetch(:notify, false))
+        end
       end
     end
   end
@@ -84,6 +87,20 @@ class PetKibblePriceJobTest < ActiveJob::TestCase
     assert check.failed?
     assert_equal "RuntimeError: BigGo is down", check.error_message
     assert_empty check.kibble_prices
+  end
+
+  test "the monthly run emails the owner when there are prices; a refresh doesn't" do
+    @pet.user.update!(gemini_api_key: nil)
+
+    assert_enqueued_emails(1) { run_job(checked_on: Date.current, notify: true) }
+    assert_no_enqueued_emails { run_job(checked_on: Date.tomorrow) }
+  end
+
+  test "no email when nothing was found" do
+    @pet.user.update!(gemini_api_key: nil)
+    @pet.trackers.where(brand: "曙光").destroy_all
+
+    assert_no_enqueued_emails { run_job(checked_on: Date.current, notify: true) }
   end
 
   test "runs one pet at a time across all users" do

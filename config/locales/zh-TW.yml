@@ -313,6 +313,7 @@ zh-TW:
       destroy_profile: "刪除 %{petname} 的個人資料和記錄"
       confirm: "您確定嗎？"
       vet_visits: "門診提問 & 記錄"
+      kibble_prices: "飼料價格"
     create:
       notice: "寵物已成功建立。"
     update:
@@ -475,6 +476,7 @@ zh-TW:
       brand: "品牌"
       description: "描述"
       favorite_score: "喜好分數 & 上次餵食日期"
+      kibble_prices: "%{petname} 的飼料價格"
     index:
       share_settings:
         title: "分享連結設定"
@@ -615,6 +617,49 @@ zh-TW:
       notice: "帳戶已成功更新。"
     destroy:
       alert: "%{name}及其所有相關紀錄已成功刪除。"
+  kibble_prices:
+    index:
+      title: "%{petname} 的飼料價格"
+      intro: "%{petname} 最近喜歡的飼料在台灣的最新價格，依每公斤價格由低到高排列。每月 1 日更新。"
+      checked_on: "%{date} 查詢"
+      refresh: "立即更新"
+      refresh_tomorrow: "今天已查詢，明天可以再更新。"
+      favorite_list: "%{petname} 的最愛清單"
+      no_check_yet: "還沒有價格。每月 1 日會自動查詢，或按「立即更新」。"
+      pending: "正在查詢價格，請一分鐘後重新整理此頁。"
+      failed: "上次的價格查詢沒有完成，請明天再按「立即更新」。"
+      no_favorites: "%{petname} 最近 %{months} 個月沒有可查詢的最愛飼料。飼料在紀錄中喜好分數達 30 分以上才會列入。"
+      favorite_score: "喜好分數 %{score}"
+      no_listings: "這次沒有找到商店的商品。"
+      store: "商店"
+      product: "商品"
+      price: "價格"
+      bag_size: "包裝"
+      per_kg: "每公斤"
+      source: "來源"
+      listed: "標價 · %{source}"
+      listed_note: "%{date} 透過 %{source} 找到的商店標價。商店常調整價格，購買前請到商店確認。"
+      unverified: "未確認"
+      unverified_note: "由 Gemini 從 Google 搜尋結果找到，可能不是最新價格。購買前請到商店確認。"
+      gemini_no_key_html: "在%{profile_link}加入 Gemini API 金鑰，商店沒有商品時也會用 Google 搜尋。"
+      profile: "個人資料"
+      suspicious:
+        one: "⚠ 1 個價格與一般價格差很多"
+        other: "⚠ %{count} 個價格與一般價格差很多"
+      disclaimer: "價格僅供參考，可能已經變動。Pet Tracker 不販售商品，也沒有向這些商店收取費用。"
+    create:
+      queued: "正在查詢價格，請一分鐘後重新整理此頁。"
+      already_checked: "今天已經查詢過價格，明天可以再更新。"
+      rate_limited: "更新次數太多，請幾分鐘後再試。"
+  kibble_price_mailer:
+    monthly_report:
+      subject: "%{petname} 本月的飼料價格"
+      greeting: "%{username} 您好，"
+      intro: "以下是 %{petname} 最近喜歡的飼料本月價格，依每公斤價格由低到高排列（%{date} 查詢）。"
+      suspicious_hidden:
+        one: "有 1 個差異很大的價格沒有列出，請到網頁查看。"
+        other: "有 %{count} 個差異很大的價格沒有列出，請到網頁查看。"
+      see_page: "查看 %{petname} 的飼料價格"
   mailers:
     user_backup:
       subject: "您的寵物追蹤器備份"

@@ -8,7 +8,7 @@ class MonthlyKibblePriceJob < ApplicationJob
     queued = 0
 
     pets.find_each do |pet|
-      PetKibblePriceJob.perform_later(pet, checked_on)
+      PetKibblePriceJob.perform_later(pet, checked_on, notify: true)
       queued += 1
     end
 

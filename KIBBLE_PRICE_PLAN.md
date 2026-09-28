@@ -10,7 +10,7 @@
 | A — Refactor | ✅ Done (2026-09-28). Committed as `cb5ea94` on `feature/kibble-prices` and pushed to GitHub. See [Checkpoint A result](#checkpoint-a-result-2026-09-28). |
 | B — Price sources and lookup | ✅ Done (2026-09-28). Committed on `feature/kibble-prices` and pushed. See [Checkpoint B result](#checkpoint-b-result-2026-09-28). Its four review questions were answered the same day. |
 | C — Gemini backup, models, jobs | ✅ Done (2026-09-28). Committed on `feature/kibble-prices` and pushed. See [Checkpoint C result](#checkpoint-c-result-2026-09-28). |
-| D — Page, email, translations | Not started |
+| D — Page, email, translations | ✅ Done (2026-09-28). Committed on `feature/kibble-prices` and pushed. See [Checkpoint D result](#checkpoint-d-result-2026-09-28). |
 | E — Tests, lint, CI, pull request | Not started |
 
 **Decisions**
@@ -202,6 +202,45 @@ To try the Gemini path yourself, add your Gemini API key in your local user prof
 - `bin/rails test:system`: 29 runs, 0 failures.
 - `bin/rubocop`: no offenses. `bin/brakeman -w2`: no warnings.
 
+## Checkpoint D result (2026-09-28)
+
+**New and changed files:**
+
+| File | What it does |
+|---|---|
+| `app/controllers/kibble_prices_controller.rb`, `config/routes.rb` | `GET /pets/:pet_id/kibble_prices` (the page) and `POST` ("Refresh now"); owner only |
+| `app/views/kibble_prices/index.html.erb`, `app/helpers/kibble_prices_helper.rb` | The page, and helpers for NT$ amounts, bag sizes and safe shop links |
+| `app/mailers/kibble_price_mailer.rb`, `app/views/kibble_price_mailer/monthly_report.{html,text}.erb` | The monthly email |
+| `test/mailers/previews/kibble_price_mailer_preview.rb` | Preview at `/rails/mailers/kibble_price_mailer/monthly_report` (uses the latest finished check) |
+| `app/jobs/pet_kibble_price_job.rb`, `monthly_kibble_price_job.rb` | The monthly run passes `notify: true`, which sends the email |
+| `app/views/pets/show.html.erb`, `app/views/trackers/favorite_food.html.erb` | Links to the page |
+| `config/locales/{en,ja,zh-TW}.yml` | `kibble_prices.*`, `kibble_price_mailer.*`, and the two link labels |
+
+**The page, as built:**
+- Shows the pet's **latest check**: the date it ran, then one card per favorite kibble in favorite order, including kibbles with no prices ("No shop listings found this time").
+- Each card ranks prices cheapest NT$/kg first, with the cheapest highlighted. Columns: shop, product (linked to the shop's page, with the priced variant under it), price, bag size (the shop's label, plus the kg total when they differ: `3磅 (1.361 kg)`), NT$/kg, and a source badge: **✔ Listed · BigGo / PChome** or **Unverified** (Gemini).
+- **On phones** the table becomes one card per price, since seven columns don't fit.
+- A note under each list says where the prices came from and when; Gemini prices say they may be out of date.
+- **Suspicious prices** sit in a collapsed "⚠ N suspicious prices" section with their reason (`-78% from NT$507/kg`), not in the ranking.
+- A kibble that fell back to Gemini without a key shows "Add your Gemini API key in your profile…" with a link to the profile page.
+- States: no check yet, checking now (pending), last check didn't finish (failed; the error stays in the logs), no favorite kibble in the last 4 months.
+- **Links to shops** only become links when they're http(s), and open in a new tab with `rel="noopener noreferrer nofollow"`.
+- **Refresh now** queues `PetKibblePriceJob` unless the pet was already checked today (then the button is replaced by "Checked today; you can refresh again tomorrow"). Also rate-limited to 5 per user per 10 minutes. A refresh doesn't send the email.
+- Owner only: another user's pet redirects to the pet list, like the tracker pages.
+
+**The email, as built:**
+- Sent by the monthly run only, and only when the check found at least one ranked price.
+- Same ranked lists per kibble (HTML with inline styles, plus a plain-text part); suspicious prices only as a count; a link to the page; the disclaimer.
+- **Language:** users don't store a language (the site takes it from the URL), so the email follows the user's time zone: Asia/Taipei → 繁體中文, Asia/Tokyo → 日本語, otherwise English.
+- **Not CC'd to the app's address**, unlike the backup and welcome emails: it's the owner's own price list, and nothing in it needs the admin.
+
+**Checked in a browser:** a throwaway browser test (not committed) signed in as a test user with Aji's real prices from the local check, and took screenshots of the page in English and 繁體中文 on desktop, on a 390 px phone screen, and of the email. Two things were fixed from them: the intro printed `%{petname}` literally, and on phones the table squeezed product names into a narrow column and pushed the badge off screen (now cards).
+
+**Results:**
+- `bin/rails test`: 290 runs, 0 failures (10 new: page, refresh, owner-only, links, email languages, email rules).
+- `bin/rails test:system`: 29 runs, 0 failures.
+- `bin/rubocop`: no offenses. `bin/brakeman -w2`: no warnings.
+
 ## How it works
 
 ```
@@ -287,7 +326,7 @@ For each kibble: collect BigGo and PChome listings, then fall back to Gemini if 
 - **`PetKibblePriceJob`**:
   - `limits_concurrency to: 1, key: "kibble_price_search"` — only one search at a time across all users; about 2 seconds between uncached requests.
   - Creates the check (skips if one already exists for that date), runs the lookup, saves the results.
-  - Marks the check done or failed; sends the email when done and there are results.
+  - Marks the check done or failed; with `notify: true` (the monthly run) sends the email when done and there are ranked prices.
 - `config/recurring.yml` under `production:`:
   ```yaml
   monthly_kibble_prices:
@@ -295,7 +334,7 @@ For each kibble: collect BigGo and PChome listings, then fall back to Gemini if 
     schedule: every month on the 1st at 6am   # as built; the original wording isn't a valid repeating schedule
   ```
 
-### 9. In-app page
+### 9. In-app page ✅ — see [Checkpoint D result](#checkpoint-d-result-2026-09-28)
 - Route: `resources :pets { resources :kibble_prices, only: [:index, :create] }`.
 - **`index`** — latest check, grouped by kibble with its favorite score:
   - **Ranked table**, cheapest NT$/kg first: store, product title (linked), price, bag size (shop's label with the kg total, e.g. "2kg x 2 (4 kg)"), NT$/kg, source badge (✔ Listed price — BigGo/PChome, or Unverified).
@@ -306,11 +345,11 @@ For each kibble: collect BigGo and PChome listings, then fall back to Gemini if 
 - Links from the pet page and the favorite-food page.
 - Owner-only access, like the other pet pages. Tailwind styling to match.
 
-### 10. Email
+### 10. Email ✅ — language follows the user's time zone; not CC'd to the admin
 - `KibblePriceMailer#monthly_report(check)`: HTML ranked table in the user's locale with source badges. Suspicious rows only as a count, with a link to the in-app page.
 - Follows the `UserBackupMailer` pattern.
 
-### 11. Translations
+### 11. Translations ✅
 - Keys in `config/locales/en.yml`, `ja.yml`, `zh-TW.yml` for the page, badges, source notes and email.
 
 ### 12. Tests (no real network calls; saved copies of real pages)
@@ -338,7 +377,7 @@ For each kibble: collect BigGo and PChome listings, then fall back to Gemini if 
 | A | Step 1 (refactor) | ✅ Done — all tests pass and `favorite_food` behaves the same |
 | B | Inspect BigGo listing HTML, then Steps 3 → 4 → 5 → 7 (Gemini skipped for now) | ✅ Done — console run on Aji's 5 kibbles; 4 review questions answered |
 | C | Step 6 (Gemini backup), then Steps 2 and 8 | ✅ Done — job ran end to end locally; Gemini path taken only for the kibble with nothing listed |
-| D | Steps 9, 10, 11 | Check the page and the email in the browser |
+| D | Steps 9, 10, 11 | ✅ Done — screenshots of the page (desktop, phone, 2 languages) and the email reviewed; 2 layout fixes made |
 | E | Step 12 + `bin/rubocop` + CI | Everything passes locally; open a pull request from `feature/kibble-prices` so CI runs (CI only runs on pull requests and pushes to `main`) |
 
 ## Risks and how the plan handles them
