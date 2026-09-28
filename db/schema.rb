@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_16_130000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_28_120000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -111,6 +111,39 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_16_130000) do
     t.datetime "updated_at", null: false
     t.decimal "wbc"
     t.index ["pet_id"], name: "index_health_checks_on_pet_id"
+  end
+
+  create_table "kibble_price_checks", force: :cascade do |t|
+    t.date "checked_on", null: false
+    t.datetime "created_at", null: false
+    t.string "error_message"
+    t.json "kibbles", default: [], null: false
+    t.integer "pet_id", null: false
+    t.string "status", default: "pending", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pet_id", "checked_on"], name: "index_kibble_price_checks_on_pet_id_and_checked_on", unique: true
+    t.index ["pet_id"], name: "index_kibble_price_checks_on_pet_id"
+  end
+
+  create_table "kibble_prices", force: :cascade do |t|
+    t.decimal "bag_size_kg", precision: 8, scale: 3, null: false
+    t.string "bag_size_label", null: false
+    t.string "brand", null: false
+    t.datetime "created_at", null: false
+    t.string "description", null: false
+    t.integer "favorite_score"
+    t.integer "kibble_price_check_id", null: false
+    t.decimal "price_per_kg", precision: 10, scale: 1, null: false
+    t.integer "price_twd", null: false
+    t.string "product_title", null: false
+    t.string "source", null: false
+    t.string "store"
+    t.boolean "suspicious", default: false, null: false
+    t.string "suspicious_reason"
+    t.datetime "updated_at", null: false
+    t.string "url"
+    t.string "variant"
+    t.index ["kibble_price_check_id"], name: "index_kibble_prices_on_kibble_price_check_id"
   end
 
   create_table "pets", force: :cascade do |t|
@@ -341,6 +374,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_16_130000) do
   add_foreign_key "connected_services", "users"
   add_foreign_key "dry_foods", "Users", column: "user_id"
   add_foreign_key "health_checks", "pets"
+  add_foreign_key "kibble_price_checks", "pets"
+  add_foreign_key "kibble_prices", "kibble_price_checks"
   add_foreign_key "pets", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
