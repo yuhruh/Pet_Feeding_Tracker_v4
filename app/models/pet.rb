@@ -10,6 +10,7 @@ class Pet < ApplicationRecord
   has_many :trackers, dependent: :destroy
   has_many :health_checks, dependent: :destroy
   has_many :vet_visits, dependent: :destroy
+  has_many :kibble_price_checks, dependent: :destroy
   validates :petname, presence: true,
                       length: { minimum: 2, maximum: 25 }
 

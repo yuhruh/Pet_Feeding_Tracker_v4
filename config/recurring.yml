@@ -22,6 +22,9 @@ production:
   user_backups:
     class: UserBackupJob
     schedule: every day at 3am
+  monthly_kibble_prices:
+    class: MonthlyKibblePriceJob
+    schedule: every month on the 1st at 6am
   # db_backup is deliberately not scheduled. It failed every night: the image has no
   # pg_dump, and the worker has no persistent disk, so a dump would be deleted on the
   # next deploy anyway. Full-database recovery comes from Railway's managed Postgres

@@ -313,6 +313,7 @@ en:
       destroy_profile: "Destroy %{petname}'s profile and records"
       confirm: "Are you sure?"
       vet_visits: "Vet Visits & Questions"
+      kibble_prices: "Kibble Prices"
     create:
       notice: "Cat was successfully created."
     update:
@@ -475,6 +476,7 @@ en:
       brand: "brand"
       description: "description"
       favorite_score: "favorite score & Last Fed Date"
+      kibble_prices: "%{petname}'s kibble prices"
     index:
       share_settings:
         title: "Share link settings"
@@ -615,6 +617,49 @@ en:
       notice: "Account was successfully updated."
     destroy:
       alert: "%{name} and all associated records were successfully deleted."
+  kibble_prices:
+    index:
+      title: "%{petname}'s Kibble Prices"
+      intro: "Current Taiwan prices for the kibbles %{petname} has loved lately, cheapest per kg first. Checked on the 1st of every month."
+      checked_on: "Checked on %{date}"
+      refresh: "Refresh now"
+      refresh_tomorrow: "Checked today; you can refresh again tomorrow."
+      favorite_list: "%{petname}'s Favorite List"
+      no_check_yet: "No prices yet. They're checked on the 1st of every month, or press \"Refresh now\"."
+      pending: "Checking prices now. Reload this page in a minute."
+      failed: "The last price check didn't finish. Try \"Refresh now\" tomorrow."
+      no_favorites: "%{petname} has no favorite kibble from the last %{months} months to check. A kibble counts once it scores 30 or more in the tracker."
+      favorite_score: "Favorite score %{score}"
+      no_listings: "No shop listings found this time."
+      store: "Shop"
+      product: "Product"
+      price: "Price"
+      bag_size: "Bag size"
+      per_kg: "Per kg"
+      source: "Source"
+      listed: "Listed · %{source}"
+      listed_note: "Listed prices found via %{source} on %{date}. Shops change prices often; check the shop before buying."
+      unverified: "Unverified"
+      unverified_note: "Found by Gemini from Google search results, which may be out of date. Check the shop before buying."
+      gemini_no_key_html: "Add your Gemini API key in your %{profile_link} to also search Google when shops list nothing."
+      profile: "profile"
+      suspicious:
+        one: "⚠ 1 suspicious price, far from the usual price"
+        other: "⚠ %{count} suspicious prices, far from the usual price"
+      disclaimer: "Prices are approximate and may have changed. Pet Tracker doesn't sell anything and isn't paid by these shops."
+    create:
+      queued: "Checking prices now. Reload this page in a minute."
+      already_checked: "Prices were already checked today. You can refresh again tomorrow."
+      rate_limited: "Too many refreshes. Please try again in a few minutes."
+  kibble_price_mailer:
+    monthly_report:
+      subject: "%{petname}'s kibble prices this month"
+      greeting: "Hi %{username},"
+      intro: "Here are this month's prices for the kibbles %{petname} has loved lately, cheapest per kg first (checked %{date})."
+      suspicious_hidden:
+        one: "1 suspicious price isn't shown here; see the page."
+        other: "%{count} suspicious prices aren't shown here; see the page."
+      see_page: "See %{petname}'s kibble prices"
   mailers:
     user_backup:
       subject: "Your Pet Tracker Backup"

@@ -9,8 +9,8 @@
 | 0 — Terms check | ✅ Done (2026-09-28). **feebee rejected** (its terms forbid automated collection). **BigGo confirmed as the main source.** See [Checkpoint 0 result](#checkpoint-0-result-2026-09-28). |
 | A — Refactor | ✅ Done (2026-09-28). Committed as `cb5ea94` on `feature/kibble-prices` and pushed to GitHub. See [Checkpoint A result](#checkpoint-a-result-2026-09-28). |
 | B — Price sources and lookup | ✅ Done (2026-09-28). Committed on `feature/kibble-prices` and pushed. See [Checkpoint B result](#checkpoint-b-result-2026-09-28). Its four review questions were answered the same day. |
-| C — Gemini backup, models, jobs | Not started |
-| D — Page, email, translations | Not started |
+| C — Gemini backup, models, jobs | ✅ Done (2026-09-28). Committed on `feature/kibble-prices` and pushed. See [Checkpoint C result](#checkpoint-c-result-2026-09-28). |
+| D — Page, email, translations | ✅ Done (2026-09-28). Committed on `feature/kibble-prices` and pushed. See [Checkpoint D result](#checkpoint-d-result-2026-09-28). |
 | E — Tests, lint, CI, pull request | Not started |
 
 **Decisions**
@@ -165,6 +165,82 @@ Before the protein rule, 曙光's list wrongly included the chicken (雞肉) and
 3. **Series listings → keep.** A listing that sells several flavors at one price is kept when the owner's flavor is among them (e.g. PChome's 曙光 12LB, `雞肉/鴨肉/白鮭魚/火雞肉`). No change needed.
 4. **Nothing found → try Gemini.** For a kibble with no BigGo or PChome listings (e.g. 天然密碼 鴨肉&火雞肉), checkpoint C asks Gemini with the owner's key and labels its prices "unverified", as planned in Step 6.
 
+## Checkpoint C result (2026-09-28)
+
+**New and changed files:**
+
+| File | What it does |
+|---|---|
+| `db/migrate/20260928120000_create_kibble_price_checks_and_prices.rb` | `kibble_price_checks` and `kibble_prices` tables (Step 2), plus a `variant` column on prices and a `kibbles` JSON column on checks |
+| `app/models/kibble_price_check.rb`, `kibble_price.rb`, `pet.rb` | Models, scopes (`ranked`, `flagged`), `verified?`, `Pet has_many :kibble_price_checks` |
+| `app/services/kibble_prices/gemini_search.rb` | The Gemini backup (Step 6) |
+| `app/services/kibble_prices/lookup.rb` | Calls Gemini when nothing is listed, and flags suspicious Gemini prices |
+| `app/jobs/pet_kibble_price_job.rb`, `monthly_kibble_price_job.rb` | The jobs (Step 8) |
+| `config/recurring.yml` | `monthly_kibble_prices` under `production:` |
+| `config/environments/test.rb` | Fixed, non-secret Active Record encryption keys for tests only, so tests can save `User#gemini_api_key` (encrypted); CI has no credentials file |
+
+**How it works, as built:**
+- **`KibblePrices::GeminiSearch`** follows `GeminiOcrService` (same `gemini-flash-latest` endpoint; key in `x-goog-api-key`; 60 s read timeout) and turns on `tools: [{ google_search: {} }]`. It asks for a JSON array of up to 8 offers `{store, url, price_twd, product_title}` and cuts the array out of the answer (Gemini often wraps it in ```json fences). Offers without an http(s) product page, a title or a price are dropped. Answers are cached for the month; failures (e.g. a quota error) aren't.
+- **When Gemini is asked:** only for a kibble where both searches (exact name, then brand) found nothing on BigGo and PChome, with the exact-name search, using the **owner's** key. With no key it's skipped and recorded as `no_key`, so the page can say so. Gemini's offers pass the same matching rules as listed ones (brand, species, protein, code, coverage, bag size, price range).
+- **Suspicious check, changed from the plan:** the plan compared a Gemini price with the same kibble's listed prices, but Gemini only runs when there are none, so that could never fire. As built, a Gemini price more than ±40% from a **reference NT$/kg** is flagged (`suspicious_reason` like `-78% from NT$507/kg`) and listed after the others. The reference is the median listed price from the pet's **latest earlier check** that had listed prices for that kibble, or else the median of Gemini's own offers when there are at least 3.
+- **`PetKibblePriceJob`** creates the day's check (the unique index makes a second run that day a no-op), runs the lookup, saves the prices and a per-kibble summary (`brand`, `description`, `favorite_score`, `queries`, `found`, `gemini`) in one transaction, and marks it `done`. On an error it marks the check `failed` with the message and re-raises, so Solid Queue records the failure. `limits_concurrency key: "kibble_price_search", duration: 15.minutes` runs one pet at a time across all users.
+- **`MonthlyKibblePriceJob`** queues one `PetKibblePriceJob` per pet with a kibble tracker in the last 30 days, and logs the count.
+- **Schedule:** `every month on the 1st at 6am` (cron `0 6 1 * *`). The plan's wording, `at 6am on the 1st of every month`, is read by Fugit as a single date, and Solid Queue rejects it (`Schedule is not a supported recurring schedule`); a new test now checks every production schedule. Like the existing entries it runs in the server's time zone (UTC), i.e. 2 pm in Taiwan.
+- The email is not sent yet; `KibblePriceMailer` comes in checkpoint D.
+
+**End-to-end run** (local database, pet 1 Aji, with the clock set to 2026-05-01 because the local copy ends in April; live BigGo and PChome requests; 10 s):
+- Check #1 on 2026-05-01: `done`, 7 prices, 3 favorite kibbles in the 4-month window.
+- 天然密碼 無穀鴨肉&火雞肉: nothing listed → `gemini: "no_key"` (the local user has no Gemini key).
+- 曙光 無穀滋養鴨肉食譜: 3 listed prices, Gemini not asked. 吶一口 室內貓雙響宴: 4 listed prices, Gemini not asked.
+- A second run the same day didn't add a check.
+- The check is still in the local development database, so checkpoint D's page can show it.
+
+To try the Gemini path yourself, add your Gemini API key in your local user profile, then run `bin/rails runner 'PetKibblePriceJob.perform_now(Pet.find(1))'` (today's check) — note the default 4-month window finds no favorites in the local copy.
+
+**Results:**
+- `bin/rails test`: 280 runs, 0 failures (21 new: Gemini search, models, lookup's Gemini path, both jobs, schedules).
+- `bin/rails test:system`: 29 runs, 0 failures.
+- `bin/rubocop`: no offenses. `bin/brakeman -w2`: no warnings.
+
+## Checkpoint D result (2026-09-28)
+
+**New and changed files:**
+
+| File | What it does |
+|---|---|
+| `app/controllers/kibble_prices_controller.rb`, `config/routes.rb` | `GET /pets/:pet_id/kibble_prices` (the page) and `POST` ("Refresh now"); owner only |
+| `app/views/kibble_prices/index.html.erb`, `app/helpers/kibble_prices_helper.rb` | The page, and helpers for NT$ amounts, bag sizes and safe shop links |
+| `app/mailers/kibble_price_mailer.rb`, `app/views/kibble_price_mailer/monthly_report.{html,text}.erb` | The monthly email |
+| `test/mailers/previews/kibble_price_mailer_preview.rb` | Preview at `/rails/mailers/kibble_price_mailer/monthly_report` (uses the latest finished check) |
+| `app/jobs/pet_kibble_price_job.rb`, `monthly_kibble_price_job.rb` | The monthly run passes `notify: true`, which sends the email |
+| `app/views/pets/show.html.erb`, `app/views/trackers/favorite_food.html.erb` | Links to the page |
+| `config/locales/{en,ja,zh-TW}.yml` | `kibble_prices.*`, `kibble_price_mailer.*`, and the two link labels |
+
+**The page, as built:**
+- Shows the pet's **latest check**: the date it ran, then one card per favorite kibble in favorite order, including kibbles with no prices ("No shop listings found this time").
+- Each card ranks prices cheapest NT$/kg first, with the cheapest highlighted. Columns: shop, product (linked to the shop's page, with the priced variant under it), price, bag size (the shop's label, plus the kg total when they differ: `3磅 (1.361 kg)`), NT$/kg, and a source badge: **✔ Listed · BigGo / PChome** or **Unverified** (Gemini).
+- **On phones** the table becomes one card per price, since seven columns don't fit.
+- A note under each list says where the prices came from and when; Gemini prices say they may be out of date.
+- **Suspicious prices** sit in a collapsed "⚠ N suspicious prices" section with their reason (`-78% from NT$507/kg`), not in the ranking.
+- A kibble that fell back to Gemini without a key shows "Add your Gemini API key in your profile…" with a link to the profile page.
+- States: no check yet, checking now (pending), last check didn't finish (failed; the error stays in the logs), no favorite kibble in the last 4 months.
+- **Links to shops** only become links when they're http(s), and open in a new tab with `rel="noopener noreferrer nofollow"`.
+- **Refresh now** queues `PetKibblePriceJob` unless the pet was already checked today (then the button is replaced by "Checked today; you can refresh again tomorrow"). Also rate-limited to 5 per user per 10 minutes. A refresh doesn't send the email.
+- Owner only: another user's pet redirects to the pet list, like the tracker pages.
+
+**The email, as built:**
+- Sent by the monthly run only, and only when the check found at least one ranked price.
+- Same ranked lists per kibble (HTML with inline styles, plus a plain-text part); suspicious prices only as a count; a link to the page; the disclaimer.
+- **Language:** users don't store a language (the site takes it from the URL), so the email follows the user's time zone: Asia/Taipei → 繁體中文, Asia/Tokyo → 日本語, otherwise English.
+- **Not CC'd to the app's address**, unlike the backup and welcome emails: it's the owner's own price list, and nothing in it needs the admin.
+
+**Checked in a browser:** a throwaway browser test (not committed) signed in as a test user with Aji's real prices from the local check, and took screenshots of the page in English and 繁體中文 on desktop, on a 390 px phone screen, and of the email. Two things were fixed from them: the intro printed `%{petname}` literally, and on phones the table squeezed product names into a narrow column and pushed the badge off screen (now cards).
+
+**Results:**
+- `bin/rails test`: 290 runs, 0 failures (10 new: page, refresh, owner-only, links, email languages, email rules).
+- `bin/rails test:system`: 29 runs, 0 failures.
+- `bin/rubocop`: no offenses. `bin/brakeman -w2`: no warnings.
+
 ## How it works
 
 ```
@@ -196,7 +272,7 @@ MonthlyKibblePriceJob (1st of month, 6am)
   - `Pet#favorite_kibbles(min_score: 30, since: 4.months.ago, limit: 5)` (was 3 months until 2026-09-28; `Pet::FAVORITE_KIBBLE_WINDOW`) — kibble only (`Tracker.kibble`), fed on or after `since`, latest-day score ≥ `min_score`, most loved first. Each entry is the same hash as `favorite_foods` plus `dry_food:` — the bag it was last fed from, or `nil`.
 - The controller now calls `@pet.favorite_foods(food_type: params[:food_type])`. Its output is unchanged.
 
-### 2. Migration and models
+### 2. Migration and models ✅ — see [Checkpoint C result](#checkpoint-c-result-2026-09-28) (adds `variant` and the check's `kibbles` summary)
 - **`kibble_price_checks`**: `pet_id`, `checked_on` (date), `status` (pending / done / failed), `error_message`, timestamps.
   - Unique index on `[pet_id, checked_on]` to prevent a duplicate run for the same date.
 - **`kibble_prices`**: `kibble_price_check_id`, `brand`, `description`, `favorite_score`, `store`, `url`, `product_title`, `price_twd`, `bag_size_label`, `bag_size_kg`, `price_per_kg`, `source` (enum: `biggo` / `pchome` / `gemini`), `suspicious` (boolean), `suspicious_reason`, timestamps.
@@ -227,7 +303,7 @@ Built as `KibblePrices::Query`, `KibblePrices::Matcher`, `KibblePrices::BagSize`
 - Same monthly cache. **As built:** an empty result is normal (PChome's search is loose), so the admin alert only fires when the answer isn't JSON or has no `Prods` list.
 - Undocumented endpoint: any error means no PChome results, and the run carries on.
 
-### 6. `GeminiKibbleSearchService` (backup)
+### 6. `GeminiKibbleSearchService` (backup) ✅ — built as `KibblePrices::GeminiSearch`
 - Follows `GeminiOcrService`: key in `x-goog-api-key`, timeouts.
 - Request uses `tools: [{ google_search: {} }]` and asks for **JSON only**: `[{store, url, price_twd, product_title}]`.
 - **Only called when steps 4 and 5 found nothing** for a kibble.
@@ -242,23 +318,23 @@ For each kibble: collect BigGo and PChome listings, then fall back to Gemini if 
   - Price between NT$50 and NT$20,000.
   - Gemini rows must also have a URL and a title.
 - **Remove duplicates:** keep the cheapest listing per store and bag size.
-- **Check Gemini rows** *(checkpoint C, with Gemini)*: if listed prices exist, an unverified row more than ±40% from the median listed NT$/kg is marked `suspicious`, with the reason saved.
+- **Check Gemini rows** ✅ *(changed in checkpoint C)*: an unverified row more than ±40% from a reference NT$/kg is marked `suspicious`, with the reason saved. The reference is the median listed price from the pet's latest earlier check, or else the median of Gemini's own offers when there are at least 3 (same-check listed prices never exist when Gemini runs).
 - **Calculate and rank:** `price_per_kg = price_twd / bag_size_kg` (1 decimal place), keep the **top 8** per kibble.
 
-### 8. Jobs and schedule
+### 8. Jobs and schedule ✅ — email step waits for checkpoint D
 - **`MonthlyKibblePriceJob`**: users with kibble trackers in the last 30 days → one `PetKibblePriceJob` per pet. Logs a count, like `UserBackupJob`. No Gemini key required.
 - **`PetKibblePriceJob`**:
   - `limits_concurrency to: 1, key: "kibble_price_search"` — only one search at a time across all users; about 2 seconds between uncached requests.
   - Creates the check (skips if one already exists for that date), runs the lookup, saves the results.
-  - Marks the check done or failed; sends the email when done and there are results.
+  - Marks the check done or failed; with `notify: true` (the monthly run) sends the email when done and there are ranked prices.
 - `config/recurring.yml` under `production:`:
   ```yaml
   monthly_kibble_prices:
     class: MonthlyKibblePriceJob
-    schedule: at 6am on the 1st of every month
+    schedule: every month on the 1st at 6am   # as built; the original wording isn't a valid repeating schedule
   ```
 
-### 9. In-app page
+### 9. In-app page ✅ — see [Checkpoint D result](#checkpoint-d-result-2026-09-28)
 - Route: `resources :pets { resources :kibble_prices, only: [:index, :create] }`.
 - **`index`** — latest check, grouped by kibble with its favorite score:
   - **Ranked table**, cheapest NT$/kg first: store, product title (linked), price, bag size (shop's label with the kg total, e.g. "2kg x 2 (4 kg)"), NT$/kg, source badge (✔ Listed price — BigGo/PChome, or Unverified).
@@ -269,11 +345,11 @@ For each kibble: collect BigGo and PChome listings, then fall back to Gemini if 
 - Links from the pet page and the favorite-food page.
 - Owner-only access, like the other pet pages. Tailwind styling to match.
 
-### 10. Email
+### 10. Email ✅ — language follows the user's time zone; not CC'd to the admin
 - `KibblePriceMailer#monthly_report(check)`: HTML ranked table in the user's locale with source badges. Suspicious rows only as a count, with a link to the in-app page.
 - Follows the `UserBackupMailer` pattern.
 
-### 11. Translations
+### 11. Translations ✅
 - Keys in `config/locales/en.yml`, `ja.yml`, `zh-TW.yml` for the page, badges, source notes and email.
 
 ### 12. Tests (no real network calls; saved copies of real pages)
@@ -300,8 +376,8 @@ For each kibble: collect BigGo and PChome listings, then fall back to Gemini if 
 | 0 | Terms review | ✅ Done — feebee rejected; BigGo confirmed |
 | A | Step 1 (refactor) | ✅ Done — all tests pass and `favorite_food` behaves the same |
 | B | Inspect BigGo listing HTML, then Steps 3 → 4 → 5 → 7 (Gemini skipped for now) | ✅ Done — console run on Aji's 5 kibbles; 4 review questions answered |
-| C | Step 6 (Gemini backup), then Steps 2 and 8 | Job runs end to end locally; backup fires only when nothing is listed |
-| D | Steps 9, 10, 11 | Check the page and the email in the browser |
+| C | Step 6 (Gemini backup), then Steps 2 and 8 | ✅ Done — job ran end to end locally; Gemini path taken only for the kibble with nothing listed |
+| D | Steps 9, 10, 11 | ✅ Done — screenshots of the page (desktop, phone, 2 languages) and the email reviewed; 2 layout fixes made |
 | E | Step 12 + `bin/rubocop` + CI | Everything passes locally; open a pull request from `feature/kibble-prices` so CI runs (CI only runs on pull requests and pushes to `main`) |
 
 ## Risks and how the plan handles them

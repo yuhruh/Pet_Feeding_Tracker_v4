@@ -1,0 +1,45 @@
+<div style="font-family: Arial, 'PingFang TC', 'Microsoft JhengHei', sans-serif; color: #1f2937; max-width: 680px;">
+  <p><%= t(".greeting", username: @user.username) %></p>
+  <p><%= t(".intro", petname: @petname, date: l(@check.checked_on, format: :long)) %></p>
+
+  <% @check.kibbles.each do |kibble| %>
+    <% prices = @check.prices_for(kibble["brand"], kibble["description"]) %>
+    <% flagged_count = @check.kibble_prices.flagged.where(brand: kibble["brand"], description: kibble["description"]).count %>
+    <h3 style="margin: 24px 0 8px; font-size: 16px;"><%= kibble["brand"] %> · <%= kibble["description"] %></h3>
+
+    <% if prices.empty? %>
+      <p style="margin: 0; color: #4b5563;"><%= t("kibble_prices.index.no_listings") %></p>
+    <% else %>
+      <table style="border-collapse: collapse; width: 100%; font-size: 13px;">
+        <tr style="background: #f3f4f6;">
+          <th style="padding: 6px; text-align: left;"><%= t("kibble_prices.index.store") %></th>
+          <th style="padding: 6px; text-align: left;"><%= t("kibble_prices.index.product") %></th>
+          <th style="padding: 6px; text-align: right;"><%= t("kibble_prices.index.price") %></th>
+          <th style="padding: 6px; text-align: right;"><%= t("kibble_prices.index.bag_size") %></th>
+          <th style="padding: 6px; text-align: right;"><%= t("kibble_prices.index.per_kg") %></th>
+          <th style="padding: 6px; text-align: center;"><%= t("kibble_prices.index.source") %></th>
+        </tr>
+        <% prices.each do |price| %>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 6px;"><%= price.store %></td>
+            <td style="padding: 6px;"><%= kibble_product_link(price, style: "color: #0369a1;") %><% if price.variant.present? %><br><span style="color: #6b7280; font-size: 12px;"><%= price.variant %></span><% end %></td>
+            <td style="padding: 6px; text-align: right; white-space: nowrap;"><%= kibble_twd(price.price_twd) %></td>
+            <td style="padding: 6px; text-align: right; white-space: nowrap;"><%= kibble_bag_size(price) %></td>
+            <td style="padding: 6px; text-align: right; white-space: nowrap; font-weight: bold;"><%= kibble_twd(price.price_per_kg, precision: 1) %></td>
+            <td style="padding: 6px; text-align: center; white-space: nowrap;"><%= price.verified? ? "✔ #{t('kibble_prices.index.listed', source: price.source_before_type_cast)}" : t("kibble_prices.index.unverified") %></td>
+          </tr>
+        <% end %>
+      </table>
+      <% if prices.any?(&:gemini?) %>
+        <p style="margin: 4px 0 0; font-size: 12px; color: #6b7280;"><%= t("kibble_prices.index.unverified_note") %></p>
+      <% end %>
+    <% end %>
+
+    <% if flagged_count.positive? %>
+      <p style="margin: 4px 0 0; font-size: 12px; color: #b45309;"><%= t(".suspicious_hidden", count: flagged_count) %></p>
+    <% end %>
+  <% end %>
+
+  <p style="margin-top: 24px;"><%= link_to t(".see_page", petname: @petname), @page_url, style: "color: #0369a1;" %></p>
+  <p style="font-size: 12px; color: #6b7280;"><%= t("kibble_prices.index.disclaimer") %></p>
+</div>
