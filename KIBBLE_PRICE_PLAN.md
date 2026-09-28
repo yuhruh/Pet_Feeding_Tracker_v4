@@ -7,11 +7,11 @@
 | Checkpoint | Status |
 |---|---|
 | 0 — Terms check | ✅ Done (2026-09-28). **feebee rejected** (its terms forbid automated collection). **BigGo confirmed as the main source.** See [Checkpoint 0 result](#checkpoint-0-result-2026-09-28). |
-| A — Refactor | ✅ Done (2026-09-28) on branch `feature/kibble-prices`, not committed yet. See [Checkpoint A result](#checkpoint-a-result-2026-09-28). |
+| A — Refactor | ✅ Done (2026-09-28). Committed as `cb5ea94` on `feature/kibble-prices` and pushed to GitHub. See [Checkpoint A result](#checkpoint-a-result-2026-09-28). |
 | B — Price sources and lookup | Not started |
 | C — Gemini backup, models, jobs | Not started |
 | D — Page, email, translations | Not started |
-| E — Tests, lint, CI, commit | Not started |
+| E — Tests, lint, CI, pull request | Not started |
 
 **Decisions**
 
@@ -74,7 +74,7 @@ Its terms page couldn't be found. robots.txt disallows `/go/` and `/json/`. Not 
 
 ## Checkpoint A result (2026-09-28)
 
-**Changed files** (branch `feature/kibble-prices`, not committed):
+**Changed files** (commit `cb5ea94` on `feature/kibble-prices`, pushed to GitHub; no pull request yet):
 - `app/models/pet.rb` — adds `favorite_foods`, `favorite_kibbles` and the private helpers they share (`rated_trackers`, `group_favorites`, `favorite_summary`).
 - `app/controllers/trackers_controller.rb` — `favorite_food` calls `@pet.favorite_foods`; about 30 lines removed.
 - `test/controllers/favorite_food_test.rb` (new) — pins down the favorite-food JSON and page. **Written and passing before the refactor**, then still passing after it:
@@ -93,6 +93,8 @@ Its terms page couldn't be found. robots.txt disallows `/go/` and `/json/`. Not 
 **Found while writing the tests (existing behavior, kept as is):**
 - The favorite-food list leaves a feeding out only when **both** its hungry and love ratings are blank. A feeding with just one of them still counts. The test pins this.
 - "Most loved" means the score of the food's **latest** listed day, not its best day. `favorite_kibbles` uses the same score for `min_score`, so the ranking matches the favorite-food page.
+
+**Commits:** each checkpoint is committed on `feature/kibble-prices` once `bin/rails test` passes, then pushed.
 
 ## How it works
 
@@ -230,7 +232,7 @@ For each kibble: collect BigGo and PChome listings, then fall back to Gemini if 
 | B | Inspect BigGo listing HTML, then Steps 3 → 4 → 5 → 7 (Gemini skipped for now) | **Run once in the console on real pets' kibbles.** Review matches, bag sizes and ranking |
 | C | Step 6 (Gemini backup), then Steps 2 and 8 | Job runs end to end locally; backup fires only when nothing is listed |
 | D | Steps 9, 10, 11 | Check the page and the email in the browser |
-| E | Step 12 + `bin/rubocop` + CI | Everything passes; commit on a feature branch (not `main`) |
+| E | Step 12 + `bin/rubocop` + CI | Everything passes locally; open a pull request from `feature/kibble-prices` so CI runs (CI only runs on pull requests and pushes to `main`) |
 
 ## Risks and how the plan handles them
 
