@@ -20,6 +20,10 @@ This guide provides detailed instructions on how to use the key features of Pet 
   - [Creating a Tracker](#creating-a-tracker)
   - [Favorite Food](#favorite-food)
   - [Importing Trackers from CSV](#importing-trackers-from-csv)
+- [Kibble Prices](#kibble-prices)
+  - [Which Kibbles Are Checked](#which-kibbles-are-checked)
+  - [Reading the Prices Page](#reading-the-prices-page)
+  - [Refreshing and the Monthly Email](#refreshing-and-the-monthly-email)
 - [Progressive Web App (PWA)](#progressive-web-app-pwa)
 
 ## User Account
@@ -40,7 +44,7 @@ Your user account is the central hub for managing your pets and tracking their a
 
 ### Third-Party Sign-In
 
-You can also sign in using a third-party provider (such as Google, Facebook, etc.) for a more streamlined experience.
+You can also sign in with **Google**, **LINE** or **GitHub**. If you sign in with LINE, weight reminders are sent to you on LINE instead of by email.
 
 ### Timezone
 
@@ -97,10 +101,11 @@ Trackers are used to log your pet's daily activities, such as feeding times, wal
 
 ### Favorite Food
 
-The "Favorite Food" feature allows you to see which dry food your pet consumes the most.
+The "Favorite Food" list ranks every food your pet has eaten by how much it loved it. Each meal gets a **favorite score** from how hungry your pet was, how much it loved the food, how much it left, and how often it came back to eat. The list shows each food's five best days.
 
-1.  **Go to Trackers:** Navigate to the "Trackers" section for a specific pet.
-2.  **Favorite Food:** Click the "Favorite Food" button to see the analysis.
+1.  **Open the list:** In the menu, open "Trackers" → "*Pet*'s Favorite List".
+2.  **Filter** by food type if you only want to see, for example, kibble.
+3.  **See prices:** use the "Kibble prices" link at the top to see where your pet's favorite kibbles are cheapest (see [Kibble Prices](#kibble-prices)).
 
 ### Importing Trackers from CSV
 
@@ -111,11 +116,35 @@ For bulk data entry, you can import trackers from a CSV file.
 3.  **Choose File:** Select the CSV file you want to import.
 4.  **Upload:** Click "Import" to upload and process the file.
 
-The CSV file should have the following columns:
+The file must be **semicolon-separated** (`;`), in the same format as the CSV you download from the Trackers page, so the easiest start is to export first and edit that file. Its columns are:
 
--   `activity_type`
--   `activity_time`
--   `notes`
+`date; feed_time; come_back_to_eat; food_type; brand; description; amount; left_amount; total_ate_amount; hungry; love; result; note; weight`
+
+Every row is checked before anything is saved: dates must be valid and not before your pet's birthday, and amounts and weight must be numbers. If any row has a problem, nothing is imported and you'll see which rows to fix.
+
+## Kibble Prices
+
+Pet Tracker checks what your pet's favorite kibbles cost in Taiwan's online shops, so you can buy the one your pet loves at the best price.
+
+### Which Kibbles Are Checked
+
+-   Kibbles on your pet's Favorite Food list with a **favorite score of 30 or more**, fed in the **last 4 months** (up to 5 kibbles).
+-   Prices come from **BigGo**, a price-comparison site that covers shops such as Shopee, momo, Yahoo, Coupang and Rakuten, and from **PChome 24h**.
+-   Name the food the way it's sold: brand plus product name, e.g. brand `曙光`, description `無穀滋養鴨肉食譜`. Include the flavor (鴨肉, 雞肉…) and any product code (IN27…). The app uses these to tell the right product from similar ones. If you use both a Chinese and an English brand name (`喵皇奴 purrsuit`), either one is matched.
+
+### Reading the Prices Page
+
+1.  **Open it:** go to your pet's profile and click **Kibble Prices**, or use the link on the Favorite List.
+2.  **One card per kibble**, in favorite order. Prices are ranked by **price per kg**, cheapest first, so bags of different sizes compare fairly. The bag size shows as the shop writes it, with the total in kg when they differ, e.g. `3磅 (1.361 kg)`.
+3.  **Click a product** to open the shop's page. Each price shows where it was found (BigGo or PChome) and when.
+4.  **"Can't find this kibble in shops right now."** means neither BigGo nor PChome lists it at the moment. Check the brand and description spelling in your trackers.
+
+Prices are approximate and shops change them often, so check the shop before buying.
+
+### Refreshing and the Monthly Email
+
+-   Prices are checked automatically on the **1st of every month**, and you get an email with the results when prices were found. The email is in 繁體中文, 日本語 or English, based on your time zone.
+-   Click **Refresh now** on the page to check today. You can refresh once a day per pet; the results appear after a minute or so, so reload the page.
 
 ## Progressive Web App (PWA)
 

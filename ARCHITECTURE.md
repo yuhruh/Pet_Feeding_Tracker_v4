@@ -2,9 +2,9 @@
 
 | Item | Value |
 |---|---|
-| Document version | 1.12 (S1–S3 and S5–S14 fixed; S4 fixed in code, operator steps pending; feed-time ordering fixed) |
-| Date | 2026-09-13 |
-| Source baseline | `main` @ `4d33dcc` |
+| Document version | 1.13 (adds the monthly kibble price check; 1.12: S1–S3 and S5–S14 fixed; S4 fixed in code, operator steps pending; feed-time ordering fixed) |
+| Date | 2026-09-28 |
+| Source baseline | `main` @ `52eef1e` |
 | Application | Pet Tracker v4 (Rails 8.1 monolith + Hotwire Native Android shell) |
 | Audience | Developers, reviewers, and operators of the application |
 
@@ -34,6 +34,7 @@ Pet Tracker v4 is a web application for pet owners to record and analyze:
 - **Health checks**: blood-panel results, optionally extracted from photos with Google Gemini.
 - **Vet visits**: questions prepared in advance, answers recorded afterwards, and visit metadata such as purpose and waiting versus consultation time.
 - **Sharing**: a public read-only feeding dashboard (share token) and per-visit collaboration with other registered users.
+- **Kibble prices**: once a month, current Taiwan prices for each pet's favorite kibbles, ranked by NT$ per kg, from the BigGo price-comparison site and PChome's search (§1.8).
 
 ### 1.2 Architectural Style
 
@@ -93,18 +94,19 @@ flowchart LR
   R -->|"OAuth 2.0 / OIDC"| O["Google · LINE · GitHub"]
   Q -->|"transactional & backup mail"| S["SendGrid"]
   Q -->|"push reminders"| L["LINE Messaging API"]
+  Q -->|"monthly kibble price search<br/>(HTTPS GET, allow-listed)"| K["BigGo · PChome"]
 ```
 
 ### 1.5 Component Responsibilities
 
 | Component | Location | Responsibility |
 |---|---|---|
-| **Controllers** | `app/controllers/` | HTTP handling, strong parameters, rendering and redirects. One controller per resource (`pets`, `trackers`, `health_checks`, `vet_visits`, `dry_foods`, `users`, `sessions`, `registrations`, `passwords`, `shared_trackers`, `timezones`, `pages`, `omni_auth/sessions`). |
+| **Controllers** | `app/controllers/` | HTTP handling, strong parameters, rendering and redirects. One controller per resource (`pets`, `trackers`, `health_checks`, `vet_visits`, `dry_foods`, `kibble_prices`, `users`, `sessions`, `registrations`, `passwords`, `shared_trackers`, `timezones`, `pages`, `omni_auth/sessions`). |
 | **Controller concerns** | `app/controllers/concerns/` | `Authentication` (session cookie, `require_authentication`, `start_new_session_for`), and `TrackersCalculable` (date-range filtering, chart series, and the hotel/boarding split, shared by the private and public tracker views). |
-| **Models** | `app/models/` | Validations, enums, associations, and domain callbacks: dry-food inventory sync, share links (on, replace, expire, off), vet-visit metadata sync, and `answered_date` stamping. `Current` holds the request-scoped session and user. |
-| **Services** | `app/services/` | `CsvImportTrackersService` (transactional CSV import), `GeminiOcrService` (image → lab values JSON), `NotificationService` (LINE push or email fallback). |
-| **Jobs** | `app/jobs/` | `PetWeightReminderJob`, `UserBackupJob`. |
-| **Mailers** | `app/mailers/` | Welcome, password reset, weight reminder, CSV backup (delivered through SendGrid). |
+| **Models** | `app/models/` | Validations, enums, associations, and domain callbacks: dry-food inventory sync, share links (on, replace, expire, off), vet-visit metadata sync, and `answered_date` stamping. `Pet#favorite_foods` / `#favorite_kibbles` rank the foods a pet loves. `KibblePriceCheck` / `KibblePrice` store monthly price checks. `Current` holds the request-scoped session and user. |
+| **Services** | `app/services/` | `CsvImportTrackersService` (transactional CSV import), `GeminiOcrService` (image → lab values JSON), `NotificationService` (LINE push or email fallback), and `KibblePrices::*` (kibble price search and matching, §1.8). |
+| **Jobs** | `app/jobs/` | `PetWeightReminderJob`, `UserBackupJob`, `MonthlyKibblePriceJob`, `PetKibblePriceJob`. |
+| **Mailers** | `app/mailers/` | Welcome, password reset, weight reminder, CSV backup, monthly kibble prices (`KibblePriceMailer`), and `DiagnosticsMailer` (test email; alert when a price source's page layout changes). |
 | **Views** | `app/views/` | ERB + Tailwind HTML, Jbuilder JSON, `:native` variants, PWA manifest. |
 | **Stimulus** | `app/javascript/controllers/` | Form helpers (`tracker_form`, `left_amount`, `range_form`, `filter_form`), bulk edit and delete, OCR upload, share/download bridge, time-zone detection, toasts. |
 | **Rake tasks** | `lib/tasks/` | `db:backup`, `notifications:weigh_pets`, `i18n:export` (hooked into `assets:precompile`), and a custom `tailwindcss:build`. |
@@ -139,7 +141,9 @@ sequenceDiagram
 | Feature | Where | Logic |
 |---|---|---|
 | **Favorite score** | `TrackersController#calculate_favorite`, `CsvImportTrackersService`, `TrackersCalculable` (model concern) | `hungry` (💖 10 · 🔺 5 · ❌ 0) + `love` (💕 15 · 🔺 5 · ❌ 0) + leftover (15 if `left_amount < amount/4`, else 8) + `frequency × 2`. `frequency` is the number of comma-separated times in `come_back_to_eat` (`"-"` counts as 0). |
-| **Favorite food ranking** | `TrackersController#favorite_food` | Groups trackers by normalized `(food_type, brand, description)`, where the normalization strips suffixes like `x2`. It keeps the best score per day, takes the latest five days, and sorts by top score. |
+| **Favorite food ranking** | `Pet#favorite_foods` (used by `TrackersController#favorite_food`) | Uses trackers with a hungry or love rating. Groups them by normalized `(food_type, brand, description)`, where the normalization strips suffixes like `x2` / `（x3）`. It keeps the best score per day, lists the five best days latest first, and ranks foods by the score of their latest listed day. |
+| **Favorite kibbles** | `Pet#favorite_kibbles` | The same ranking, limited to `kibble` trackers dated within `Pet::FAVORITE_KIBBLE_WINDOW` (4 months), with a latest-day score ≥ 30; at most 5, each with the dry-food bag it was last fed from. Input to the price check. |
+| **Kibble price matching** | `KibblePrices::Matcher`, `BagSize`, `BrandNames`, `Lookup` | A listing counts as the kibble when: no reject words (即期, 效期, 分裝…); the brand appears under any name the owner used in the last 4 months (`喵皇奴 purrsuit` → 喵皇奴 / purrsuit; entries sharing a name merge); the species matches (inferred from the pet's kibble names); every protein in the description is present (火雞 never counts as 雞); product codes (IN27…) agree; ≥ 70% of the description's characters appear; and a priced variant doesn't name another food. The bag size is read from the variant or title (`2kg x 2` → 4 kg; several sizes → skipped). Prices outside NT$50–20,000 are dropped; the cheapest per shop and size is kept, ranked by `price / kg`, top 8. |
 | **Dry-food inventory** | `DryFood#update_used_amount!` (row lock) | Uses non-archived trackers linked to the bag. `total_ate_amount = Σ amount`; `average_used_amount` = mean of per-day sums; `left_amount = max(amount − total, 0)`; `days_remaining` = **run-out date** = today + `left / avg`. Triggered by `Tracker after_commit` on create and destroy. |
 | **Restock** | `DryFoodsController#restock` | Updates `amount`, marks existing trackers `archived_dry_food = true`, and resets the counters. |
 | **Chart series** | `TrackersCalculable#calculate_tracker_data` | Daily wet and dry intake, split into "normal" and "hotel" series by keywords in `note` (`hotel`, `旅館`, `貓旅`, `boarding`, `resort`), plus average daily weight. The label interval scales with the number of data points. |
@@ -166,6 +170,36 @@ sequenceDiagram
 ```
 
 OCR currently runs **synchronously inside the web request**. See §5.4 for the recommendation to move it to a background job.
+
+**Monthly kibble price check.** On the 1st of each month `MonthlyKibblePriceJob` queues one `PetKibblePriceJob` per pet fed kibble in the last 30 days. "Refresh now" on the Kibble Prices page queues the same job for one pet (at most once a day, and 5 refreshes per 10 minutes per user).
+
+```mermaid
+sequenceDiagram
+  autonumber
+  participant M as MonthlyKibblePriceJob
+  participant J as PetKibblePriceJob
+  participant L as KibblePrices::Lookup
+  participant C as Rails.cache (Solid Cache)
+  participant B as BigGo / PChome
+  participant DB as PostgreSQL
+  M->>J: perform_later(pet, date, notify: true) per pet
+  J->>DB: create KibblePriceCheck (unique pet + date; a duplicate ends the job)
+  J->>L: call (Pet#favorite_kibbles)
+  loop each favorite kibble: exact name, then "<brand> 貓飼料" if nothing matched
+    L->>C: cached listings for this query and month?
+    L->>B: HTTPS GET search page / JSON (only on a cache miss, 2 s apart)
+    B-->>L: listings (title, variant, price, shop, link)
+    L->>L: Matcher, BagSize, NT$/kg, rank
+  end
+  J->>DB: save KibblePrices + per-kibble summary, status done (one transaction)
+  J-->>J: KibblePriceMailer.monthly_report if notify and any prices
+```
+
+- **Sources:** `KibblePrices::BigGoSearch` reads BigGo's search page with Nokogiri (`[class*="ProductItemListPC_…"]` selectors, since BigGo's class names carry a build hash); a multi-variant listing uses its priced variant. Shop links come from the `purl` parameter of BigGo's `/r/` redirect, which robots.txt disallows and which is never fetched. `KibblePrices::PchomeSearch` reads PChome's undocumented `search/v4.3` JSON; any failure there just means no PChome rows.
+- **Politeness and safety:** `KibblePrices::PoliteHttp` is the only network client: HTTPS GET to an allow-list of host + path prefixes, no redirects, 10 s timeouts, 2 MB limit, no retries, 2 s between requests per host, honest User-Agent. Each query's listings are cached for the month and shared across users; `limits_concurrency` runs one pet at a time. feebee was rejected because its terms forbid automated collection.
+- **Nothing found:** a kibble neither source lists is saved in the check's summary with `found: 0`, and the page and email say "Can't find this kibble in shops right now." (A Gemini + Google Search fallback was built and then removed: search grounding needs its own quota, which a real key didn't have.)
+- **Layout changes:** an empty BigGo page without its "no results" notice, or a PChome answer without `Prods`, logs a warning and sends `DiagnosticsMailer#price_source_alert` to the app's address, at most once a day per source.
+- **Email:** `KibblePriceMailer#monthly_report`, in the language of the owner's time zone (Asia/Taipei → zh-TW, Asia/Tokyo → ja, else en), not CC'd to the admin. Sent only by the monthly run and only when prices were found.
 
 ---
 
@@ -297,6 +331,13 @@ OCR currently runs **synchronously inside the web request**. See §5.4 for the r
 | DELETE | `/dry_foods/:id` | `destroy` | ✅ | HTML, JSON | Delete bag (linked trackers get `dry_food_id = NULL`) |
 | GET | `/dry_foods/:id/restock` | `restock` | ✅ | HTML | Restock form |
 | PATCH | `/dry_foods/:id/restock` | `restock` | ✅ | HTML | Apply restock |
+
+#### 2.2.9 Kibble prices — `/pets/:pet_id/kibble_prices`
+
+| Method | Path | Action | Ownership | Formats | Description |
+|---|---|---|---|---|---|
+| GET | `…/kibble_prices` | `index` | ✅ owner | HTML | The latest check: one card per favorite kibble, prices ranked by NT$/kg, or "Can't find this kibble in shops right now."; states for no check yet, pending and failed |
+| POST | `…/kibble_prices` | `create` | ✅ owner | HTML | "Refresh now": queues `PetKibblePriceJob` unless the pet was already checked today. Rate limit: 5 per 10 minutes per user |
 
 ### 2.3 Request / Response Specifications
 
@@ -491,7 +532,7 @@ Decimals are serialized as strings. `days_remaining` holds the predicted run-out
 - **Production:** PostgreSQL through `DATABASE_URL`. The same database serves four Rails roles: `primary` (application data), `cache` (Solid Cache), `queue` (Solid Queue), and `cable` (Solid Cable).
 - **Development / test:** SQLite (`storage/development.sqlite3`).
 - **Framework tables** (not detailed here): `active_storage_*`, `solid_queue_*` (11 tables), `solid_cache_entries`.
-- Schema version: `2026_08_17_000000`.
+- Schema version: `2026_09_28_150000`.
 
 ### 3.2 Entity-Relationship Diagram
 
@@ -508,6 +549,8 @@ erDiagram
   PETS ||--o| ACTIVE_STORAGE_ATTACHMENTS : "pet_avatar"
   DRY_FOODS |o--o{ TRACKERS : "supplies"
   VET_VISITS ||--o{ VET_VISIT_MEMBERS : "shared with"
+  PETS ||--o{ KIBBLE_PRICE_CHECKS : "priced monthly"
+  KIBBLE_PRICE_CHECKS ||--o{ KIBBLE_PRICES : "finds"
 
   USERS {
     bigint id PK
@@ -566,6 +609,21 @@ erDiagram
     bigint id PK
     bigint vet_visit_id FK
     bigint user_id FK
+  }
+  KIBBLE_PRICE_CHECKS {
+    bigint id PK
+    bigint pet_id FK
+    date checked_on
+    string status
+    json kibbles
+  }
+  KIBBLE_PRICES {
+    bigint id PK
+    bigint kibble_price_check_id FK
+    string source
+    integer price_twd
+    decimal bag_size_kg
+    decimal price_per_kg
   }
 ```
 
@@ -704,6 +762,37 @@ Indexes: `pet_id`.
 
 Indexes: `vet_visit_id`, `user_id`, and **unique** `(vet_visit_id, user_id)`.
 
+#### `kibble_price_checks`
+
+| Column | Type | Null | Default | Notes |
+|---|---|---|---|---|
+| `pet_id` | integer | NO | | FK → `pets.id` |
+| `checked_on` | date | NO | | The day of the check |
+| `status` | string | NO | `pending` | Enum (§3.5) |
+| `error_message` | string | YES | | Class and message when the check failed (not shown to users) |
+| `kibbles` | json | NO | `[]` | One entry per favorite kibble checked: `brand`, `description`, `favorite_score`, `queries`, `found`. Lets the page list a kibble with no prices. Older checks may also have a `gemini` key, which is ignored |
+
+Indexes: `pet_id`, and **unique** `(pet_id, checked_on)`, so a pet is checked at most once a day.
+
+#### `kibble_prices`
+
+| Column | Type | Null | Notes |
+|---|---|---|---|
+| `kibble_price_check_id` | integer | NO | FK → `kibble_price_checks.id` |
+| `brand`, `description` | string | NO | The favorite kibble this price is for (the tracker's normalized names) |
+| `favorite_score` | integer | YES | The kibble's score at the time |
+| `source` | string | NO | Enum (§3.5) |
+| `store` | string | YES | Shop name as listed |
+| `url` | string | YES | The shop's product page (shown only if http/https) |
+| `product_title` | string | NO | Listing title |
+| `variant` | string | YES | The option the price is for, in multi-variant listings |
+| `price_twd` | integer | NO | Listed price, NT$ |
+| `bag_size_label` | string | NO | The size as the shop writes it (`2kg x 2`) |
+| `bag_size_kg` | decimal(8,3) | NO | Total kg, for the per-kg price |
+| `price_per_kg` | decimal(10,1) | NO | Ranking key |
+
+Indexes: `kibble_price_check_id`. (`suspicious` and `suspicious_reason` existed for Gemini prices and were removed by `20260928150000_remove_gemini_from_kibble_prices`.)
+
 ### 3.4 Relationships
 
 | Parent | Child | Cardinality | Foreign key | On parent delete (app level) |
@@ -718,6 +807,8 @@ Indexes: `vet_visit_id`, `user_id`, and **unique** `(vet_visit_id, user_id)`.
 | pets | vet_visits | 1 : N | `vet_visits.pet_id` | destroy |
 | dry_foods | trackers | 0..1 : N | `trackers.dry_food_id` | **nullify** |
 | vet_visits | vet_visit_members | 1 : N | `vet_visit_members.vet_visit_id` | destroy |
+| pets | kibble_price_checks | 1 : N | `kibble_price_checks.pet_id` | destroy |
+| kibble_price_checks | kibble_prices | 1 : N | `kibble_prices.kibble_price_check_id` | destroy |
 | users ↔ vet_visits | — | M : N | through `vet_visit_members` | — |
 
 Cascades are handled by Rails (`dependent:`). The database foreign keys have no `ON DELETE` action.
@@ -730,12 +821,14 @@ Cascades are handled by Rails (`dependent:`). The database foreign keys have no 
 | `Tracker.hungry` | `eat_right_away`→`💖 Yes, eat right away`, `ate_a_little`→`🔺 No, not really. Ate A Little`, `not_interested`→`❌ No, not interested` |
 | `DryFood.food_type` | `kibble`→`Kibble`, `freeze_dried`→`Freeze-Dried` |
 | `VetVisit.purpose` | `vaccination`, `checkup`, `dental_cleaning`, `surgery`, `grooming`, `emergency`, `follow_up`, `other` |
+| `KibblePriceCheck.status` | `pending`, `done`, `failed` |
+| `KibblePrice.source` | `biggo`→`BigGo`, `pchome`→`PChome` |
 
 ### 3.6 Schema Observations and Recommendations
 
 | # | Observation | Recommendation |
 |---|---|---|
-| D1 | `add_foreign_key "dry_foods", "Users"` (capital **U**, `db/schema.rb:338`). PostgreSQL treats quoted identifiers as case-sensitive, so `db:schema:load` on a fresh PostgreSQL database may fail. | Add a migration that re-creates the FK against `users`. |
+| D1 | `add_foreign_key "dry_foods", "Users"` (capital **U**, `db/schema.rb:338`). PostgreSQL treats quoted identifiers as case-sensitive, so `db:schema:load` on a fresh PostgreSQL database fails. **Confirmed 2026-09-28** on PostgreSQL 15: `relation "Users" does not exist`. Existing databases, updated by migrations, are unaffected. | Add a migration that re-creates the FK against `users`. |
 | D2 | `schema.rb` is dumped from SQLite, so FK columns appear as `integer`, and the dev/test adapter differs from production. The code contains adapter-specific SQL branches. | Use PostgreSQL in development and CI. Keep FK columns `bigint`. |
 | D3 | `connected_services` has no unique index on `(provider, uid)`. (`pets.share_token` is now unique, S12.) | Add a unique index. |
 | D4 | Common queries filter trackers by `pet_id` + `date` range, but only single-column indexes exist. | Add a composite index `trackers(pet_id, date)`. Consider `(dry_food_id, archived_dry_food)` as well. |
@@ -816,6 +909,8 @@ Design strengths: an OAuth identity is **never automatically merged** into an ex
 | **Secrets at rest** | `gemini_api_key` encrypted (`encrypts`); app secrets in `config/credentials.yml.enc` or environment variables; `config/master.key` is not committed |
 | **Transport** | `force_ssl` + `assume_ssl` → HTTPS redirect, HSTS, secure cookies |
 | **Client gating** | `allow_browser versions: :modern` (the Hotwire Native app is exempt) |
+| **Outbound requests** (kibble prices) | `KibblePrices::PoliteHttp`: HTTPS GET only, to an allow-list of host + path prefixes (`biggo.com.tw/s/`, `ecshweb.pchome.com.tw/search/v4.3/`), no redirects followed, no credentials in URLs, 2 MB and 10 s limits, so a listing can't steer the server elsewhere (no SSRF) |
+| **External links** | Shop links on the Kibble Prices page and email become links only when http(s), and open with `rel="noopener noreferrer nofollow"` |
 | **Static analysis** | Brakeman and `importmap audit` in CI |
 
 ### 4.4 Security Findings and Gaps
@@ -876,7 +971,7 @@ Any new pet-scoped controller should follow the same pattern and add a test like
 | **Image** | Multi-stage `Dockerfile`: `ruby:3.4.1-slim`, jemalloc, libvips, libpq. Assets precompiled at build time (`i18n:export` runs first). Bootsnap precompiled. |
 | **Process start** | `bin/docker-entrypoint` runs `rails db:prepare` and then `./bin/thrust ./bin/rails server` on port 80 |
 | **Processes** | `Procfile`: `web` (Thruster + Puma) and `worker` (`bin/jobs`). The alternative is `SOLID_QUEUE_IN_PUMA=true`, which runs jobs inside the web process. |
-| **Hosting** | Managed PaaS. The production mail host defaults to `pet-feeding-tracker-v4.onrender.com` (Render), and git history also references Railway. `config/deploy.yml` (Kamal) is still the unmodified template with a placeholder IP and host. |
+| **Hosting** | **Railway**: GitHub shows a `railway-app[bot]` production deployment for every push to `main`. The production mail host still defaults to `pet-feeding-tracker-v4.onrender.com` (Render), and `config/deploy.yml` (Kamal) is unused. A Netlify GitHub App is also connected to the repository and builds failing "Deploy Previews" for pull requests; Netlify can't run this app and should be disconnected. |
 | **Database** | One managed PostgreSQL instance (`DATABASE_URL`) shared by the primary, cache, queue, and cable roles |
 | **Files** | Active Storage `:local` disk (`storage/`), with SQL backups written to `storage/backups/` |
 | **Email / push** | SendGrid API, LINE Messaging API |
@@ -892,6 +987,7 @@ flowchart TB
   JW --> D
   JW --> SG["SendGrid"]
   JW --> LN["LINE API"]
+  JW --> KP["BigGo · PChome"]
   W --> GM["Gemini API"]
 ```
 
@@ -917,8 +1013,9 @@ flowchart TB
 |---|---|---|
 | `clear_solid_queue_finished_jobs` | hourly at :12 | Deletes finished job records |
 | `purge_expired_sessions` | daily 04:00 | `Session.expired.delete_all`: removes sessions past the idle or absolute timeout (S11) |
-| `user_backups` | daily 03:00 | `UserBackupJob`: emails a per-pet tracker CSV to each user who changed a tracker in the last 25 h. (The README says "every 5 days", but the code runs daily.) |
+| `user_backups` | daily 03:00 | `UserBackupJob`: emails a per-pet tracker CSV to each user who changed a tracker in the last 25 h. |
 | ~~`db_backup`~~ | **unscheduled** | Removed from the schedule: it failed every night (no `pg_dump` in the image; the worker has no persistent disk, so a dump would vanish on the next deploy). Full-database recovery comes from Railway's managed Postgres backups. `bin/rails db:backup` remains for manual runs and now reports why it can't run instead of exiting silently. |
+| `monthly_kibble_prices` | 1st of the month 06:00 | `MonthlyKibblePriceJob` → `PetKibblePriceJob` per pet fed kibble in the last 30 days (§1.8); emails owners whose check found prices. Schedule text `every month on the 1st at 6am` (cron `0 6 1 * *`); `test/jobs/recurring_schedule_test.rb` checks every schedule parses as repeating |
 | `pet_weight_reminder` | daily 09:00 | `notifications:weigh_pets` → `PetWeightReminderJob` per user. Sends a reminder when a pet has not been weighed for ≥ 14 days (then every 7 days) and the user signed in within the last 3 days. Uses LINE push if linked, otherwise email. |
 
 \*Times are in the server time zone (UTC by default), not the user's time zone.
@@ -986,10 +1083,12 @@ flowchart TB
 ```
 app/
   controllers/        # Resource controllers + concerns/ (Authentication, TrackersCalculable) + omni_auth/
-  models/             # User, Session, ConnectedService, Pet, Tracker, DryFood, HealthCheck, VetVisit, VetVisitMember, Current
-  services/           # CsvImportTrackersService, GeminiOcrService, NotificationService
-  jobs/               # PetWeightReminderJob, UserBackupJob
-  mailers/            # UserMailer, PasswordsMailer, UserBackupMailer
+  models/             # User, Session, ConnectedService, Pet, Tracker, DryFood, HealthCheck, VetVisit, VetVisitMember,
+                      # KibblePriceCheck, KibblePrice, Current
+  services/           # CsvImportTrackersService, GeminiOcrService, NotificationService,
+                      # kibble_prices/ (BigGoSearch, PchomeSearch, Lookup, Matcher, BagSize, BrandNames, Query, PoliteHttp, SourceAlert)
+  jobs/               # PetWeightReminderJob, UserBackupJob, MonthlyKibblePriceJob, PetKibblePriceJob
+  mailers/            # UserMailer, PasswordsMailer, UserBackupMailer, KibblePriceMailer, DiagnosticsMailer
   views/              # ERB (+ :native variants), Jbuilder, PWA manifest
   javascript/         # Stimulus controllers, exported translations
 config/
