@@ -11,17 +11,6 @@ module KibblePrices
     # Share of the variant's characters that must come from the kibble's name.
     MIN_VARIANT_AGREEMENT = 0.5
 
-    # Chinese and English names for the same brand. Add pairs as new brands show up.
-    BRAND_ALIASES = [
-      %w[皇家 法國皇家 royalcanin],
-      %w[希爾思 hill's hills],
-      %w[渴望 orijen],
-      %w[愛肯拿 acana],
-      %w[璞斯 purpose],
-      %w[吶一口 neko],
-      %w[曙光 springnatural]
-    ].freeze
-
     # Words for what kind of product it is, not which one: they do not count
     # toward a match. 全 stays, as 全齡 (all ages) tells formulas apart.
     FILLER_CHARS = "貓狗犬的配方食譜糧飼料乾包袋入組個件罐裝款口味新鮮和與及專用".chars.to_set.freeze
@@ -45,8 +34,11 @@ module KibblePrices
     CAT = /貓|cat|kitten/i
     DOG = /犬|狗|dog|puppy/i
 
-    def initialize(kibble, species: nil)
+    # brand_names: every name the brand goes by (see BrandNames); by default the
+    # names in the kibble's own brand field.
+    def initialize(kibble, species: nil, brand_names: nil)
       @brand = Query.brand(kibble)
+      @brand_names = brand_names || BrandNames.split(kibble[:dry_food]&.brand.presence || kibble[:brand])
       @description = Query.description(kibble)
       @species = species
       @description_chars = meaningful(@description)
@@ -67,7 +59,7 @@ module KibblePrices
       listing = "#{title} #{variant}"
 
       return :reject_word if listing.match?(REJECT_WORDS)
-      return :brand unless brand_in?(listing)
+      return :brand unless BrandNames.in?(@brand_names, listing)
       return :species if other_species?(listing)
       return :protein unless @proteins.subset?(proteins(listing))
       return :code if @codes.any? && (codes(listing) & @codes).empty?
@@ -81,13 +73,6 @@ module KibblePrices
 
     def normalize(text)
       text.to_s.unicode_normalize(:nfkc).downcase
-    end
-
-    def brand_in?(listing)
-      compact = listing.delete(" ")
-      names = [ @brand.downcase.delete(" ") ]
-      names += BRAND_ALIASES.find { |aliases| aliases.include?(names.first) }.to_a
-      names.any? { |name| compact.include?(name) }
     end
 
     def other_species?(listing)

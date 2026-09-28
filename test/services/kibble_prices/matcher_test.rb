@@ -2,8 +2,8 @@ require "test_helper"
 
 # Titles and variants below are real BigGo listings (2026-09-28).
 class KibblePrices::MatcherTest < ActiveSupport::TestCase
-  def matcher(brand, description, species: :cat)
-    KibblePrices::Matcher.new({ brand: brand, description: description, dry_food: nil }, species: species)
+  def matcher(brand, description, species: :cat, brand_names: nil)
+    KibblePrices::Matcher.new({ brand: brand, description: description, dry_food: nil }, species: species, brand_names: brand_names)
   end
 
   test "matches despite different wording and a variant character" do
@@ -33,11 +33,20 @@ class KibblePrices::MatcherTest < ActiveSupport::TestCase
   end
 
   test "product-line codes must agree" do
-    indoor = matcher("Royal Canin", "室內成貓 IN27")
+    indoor = matcher("皇家", "室內成貓 IN27")
 
     assert indoor.match?(title: "【ROYAL 法國皇家】室內成貓專用飼料 IN27 4KG(貓乾糧)")
     assert_equal :code, indoor.rejection(title: "法國皇家ROYAL CANIN 【IN+7室內熟齡貓】保健成貓專用飼料1.5kg")
     assert_equal :variant, indoor.rejection(title: "法國皇家 ROYAL CANIN 貓飼料 成貓 室內貓 IN27", variant: "L40 體重控制成貓-1.5kg")
+  end
+
+  test "the brand may appear under any of its names" do
+    purrsuit = matcher("喵皇奴 purrsuit", "鮮雞肉")
+
+    assert purrsuit.match?(title: "Purrsuit 無穀鮮雞肉 貓飼料 2kg"), "the English name alone"
+    assert purrsuit.match?(title: "喵皇奴 無穀鮮雞肉 貓飼料 2kg"), "the Chinese name alone"
+    assert matcher("超躍", "無穀雞肉", brand_names: Set["超躍", "hyperr"]).match?(title: "Hyperr 無穀雞肉 貓飼料")
+    assert_equal :brand, matcher("go", "雞肉").rejection(title: "GoGo貓 雞肉 貓飼料"), "a Latin name is a whole word"
   end
 
   test "brand, species and short-dated stock" do
