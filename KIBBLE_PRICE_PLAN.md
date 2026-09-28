@@ -1,6 +1,6 @@
 # Monthly Kibble Price Ranking — Implementation Plan (v4)
 
-**Goal:** On the 1st of each month, find current Taiwan prices for the kibbles each pet loves, rank them by **NT$ per kg from cheapest to most expensive**, and show the list **in the app and in an email**. Gemini, using **each user's own key**, is only a backup.
+**Goal:** On the 1st of each month, find current Taiwan prices for the kibbles each pet loves, rank them by **NT$ per kg from cheapest to most expensive**, and show the list **in the app and in an email**. Prices come only from BigGo and PChome; a kibble neither lists is shown as "can't find this kibble". *(Gemini was a backup source until 2026-09-28; see [Change F](#change-f-drop-gemini-2026-09-28).)*
 
 ## Status
 
@@ -12,6 +12,7 @@
 | C — Gemini backup, models, jobs | ✅ Done (2026-09-28). Committed on `feature/kibble-prices` and pushed. See [Checkpoint C result](#checkpoint-c-result-2026-09-28). |
 | D — Page, email, translations | ✅ Done (2026-09-28). Committed on `feature/kibble-prices` and pushed. See [Checkpoint D result](#checkpoint-d-result-2026-09-28). |
 | E — Tests, lint, CI, merge | ✅ Done (2026-09-28). Merged into `main` directly (no pull request, at your request) as `8d34a86`; tests, lint and CI passed. **The first monthly run is 2026-10-01 at 06:00 UTC (14:00 Taiwan).** |
+| F — Drop Gemini | ✅ Done (2026-09-28). Committed on `feature/kibble-prices` and pushed; **not merged into `main` yet**. See [Change F](#change-f-drop-gemini-2026-09-28). |
 
 **Decisions**
 
@@ -20,11 +21,11 @@
 | Ranking | Price per kg, cheapest first |
 | Region / currency | Taiwan, TWD |
 | Delivery | In-app page + monthly email |
-| Gemini key | Each user's own key (backup source only) |
+| Gemini | **Not used** (dropped 2026-09-28, see Change F). Was: the owner's key as a backup source |
 | Favorite window | Kibbles fed in the last 4 months (also the window for learning brand names) |
 | Ranking ties to bag size | None: ranked purely by NT$/kg, so a small bag can come first |
 | Multi-flavor "series" listings | Kept when the owner's flavor is among them |
-| No BigGo/PChome listings | Ask Gemini (owner's key), label "unverified" |
+| No BigGo/PChome listings | Show "Can't find this kibble in shops right now" (was: ask Gemini) |
 | Main price source | **BigGo** price-comparison site read with Nokogiri (confirmed 2026-09-28; was feebee until checkpoint 0) |
 
 ## Background: why this approach
@@ -43,7 +44,35 @@ Rejected options:
 - **Headless browser** — heavy on Railway and still blocked by anti-bot measures.
 - **Shopee Affiliate Open API** — not available to individual accounts.
 - **Gemini as the main source** — prices come from Google's index and may be outdated or made up.
+- **Gemini as a backup** (built in checkpoint C, dropped in Change F) — Google Search through Gemini needs its own quota, which a real key didn't have (HTTP 429), and its prices were unverified anyway.
 - **feebee** — its terms forbid automated collection and storing its data (see below).
+
+## Change F: drop Gemini (2026-09-28)
+
+**Why:** the first real Gemini call, with the owner's key, was refused for the Google Search feature (HTTP 429 "You exceeded your current quota") even though the same key answered a plain request. Most owners' keys would hit the same limit, their prices were only ever "unverified", and the page would silently show nothing. **Decision (you, 2026-09-28): remove Gemini as a backup. When BigGo and PChome list nothing for a kibble, the page and email say "Can't find this kibble in shops right now".**
+
+**What changes:**
+
+| Area | Change |
+|---|---|
+| `app/services/kibble_prices/gemini_search.rb` + its test | Deleted |
+| `KibblePrices::Lookup` | No Gemini call, no `gemini:` result, no suspicious-price check (it only ever applied to Gemini prices). A kibble with nothing listed gets `found: 0` |
+| Database | New migration: delete any `source = "Gemini"` prices (production may have some if a "Refresh now" ran with a key since the merge), then remove the `suspicious` and `suspicious_reason` columns from `kibble_prices`. The existing migration stays as it is, since it may already have run in production |
+| `KibblePrice` | `source` only `BigGo` / `PChome`; no `flagged` scope, no `verified?`; `ranked` is just cheapest per kg first |
+| `PetKibblePriceJob` | The per-kibble summary drops `gemini`. Older checks may still have a `gemini` key in their summary; it's ignored |
+| Page and email | For a kibble with no prices: **"Can't find this kibble in shops right now."** No "Unverified" badge, no "⚠ suspicious prices" section, no "add your Gemini key" note. Every price shows "✔ Listed · BigGo / PChome" |
+| Translations (en, ja, zh-TW) | `no_listings` becomes "Can't find this kibble in shops right now." / 「今回はショップでこのフードが見つかりませんでした。」 / 「目前在商店找不到這款飼料。」. The Gemini, unverified and suspicious strings are removed |
+| `config/environments/test.rb` | The fixed test encryption keys (added only so tests could save a Gemini key) are removed |
+| Tests | Gemini and suspicious tests removed; tests added for "can't find" on the page and in the email, and for the migration's clean-up |
+| Unchanged | BigGo and PChome searches, matching rules, bag sizes, ranking, jobs, schedule, "Refresh now", email rules, languages. The user's own Gemini key stays in their profile, as the health-check reader (`GeminiOcrService`) still uses it |
+
+**Checks before committing:** `bin/rails test`, `bin/rails test:system`, rubocop, brakeman; the new migration on a throwaway PostgreSQL database too; a screenshot of a "can't find" kibble on the page.
+
+**Result (implemented 2026-09-28):**
+- Done as listed above. The new migration is `db/migrate/20260928150000_remove_gemini_from_kibble_prices.rb`.
+- Tests: the Gemini and suspicious tests were removed; new or changed tests cover "can't find" on the page, in the email and in the browser test, a kibble neither source lists (both searches made, no prices), and `source` rejecting `Gemini`. `bin/rails test` 282 runs and `bin/rails test:system` 32 runs, 0 failures; rubocop and brakeman clean.
+- **Migration clean-up checked by hand, not by a committed test** (a test for it would need the old schema): on a throwaway PostgreSQL 15 database with the schema from before this change plus one BigGo and one Gemini price, `db:migrate` deleted only the Gemini price and removed both `suspicious` columns; `db:rollback` put the columns back and migrating again worked. The database was then dropped.
+- Screenshot reviewed: 天然密碼 shows "Can't find this kibble in shops right now."; every price shows "✔ Listed · BigGo / PChome".
 
 ## Checkpoint 0 result (2026-09-28)
 
@@ -167,6 +196,8 @@ Before the protein rule, 曙光's list wrongly included the chicken (雞肉) and
 
 ## Checkpoint C result (2026-09-28)
 
+> **Superseded in part by [Change F](#change-f-drop-gemini-2026-09-28):** the Gemini backup and the suspicious-price check described here are being removed.
+
 **New and changed files:**
 
 | File | What it does |
@@ -203,6 +234,8 @@ To try the Gemini path yourself, add your Gemini API key in your local user prof
 - `bin/rubocop`: no offenses. `bin/brakeman -w2`: no warnings.
 
 ## Checkpoint D result (2026-09-28)
+
+> **Superseded in part by [Change F](#change-f-drop-gemini-2026-09-28):** the "Unverified" badge, the suspicious-prices section and the Gemini-key note are being removed; a kibble with no prices shows "Can't find this kibble in shops right now".
 
 **New and changed files:**
 
@@ -241,6 +274,20 @@ To try the Gemini path yourself, add your Gemini API key in your local user prof
 - `bin/rails test:system`: 29 runs, 0 failures.
 - `bin/rubocop`: no offenses. `bin/brakeman -w2`: no warnings.
 
+## After merging: extra checks (2026-09-28)
+
+| Check | Result |
+|---|---|
+| **Migration on PostgreSQL** (production's database; development, tests and CI use SQLite) | ✅ On a throwaway local PostgreSQL 15 database: loaded the schema from before this feature (`main` at `e1c5fb4`), ran `db:migrate` → both tables, the unique `(pet_id, checked_on)` index and the foreign keys were created. |
+| **Whole test suite on PostgreSQL** | ✅ 290 runs, 0 failures (single process, against that database). The throwaway database was then dropped. |
+| **Browser test for the page** (`test/system/kibble_prices_test.rb`, committed) | ✅ Profile → "Kibble Prices" → ranked table, badges, "no listings" and Gemini-key notes, opening the suspicious section; "Refresh now" queues a check and is replaced after a check that day; phones get cards instead of the table. |
+| **"Refresh now" rate limit** (`test/controllers/rate_limit_test.rb`) | ✅ Over the limit: no search queued, redirected with the "Too many refreshes" alert. |
+| **Gemini with a real API key** | ⏳ **Not run yet**: the local user has no Gemini key. Add one in the local profile, then run the lookup for 天然密碼 (the kibble BigGo and PChome found nothing for) to see a real Gemini answer. |
+
+Totals after these: `bin/rails test` 291 runs and `bin/rails test:system` 32 runs, 0 failures; rubocop clean.
+
+**Found along the way (older than this feature, not changed):** `db/schema.rb` has `add_foreign_key "dry_foods", "Users", column: "user_id"` with a capital `U`. SQLite ignores the case; PostgreSQL treats `"Users"` as a different table, so `db:schema:load` (or `db:prepare` on an **empty** PostgreSQL database, e.g. a new environment) fails with `relation "Users" does not exist`. Existing production isn't affected, as it's updated by migrations, not by loading the schema.
+
 ## How it works
 
 ```
@@ -250,8 +297,8 @@ MonthlyKibblePriceJob (1st of month, 6am)
         2. For each kibble, build a search query, e.g. "皇家 室內成貓 IN27"
         3. KibblePrices::BigGoSearch  (Nokogiri)   → listings: title, variant, price, store, link   [cached for the month]
         4. KibblePrices::PchomeSearch (JSON.parse) → listings (optional)                            [cached for the month]
-        5. Gemini backup                           → only if steps 3 and 4 found nothing (checkpoint C)
-        6. KibblePrices::Lookup                    → match, check bag size, flag suspicious prices, calculate NT$/kg, rank
+        5. KibblePrices::Lookup                    → match, check bag size, calculate NT$/kg, rank;
+                                                     nothing listed → "can't find this kibble"
         7. Save KibblePriceCheck + KibblePrices → email + in-app page
 ```
 
@@ -259,8 +306,7 @@ MonthlyKibblePriceJob (1st of month, 6am)
 |---|---|---|---|
 | **BigGo** search page | Nokogiri, `[class*="ProductItemListPC_…"]` | ✔ Listed price | Always, the main source |
 | **PChome** `ecshweb.pchome.com.tw/search/v4.3/all/results` | `JSON.parse` | ✔ Listed price | Always, optional extra |
-| **Gemini** + Google Search | `JSON.parse` on its reply | Unverified | Only when both of the above found nothing for that kibble |
-| Any unverified price ±40% from the listed prices | — | ⚠ Suspicious, not ranked | — |
+| *(nothing from either)* | — | "Can't find this kibble in shops right now" | — |
 
 ---
 
@@ -281,8 +327,7 @@ MonthlyKibblePriceJob (1st of month, 6am)
   - "Verified" is derived from `source`: biggo and pchome rows count as verified.
 - Associations: `Pet has_many :kibble_price_checks`, `KibblePriceCheck has_many :kibble_prices`, both `dependent: :destroy`.
 - Scopes:
-  - `ranked` — not suspicious, ordered by `price_per_kg ASC`.
-  - `flagged` — suspicious.
+  - `ranked` — ordered by `price_per_kg ASC`. *(Change F removes `suspicious`, `suspicious_reason` and the `flagged` scope.)*
 
 ### 3. Shared helpers ✅
 Built as `KibblePrices::Query`, `KibblePrices::Matcher`, `KibblePrices::BagSize` and `KibblePrices::PoliteHttp`; see [Checkpoint B result](#checkpoint-b-result-2026-09-28) for the rules as built. As planned:
@@ -303,14 +348,14 @@ Built as `KibblePrices::Query`, `KibblePrices::Matcher`, `KibblePrices::BagSize`
 - Same monthly cache. **As built:** an empty result is normal (PChome's search is loose), so the admin alert only fires when the answer isn't JSON or has no `Prods` list.
 - Undocumented endpoint: any error means no PChome results, and the run carries on.
 
-### 6. `GeminiKibbleSearchService` (backup) ✅ — built as `KibblePrices::GeminiSearch`
+### 6. ~~`GeminiKibbleSearchService` (backup)~~ — built in checkpoint C, **removed in Change F**
 - Follows `GeminiOcrService`: key in `x-goog-api-key`, timeouts.
 - Request uses `tools: [{ google_search: {} }]` and asks for **JSON only**: `[{store, url, price_twd, product_title}]`.
 - **Only called when steps 4 and 5 found nothing** for a kibble.
 - No user key: skip this step (with a note on the page); don't fail the run.
 
 ### 7. `KibblePriceLookup` (combine and check) ✅ — built as `KibblePrices::Lookup`, except the Gemini parts (checkpoint C)
-For each kibble: collect BigGo and PChome listings, then fall back to Gemini if both are empty.
+For each kibble: collect BigGo and PChome listings (exact name, then brand). *Change F: no Gemini fallback; nothing listed → "can't find".*
 
 - **Filter:**
   - `KibbleMatcher.match?` must pass.
@@ -318,7 +363,7 @@ For each kibble: collect BigGo and PChome listings, then fall back to Gemini if 
   - Price between NT$50 and NT$20,000.
   - Gemini rows must also have a URL and a title.
 - **Remove duplicates:** keep the cheapest listing per store and bag size.
-- **Check Gemini rows** ✅ *(changed in checkpoint C)*: an unverified row more than ±40% from a reference NT$/kg is marked `suspicious`, with the reason saved. The reference is the median listed price from the pet's latest earlier check, or else the median of Gemini's own offers when there are at least 3 (same-check listed prices never exist when Gemini runs).
+- ~~**Check Gemini rows**~~ *(removed in Change F)*: an unverified row more than ±40% from a reference NT$/kg is marked `suspicious`, with the reason saved. The reference is the median listed price from the pet's latest earlier check, or else the median of Gemini's own offers when there are at least 3 (same-check listed prices never exist when Gemini runs).
 - **Calculate and rank:** `price_per_kg = price_twd / bag_size_kg` (1 decimal place), keep the **top 8** per kibble.
 
 ### 8. Jobs and schedule ✅ — email step waits for checkpoint D
@@ -339,7 +384,7 @@ For each kibble: collect BigGo and PChome listings, then fall back to Gemini if 
 - **`index`** — latest check, grouped by kibble with its favorite score:
   - **Ranked table**, cheapest NT$/kg first: store, product title (linked), price, bag size (shop's label with the kg total, e.g. "2kg x 2 (4 kg)"), NT$/kg, source badge (✔ Listed price — BigGo/PChome, or Unverified).
   - Source note: "Listed price via BigGo on {date}" or "From Google search results, may be outdated".
-  - Collapsed **"⚠ Suspicious prices"** section with reasons.
+  - ~~Collapsed "⚠ Suspicious prices" section~~ *(removed in Change F)*; a kibble with no prices shows "Can't find this kibble in shops right now".
   - "No listings found" for kibbles with no results.
 - **`create`** — "Refresh now" button, limited to once a day per pet, queues `PetKibblePriceJob` (monthly cache still applies).
 - Links from the pet page and the favorite-food page.
@@ -379,6 +424,7 @@ For each kibble: collect BigGo and PChome listings, then fall back to Gemini if 
 | C | Step 6 (Gemini backup), then Steps 2 and 8 | ✅ Done — job ran end to end locally; Gemini path taken only for the kibble with nothing listed |
 | D | Steps 9, 10, 11 | ✅ Done — screenshots of the page (desktop, phone, 2 languages) and the email reviewed; 2 layout fixes made |
 | E | Step 12 + `bin/rubocop` + CI | ✅ Done — 290 tests and 29 browser tests pass on the merged `main`; GitHub CI on `main` passed (scan_ruby, test, scan_js, lint) |
+| F | Change F: drop Gemini | ✅ Done — 282 tests and 32 browser tests pass; migration and rollback checked on PostgreSQL; "can't find" screenshot reviewed |
 
 ## Risks and how the plan handles them
 
@@ -386,10 +432,9 @@ For each kibble: collect BigGo and PChome listings, then fall back to Gemini if 
 |---|---|
 | Comparison site's terms | Checked at checkpoint 0: feebee dropped, BigGo has no scraping clause; re-check BigGo's terms before each release |
 | Being blocked | One request per query per month shared across users; one search at a time; never fetch disallowed paths (`/r/`) |
-| BigGo's layout changes | Selectors in constants; tests against a saved page; admin alert on 0 listings; Gemini fallback |
+| BigGo's layout changes | Selectors in constants; tests against a saved page; admin alert on 0 listings |
 | Wrong product matched | Brand plus product line must both appear in the title; product title shown |
 | Multi-variant or multi-pack listings | `BagSize` drops titles with several sizes and handles multiplied packs |
 | Comparison site's price slightly out of date | "Listed price via BigGo on {date}" shown, with a link to the store |
-| Wrong Gemini prices | Backup only, labelled unverified, ±40% suspicious check |
 | PChome endpoint changing | Optional; fails without breaking anything |
-| Security | Fixed list of allowed hosts and paths; owner-only pages; Gemini key sent in a header |
+| Security | Fixed list of allowed hosts and paths; owner-only pages |

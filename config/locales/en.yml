@@ -630,7 +630,7 @@ en:
       failed: "The last price check didn't finish. Try \"Refresh now\" tomorrow."
       no_favorites: "%{petname} has no favorite kibble from the last %{months} months to check. A kibble counts once it scores 30 or more in the tracker."
       favorite_score: "Favorite score %{score}"
-      no_listings: "No shop listings found this time."
+      no_listings: "Can't find this kibble in shops right now."
       store: "Shop"
       product: "Product"
       price: "Price"
@@ -639,13 +639,6 @@ en:
       source: "Source"
       listed: "Listed · %{source}"
       listed_note: "Listed prices found via %{source} on %{date}. Shops change prices often; check the shop before buying."
-      unverified: "Unverified"
-      unverified_note: "Found by Gemini from Google search results, which may be out of date. Check the shop before buying."
-      gemini_no_key_html: "Add your Gemini API key in your %{profile_link} to also search Google when shops list nothing."
-      profile: "profile"
-      suspicious:
-        one: "⚠ 1 suspicious price, far from the usual price"
-        other: "⚠ %{count} suspicious prices, far from the usual price"
       disclaimer: "Prices are approximate and may have changed. Pet Tracker doesn't sell anything and isn't paid by these shops."
     create:
       queued: "Checking prices now. Reload this page in a minute."
@@ -656,9 +649,6 @@ en:
       subject: "%{petname}'s kibble prices this month"
       greeting: "Hi %{username},"
       intro: "Here are this month's prices for the kibbles %{petname} has loved lately, cheapest per kg first (checked %{date})."
-      suspicious_hidden:
-        one: "1 suspicious price isn't shown here; see the page."
-        other: "%{count} suspicious prices aren't shown here; see the page."
       see_page: "See %{petname}'s kibble prices"
   mailers:
     user_backup:

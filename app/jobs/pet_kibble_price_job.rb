@@ -15,7 +15,7 @@ class PetKibblePriceJob < ApplicationJob
     Rails.logger.info("[PetKibblePriceJob] pet #{pet.id} already checked on #{checked_on}")
   else
     run(check)
-    KibblePriceMailer.monthly_report(check).deliver_later if notify && check.kibble_prices.ranked.exists?
+    KibblePriceMailer.monthly_report(check).deliver_later if notify && check.kibble_prices.exists?
   end
 
   private
@@ -39,7 +39,7 @@ class PetKibblePriceJob < ApplicationJob
       brand: kibble[:brand], description: kibble[:description], favorite_score: kibble[:results].first[:favorite_score],
       source: row[:source], store: row[:store], url: row[:url], product_title: row[:title], variant: row[:variant],
       price_twd: row[:price_twd], bag_size_label: row[:bag_size_label], bag_size_kg: row[:bag_size_kg],
-      price_per_kg: row[:price_per_kg], suspicious: row[:suspicious] || false, suspicious_reason: row[:suspicious_reason]
+      price_per_kg: row[:price_per_kg]
     }
   end
 
@@ -49,7 +49,7 @@ class PetKibblePriceJob < ApplicationJob
     {
       "brand" => kibble[:brand], "description" => kibble[:description],
       "favorite_score" => kibble[:results].first[:favorite_score],
-      "queries" => result[:queries], "found" => result[:prices].size, "gemini" => result[:gemini]&.to_s
+      "queries" => result[:queries], "found" => result[:prices].size
     }
   end
 end

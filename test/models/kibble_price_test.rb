@@ -10,21 +10,17 @@ class KibblePriceTest < ActiveSupport::TestCase
                                  price_twd: 690, bag_size_label: "3磅", bag_size_kg: 1.361, price_per_kg: price_per_kg, **attrs)
   end
 
-  test "ranked lists trusted prices cheapest per kg first; flagged lists the suspicious ones" do
+  test "ranked lists prices cheapest per kg first" do
     dear = price(663.3)
     cheap = price(507.0)
-    odd = price(120.0, source: "Gemini", suspicious: true, suspicious_reason: "-76% from NT$507/kg")
 
     assert_equal [ cheap, dear ], @check.kibble_prices.ranked.to_a
-    assert_equal [ odd ], @check.kibble_prices.flagged.to_a
     assert_equal [ cheap, dear ], @check.prices_for("曙光", "無穀滋養鴨肉食譜").to_a
   end
 
-  test "only BigGo and PChome prices count as verified" do
-    assert price(507.0, source: "BigGo").verified?
-    assert price(507.0, source: "PChome").verified?
-    assert_not price(507.0, source: "Gemini").verified?
-    assert_raises(ActiveRecord::RecordInvalid) { price(507.0, source: "feebee") }
+  test "prices come from BigGo or PChome only" do
+    assert price(507.0, source: "PChome").pchome?
+    assert_raises(ActiveRecord::RecordInvalid) { price(507.0, source: "Gemini") }
   end
 
   test "one check per pet a day" do

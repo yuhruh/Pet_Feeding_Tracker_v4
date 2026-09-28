@@ -630,7 +630,7 @@ zh-TW:
       failed: "上次的價格查詢沒有完成，請明天再按「立即更新」。"
       no_favorites: "%{petname} 最近 %{months} 個月沒有可查詢的最愛飼料。飼料在紀錄中喜好分數達 30 分以上才會列入。"
       favorite_score: "喜好分數 %{score}"
-      no_listings: "這次沒有找到商店的商品。"
+      no_listings: "目前在商店找不到這款飼料。"
       store: "商店"
       product: "商品"
       price: "價格"
@@ -639,13 +639,6 @@ zh-TW:
       source: "來源"
       listed: "標價 · %{source}"
       listed_note: "%{date} 透過 %{source} 找到的商店標價。商店常調整價格，購買前請到商店確認。"
-      unverified: "未確認"
-      unverified_note: "由 Gemini 從 Google 搜尋結果找到，可能不是最新價格。購買前請到商店確認。"
-      gemini_no_key_html: "在%{profile_link}加入 Gemini API 金鑰，商店沒有商品時也會用 Google 搜尋。"
-      profile: "個人資料"
-      suspicious:
-        one: "⚠ 1 個價格與一般價格差很多"
-        other: "⚠ %{count} 個價格與一般價格差很多"
       disclaimer: "價格僅供參考，可能已經變動。Pet Tracker 不販售商品，也沒有向這些商店收取費用。"
     create:
       queued: "正在查詢價格，請一分鐘後重新整理此頁。"
@@ -656,9 +649,6 @@ zh-TW:
       subject: "%{petname} 本月的飼料價格"
       greeting: "%{username} 您好，"
       intro: "以下是 %{petname} 最近喜歡的飼料本月價格，依每公斤價格由低到高排列（%{date} 查詢）。"
-      suspicious_hidden:
-        one: "有 1 個差異很大的價格沒有列出，請到網頁查看。"
-        other: "有 %{count} 個差異很大的價格沒有列出，請到網頁查看。"
       see_page: "查看 %{petname} 的飼料價格"
   mailers:
     user_backup:

@@ -38,7 +38,6 @@
   <% else %>
     <% @check.kibbles.each do |kibble| %>
       <% prices = @check.prices_for(kibble["brand"], kibble["description"]) %>
-      <% flagged = @check.kibble_prices.flagged.where(brand: kibble["brand"], description: kibble["description"]) %>
       <section class="mb-6 border-2 border-slate-200 rounded-xl shadow-lg overflow-hidden">
         <div class="flex flex-wrap justify-between items-baseline gap-2 px-4 py-3 bg-gray-100 dark:bg-slate-800">
           <h2 class="font-semibold text-lg capitalize"><%= kibble["brand"] %> · <%= kibble["description"] %></h2>
@@ -54,11 +53,7 @@
               <li class="px-4 py-3 text-sm <%= "bg-emerald-50" if index.zero? %>">
                 <div class="flex justify-between items-baseline gap-2">
                   <span class="font-semibold"><%= index + 1 %>. <%= kibble_twd(price.price_per_kg, precision: 1) %> / kg</span>
-                  <% if price.verified? %>
-                    <span class="rounded-full px-2 py-0.5 text-xs bg-emerald-100 text-emerald-700 whitespace-nowrap">✔ <%= t(".listed", source: price.source_before_type_cast) %></span>
-                  <% else %>
-                    <span class="rounded-full px-2 py-0.5 text-xs bg-amber-100 text-amber-700 whitespace-nowrap"><%= t(".unverified") %></span>
-                  <% end %>
+                  <span class="rounded-full px-2 py-0.5 text-xs bg-emerald-100 text-emerald-700 whitespace-nowrap">✔ <%= t(".listed", source: price.source_before_type_cast) %></span>
                 </div>
                 <div class="mt-1"><%= kibble_product_link(price, class: "text-sky-700 hover:underline") %></div>
                 <% if price.variant.present? %><div class="text-xs text-gray-500"><%= price.variant %></div><% end %>
@@ -92,11 +87,7 @@
                     <td class="p-2 text-right whitespace-nowrap"><%= kibble_bag_size(price) %></td>
                     <td class="p-2 text-right whitespace-nowrap font-semibold"><%= kibble_twd(price.price_per_kg, precision: 1) %></td>
                     <td class="p-2 text-center whitespace-nowrap">
-                      <% if price.verified? %>
-                        <span class="inline-block rounded-full px-2 py-0.5 text-xs bg-emerald-100 text-emerald-700" title="<%= t(".listed_note", source: price.source_before_type_cast, date: l(@check.checked_on)) %>">✔ <%= t(".listed", source: price.source_before_type_cast) %></span>
-                      <% else %>
-                        <span class="inline-block rounded-full px-2 py-0.5 text-xs bg-amber-100 text-amber-700" title="<%= t(".unverified_note") %>"><%= t(".unverified") %></span>
-                      <% end %>
+                      <span class="inline-block rounded-full px-2 py-0.5 text-xs bg-emerald-100 text-emerald-700" title="<%= t(".listed_note", source: price.source_before_type_cast, date: l(@check.checked_on)) %>">✔ <%= t(".listed", source: price.source_before_type_cast) %></span>
                     </td>
                   </tr>
                 <% end %>
@@ -104,30 +95,10 @@
             </table>
           </div>
           <p class="px-4 py-2 text-xs text-gray-500 dark:text-gray-400">
-            <%= prices.any?(&:gemini?) ? t(".unverified_note") : t(".listed_note", source: prices.map(&:source_before_type_cast).uniq.to_sentence, date: l(@check.checked_on)) %>
+            <%= t(".listed_note", source: prices.map(&:source_before_type_cast).uniq.to_sentence, date: l(@check.checked_on)) %>
           </p>
         <% end %>
 
-        <% if kibble["gemini"] == "no_key" %>
-          <p class="px-4 pb-4 text-sm text-gray-600 dark:text-gray-300">
-            <%= t(".gemini_no_key_html", profile_link: link_to(t(".profile"), edit_users_path, class: "text-sky-700 underline")) %>
-          </p>
-        <% end %>
-
-        <% if flagged.any? %>
-          <details class="px-4 pb-4 text-sm">
-            <summary class="cursor-pointer text-amber-700"><%= t(".suspicious", count: flagged.size) %></summary>
-            <ul class="mt-2 list-disc pl-6 text-gray-700 dark:text-gray-200">
-              <% flagged.each do |price| %>
-                <li>
-                  <%= kibble_product_link(price, class: "text-sky-700 hover:underline") %>
-                  — <%= price.store %>, <%= kibble_twd(price.price_twd) %> (<%= kibble_bag_size(price) %>, <%= kibble_twd(price.price_per_kg, precision: 1) %>/kg):
-                  <%= price.suspicious_reason %>
-                </li>
-              <% end %>
-            </ul>
-          </details>
-        <% end %>
       </section>
     <% end %>
   <% end %>

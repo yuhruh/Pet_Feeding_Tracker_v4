@@ -46,6 +46,18 @@ class RateLimitTest < ActionDispatch::IntegrationTest
     assert_equal I18n.t("trackers.import.alert_rate_limit"), flash[:alert]
   end
 
+  test "kibble price refreshes are rate-limited without queuing a search" do
+    log_in_as users(:one)
+    pet = pets(:one)
+    over_limit do
+      assert_no_enqueued_jobs(only: PetKibblePriceJob) do
+        post pet_kibble_prices_url(pet, locale: I18n.default_locale)
+      end
+    end
+    assert_redirected_to pet_kibble_prices_url(pet, locale: I18n.default_locale)
+    assert_equal I18n.t("kibble_prices.create.rate_limited"), flash[:alert]
+  end
+
   test "requests under the limit still go through" do
     assert_enqueued_emails 1 do
       post passwords_url(locale: I18n.default_locale), params: { email_address: users(:one).email_address }
