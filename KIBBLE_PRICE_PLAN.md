@@ -8,7 +8,7 @@
 |---|---|
 | 0 — Terms check | ✅ Done (2026-09-28). **feebee rejected** (its terms forbid automated collection). **BigGo confirmed as the main source.** See [Checkpoint 0 result](#checkpoint-0-result-2026-09-28). |
 | A — Refactor | ✅ Done (2026-09-28). Committed as `cb5ea94` on `feature/kibble-prices` and pushed to GitHub. See [Checkpoint A result](#checkpoint-a-result-2026-09-28). |
-| B — Price sources and lookup | ✅ Done (2026-09-28). Committed on `feature/kibble-prices` and pushed. See [Checkpoint B result](#checkpoint-b-result-2026-09-28). **Four review questions for you** are listed there. |
+| B — Price sources and lookup | ✅ Done (2026-09-28). Committed on `feature/kibble-prices` and pushed. See [Checkpoint B result](#checkpoint-b-result-2026-09-28). Its four review questions were answered the same day. |
 | C — Gemini backup, models, jobs | Not started |
 | D — Page, email, translations | Not started |
 | E — Tests, lint, CI, pull request | Not started |
@@ -21,6 +21,10 @@
 | Region / currency | Taiwan, TWD |
 | Delivery | In-app page + monthly email |
 | Gemini key | Each user's own key (backup source only) |
+| Favorite window | Kibbles fed in the last 4 months (also the window for learning brand names) |
+| Ranking ties to bag size | None: ranked purely by NT$/kg, so a small bag can come first |
+| Multi-flavor "series" listings | Kept when the owner's flavor is among them |
+| No BigGo/PChome listings | Ask Gemini (owner's key), label "unverified" |
 | Main price source | **BigGo** price-comparison site read with Nokogiri (confirmed 2026-09-28; was feebee until checkpoint 0) |
 
 ## Background: why this approach
@@ -155,11 +159,11 @@ Before the protein rule, 曙光's list wrongly included the chicken (雞肉) and
 - `bin/rubocop`: no offenses. `bin/brakeman -w2`: no warnings.
 - Test fixtures are trimmed real BigGo pages (`test/fixtures/files/kibble_prices/`); no test touches the network.
 
-**⏳ Review questions for you:**
-1. **Time window:** `favorite_kibbles` defaults to kibbles fed in the last **3 months**. In the local database, Aji's latest kibble tracker is dated 2026-04-26 and the latest tracker of any food 2026-04-29 (the local copy seems to stop there), so the default window (from 2026-06-28) finds nothing locally. Is 3 months right for production, or should it be longer (e.g. 12 months)?
-2. **Small bags rank first:** the cheapest-per-kg can be a tiny bag, e.g. 吶一口 at NT$460/kg for 150g × 2 from Coupang. Keep ranking purely by NT$/kg, or show a minimum bag size (e.g. ≥ 1 kg) first?
-3. **Series listings:** PChome's 曙光 12LB listing covers four flavors (`雞肉/鴨肉/白鮭魚/火雞肉`) at one price. It's kept because duck is among them. Keep, or reject listings that name several other proteins without a priced variant?
-4. **No results:** 天然密碼 鴨肉&火雞肉 found nothing on BigGo or PChome. At checkpoint C, Gemini (the user's key) is tried for such kibbles, labelled "unverified". Still what you want?
+**✅ Review questions — answered 2026-09-28:**
+1. **Time window → 4 months.** `favorite_kibbles` now defaults to kibbles fed in the last **4 months** (`Pet::FAVORITE_KIBBLE_WINDOW`), the same window `BrandNames` uses for brand names. Locally this still finds nothing: Aji's latest kibble tracker is 2026-04-26 and the local copy ends 2026-04-29.
+2. **Small bags → rank purely by NT$/kg.** A small bag stays first when it's cheapest per kg (e.g. 吶一口 150g × 2 at NT$460/kg). No change needed.
+3. **Series listings → keep.** A listing that sells several flavors at one price is kept when the owner's flavor is among them (e.g. PChome's 曙光 12LB, `雞肉/鴨肉/白鮭魚/火雞肉`). No change needed.
+4. **Nothing found → try Gemini.** For a kibble with no BigGo or PChome listings (e.g. 天然密碼 鴨肉&火雞肉), checkpoint C asks Gemini with the owner's key and labels its prices "unverified", as planned in Step 6.
 
 ## How it works
 
@@ -189,7 +193,7 @@ MonthlyKibblePriceJob (1st of month, 6am)
 ### 1. Share the "favorite kibble" logic ✅
 - The grouping and scoring moved out of `TrackersController#favorite_food` into `Pet` (`app/models/pet.rb`):
   - `Pet#favorite_foods(food_type: nil)` — the full list the favorite-food page and its JSON use, unchanged.
-  - `Pet#favorite_kibbles(min_score: 30, since: 3.months.ago, limit: 5)` — kibble only (`Tracker.kibble`), fed on or after `since`, latest-day score ≥ `min_score`, most loved first. Each entry is the same hash as `favorite_foods` plus `dry_food:` — the bag it was last fed from, or `nil`.
+  - `Pet#favorite_kibbles(min_score: 30, since: 4.months.ago, limit: 5)` (was 3 months until 2026-09-28; `Pet::FAVORITE_KIBBLE_WINDOW`) — kibble only (`Tracker.kibble`), fed on or after `since`, latest-day score ≥ `min_score`, most loved first. Each entry is the same hash as `favorite_foods` plus `dry_food:` — the bag it was last fed from, or `nil`.
 - The controller now calls `@pet.favorite_foods(food_type: params[:food_type])`. Its output is unchanged.
 
 ### 2. Migration and models
@@ -295,7 +299,7 @@ For each kibble: collect BigGo and PChome listings, then fall back to Gemini if 
 |---|---|---|
 | 0 | Terms review | ✅ Done — feebee rejected; BigGo confirmed |
 | A | Step 1 (refactor) | ✅ Done — all tests pass and `favorite_food` behaves the same |
-| B | Inspect BigGo listing HTML, then Steps 3 → 4 → 5 → 7 (Gemini skipped for now) | ✅ Done — console run on Aji's 5 kibbles; 4 review questions open |
+| B | Inspect BigGo listing HTML, then Steps 3 → 4 → 5 → 7 (Gemini skipped for now) | ✅ Done — console run on Aji's 5 kibbles; 4 review questions answered |
 | C | Step 6 (Gemini backup), then Steps 2 and 8 | Job runs end to end locally; backup fires only when nothing is listed |
 | D | Steps 9, 10, 11 | Check the page and the email in the browser |
 | E | Step 12 + `bin/rubocop` + CI | Everything passes locally; open a pull request from `feature/kibble-prices` so CI runs (CI only runs on pull requests and pushes to `main`) |

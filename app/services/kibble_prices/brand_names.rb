@@ -2,8 +2,9 @@ module KibblePrices
   # The names a brand goes by, learned from what the owner typed: "喵皇奴 purrsuit"
   # is both 喵皇奴 and purrsuit, and "超躍" plus "超躍 hyperr" makes 超躍 also hyperr.
   module BrandNames
-    # Only brands the owner fed lately, so names typed long ago do not linger.
-    WINDOW = 4.months
+    # Only brands the owner fed lately, so names typed long ago do not linger;
+    # the same window that makes a kibble a current favorite.
+    WINDOW = Pet::FAVORITE_KIBBLE_WINDOW
 
     # Chinese runs and Latin runs, each kept whole: "mon petit 貓倍麗" => ["mon petit", "貓倍麗"].
     def self.split(brand)
