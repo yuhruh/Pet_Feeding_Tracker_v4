@@ -1,6 +1,6 @@
-# Households and Caregivers — Implementation Plan (v3)
+# Households and Caregivers — Implementation Plan (v4)
 
-**Goal:** Let several people look after the same cats. Each **owner** has a **household**: their cats, food bags, litter boxes and water spots, and the people they let help. A **caregiver** records care with **one tap** (fed, litter, water, meds given) and everyone in the household sees it right away. A **viewer** sees the charts and today's timeline, read-only. Caregivers and viewers can belong to **several owners' households**.
+**Goal:** Let several people look after the same cats. Each **owner** has a **household**: their cats, food bags, litter boxes and water spots, and the people they let help. A **caregiver** records care with **one tap** (fed, litter, water, meds given) and everyone in the household sees it right away. A **viewer** sees the charts and today's timeline, read-only. Caregivers and viewers can belong to **several owners' households**. **Reminders** say when a job "might be time" (clean the fountain, change the filter, give meds), by LINE or email first and later as Android app notifications.
 
 ## Status
 
@@ -14,8 +14,9 @@
 | E — Medications | Not started |
 | F — Litter observations | Not started |
 | G — Live updates and care events on the charts | Not started |
-| H — Notifications (optional) | Not started |
-| I — Clean-up, docs, CI, merge | Not started |
+| H — Reminders by LINE and email | Not started |
+| I — Android app push notifications (Firebase) | Not started |
+| J — Clean-up, docs, CI, merge | Not started |
 
 **Commits:** each checkpoint is committed on `feature/households` once `bin/rails test` passes, then pushed. Merged into `main` only when you ask.
 
@@ -30,6 +31,10 @@
 | Food bags | **Belong to the household** | Caregivers pick from them; with one owner, "household bags" and "owner's bags" are the same bags |
 | Litter and water | **Shared, per litter box or water spot**, not per cat. One box and one water spot are created for every household; the owner can add, rename or remove more | Cats share boxes and bowls; whoever scoops is caring for the box |
 | Water spots | Each is a **bowl** or a **fountain**. Bowl: **💧 Refilled · 🧽 Bowl cleaned**. Fountain: **💧 Refilled · 🧽 Fountain cleaned · 🔄 Filter changed**. **Several actions can go in one record** | One visit often covers several jobs |
+| Several water actions | **Buttons + checkboxes:** one tap on any button saves that action; the saved notice shows **all the spot's actions as checkboxes** (the tapped one ticked), and ticking another adds it to the **same record** at once, with no Save button. The same checkboxes are in "Add details" on the timeline entry | Keeps one tap for the everyday refill, with a checklist feel when several jobs are done together |
+| Reminders | Per water spot (and litter box) and job, the owner sets **how often**: twice a week, weekly, every 2 weeks, twice a month, monthly, or every N days. **Due = last time it was recorded + that interval**, so doing it early moves the next reminder. Sent **once** when due, at **9am in the member's time zone**, with **one follow-up 2 days later** if still not done. Overdue **meds** use the same system | Follows what actually happened instead of fixed weekdays; never nags about a job already done; not overnight |
+| Who gets reminders | The **owner and caregivers**, each choosing on or off; never viewers | Viewers only look |
+| Reminder channels | **Checkpoint H: LINE, else email**, as weight reminders already work (`NotificationService`). **Checkpoint I: Android app push via Firebase.** Each reminder goes by **one** channel per member: the Android app if they have it installed and notifications allowed, else LINE if they signed in with LINE, else email | LINE and email work today; the Android app is the real phone notification; one channel avoids duplicates |
 | Litter | **🚽 Scooped · ♻️ Full change** | The two jobs that differ |
 | Litter observations | **Built in a later checkpoint (F).** Stored in **optional fields** from the start, so older records simply have none; charts and the timeline show details only where they exist | Gets the one-tap buttons into use sooner; nothing breaks when details arrive |
 | "Which cat" | Optional, and **only on litter observations** (someone saw it was Aji) | Ties a health warning to the right cat without making boxes belong to cats |
@@ -64,7 +69,8 @@
 | Kibble prices page | ✅ | ❌ | ❌ |
 | Health checks, vet visits | ✅ | ❌ | ❌ |
 | Food bags | ✅ | Read-only (to pick from) | ❌ |
-| Edit cats, medications, litter boxes and water spots | ✅ | ❌ | ❌ |
+| Edit cats, medications, litter boxes and water spots, and their reminder intervals | ✅ | ❌ | ❌ |
+| Receive reminders (their own on/off choice) | ✅ | ✅ | ❌ |
 | Invite, change roles, remove members; transfer ownership | ✅ | ❌ | ❌ |
 | Public share link | ✅ | ❌ | ❌ |
 | Leave the household | — (transfer first) | ✅ | ✅ |
@@ -116,8 +122,8 @@ ownership_transfers     household_id, from_user_id, to_user_id, token_digest, ex
 care_spots              household_id, kind (litter_box · water_bowl · water_fountain), name,
                         position, archived_at, timestamps
                         ← litter boxes and water spots; one litter box and one water bowl per household to start
-pets                    + household_id (NOT NULL once filled); user_id kept until checkpoint I
-dry_foods               + household_id (NOT NULL once filled); user_id kept until checkpoint I
+pets                    + household_id (NOT NULL once filled); user_id kept until checkpoint J
+dry_foods               + household_id (NOT NULL once filled); user_id kept until checkpoint J
 care_events             household_id, actor_id → users, kind, occurred_at,
                         pet_id        (fed, meds, weight; optional "which cat" on litter observations)
                         care_spot_id  (litter, water)
@@ -134,6 +140,13 @@ care_events             household_id, actor_id → users, kind, occurred_at,
                         kind: fed · litter · water · meds · weight
 medications             pet_id, name, dose (text, e.g. "1 tablet"), times (e.g. ["08:00", "20:00"]
                         or none for "as needed"), starts_on, ends_on, active, timestamps
+care_routines           care_spot_id, action (cleaned · filter_changed · refilled · scooped · full_change),
+                        every_days, enabled, started_on, timestamps          ← reminder intervals (checkpoint H)
+care_reminders          household_id, care_routine_id or medication_id, due_on (or dose time),
+                        user_id, channel (android · line · email), sent_at, follow_up_sent_at
+                        unique (reminder subject, due, user)                  ← "sent once" record
+                        + household_memberships.reminders_enabled, households.owner_reminders_enabled
+device_tokens           user_id, platform (android), token (unique), last_used_at, timestamps   (checkpoint I)
 ```
 
 **Why `details` is optional fields:** the litter observations in checkpoint F add form fields and their display, not columns to existing rows. Records made before F simply have no observations, and the charts and timeline show observations only where they exist. A new detail later (say "litter brand") is also additive.
@@ -150,13 +163,13 @@ medications             pet_id, name, dose (text, e.g. "1 tablet"), times (e.g. 
 | ⚖️ Weight | Each cat | Opens a small form (a number; "now" prefilled) | — |
 | 💊 Meds | Each cat with medications | Confirmation: **Given** or **Couldn't give** (reason: refused, spat out, vomited, other) | Change time · Undo |
 | 🚽 Scooped / ♻️ Full change | Each litter box | Saves that action now | Change time · Add details (observations, from checkpoint F) · Undo |
-| 💧 Refilled / 🧽 Cleaned / 🔄 Filter changed | Each water spot (filter only on fountains) | Saves that action now | **"+" the other actions, added to the same record** · Change time · Undo |
+| 💧 Refilled / 🧽 Cleaned / 🔄 Filter changed | Each water spot (filter only on fountains) | Saves that action now | **Checkboxes for the spot's actions**, ticking one adds it to the same record · Change time · Undo |
 
-**Several actions in one record (water):**
+**Several actions in one record (water): buttons + checkboxes**
 ```
-✔ Kitchen fountain · 💧 Refilled · 07:30   [+ 🧽 Fountain cleaned]  [+ 🔄 Filter changed]  [Change time]  [Undo]
+✔ Kitchen fountain · 07:30   ☑ Refilled  ☐ Fountain cleaned  ☐ Filter changed   [Change time]  [Undo]
 ```
-Tapping "+" adds the action to the same record. The same actions can be added later with "Add details" on the timeline entry. A second tap on a water button for the same spot within 2 minutes also adds to the open record instead of creating a new one.
+One tap on a button saves that action; the notice lists all of the spot's actions as checkboxes with the tapped one ticked. Ticking another box adds it to the **same record** straight away (no Save button); unticking removes it, as long as one action stays ticked. The same checkboxes are in "Add details" on the timeline entry, for adding actions later. A second tap on a water button for the same spot within 2 minutes also adds to the open record instead of creating a new one.
 
 **Feeding details ("Add details" after 🍽), all optional:**
 - Date and time (prefilled with the saved time).
@@ -188,7 +201,7 @@ Tapping "+" adds the action to the same record. The same actions can be added la
 ```
 Rita's cats
 ┌ Upstairs box ─── 🚽 Scooped  ♻️ Full change                    Last: 07:30 by Dad
-├ Kitchen fountain 💧 Refilled  🧽 Fountain cleaned  🔄 Filter changed   Last: 07:30 by Dad
+├ Kitchen fountain 💧 Refilled  🧽 Fountain cleaned  🔄 Filter changed   🧽 Cleaning due today · 🔄 Filter in 6 days
 ├ Aji ──────────── 🍽 Fed  💊 Meds  ⚖️ Weight                    Fed 08:12 by Mom · Clavamox due 20:00
 └ Umi ──────────── 🍽 Fed  ⚖️ Weight                             Fed 08:15 by Mom
 
@@ -202,7 +215,7 @@ Today · Rita's cats
 ```
 
 - **Rows for each litter box and water spot**, then **one card per cat**, grouped by household when the user belongs to several ("Rita's cats · Ken's cats").
-- **Next to each row:** the last time it was done, and by whom. **Meds** show **due**, **given** (by whom, when), **couldn't give** or **overdue** for today's times. The 💊 button is hidden for a cat with no medications.
+- **Next to each row:** the last time it was done and by whom, or, for a job with a reminder interval, when it's **due** ("Cleaning due today", "Filter in 6 days"). **Meds** show **due**, **given** (by whom, when), **couldn't give** or **overdue** for today's times. The 💊 button is hidden for a cat with no medications.
 - **Today's timeline** below: everything recorded today in the household, newest first, with who did it, including the owner's trackers.
 - **Viewers** see the same page **without any buttons or links** (no change time, add details or undo): just the last-done times and today's timeline.
 - Works in the browser, the installable web app and the Android app (Hotwire Native; a `:native` variant if the layout needs it). Caregivers land here after sign-in.
@@ -237,17 +250,58 @@ Today · Rita's cats
 5. **Deleting an account** that owns a household with cats first asks: transfer to a member, or delete the household and its cats (as happens today).
 6. After a transfer, owner-only emails (kibble prices, backups) go to the new owner.
 
+## Reminders (checkpoint H, then I for the Android app)
+
+**Setting it up (owner):** in each water spot's or litter box's settings, one line per job:
+```
+Kitchen fountain
+  🧽 Fountain cleaned   every  [Twice a week ▾]   (every 4 days)
+  🔄 Filter changed     every  [Twice a month ▾]  (every 15 days)
+  💧 Refilled           every  [Off ▾]
+```
+Choices and their day counts: twice a week (4 days), weekly (7), every 2 weeks (14), twice a month (15), monthly (30), or custom (every N days). Medications need no setup: their schedule already says when a dose is due.
+
+**When it's due:**
+- **Due = the latest record with that action + the interval.** Cleaned Monday with "twice a week" (4 days) → due Friday. Cleaned again early on Wednesday → due moves to Sunday.
+- Never recorded yet → counted from the day the interval was set.
+- Recording the job (one tap on the Today page) resets the countdown.
+
+**Sending:**
+- An hourly job (Solid Queue, like the existing scheduled jobs) finds routines that are due for members whose local time has reached **9am**, and sends each reminder **once**: "🧽 Kitchen fountain might be time to clean. Last cleaned Monday by Dad."
+- If it's still not done **2 days** later, **one follow-up**, then nothing more until someone records it.
+- Meds: "💊 Aji's 20:00 Clavamox hasn't been recorded" shortly after the dose time (e.g. 1 hour), once.
+- The job remembers what it sent for each due date, so a restart or a second run never sends twice.
+- **Who:** the owner and caregivers who have reminders on (a switch per member per household). Never viewers.
+
+**Channels, one per member per reminder:**
+1. **Android app** (checkpoint I), if the member has the app installed, signed in, and notifications allowed.
+2. Else **LINE**, if they signed in with LINE (the app already sends LINE pushes for weight reminders).
+3. Else **email**.
+
+Tapping the notification or the link opens the **Today page**, where one tap records the job.
+
+## Android app push notifications (checkpoint I)
+
+The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or notification setup yet**; it only asks for internet access. It already opens `pet-feeding-tracker-v4.up.railway.app` links inside the app, which a notification can use to open the Today page.
+
+**In the Android app:**
+- Add the **Firebase Cloud Messaging** SDK and the Firebase project's `google-services.json` (from the Firebase console).
+- Ask for the **notification permission** (required on Android 13+, which `targetSdk 35` covers) at a sensible moment: when the user turns reminders on, not at first launch.
+- After sign-in, send the device's **FCM token** to the server; send it again when Firebase rotates it. Remove it on sign-out.
+- Tapping a notification opens the Today page URL in the app.
+
+**On the server:**
+- A `device_tokens` table: user, platform (`android`), token, last used.
+- Sending through the **FCM HTTP v1 API** with a Firebase service account (its key in credentials or an environment variable, never in git).
+- A token that FCM reports as no longer valid is deleted, and that member falls back to LINE or email.
+- An endpoint for the app to register and remove its token, for the signed-in user only.
+
+**Also needed:** a Firebase project for the app (the free tier is enough for this volume), with the app's package name `com.pettracker.v4` registered in it.
+
 ## Live updates (checkpoint G)
 
 - A tap broadcasts the new event to the household with **Turbo Streams over Solid Cable**, which production already runs (`config/cable.yml`), so other members' Today pages, including viewers', update without reloading.
 - Care events appear on the **charts** (markers for litter, water and meds; litter observations with a cat on that cat's chart), and in the owner's CSV export.
-
-## Notifications (checkpoint H, optional)
-
-Using the existing `NotificationService` (LINE push or email), to the owner and caregivers:
-- "Meds overdue for Aji (due 09:00)".
-- "No scooping logged for the Upstairs box in 2 days".
-- "Kitchen fountain filter last changed 30 days ago".
 
 ## Build order and checkpoints
 
@@ -257,19 +311,20 @@ Using the existing `NotificationService` (LINE push or email), to the owner and 
 | A | `households`, `household_memberships`, `care_spots` (one box, one bowl each), `pets.household_id`, `dry_foods.household_id`; data migration | All existing tests pass unchanged; migration checked on PostgreSQL; every current user owns one household with their pets, bags, a litter box and a water bowl |
 | B | `Pet.accessible_by`, `HouseholdPolicy`; replace every lookup listed above; food-bag rule by household; jobs, mailers and brand names via the household's owner | A test matrix of **each role on each page** (allowed and refused); single-member households behave exactly as today |
 | C | Invitations, member list, role changes, leaving; transfer ownership; account deletion asks to transfer | Invite → accept → role applies; expired, reused and wrong-email links refused; transfer swaps owner and caregiver in one transaction |
-| D | `care_events`; Today page with litter-box and water-spot rows and cat cards; one-tap fed, scooped, full change, refilled, cleaned, filter changed (several actions in one record); weight form; change time; feeding "Add details" with suggestions by food type; "Add to trackers"; undo; double-tap guard; viewers' read-only Today page; managing boxes and water spots | Browser test: caregiver taps Fed and adds details, refills and cleans the fountain in one record, changes a time, undoes a tap; owner adds a feeding to trackers; viewer sees the timeline with no buttons |
+| D | `care_events`; Today page with litter-box and water-spot rows and cat cards; one-tap fed, scooped, full change, refilled, cleaned, filter changed (several actions in one record, with checkboxes in the notice); weight form; change time; feeding "Add details" with suggestions by food type; "Add to trackers"; undo; double-tap guard; viewers' read-only Today page; managing boxes and water spots | Browser test: caregiver taps Fed and adds details, refills and cleans the fountain in one record, changes a time, undoes a tap; owner adds a feeding to trackers; viewer sees the timeline with no buttons |
 | E | `medications`; meds button with Given / Couldn't give; due / given / overdue | Doses shown per schedule; double dose guarded |
 | F | Litter observations in "Add details" (optional fields; which cat) | Old records unchanged; observations show on the timeline and, with a cat, in that cat's history |
 | G | Turbo Streams broadcast; care events on charts and in CSV | Two browser sessions: a tap in one appears in the other, including a viewer's |
-| H | Reminders (optional) | Overdue meds, missing scooping and old filter reminders sent once |
-| I | Remove `pets.user_id` / `dry_foods.user_id`; docs (README, ARCHITECTURE, USAGE) | CI green; merged into `main` when you ask |
+| H | `care_routines`, `care_reminders`; interval settings per spot and job; "due" on the Today page; hourly reminder job; LINE, else email; per-member on/off; overdue meds | A due routine is sent once at 9am local time, one follow-up 2 days later, none after it's recorded; viewers never get one; doing the job early moves the due date |
+| I | Firebase in the Android app (FCM SDK, notification permission, token registration); `device_tokens`; sending through FCM HTTP v1; fallback to LINE or email | A reminder arrives as an Android notification and opens the Today page; an invalid token falls back to LINE or email |
+| J | Remove `pets.user_id` / `dry_foods.user_id`; docs (README, ARCHITECTURE, USAGE) | CI green; merged into `main` when you ask |
 
 ## Risks
 
 | Risk | How it's handled |
 |---|---|
 | **Access checks change on every page** (checkpoint B) | One policy used everywhere; a role × page test matrix; single-member households behave exactly as today |
-| Data migration on production | Additive columns first, backfilled by a migration tested on PostgreSQL; old `user_id` columns removed only in I |
+| Data migration on production | Additive columns first, backfilled by a migration tested on PostgreSQL; old `user_id` columns removed only in J |
 | Caregivers or viewers seeing private data | Health checks, vet visits, kibble prices, the Gemini API key, the share link and owner emails stay owner-only; viewers see charts and today's timeline only |
 | Owner leaves or deletes their account | Transfer ownership; account deletion asks to transfer first |
 | Invitation or transfer links forwarded | Single use, 7-day expiry, bound to the invited email / chosen member |
@@ -277,10 +332,14 @@ Using the existing `NotificationService` (LINE push or email), to the owner and 
 | Wrong times | "Now" by default (entries are made within 10 minutes), quick picks, 7-day limit, edits shown |
 | Details added in a later checkpoint | Optional fields from the start; older records simply have none |
 | Inconsistent food names from caregivers | Suggestions by food type from the household's bags and the cat's favorites |
+| Too many reminders | Once per due date plus one follow-up; 9am local time; per-member switch; one channel per member |
+| Push setup secrets | Firebase service-account key only in credentials or an environment variable; device tokens tied to the signed-in user and removed on sign-out |
+| Android notification permission refused | Reminders fall back to LINE or email |
 | Kibble price check | Unchanged; it keeps using the owner's trackers and favorites. Brand names and the email come from the household's owner in B |
 
 ## Change log
 
+- **v4 (2026-09-29):** water spots use **buttons + checkboxes** (one tap saves; the notice's checkboxes add the other actions to the same record). **Reminders** per spot and job, counted from the last time it was done (twice a week, twice a month, …), once at 9am local time plus one follow-up, to the owner and caregivers who turn them on; meds overdue too. Channels: **LINE, else email (H)**, then **Android app push via Firebase (I)**. Clean-up moves to J.
 - **v3 (2026-09-29):** litter and water are shared per litter box or water spot (one of each created automatically; owners add more); water spots are bowls or fountains, fountains with 💧 Refilled · 🧽 Fountain cleaned · 🔄 Filter changed, and several actions in one record; litter 🚽 Scooped · ♻️ Full change; litter observations in a later checkpoint (F), stored as optional fields from the start; optional "which cat" only on observations; "Add details" also on timeline entries; meds "Couldn't give"; viewers see charts and today's timeline read-only; kibble prices owner-only. Checkpoints renumbered (F observations, G live updates, H notifications, I clean-up).
 - **v2 (2026-09-29):** one owner per household with transfer ownership; caregivers and viewers can belong to several households; household food bags; caregiver read-only on trackers and charts; owner-only emails; caregiver feeding details with suggestions by food type, saved on the care event, and the owner's "Add to trackers".
 - **v1 (2026-09-29):** first plan.
