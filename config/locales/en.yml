@@ -1,4 +1,22 @@
 en:
+  viewer_pages:
+    following: "%{household} is now in your account."
+    show:
+      title: "%{household} · shared with %{name}"
+      read_only_note: "Read-only: how much they eat and their weight."
+      no_cats: "No cats here yet."
+      charts: "Charts"
+      cat: "Cat"
+      show: "Show"
+      follow_title: "Want to see all the cats you follow in one place?"
+      sign_up: "Sign up"
+      sign_in: "Sign in"
+      add_to_account: "Add to my account"
+      already_following: "These cats are in your account."
+      go_to_today: "Go to Today"
+    inactive:
+      title: "This link is no longer active"
+      body: "Ask the person who sent it to you for a new one."
   household_joins:
     joined: "You've joined %{household}."
     create:

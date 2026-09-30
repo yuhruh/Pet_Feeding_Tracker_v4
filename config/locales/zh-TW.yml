@@ -1,4 +1,22 @@
 zh-TW:
+  viewer_pages:
+    following: "已將 %{household} 加入你的帳號。"
+    show:
+      title: "%{household} · 與 %{name} 分享"
+      read_only_note: "唯讀：食量與體重。"
+      no_cats: "這裡還沒有貓咪。"
+      charts: "圖表"
+      cat: "貓咪"
+      show: "顯示"
+      follow_title: "想在同一個地方看到你關注的所有貓咪嗎？"
+      sign_up: "註冊"
+      sign_in: "登入"
+      add_to_account: "加入我的帳號"
+      already_following: "這些貓咪已在你的帳號中。"
+      go_to_today: "前往今天頁面"
+    inactive:
+      title: "這個連結已失效"
+      body: "請向傳連結給你的人要一個新的。"
   household_joins:
     joined: "你已加入 %{household}。"
     create:

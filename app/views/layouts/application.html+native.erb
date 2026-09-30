@@ -23,7 +23,7 @@
   </head>
 
   <body class="dark:bg-darkBlue dark:text-white">
-    <%= render 'layouts/navigation' %>
+    <%= render 'layouts/navigation' unless content_for?(:without_app_menu) %>
     <%= render 'layouts/messages' %>
     
     <%= yield %>

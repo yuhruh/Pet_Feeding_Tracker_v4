@@ -1,0 +1,46 @@
+<% content_for :title, t(".title", household: household_name(@household), name: @link.name) %>
+<% content_for :without_app_menu, true %>
+<% content_for :head do %>
+  <meta name="robots" content="noindex, nofollow">
+<% end %>
+
+<div class="container mx-auto w-full px-2 md:w-5/6 py-6 space-y-6">
+  <div class="text-center">
+    <h1 class="font-bold text-2xl md:text-4xl">🐾 <%= t(".title", household: household_name(@household), name: @link.name) %></h1>
+    <p class="text-sm italic text-gray-500 mt-2"><%= t(".read_only_note") %></p>
+  </div>
+
+  <% if @pet.nil? %>
+    <p class="text-center text-gray-600 dark:text-gray-300"><%= t(".no_cats") %></p>
+  <% else %>
+    <section class="border-2 border-slate-200 rounded-xl shadow-lg p-4">
+      <h2 class="font-semibold text-xl mb-3"><%= t(".charts") %></h2>
+      <%= form_with url: viewer_page_path(token: params[:token]), method: :get, class: "flex flex-wrap items-center gap-3" do |form| %>
+        <%= form.label :pet_id, t(".cat") %>
+        <%= form.select :pet_id, @pets.map { |pet| [ pet.petname.split(" ").map(&:capitalize).join(" "), pet.id ] }, { selected: @pet.id },
+              class: "p-1 rounded-md border-2 border-blue-300 text-gray-700 bg-sky-100" %>
+        <%= form.label :range, t("trackers.index.chart_range") %>
+        <%= form.select :range, [ [ t("trackers.index.last_7_days"), "7" ], [ t("trackers.index.last_30_days"), "30" ], [ t("trackers.index.last_120_days"), "120" ],
+                                  [ t("trackers.index.last_180_days"), "180" ], [ t("trackers.index.year_to_date"), "YTD" ], [ t("trackers.index.all_time"), "all" ] ],
+              { selected: @range }, class: "p-1 rounded-md border-2 border-blue-300 text-gray-700 bg-sky-100" %>
+        <%= form.submit t(".show"), name: nil, class: "px-3 py-1 rounded-md bg-sky-200 text-sky-800 font-medium cursor-pointer hover:bg-gray-100" %>
+      <% end %>
+      <%= render "shared/tracker_chart" %>
+    </section>
+  <% end %>
+
+  <section id="follow" class="border-2 border-slate-200 rounded-xl p-4 text-center space-y-3">
+    <% if @following %>
+      <p><%= t(".already_following") %> <%= link_to t(".go_to_today"), today_path, class: "text-sky-700 underline" %></p>
+    <% elsif authenticated? %>
+      <p><%= t(".follow_title") %></p>
+      <%= button_to t(".add_to_account"), viewer_page_path(token: params[:token]), class: "mx-auto px-4 py-2 rounded-md bg-softBlue text-white font-medium cursor-pointer" %>
+    <% else %>
+      <p><%= t(".follow_title") %></p>
+      <div class="flex justify-center gap-4">
+        <%= button_to t(".sign_up"), viewer_page_path(token: params[:token]), params: { then: "sign_up" }, class: "px-4 py-2 rounded-md bg-grayishBlue text-white font-medium cursor-pointer" %>
+        <%= button_to t(".sign_in"), viewer_page_path(token: params[:token]), class: "px-4 py-2 rounded-md bg-softRed text-white font-medium cursor-pointer" %>
+      </div>
+    <% end %>
+  </section>
+</div>

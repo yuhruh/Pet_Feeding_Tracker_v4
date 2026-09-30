@@ -32,13 +32,15 @@
   </head>
 
   <body class="dark:bg-darkBlue dark:text-white overflow-x-hidden">
-    <%= render 'shared/gemini_key_banner' %>
+    <% unless content_for?(:without_app_menu) %>
+      <%= render 'shared/gemini_key_banner' %>
+      <%= render 'layouts/navigation' %>
+    <% end %>
     
-    <%= render 'layouts/navigation' %>
     <%= render 'layouts/messages' %>
     <%= yield %>
     
-    <% unless hotwire_native_app? %>
+    <% unless hotwire_native_app? || content_for?(:without_app_menu) %>
       <div>
         <%= render 'layouts/footer' %>
       </div>
