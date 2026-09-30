@@ -1,4 +1,74 @@
  ja:
+  care_spots:
+    kinds:
+      litter_box: "トイレ"
+      water_bowl: "水入れ"
+      water_fountain: "給水器"
+  care_events:
+    not_found: "その猫または場所はあなたの家庭にありません。"
+    not_allowed: "お世話を記録できるのはオーナーとお世話メンバーだけです。"
+    someone: "だれか"
+    save: "保存"
+    grams: "%{amount} g"
+    yesterday: "昨日 %{time}"
+    weight_label: "体重（kg）"
+    buttons:
+      fed: "🍽 ごはん"
+      weight: "⚖️ 体重"
+    actions:
+      litter_box:
+        scooped: "🚽 そうじ"
+        full_change: "♻️ 全交換"
+      water_bowl:
+        refilled: "💧 水を補充"
+        cleaned: "🧽 水入れを洗った"
+      water_fountain:
+        refilled: "💧 水を補充"
+        cleaned: "🧽 給水器を洗った"
+        filter_changed: "🔄 フィルター交換"
+    done:
+      litter_box:
+        scooped: "そうじ"
+        full_change: "全交換"
+      water_bowl:
+        refilled: "水を補充"
+        cleaned: "水入れを洗った"
+      water_fountain:
+        refilled: "水を補充"
+        cleaned: "給水器を洗った"
+        filter_changed: "フィルター交換"
+    summary:
+      fed: "%{pet}：ごはん"
+      weight: "%{pet}：%{kg} kg"
+    status:
+      last: "%{actions} %{when}（%{person}）"
+      not_yet: "まだ記録がありません"
+      fed: "ごはん %{when}（%{person}）"
+      not_fed: "今日はまだごはんの記録がありません"
+      weight: "%{kg} kg（%{when}）"
+    timeline:
+      title: "今日の記録"
+      empty: "今日はまだ記録がありません。"
+      changed: "（変更あり）"
+      change: "変更"
+      add_to_trackers: "記録に追加"
+      from_trackers: "（トラッカー）"
+    notice:
+      change_time: "時刻を変更："
+      minutes_ago:
+        one: "%{count}分前"
+        other: "%{count}分前"
+      add_details: "詳細を追加"
+      undo: "取り消す"
+    repeat:
+      question: "%{person}さんが %{time} に「%{what}」を記録しています。もう一度記録しますか？"
+      record_again: "もう一度記録"
+      cancel: "キャンセル"
+    update:
+      notice: "保存しました。"
+    undo:
+      notice: "取り消しました。"
+      too_late: "取り消しはタップ後10秒以内だけです。今日の記録の「変更」をお使いください。"
   ownership_transfers:
     create:
       notice: "%{name}さんに引き継ぎを依頼しました。"
@@ -70,6 +140,8 @@
       no_cats: "まだ猫がいません。"
       charts: "グラフ"
       trackers_and_charts: "記録とグラフ"
+      pet_trackers: "%{pet}の記録とグラフ"
+      pet_charts: "%{pet}のグラフ"
       transfer_offer: "%{owner}さんが%{household}をあなたに引き継ぎたいそうです。"
       review_offer: "確認する"
       favorites: "お気に入り"
@@ -1011,6 +1083,35 @@
               too_long: "名前は40文字以内にしてください。"
             expires_at:
               in_the_past: "期限は未来の日付にしてください。"
+        care_event:
+          attributes:
+            occurred_at:
+              in_the_future: "未来の時刻は指定できません。"
+              too_long_ago: "7日より前の時刻は指定できません。"
+            details:
+              other_household_bag: "そのフードの袋は別の家庭のものです。"
+              food_type: "一覧からフードの種類を選んでください。"
+              amount: "量は0.1〜2000 gで入力してください。"
+              too_long: "ブランドと説明は100文字以内にしてください。"
+              present: "詳細はごはんの記録にだけ付けられます。"
+            value:
+              weight_range: "体重は0.1〜30 kgで入力してください。"
+              present: "数値は体重の記録にだけ付けられます。"
+            actions:
+              blank: "作業を1つ以上選んでください。"
+              inclusion: "その作業はこの場所に合いません。"
+              present: "作業はトイレと水の場所にだけあります。"
+            pet:
+              blank: "猫を選んでください。"
+            care_spot:
+              blank: "トイレか水の場所を選んでください。"
+              invalid: "その作業はこの場所に合いません。"
+            household:
+              invalid: "この家庭のものではありません。"
+            tracker:
+              invalid: "そのトラッカーは別の猫のものです。"
+            kind:
+              inclusion: "不明なお世話の種類です。"
         ownership_transfer:
           attributes:
             base:

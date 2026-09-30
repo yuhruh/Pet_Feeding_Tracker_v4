@@ -1,4 +1,74 @@
 zh-TW:
+  care_spots:
+    kinds:
+      litter_box: "貓砂盆"
+      water_bowl: "水碗"
+      water_fountain: "飲水機"
+  care_events:
+    not_found: "這隻貓或這個地點不在你的家庭裡。"
+    not_allowed: "只有主人和照顧者可以記錄照顧。"
+    someone: "某人"
+    save: "儲存"
+    grams: "%{amount} g"
+    yesterday: "昨天 %{time}"
+    weight_label: "體重（kg）"
+    buttons:
+      fed: "🍽 餵食"
+      weight: "⚖️ 體重"
+    actions:
+      litter_box:
+        scooped: "🚽 清砂"
+        full_change: "♻️ 全換"
+      water_bowl:
+        refilled: "💧 加水"
+        cleaned: "🧽 洗水碗"
+      water_fountain:
+        refilled: "💧 加水"
+        cleaned: "🧽 洗飲水機"
+        filter_changed: "🔄 換濾心"
+    done:
+      litter_box:
+        scooped: "清砂"
+        full_change: "全換"
+      water_bowl:
+        refilled: "加水"
+        cleaned: "洗水碗"
+      water_fountain:
+        refilled: "加水"
+        cleaned: "洗飲水機"
+        filter_changed: "換濾心"
+    summary:
+      fed: "%{pet}：已餵食"
+      weight: "%{pet}：%{kg} kg"
+    status:
+      last: "%{actions} %{when}（%{person}）"
+      not_yet: "還沒有紀錄"
+      fed: "已餵食 %{when}（%{person}）"
+      not_fed: "今天還沒餵"
+      weight: "%{kg} kg（%{when}）"
+    timeline:
+      title: "今天"
+      empty: "今天還沒有紀錄。"
+      changed: "（已修改）"
+      change: "修改"
+      add_to_trackers: "加入紀錄表"
+      from_trackers: "（紀錄表）"
+    notice:
+      change_time: "修改時間："
+      minutes_ago:
+        one: "%{count} 分鐘前"
+        other: "%{count} 分鐘前"
+      add_details: "加入細節"
+      undo: "復原"
+    repeat:
+      question: "%{person} 在 %{time} 記錄了「%{what}」。還要再記錄一次嗎？"
+      record_again: "再記錄一次"
+      cancel: "取消"
+    update:
+      notice: "已儲存。"
+    undo:
+      notice: "已復原。"
+      too_late: "只能在點擊後 10 秒內復原。請改用今天紀錄上的「修改」。"
   ownership_transfers:
     create:
       notice: "已向 %{name} 提出移交。"
@@ -70,6 +140,8 @@ zh-TW:
       no_cats: "這裡還沒有貓咪。"
       charts: "圖表"
       trackers_and_charts: "紀錄與圖表"
+      pet_trackers: "%{pet} 的紀錄與圖表"
+      pet_charts: "%{pet} 的圖表"
       transfer_offer: "%{owner} 想把 %{household} 移交給你。"
       review_offer: "查看"
       favorites: "最愛清單"
@@ -1011,6 +1083,35 @@ zh-TW:
               too_long: "名字請在 40 個字以內。"
             expires_at:
               in_the_past: "到期日必須在未來。"
+        care_event:
+          attributes:
+            occurred_at:
+              in_the_future: "時間不能在未來。"
+              too_long_ago: "時間最多只能是 7 天前。"
+            details:
+              other_household_bag: "那包飼料屬於另一個家庭。"
+              food_type: "請從清單中選擇食物類型。"
+              amount: "份量必須介於 0.1 到 2000 g。"
+              too_long: "品牌和描述請在 100 字以內。"
+              present: "細節只能加在餵食紀錄上。"
+            value:
+              weight_range: "體重必須介於 0.1 到 30 kg。"
+              present: "只有體重紀錄有數值。"
+            actions:
+              blank: "請至少勾選一項工作。"
+              inclusion: "這項工作不適用於這個地點。"
+              present: "只有貓砂盆和水的地點有工作項目。"
+            pet:
+              blank: "請選擇一隻貓。"
+            care_spot:
+              blank: "請選擇貓砂盆或水的地點。"
+              invalid: "這項工作不適用於這個地點。"
+            household:
+              invalid: "這不屬於這個家庭。"
+            tracker:
+              invalid: "那筆紀錄是另一隻貓的。"
+            kind:
+              inclusion: "未知的照顧類型。"
         ownership_transfer:
           attributes:
             base:

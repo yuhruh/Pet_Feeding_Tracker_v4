@@ -1,4 +1,6 @@
 <% content_for :title, t(".title") %>
+<%# A tap returns to this page; morphing keeps the scroll position. %>
+<% content_for :head, turbo_refreshes_with(method: :morph, scroll: :preserve) %>
 
 <div class="container mx-auto w-full px-2 md:w-2/3 mb-8 space-y-6">
   <h1 class="text-center font-bold text-3xl md:text-4xl"><%= t(".title") %></h1>
@@ -10,15 +12,17 @@
     </div>
   <% end %>
 
-  <% if @households.empty? %>
+  <% if @days.empty? %>
     <div class="text-center space-y-3">
       <p class="text-gray-600 dark:text-gray-300"><%= t(".nothing_yet") %></p>
       <%= link_to t(".add_a_cat"), new_pet_path, class: "inline-block rounded-md px-3.5 py-2 text-orange-600 bg-orange-200 font-medium hover:bg-white" %>
     </div>
   <% end %>
 
-  <% @households.each do |household| %>
+  <% @days.each do |day| %>
+    <% household = day.household %>
     <% role = @roles[household.id] %>
+    <% can_record = HouseholdPolicy.new(Current.user, household).can?(:record_care) %>
     <section id="<%= dom_id(household) %>" class="border-2 border-slate-200 rounded-xl shadow-lg p-4">
       <h2 class="font-semibold text-xl mb-3">
         <%= role ? household_name(household) : t(".my_cats") %>
@@ -26,25 +30,24 @@
           <span class="ml-2 rounded-full px-2 py-0.5 text-xs bg-sky-100 text-sky-700 align-middle"><%= t(".you_are_a.#{role}") %></span>
         <% end %>
       </h2>
-      <% pets = @pets[household.id] || [] %>
-      <% if pets.empty? %>
+
+      <% if @repeat && @repeat["event"]&.household_id == household.id %>
+        <%= render "care_events/repeat_prompt", repeat: @repeat %>
+      <% end %>
+      <% if @saved_event&.household_id == household.id %>
+        <%= render "care_events/notice", event: @saved_event %>
+      <% end %>
+
+      <% if day.pets.empty? && day.spots.empty? %>
         <p class="text-gray-600 dark:text-gray-300"><%= t(".no_cats") %></p>
       <% else %>
-        <ul class="divide-y divide-slate-200">
-          <% pets.each do |pet| %>
-            <li class="flex flex-wrap justify-between items-center gap-2 py-2">
-              <span class="font-medium"><%= pet.petname.split(" ").map(&:capitalize).join(" ") %></span>
-              <span class="flex gap-4 text-sm">
-                <% if role == "viewer" %>
-                  <%= link_to t(".charts"), pet_trackers_path(pet), class: "text-sky-700 underline" %>
-                <% else %>
-                  <%= link_to t(".trackers_and_charts"), pet_trackers_path(pet), class: "text-sky-700 underline" %>
-                  <%= link_to t(".favorites"), favorite_food_pet_trackers_path(pet), class: "text-rose-700 underline" %>
-                <% end %>
-              </span>
-            </li>
+        <%= render "care_events/status", day: day, can_record: can_record %>
+        <p class="mt-2 flex flex-wrap gap-4 text-sm">
+          <% day.pets.each do |pet| %>
+            <%= link_to t(role == "viewer" ? ".pet_charts" : ".pet_trackers", pet: pet_display_name(pet)), pet_trackers_path(pet), class: "text-sky-700 underline" %>
           <% end %>
-        </ul>
+        </p>
+        <%= render "care_events/timeline", day: day, reader: Current.user %>
       <% end %>
     </section>
   <% end %>

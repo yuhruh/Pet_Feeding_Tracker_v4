@@ -46,6 +46,9 @@ Rails.application.routes.draw do
     post "view/:token", to: "viewer_pages#create"
     delete "households/:household_id/leave", to: "household_memberships#destroy", as: :leave_household
     get "today", to: "today#show", as: :today
+    resources :care_events, only: %i[create edit update] do
+      post :undo, on: :member
+    end
     # The member a household was offered to accepts it.
     resources :ownership_transfer_offers, only: %i[show update], path: "transfers"
     resource :session, except: [ :new ]

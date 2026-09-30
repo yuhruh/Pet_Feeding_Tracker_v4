@@ -1,0 +1,57 @@
+<%# The rows for litter boxes and water spots, then one card per cat. Buttons only for people who may record care. %>
+<% household = day.household %>
+<% zone = day.zone %>
+<ul class="divide-y divide-slate-200">
+  <% day.spots.each do |spot| %>
+    <% last = day.last_done(spot) %>
+    <li id="<%= dom_id(spot) %>" class="py-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <span class="font-medium"><%= care_spot_name(spot) %></span>
+      <% if can_record %>
+        <span class="flex flex-wrap gap-2">
+          <% CareEvent::SPOT_ACTIONS.fetch(spot.kind).each do |action| %>
+            <%= button_to care_action_label(spot, action), care_events_path, params: { care_spot_id: spot.id, care_action: action },
+                  class: "rounded-full px-3 py-1 text-sm font-medium bg-sky-100 text-sky-800 border border-sky-200 cursor-pointer hover:bg-sky-200" %>
+          <% end %>
+        </span>
+      <% end %>
+      <span class="text-sm text-gray-600 dark:text-gray-300">
+        <% if last %>
+          <%= t("care_events.status.last", actions: last.actions.map { |action| care_action_done(spot, action) }.join(t("support.array.words_connector")),
+                when: care_when(last.occurred_at, day), person: care_person(last.actor)) %>
+        <% else %>
+          <%= t("care_events.status.not_yet") %>
+        <% end %>
+      </span>
+    </li>
+  <% end %>
+
+  <% day.pets.each do |pet| %>
+    <% fed = day.last_fed(pet) %>
+    <% weight = day.last_weight(pet) %>
+    <li id="<%= dom_id(pet, :care) %>" class="py-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <span class="font-semibold"><%= pet_display_name(pet) %></span>
+      <% if can_record %>
+        <span class="flex flex-wrap items-center gap-2">
+          <%= button_to t("care_events.buttons.fed"), care_events_path, params: { pet_id: pet.id, kind: "fed" },
+                class: "rounded-full px-3 py-1 text-sm font-medium bg-orange-100 text-orange-800 border border-orange-200 cursor-pointer hover:bg-orange-200" %>
+          <details class="relative">
+            <summary class="list-none rounded-full px-3 py-1 text-sm font-medium bg-violet-100 text-violet-800 border border-violet-200 cursor-pointer hover:bg-violet-200"><%= t("care_events.buttons.weight") %></summary>
+            <%= form_with url: care_events_path, method: :post, class: "absolute z-20 mt-1 flex items-center gap-2 p-2 bg-white border rounded-md shadow-lg dark:bg-slate-700" do |form| %>
+              <%= hidden_field_tag :pet_id, pet.id %>
+              <%= hidden_field_tag :kind, "weight" %>
+              <%= form.number_field :value, step: 0.01, min: 0.1, max: 30, required: true, placeholder: "kg", "aria-label": t("care_events.weight_label"),
+                    class: "w-24 rounded-md border px-2 py-1 dark:text-black" %>
+              <%= form.submit t("care_events.save"), class: "rounded-md px-2 py-1 bg-violet-200 text-violet-800 cursor-pointer" %>
+            <% end %>
+          </details>
+        </span>
+      <% end %>
+      <span class="text-sm text-gray-600 dark:text-gray-300">
+        <%= fed ? t("care_events.status.fed", when: care_time(fed.first, zone), person: care_person(fed.last)) : t("care_events.status.not_fed") %>
+        <% if weight %>
+          · <%= t("care_events.status.weight", kg: format("%g", weight.value), when: care_when(weight.occurred_at, day)) %>
+        <% end %>
+      </span>
+    </li>
+  <% end %>
+</ul>

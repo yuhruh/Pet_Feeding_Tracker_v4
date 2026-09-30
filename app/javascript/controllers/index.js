@@ -13,6 +13,9 @@ application.register("bulk-delete", BulkDeleteController)
 import BulkEditController from "controllers/bulk_edit_controller"
 application.register("bulk-edit", BulkEditController)
 
+import CopyController from "controllers/copy_controller"
+application.register("copy", CopyController)
+
 import DismissController from "controllers/dismiss_controller"
 application.register("dismiss", DismissController)
 
@@ -21,6 +24,9 @@ application.register("dynamic-emails", DynamicEmailsController)
 
 import EmailSuggestionController from "controllers/email_suggestion_controller"
 application.register("email-suggestion", EmailSuggestionController)
+
+import ExpireController from "controllers/expire_controller"
+application.register("expire", ExpireController)
 
 import FilterFormController from "controllers/filter_form_controller"
 application.register("filter-form", FilterFormController)

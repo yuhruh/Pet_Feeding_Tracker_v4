@@ -1,4 +1,74 @@
 en:
+  care_spots:
+    kinds:
+      litter_box: "Litter box"
+      water_bowl: "Water bowl"
+      water_fountain: "Water fountain"
+  care_events:
+    not_found: "That cat or spot isn't in your households."
+    not_allowed: "Only the owner and caregivers can record care."
+    someone: "Someone"
+    save: "Save"
+    grams: "%{amount} g"
+    yesterday: "yesterday %{time}"
+    weight_label: "Weight in kg"
+    buttons:
+      fed: "🍽 Fed"
+      weight: "⚖️ Weight"
+    actions:
+      litter_box:
+        scooped: "🚽 Scooped"
+        full_change: "♻️ Full change"
+      water_bowl:
+        refilled: "💧 Refilled"
+        cleaned: "🧽 Bowl cleaned"
+      water_fountain:
+        refilled: "💧 Refilled"
+        cleaned: "🧽 Fountain cleaned"
+        filter_changed: "🔄 Filter changed"
+    done:
+      litter_box:
+        scooped: "scooped"
+        full_change: "full change"
+      water_bowl:
+        refilled: "refilled"
+        cleaned: "bowl cleaned"
+      water_fountain:
+        refilled: "refilled"
+        cleaned: "fountain cleaned"
+        filter_changed: "filter changed"
+    summary:
+      fed: "%{pet}: fed"
+      weight: "%{pet}: %{kg} kg"
+    status:
+      last: "%{actions} %{when} by %{person}"
+      not_yet: "Nothing recorded yet"
+      fed: "Fed %{when} by %{person}"
+      not_fed: "Not fed yet today"
+      weight: "%{kg} kg (%{when})"
+    timeline:
+      title: "Today"
+      empty: "Nothing recorded today yet."
+      changed: "(changed)"
+      change: "Change"
+      add_to_trackers: "Add to trackers"
+      from_trackers: "(tracker)"
+    notice:
+      change_time: "Change time:"
+      minutes_ago:
+        one: "%{count} min ago"
+        other: "%{count} min ago"
+      add_details: "Add details"
+      undo: "Undo"
+    repeat:
+      question: "%{person} recorded “%{what}” at %{time}. Record it again?"
+      record_again: "Record again"
+      cancel: "Cancel"
+    update:
+      notice: "Saved."
+    undo:
+      notice: "Undone."
+      too_late: "Undo works for 10 seconds after a tap. Use Change on the timeline instead."
   ownership_transfers:
     create:
       notice: "Offer sent to %{name}."
@@ -70,6 +140,8 @@ en:
       no_cats: "No cats here yet."
       charts: "Charts"
       trackers_and_charts: "Trackers and charts"
+      pet_trackers: "%{pet}'s trackers and charts"
+      pet_charts: "%{pet}'s charts"
       transfer_offer: "%{owner} wants to hand %{household} to you."
       review_offer: "Review"
       favorites: "Favorites"
@@ -1026,6 +1098,35 @@ en:
               too_long: "Keep the name to 40 characters."
             expires_at:
               in_the_past: "The expiry must be in the future."
+        care_event:
+          attributes:
+            occurred_at:
+              in_the_future: "The time can't be in the future."
+              too_long_ago: "The time can be at most 7 days ago."
+            details:
+              other_household_bag: "That food bag belongs to another household."
+              food_type: "Pick a food type from the list."
+              amount: "The amount must be between 0.1 and 2000 g."
+              too_long: "Keep the brand and description to 100 characters."
+              present: "Details only go on feedings."
+            value:
+              weight_range: "The weight must be between 0.1 and 30 kg."
+              present: "Only a weight has a number."
+            actions:
+              blank: "Tick at least one job."
+              inclusion: "That job doesn't fit this spot."
+              present: "Only litter boxes and water spots have jobs."
+            pet:
+              blank: "Pick a cat."
+            care_spot:
+              blank: "Pick a litter box or water spot."
+              invalid: "That job doesn't fit this spot."
+            household:
+              invalid: "That doesn't belong to this household."
+            tracker:
+              invalid: "That tracker is for another cat."
+            kind:
+              inclusion: "Unknown kind of care."
         ownership_transfer:
           attributes:
             base:

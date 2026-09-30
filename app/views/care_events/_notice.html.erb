@@ -1,0 +1,37 @@
+<%# Shown right after a tap: Undo for 10 seconds, quick time changes, Add details, and a water spot's checkboxes. %>
+<% zone = event.household.time_zone %>
+<div id="care_notice" class="mb-3 p-3 rounded-lg border-2 border-emerald-200 bg-emerald-50 text-sm dark:text-gray-800 space-y-2">
+  <p class="font-medium">✔ <%= care_event_summary(event) %> · <%= care_time(event.occurred_at, zone) %></p>
+
+  <% if event.water? %>
+    <%= form_with url: care_event_path(event), method: :patch, class: "flex flex-wrap gap-3" do %>
+      <%= hidden_field_tag :from_notice, 1 %>
+      <% event.available_actions.each do |action| %>
+        <% ticked = event.actions.include?(action) %>
+        <label class="flex items-center gap-1 cursor-pointer">
+          <%= check_box_tag "care_actions[]", action, ticked, id: "care_action_#{action}", data: { controller: "auto-submit", action: "change->auto-submit#submit" },
+                disabled: ticked && event.actions.one? %>
+          <%= care_action_label(event.care_spot, action) %>
+        </label>
+      <% end %>
+      <%# The last ticked action stays; a disabled box isn't sent, so it's sent here. %>
+      <% if event.actions.one? %>
+        <%= hidden_field_tag "care_actions[]", event.actions.first, id: nil %>
+      <% end %>
+      <noscript><%= submit_tag t("care_events.save") %></noscript>
+    <% end %>
+  <% end %>
+
+  <div class="flex flex-wrap items-center gap-2">
+    <span><%= t("care_events.notice.change_time") %></span>
+    <% [ 5, 10, 15 ].each do |minutes| %>
+      <%= button_to t("care_events.notice.minutes_ago", count: minutes), care_event_path(event), method: :patch,
+            params: { minutes_ago: minutes, from_notice: 1 }, class: "rounded px-2 py-0.5 bg-white border cursor-pointer hover:bg-gray-100" %>
+    <% end %>
+    <%= link_to t("care_events.notice.add_details"), edit_care_event_path(event), class: "text-sky-700 underline" %>
+    <% if event.undoable_by?(Current.user) %>
+      <%= button_to t("care_events.notice.undo"), undo_care_event_path(event), data: { controller: "expire", expire_after_value: ((event.created_at + CareEvent::UNDO_WINDOW - Time.current) * 1000).to_i },
+            class: "rounded px-2 py-0.5 bg-red-100 text-red-700 border border-red-200 cursor-pointer" %>
+    <% end %>
+  </div>
+</div>

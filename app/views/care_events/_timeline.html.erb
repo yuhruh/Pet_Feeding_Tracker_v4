@@ -1,0 +1,36 @@
+<%# Today's records in one household, newest first. Links to change a record only where the reader may. %>
+<% entries = day.timeline %>
+<div class="mt-4">
+  <h3 class="font-semibold text-lg mb-2"><%= t("care_events.timeline.title") %></h3>
+  <% if entries.empty? %>
+    <p class="text-sm text-gray-600 dark:text-gray-300"><%= t("care_events.timeline.empty") %></p>
+  <% else %>
+    <ol class="space-y-1 text-sm">
+      <% entries.each do |entry| %>
+        <li class="flex flex-wrap gap-x-2" <%= "id=#{dom_id(entry.event)}" if entry.event %>>
+          <span class="font-mono text-gray-500"><%= care_time(entry.at, day.zone) %></span>
+          <% if (event = entry.event) %>
+            <span>
+              <%= CareEventsHelper::KIND_ICONS[event.kind] %> <%= care_event_summary(event) %> · <%= care_person(event.actor) %>
+              <% if event.fed? && event.details.any? %>· <%= fed_details_text(event.details["brand"], event.details["description"], event.details["amount_g"]) %><% end %>
+              <% if event.edited? %><span class="text-gray-500"><%= t("care_events.timeline.changed") %></span><% end %>
+            </span>
+            <% if reader && event.editable_by?(reader) %>
+              <%= link_to t("care_events.timeline.change"), edit_care_event_path(event), class: "text-sky-700 underline" %>
+            <% end %>
+            <% if reader && event.fed? && event.tracker_id.nil? && HouseholdPolicy.new(reader, day.household).owner? %>
+              <%= link_to t("care_events.timeline.add_to_trackers"), new_pet_tracker_path(event.pet, care_event_id: event.id), class: "text-emerald-700 underline" %>
+            <% end %>
+          <% else %>
+            <% tracker = entry.tracker %>
+            <span>
+              🍽 <%= t("care_events.summary.fed", pet: pet_display_name(tracker.pet)) %> · <%= care_person(day.household.owner) %>
+              · <%= fed_details_text(tracker.brand, tracker.description, tracker.amount) %>
+              <span class="text-gray-500"><%= t("care_events.timeline.from_trackers") %></span>
+            </span>
+          <% end %>
+        </li>
+      <% end %>
+    </ol>
+  <% end %>
+</div>
