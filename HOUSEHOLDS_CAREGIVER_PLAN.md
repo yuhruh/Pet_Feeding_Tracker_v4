@@ -1,4 +1,4 @@
-# Households and Caregivers — Implementation Plan (v5)
+# Households and Caregivers — Implementation Plan (v6)
 
 **Goal:** Let several people look after the same cats. Each **owner** has a **household**: their cats, food bags, litter boxes and water spots, and the people they let help. A **caregiver** records care with **one tap** (fed, litter, water, meds given) and everyone in the household sees it right away. A **viewer** sees the charts and today's timeline, read-only, through a **personal link** with no account needed. A caregiver **needs an account**, joining through the owner's invitation. Caregivers and viewers can belong to **several owners' households**. **Reminders** say when a job "might be time" (clean the fountain, change the filter, give meds), by LINE or email first and later as Android app notifications.
 
@@ -55,6 +55,9 @@
 | Kibble prices page | **Owner only** | The owner does the buying and gets the monthly email |
 | Emails (kibble prices, backups) | **Unchanged: the owner only**, never caregivers or viewers | Decided 2026-09-29 |
 | Kibble price tracker | **Unchanged** (the BigGo momo shop filter is not added) | Decided 2026-09-29 |
+| Where people land after signing in | By what they have, not by "first sign-in": a new user with no household → **"Add A Cat"** (as today); an owner → the pet list (as today); a caregiver, or someone who is both owner and caregiver → **Today** | "Add A Cat" stays the start for new owners, and caregivers never get sent there |
+| A caregiver's own cats | **"Add my own cat" under Account**, not in the main menu, with: *"This creates your own household. Rita's cats are not affected."* It creates their household (owner, one litter box, one water bowl); they are then an owner and a caregiver | Someone helping with another's cats can still get their own, without a second account |
+| Keeping households apart | **No household picker.** The household of every record comes from the **cat, litter box or water spot** it's recorded on, set by the server, never taken from the form. Pages that need a cat use a **cat list grouped by household** | Nothing to choose wrongly; a tampered request still can't mix households |
 
 ## Roles
 
@@ -261,7 +264,7 @@ Today · Rita's cats
    └──────────────────────────────────────────────┘
    ```
    The email is prefilled and fixed; the time zone is detected, as sign-up already does. Someone who already has an account signs in and gains this household.
-4. After joining, the caregiver lands on the **Today page**, not the "Add A Cat" page that every first sign-in shows today. Their menu is smaller: **Today · Trackers (read-only) · Charts · Account**, with no "Add a cat", food bags, health checks, vet visits or kibble prices.
+4. After joining, the caregiver lands on the **Today page**, not the "Add A Cat" page that every first sign-in shows today (see [Where people land](#where-people-land-after-signing-in)). Their menu is smaller: **Today · Trackers (read-only) · Charts · Account**, with no food bags, health checks, vet visits or kibble prices. "Add my own cat" is under Account (see [People in several households](#people-in-several-households)).
 5. The owner can remove a caregiver; caregivers can leave.
 
 ## Viewer links and the viewer page
@@ -291,6 +294,83 @@ Today · Rita's cats
 3. **Sign up or sign in** from the page adds the household to the viewer's account as a viewer membership, so it appears with any other households they follow. The link keeps working too.
 4. The owner sees each viewer link with its name and when it was last used, and can **turn it off** (it stops working immediately) or change its expiry.
 5. **Safety:** a long random token stored only as a digest; turned-off and expired links show "This link is no longer active"; the page is marked not to be indexed by search engines; it never shows health checks, vet visits, notes, kibble prices or anyone's email; each viewer link is separate from the pet's existing public share link.
+
+## Where people land after signing in
+
+Today the rule is "first sign-in → Add A Cat; after that → the pet list". It becomes a rule about what the person has:
+
+| Person | Lands on |
+|---|---|
+| New user who signed up on their own (no invitation, no household) | **"Add A Cat"**, as today: they're starting their own household |
+| Owner (only their own cats) | The pet list, as today |
+| Caregiver (joined through an invitation), even on the first sign-in | **Today** |
+| Owner who is also a caregiver or viewer elsewhere | **Today**, showing all their households |
+| Viewer with a link | Doesn't sign in; the link opens the viewer page |
+
+## People in several households
+
+Example: **Mom** is a caregiver for Rita's cats (Aji, Umi), then adds her own cat **Kuro** with "Add my own cat".
+
+**Before Kuro (caregiver only):**
+- Menu: **Today · Trackers · Charts · Account** (trackers and charts read-only).
+- Account page: name, email, password, time zone, LINE; reminders on/off per household; **Households**: "Rita's cats · caregiver [Leave]"; and **🐱 Add my own cat**, with *"This creates your own household. Rita's cats are not affected."*
+
+**After Kuro (owner of her own household, caregiver in Rita's):**
+- "Add my own cat" opens the normal Add a cat form. Saving it creates **Mom's household** with her as owner, one litter box and one water bowl.
+- Menu: the full owner menu, **Today · My cats · Trackers · Charts · Dry food · Health · Vet visits · Account**, because she now owns cats.
+- Account page: "Add my own cat" is gone (a user owns at most one household); **My household** (invite caregivers, viewer links, transfer ownership) and **Rita's cats · caregiver [Leave]**.
+- Rita's household is unaffected: Rita still owns it, and Mom's rights there don't change.
+
+**Each page works per household, with the person's own role in each:**
+
+| Page | Kuro (Mom's own) | Aji and Umi (Rita's) |
+|---|---|---|
+| Today | Buttons, as owner | Buttons, as caregiver |
+| My cats, Health, Vet visits, Kibble prices | ✅ Kuro only | Not shown |
+| Trackers | Full (add, edit) | Read-only |
+| Charts | ✅ | ✅ read-only |
+| Food bags | Mom's bags, for Kuro | Rita's bags, read-only, only as suggestions when recording "Fed" for Aji or Umi |
+| Owner-only emails (kibble prices, backups) | Sent to Mom, for Kuro | Not sent to Mom (Rita gets them) |
+
+**Today page:** her own household first, then the others:
+```
+Today
+── My cats ─────────────────────────────────────────────
+Litter box        🚽 Scooped  ♻️ Full change
+Water bowl        💧 Refilled  🧽 Cleaned
+Kuro  🍽 Fed  💊 Meds  ⚖️ Weight
+── Rita's cats (you're a caregiver) ───────────────────
+Upstairs box      🚽 Scooped  ♻️ Full change   07:30 Dad
+Aji   🍽 Fed  💊 Meds  ⚖️ Weight              Clavamox due 20:00
+Umi   🍽 Fed  ⚖️ Weight
+```
+
+**Cat lists on other pages** are grouped by household, with the role shown:
+```
+Trackers ▾
+  My cats
+    Kuro
+  Rita's cats (read-only)
+    Aji
+    Umi
+```
+
+## Keeping households apart
+
+**For the person: the tap says which cat.** Every button sits on one cat's card or one litter box or water spot row. Tapping 🍽 on Kuro's card means "Kuro was fed"; on Aji's card, "Aji was fed". There is no household to choose. Pages that are per cat (trackers, charts) are reached by choosing a cat from the grouped list, as today, and the household follows from the cat.
+
+**Suggestions come from the cat's household:** "Add details" → kibble on **Kuro** lists **Mom's** bags; on **Aji**, **Rita's** bags. A mixed list never appears.
+
+**For the data: the server checks every save**, so even a tampered request can't mix households:
+
+| Check | Refused if |
+|---|---|
+| The record's household | It isn't the household of the cat, litter box or water spot; the server sets it and never accepts it from the form |
+| The person's permission | They aren't the owner or a caregiver **of that household** |
+| A food bag on a feeding or tracker | The bag belongs to a different household from the cat (today's rule "bag of the pet's owner" becomes "bag of the pet's household") |
+| A litter box or water spot | It belongs to a different household |
+| A medication | It belongs to a different cat |
+| "Add to trackers" | The care event's cat isn't in the owner's own household |
 
 ## Transfer ownership
 
@@ -361,8 +441,8 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 | 0 | Decisions | ✅ Done |
 | A | `households`, `household_memberships`, `care_spots` (one box, one bowl each), `pets.household_id`, `dry_foods.household_id`; data migration | All existing tests pass unchanged; migration checked on PostgreSQL; every current user owns one household with their pets, bags, a litter box and a water bowl |
 | B | `Pet.accessible_by`, `HouseholdPolicy`; replace every lookup listed above; food-bag rule by household; jobs, mailers and brand names via the household's owner | A test matrix of **each role on each page** (allowed and refused); single-member households behave exactly as today |
-| C | Caregiver invitations and the join page (prefilled email, Google / LINE); caregivers land on Today, skipping "Add A Cat"; the caregiver menu; viewer links (create, name, expiry, turn off) and the viewer page with charts; member list, removing, leaving; transfer ownership; account deletion asks to transfer | Invite → join → caregiver role applies; expired, reused and wrong-email invitations refused; a viewer link opens only its household's viewer page, and stops at once when turned off or expired; signing in from a viewer link adds a viewer membership; transfer swaps owner and caregiver in one transaction |
-| D | `care_events`; Today page with litter-box and water-spot rows and cat cards; one-tap fed, scooped, full change, refilled, cleaned, filter changed (several actions in one record, with checkboxes in the notice); weight form; change time; feeding "Add details" with suggestions by food type; "Add to trackers"; undo; double-tap guard; status and today's timeline on the viewer page; managing boxes and water spots | Browser test: caregiver taps Fed and adds details, refills and cleans the fountain in one record, changes a time, undoes a tap; owner adds a feeding to trackers; the viewer link shows the new records with no buttons |
+| C | Caregiver invitations and the join page (prefilled email, Google / LINE); the new landing rules (caregivers and people in several households land on Today; new users with no household still get "Add A Cat"); "Add my own cat" under Account; menus and cat lists grouped by household; the caregiver menu; viewer links (create, name, expiry, turn off) and the viewer page with charts; member list, removing, leaving; transfer ownership; account deletion asks to transfer | Invite → join → caregiver role applies; expired, reused and wrong-email invitations refused; a viewer link opens only its household's viewer page, and stops at once when turned off or expired; signing in from a viewer link adds a viewer membership; transfer swaps owner and caregiver in one transaction |
+| D | `care_events`; Today page with litter-box and water-spot rows and cat cards; one-tap fed, scooped, full change, refilled, cleaned, filter changed (several actions in one record, with checkboxes in the notice); weight form; change time; feeding "Add details" with suggestions by food type; "Add to trackers"; undo; double-tap guard; status and today's timeline on the viewer page; managing boxes and water spots | Browser test: caregiver taps Fed and adds details, refills and cleans the fountain in one record, changes a time, undoes a tap; owner adds a feeding to trackers; the viewer link shows the new records with no buttons; tests that every save refuses a household mismatch (record, food bag, box, water spot, medication) and a person without rights in that household |
 | E | `medications`; meds button with Given / Couldn't give; due / given / overdue | Doses shown per schedule; double dose guarded |
 | F | Litter observations in "Add details" (optional fields; which cat) | Old records unchanged; observations show on the timeline and, with a cat, in that cat's history |
 | G | Turbo Streams broadcast (Today pages and viewer pages); care events on charts and in CSV | Two browser sessions: a tap in one appears in the other, including on a viewer page |
@@ -380,7 +460,8 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 | Owner leaves or deletes their account | Transfer ownership; account deletion asks to transfer first |
 | Invitation or transfer links forwarded | Single use, 7-day expiry, bound to the invited email / chosen member |
 | Viewer link forwarded | One link per viewer, turned off by the owner at any time, optional expiry; read-only; shows no private data; not indexed by search engines |
-| New caregivers sent to "Add A Cat" | Caregivers joining through an invitation land on the Today page instead |
+| New caregivers sent to "Add A Cat" | Landing depends on what the person has: caregivers land on Today; only a new user with no household gets "Add A Cat" |
+| Records ending up in the wrong household | No household picker; the server sets the household from the cat, box or spot and refuses any mismatch (see [Keeping households apart](#keeping-households-apart)) |
 | Double feeding / double doses | Live timeline, double-tap guard, meds confirmation |
 | Wrong times | "Now" by default (entries are made within 10 minutes), quick picks, 7-day limit, edits shown |
 | Details added in a later checkpoint | Optional fields from the start; older records simply have none |
@@ -392,6 +473,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 
 ## Change log
 
+- **v6 (2026-09-30):** landing after sign-in depends on what the person has (new user with no household → "Add A Cat"; caregivers → Today). Caregivers can create their own household with **"Add my own cat" under Account** ("This creates your own household. Rita's cats are not affected."), becoming owner and caregiver. Pages for someone in several households: owner menu once they own cats, Today grouped by household (own first), cat lists grouped by household with the role shown. **Keeping households apart:** no household picker; the household comes from the cat, box or spot and is set by the server, which refuses any mismatch.
 - **v5 (2026-09-29):** caregivers **need an account**, joining through a one-step invitation page (prefilled email, or Google / LINE), landing on Today instead of "Add A Cat", with a smaller menu. Viewers use a **personal link** with no account: a read-only viewer page with status, today's timeline and charts; one link per viewer, revocable, optional expiry; signing in from it adds the household to their account. Invitations are for caregivers only; new `viewer_links` table.
 - **v4 (2026-09-29):** water spots use **buttons + checkboxes** (one tap saves; the notice's checkboxes add the other actions to the same record). **Reminders** per spot and job, counted from the last time it was done (twice a week, twice a month, …), once at 9am local time plus one follow-up, to the owner and caregivers who turn them on; meds overdue too. Channels: **LINE, else email (H)**, then **Android app push via Firebase (I)**. Clean-up moves to J.
 - **v3 (2026-09-29):** litter and water are shared per litter box or water spot (one of each created automatically; owners add more); water spots are bowls or fountains, fountains with 💧 Refilled · 🧽 Fountain cleaned · 🔄 Filter changed, and several actions in one record; litter 🚽 Scooped · ♻️ Full change; litter observations in a later checkpoint (F), stored as optional fields from the start; optional "which cat" only on observations; "Add details" also on timeline entries; meds "Couldn't give"; viewers see charts and today's timeline read-only; kibble prices owner-only. Checkpoints renumbered (F observations, G live updates, H notifications, I clean-up).
