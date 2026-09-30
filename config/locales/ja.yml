@@ -165,13 +165,10 @@
         caregiver: "お世話メンバー"
         viewer: "閲覧のみ"
       no_cats: "まだ猫がいません。"
-      charts: "グラフ"
-      trackers_and_charts: "記録とグラフ"
       pet_trackers: "%{pet}の記録とグラフ"
       pet_charts: "%{pet}のグラフ"
       transfer_offer: "%{owner}さんが%{household}をあなたに引き継ぎたいそうです。"
       review_offer: "確認する"
-      favorites: "お気に入り"
   household_memberships:
     destroy:
       notice: "%{household}から退出しました。"

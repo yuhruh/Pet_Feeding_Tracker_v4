@@ -165,13 +165,10 @@ en:
         caregiver: "you're a caregiver"
         viewer: "you're a viewer"
       no_cats: "No cats here yet."
-      charts: "Charts"
-      trackers_and_charts: "Trackers and charts"
       pet_trackers: "%{pet}'s trackers and charts"
       pet_charts: "%{pet}'s charts"
       transfer_offer: "%{owner} wants to hand %{household} to you."
       review_offer: "Review"
-      favorites: "Favorites"
   household_memberships:
     destroy:
       notice: "You've left %{household}."

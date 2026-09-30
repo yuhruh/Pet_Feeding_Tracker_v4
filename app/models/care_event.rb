@@ -89,6 +89,8 @@ class CareEvent < ApplicationRecord
 
   def tidy_details
     self.actions = Array(actions).map(&:to_s).compact_blank.uniq
+    # Always in the spot's order: "refilled, fountain cleaned".
+    self.actions = actions.sort_by { |action| available_actions.index(action) || available_actions.size }
     self.details = (details || {}).to_h.stringify_keys.slice(*FED_DETAILS).compact_blank
   end
 

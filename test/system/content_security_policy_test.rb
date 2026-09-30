@@ -35,6 +35,11 @@ class ContentSecurityPolicyTest < ApplicationSystemTestCase
     visit shared_pet_trackers_url(share_token: @pet.share_token, locale: LOCALE)
     wait_for_charts
     assert_no_csp_violations "shared page"
+
+    link = households(:one).viewer_links.create!(name: "Grandma", created_by: @user)
+    visit viewer_page_url(token: link.token, locale: LOCALE)
+    wait_for_charts
+    assert_no_csp_violations "viewer page"
   end
 
   test "signed-in pages load without CSP violations" do
@@ -49,7 +54,8 @@ class ContentSecurityPolicyTest < ApplicationSystemTestCase
       pet_health_checks_url(pet_id: @pet, locale: LOCALE), new_pet_health_check_url(pet_id: @pet, locale: LOCALE),
       pet_health_check_url(pet_id: @pet, id: health_check, locale: LOCALE), edit_pet_health_check_url(pet_id: @pet, id: health_check, locale: LOCALE),
       pet_vet_visits_url(pet_id: @pet, locale: LOCALE), new_pet_vet_visit_url(pet_id: @pet, locale: LOCALE),
-      dry_foods_url(locale: LOCALE), new_dry_food_url(locale: LOCALE), users_url(locale: LOCALE), edit_users_url(locale: LOCALE) ].each do |url|
+      dry_foods_url(locale: LOCALE), new_dry_food_url(locale: LOCALE), users_url(locale: LOCALE), edit_users_url(locale: LOCALE),
+      today_url(locale: LOCALE), household_url(locale: LOCALE) ].each do |url|
       visit url
       assert_no_csp_violations url
     end

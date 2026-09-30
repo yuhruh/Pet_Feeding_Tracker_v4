@@ -153,4 +153,17 @@ class CareEventsControllerTest < ActionDispatch::IntegrationTest
       assert_equal "ate half", moms.reload.note
     end
   end
+
+  test "a tampered request can't choose the household, person, cat, spot or tracker" do
+    other_tracker = pets(:two).trackers.create!(date: Date.current, feed_time: "08:00", food_type: "Wet", brand: "x", description: "xx", amount: 1)
+    tap_fed(household_id: households(:two).id, actor_id: @owner.id, care_spot_id: @box.id)
+    event = CareEvent.sole
+    assert_equal [ @household, @mom, @pet, nil ], [ event.household, event.actor, event.pet, event.care_spot ]
+
+    patch care_event_url(event, **L), params: { household_id: households(:two).id, pet_id: pets(:two).id, care_spot_id: @box.id,
+                                                tracker_id: other_tracker.id, actor_id: @owner.id, kind: "weight", note: "ok" }
+    event.reload
+    assert_equal [ @household, @mom, @pet, nil, nil, "fed", "ok" ],
+                 [ event.household, event.actor, event.pet, event.care_spot, event.tracker, event.kind, event.note ]
+  end
 end
