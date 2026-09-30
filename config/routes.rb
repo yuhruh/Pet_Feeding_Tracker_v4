@@ -42,6 +42,8 @@ Rails.application.routes.draw do
     post "join/:token", to: "household_joins#create"
     # A viewer's personal read-only page (no account needed).
     get "view/:token", to: "viewer_pages#show", as: :viewer_page
+    delete "households/:household_id/leave", to: "household_memberships#destroy", as: :leave_household
+    get "today", to: "today#show", as: :today
     resource :session, except: [ :new ]
     delete "session/others", to: "sessions#destroy_others", as: :other_sessions
     resource :registrations, only: [ :new, :create ]

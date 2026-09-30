@@ -1,4 +1,44 @@
 zh-TW:
+  household_joins:
+    joined: "你已加入 %{household}。"
+    create:
+      rate_limited: "嘗試次數過多，請稍後再試。"
+    show:
+      page_title: "加入家庭"
+      invited: "%{owner} 邀請你以照顧者身分一起照顧 %{pets}"
+      own_household: "這是你自己的家庭。"
+      signed_in_as: "你目前以 %{email} 登入。"
+      join_button: "加入 %{household}"
+      wrong_account: "這個邀請是寄給 %{email}，但你目前以 %{current} 登入。請先登出，再重新開啟連結。"
+      sign_out: "登出"
+      email: "Email"
+      email_fixed: "來自邀請，無法更改。"
+      username: "你的名字"
+      password: "密碼"
+      password_confirmation: "確認密碼"
+      or_continue_with: "或使用以下方式繼續"
+      same_email_note: "使用 Google 或 LINE 時，請用 %{email} 的帳號。"
+      already_have_account: "已經有帳號了？"
+      sign_in: "登入"
+    expired:
+      title: "這個邀請已失效"
+      body: "邀請連結只能使用一次，有效期限 7 天。請主人重新寄一封邀請給你。"
+  today:
+    show:
+      title: "今天"
+      nothing_yet: "這裡還沒有貓咪。"
+      add_a_cat: "新增貓咪"
+      my_cats: "我的貓咪"
+      you_are_a:
+        caregiver: "你是照顧者"
+        viewer: "你是觀看者"
+      no_cats: "這裡還沒有貓咪。"
+      charts: "圖表"
+      trackers_and_charts: "紀錄與圖表"
+      favorites: "最愛清單"
+  household_memberships:
+    destroy:
+      notice: "你已離開 %{household}。"
   shared_trackers:
     read_only_view: "飲食與體重數據的唯讀圖表"
   hero_section:
@@ -195,6 +235,9 @@ zh-TW:
       edit: "編輯"
       cat_list: "寵物清單"
       my_household: "🏠 我的家庭成員"
+      today: "今天"
+      read_only: "（唯讀）"
+      view_pet_charts: "%{petname} 的圖表"
       delete: "刪除"
       delete_confirmation: "您確定要刪除此使用者帳戶嗎？使用者及其相關的飲食紀錄都會被刪除.."
       my_cats_list: "我的寵物清單"
@@ -610,6 +653,12 @@ zh-TW:
       pets: "隻"
       go_to_cats_list: "前往 %{username} 的寵物列表"
       household_button: "🏠 我的家庭成員"
+      households: "你協助照顧的家庭"
+      leave: "離開"
+      leave_confirm: "要離開 %{household} 嗎？離開後就看不到這些貓咪了。"
+      add_my_own_cat: "🐱 新增我自己的貓"
+      add_my_own_cat_note: "這會建立你自己的家庭，%{households} 不受影響。"
+      go_to_today: "前往今天頁面"
       edit_profile_button: "編輯個人資料"
       delete_profile_button: "刪除個人資料"
       delete_confirm: "您確定要刪除此使用者帳戶嗎？使用者和相關的飲食紀錄將全部被刪除.."
@@ -893,6 +942,10 @@ zh-TW:
       models:
         household_invitation:
           attributes:
+            base:
+              not_pending: "這個邀請已失效，請主人重新寄一封。"
+              wrong_email: "這個邀請是寄給另一個 Email。"
+              is_owner: "這是你自己的家庭。"
             email:
               is_owner: "這是你自己的 Email。"
               already_member: "這個人已經在你的家庭裡了。"

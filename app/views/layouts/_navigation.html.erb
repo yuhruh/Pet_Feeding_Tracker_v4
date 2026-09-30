@@ -1,4 +1,9 @@
 <nav class="w-full relative mx-auto px-6 py-4">
+  <%# Someone who only helps with other people's cats gets the smaller menu: Today, trackers and charts, account. %>
+  <% if authenticated? %>
+    <% helper_only = Current.user.helper_only? %>
+    <% other_memberships = Current.user.household_memberships.includes(household: [ :owner, :pets ]).order(:id) %>
+  <% end %>
   <div class="flex items-center justify-between lg:space-x-1 xl:space-x-8 my-6">
     <div class="z-30 shrink-0">
       <%= image_tag('aji_icon_512.png', class: "w-12 xl:w-20") %>
@@ -26,6 +31,7 @@
         </div>
       </div>
       <% if authenticated? %>
+        <%= link_to t('layouts.navigation.today'), today_path, class: "w-max lg:px-1 xl:px-3 py-2 tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed" %>
         <div class="relative">
           <div class="flex items-center  w-max bg-white lg:px-1 xl:px-3 py-2 
           text-grayishBlue tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed dark:bg-darkBlue cursor-pointer btn" data-target="btn-1">
@@ -41,13 +47,14 @@
               </div>
                 <%= link_to t('layouts.navigation.view'), users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-blue-100 focus:text-softRed focus:outline-hidden" %>
                 <%= link_to t('layouts.navigation.edit'), edit_users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-green-100 hover:text-green-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
-                <%= link_to t('layouts.navigation.cat_list'), pets_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+                <%= link_to t('layouts.navigation.cat_list'), pets_path, hidden: helper_only, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
                 <% if Current.user.owned_household %>
                   <%= link_to t('layouts.navigation.my_household'), household_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-teal-100 hover:text-teal-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
                 <% end %>
                 <%= link_to t('layouts.navigation.delete'), users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-red-100 hover:text-softRed focus:bg-gray-100 focus:text-softRed focus:outline-hidden", 
                 data: {"turbo-confirm": t('layouts.navigation.delete_confirmation'), "turbo-method": "delete"} %>
               </div>
+              <% unless helper_only %>
               <div class="px-4 py-2 text-sm text-gray-700 font-semibold border-b-2 border-gray-200">
                 <%= t('layouts.navigation.my_cats_list') %>
               </div>
@@ -58,6 +65,7 @@
                   <%= link_to "🏥 Vet Visits (#{pet.petname.capitalize})", pet_vet_visits_path(pet), class: "block px-4 py-2 text-xs text-amber-700 hover:bg-amber-100 hover:text-amber-800 focus:bg-amber-100 focus:text-softRed focus:outline-hidden pl-6 italic font-medium" %>
                 <% end %>
               </div>
+              <% end %>
 
               <%# Shared Vet Visits for co-owners/members %>
               <% shared_pets = Pet.joins(vet_visits: :vet_visit_members).where(vet_visit_members: { user_id: Current.user.id }).distinct %>
@@ -94,9 +102,24 @@
                   <%= link_to t('layouts.navigation.pet_favorite_list', petname: pet.petname.split(" ").map(&:capitalize).join(" ")), favorite_food_pet_trackers_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-rose-100 hover:text-rose-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
                 </div>
               <% end %>
+              <% other_memberships.each do |membership| %>
+                <div class="px-4 py-2 text-sm text-gray-700 font-semibold border-b-2 border-gray-200 bg-slate-50">
+                  <%= household_name(membership.household) %> <span class="font-normal normal-case text-gray-500"><%= t('layouts.navigation.read_only') %></span>
+                </div>
+                <% membership.household.pets.sort_by(&:petname).each do |pet| %>
+                  <% petname = pet.petname.split(" ").map(&:capitalize).join(" ") %>
+                  <% if membership.viewer? %>
+                    <%= link_to t('layouts.navigation.view_pet_charts', petname: petname), pet_trackers_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+                  <% else %>
+                    <%= link_to t('layouts.navigation.view_pet_trackers', petname: petname), pet_trackers_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+                    <%= link_to t('layouts.navigation.pet_favorite_list', petname: petname), favorite_food_pet_trackers_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-rose-100 hover:text-rose-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+                  <% end %>
+                <% end %>
+              <% end %>
             </div>
           </div>
         </div>
+        <% unless helper_only %>
         <div class="relative">
           <div class="flex items-center  w-max bg-white lg:px-1 xl:px-3 py-2 
             text-grayishBlue tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed dark:bg-darkBlue cursor-pointer btn" data-target="btn-3">
@@ -134,6 +157,7 @@
             </div>
           </div>
         </div>
+        <% end %>
         <%= button_to t('layouts.navigation.sign_out'), session_path, class: "lg:px-2 xl:px-8 py-2 text-white uppercase bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white", method: :delete %>
       <% else %>
         <%= link_to t('layouts.navigation.get_started'), new_registrations_path, class: "lg:px-2 xl:px-8 py-2 text-white bg-grayishBlue border-2 border-grayishBlue rounded-lg shadow-md tracking-wide hover:text-grayishBlue hover:bg-white" %>
@@ -241,6 +265,9 @@
     </div>
     <% if authenticated? %>
       <div class="w-full py-3 text-center">
+        <%= link_to t('layouts.navigation.today'), today_path, class: "block font-bold hover:text-softRed" %>
+      </div>
+      <div class="w-full py-3 text-center">
         <div class="flex flex-row justify-center gap-3">
           <svg width="20" height="20" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="50" cy="50" r="48" stroke="#ffffff" stroke-width="4"/>
@@ -255,11 +282,12 @@
         <%= link_to t('layouts.navigation.mobile.edit_profile'), edit_users_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-green-100 hover:text-green-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
         <%= link_to t('layouts.navigation.mobile.delete_profile'), users_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-red-100 hover:text-softRed focus:bg-gray-100 focus:text-softRed focus:outline-hidden", 
         data: {"turbo-confirm": t('layouts.navigation.mobile.delete_confirmation'), "turbo-method": "delete"} %>
-        <%= link_to t('layouts.navigation.mobile.cats_list'), pets_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+        <%= link_to t('layouts.navigation.mobile.cats_list'), pets_path, hidden: helper_only, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
         <% if Current.user.owned_household %>
           <%= link_to t('layouts.navigation.my_household'), household_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-teal-100 hover:text-teal-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
         <% end %>
       </div>
+      <% unless helper_only %>
       <div class="w-full py-3 text-center">
         <div class="flex flex-row justify-center gap-3">
           <svg width="20" height="20" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -372,6 +400,7 @@
           <%= link_to t('layouts.navigation.view_annual_reports'), pet_health_checks_path(pet), class: "block px-4 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
         <% end %>
       </div>
+      <% end %>
       <div class="w-full py-3 text-center">
         <div class="flex flex-row justify-center gap-3">
           <svg width="25" height="20" viewBox="70 20 60 85" xmlns="http://www.w3.org/2000/svg">
@@ -433,6 +462,22 @@
               <%= link_to t('layouts.navigation.mobile.pet_favorite_list', petname: pet.petname.split(" ").map(&:capitalize).join(" ")), favorite_food_pet_trackers_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-emerald-100 hover:text-emerald-600 hover:scale-90 hover:rounded-lg focus:bg-gray-100 underline underline-offset-4 focus:text-softRed focus:outline-hidden" %>
             </div>
           </div>
+        <% end %>
+        <% other_memberships.each do |membership| %>
+          <div class="font-bold border-t border-gray-600 mt-2 pt-2 text-sm text-gray-300">
+            <%= household_name(membership.household) %> <%= t('layouts.navigation.read_only') %>
+          </div>
+          <% membership.household.pets.sort_by(&:petname).each do |pet| %>
+            <% petname = pet.petname.split(" ").map(&:capitalize).join(" ") %>
+            <div class="flex items-center justify-center">
+              <% if membership.viewer? %>
+                <%= link_to t('layouts.navigation.view_pet_charts', petname: petname), pet_trackers_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 underline underline-offset-4" %>
+              <% else %>
+                <%= link_to t('layouts.navigation.mobile.view_pet_trackers', petname: petname), pet_trackers_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 underline underline-offset-4" %>
+                <%= link_to t('layouts.navigation.mobile.pet_favorite_list', petname: petname), favorite_food_pet_trackers_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-emerald-100 hover:text-emerald-600 underline underline-offset-4" %>
+              <% end %>
+            </div>
+          <% end %>
         <% end %>
       </div>
       <div class="w-full py-3 text-center">

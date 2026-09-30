@@ -1,4 +1,44 @@
  ja:
+  household_joins:
+    joined: "%{household}に参加しました。"
+    create:
+      rate_limited: "試行回数が多すぎます。しばらくしてからもう一度お試しください。"
+    show:
+      page_title: "お世話メンバーに参加"
+      invited: "%{owner}さんから%{pets}のお世話メンバーに招待されました"
+      own_household: "これはご自身の家庭です。"
+      signed_in_as: "%{email} でログイン中です。"
+      join_button: "%{household}に参加する"
+      wrong_account: "この招待は %{email} 宛てですが、%{current} でログインしています。ログアウトしてから、もう一度リンクを開いてください。"
+      sign_out: "ログアウト"
+      email: "メールアドレス"
+      email_fixed: "招待のメールアドレスです。変更できません。"
+      username: "お名前"
+      password: "パスワード"
+      password_confirmation: "パスワード（確認）"
+      or_continue_with: "または次の方法で続ける"
+      same_email_note: "Google や LINE では %{email} のアカウントをお使いください。"
+      already_have_account: "すでにアカウントをお持ちですか？"
+      sign_in: "ログイン"
+    expired:
+      title: "この招待は無効になりました"
+      body: "招待リンクは1回限り、7日間有効です。オーナーに新しい招待を送ってもらってください。"
+  today:
+    show:
+      title: "今日"
+      nothing_yet: "まだ猫が登録されていません。"
+      add_a_cat: "猫を追加"
+      my_cats: "わが家の猫"
+      you_are_a:
+        caregiver: "お世話メンバー"
+        viewer: "閲覧のみ"
+      no_cats: "まだ猫がいません。"
+      charts: "グラフ"
+      trackers_and_charts: "記録とグラフ"
+      favorites: "お気に入り"
+  household_memberships:
+    destroy:
+      notice: "%{household}から退出しました。"
   shared_trackers:
     read_only_view: "給餌および体重データの公開用読み取り専用ビュー"
   hero_section:
@@ -195,6 +235,9 @@
       edit: "編集"
       cat_list: "猫リスト"
       my_household: "🏠 わが家のメンバー"
+      today: "今日"
+      read_only: "（閲覧のみ）"
+      view_pet_charts: "%{petname}のグラフ"
       delete: "削除"
       delete_confirmation: "このユーザーアカウントを削除してもよろしいですか？ユーザーと関連するトラッカーはすべて削除されます。"
       my_cats_list: "私の猫リスト"
@@ -610,6 +653,12 @@
       pets: "匹"
       go_to_cats_list: "%{username}の猫リストに移動"
       household_button: "🏠 わが家のメンバー"
+      households: "お手伝いしている家庭"
+      leave: "退出"
+      leave_confirm: "%{household}から退出しますか？ この猫たちが見られなくなります。"
+      add_my_own_cat: "🐱 自分の猫を追加"
+      add_my_own_cat_note: "自分の家庭が作成されます。%{households}には影響しません。"
+      go_to_today: "今日のページへ"
       edit_profile_button: "プロフィールを編集"
       delete_profile_button: "プロフィールを削除"
       delete_confirm: "このユーザーアカウントを削除してもよろしいですか？ユーザーと関連するトラッカーはすべて削除されます。"
@@ -893,6 +942,10 @@
       models:
         household_invitation:
           attributes:
+            base:
+              not_pending: "この招待は無効になりました。オーナーに新しい招待を送ってもらってください。"
+              wrong_email: "この招待は別のメールアドレス宛てです。"
+              is_owner: "これはご自身の家庭です。"
             email:
               is_owner: "ご自身のメールアドレスです。"
               already_member: "その方はすでに世帯のメンバーです。"

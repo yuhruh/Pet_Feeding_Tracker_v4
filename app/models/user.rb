@@ -16,6 +16,12 @@ class User < ApplicationRecord
   # The cats and food bags of the household the user owns (not ones they help with).
   def owned_pets = Pet.owned_by(self)
   def owned_dry_foods = DryFood.owned_by(self)
+
+  # Households the user helps with (caregiver) or follows (viewer), not their own.
+  def member_households = Household.where(id: household_memberships.select(:household_id))
+
+  # Joined someone else's household and has no cats of their own: gets the smaller menu.
+  def helper_only? = owned_household.nil? && household_memberships.exists?
   has_many :dry_foods, dependent: :destroy
   has_many :vet_visit_members, dependent: :destroy
   has_many :shared_vet_visits, through: :vet_visit_members, source: :vet_visit

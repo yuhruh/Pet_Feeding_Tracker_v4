@@ -1,0 +1,76 @@
+<% content_for :title, t(".page_title") %>
+<% household = @invitation.household %>
+<% pet_names = household.pets.order(:petname).map { |pet| pet.petname.capitalize }.to_sentence %>
+
+<div class="container mx-auto mb-4 mt-2 px-2 md:w-2/3">
+  <div class="flex flex-col bg-gray-100 dark:bg-gray-800 border-2 border-gray-300 shadow-md rounded-lg p-4 sm:p-6 gap-4">
+    <h1 class="text-center font-semibold text-xl md:text-2xl">
+      🐾 <%= t(".invited", owner: household.owner.username.capitalize, pets: pet_names.presence || household_name(household)) %>
+    </h1>
+
+    <% if authenticated? %>
+      <% if Current.user.id == household.owner_id %>
+        <p class="text-center"><%= t(".own_household") %></p>
+      <% elsif @invitation.for?(Current.user) %>
+        <p class="text-center"><%= t(".signed_in_as", email: Current.user.email_address) %></p>
+        <%= button_to t(".join_button", household: household_name(household)), join_household_path(token: params[:token]),
+              class: "mx-auto rounded-md px-3.5 py-2.5 text-white bg-softBlue font-medium cursor-pointer hover:opacity-90" %>
+      <% else %>
+        <p class="text-center"><%= t(".wrong_account", email: @invitation.email, current: Current.user.email_address) %></p>
+        <%= button_to t(".sign_out"), session_path, method: :delete, class: "mx-auto underline text-softRed cursor-pointer" %>
+      <% end %>
+    <% else %>
+      <%= form_with model: @user, url: join_household_path(token: params[:token]), method: :post, class: "flex flex-col gap-3" do |form| %>
+        <div class="flex flex-col gap-1">
+          <%= form.label :email_address, t(".email"), class: "font-medium" %>
+          <%= form.email_field :email_address, disabled: true, class: "rounded-md border border-gray-300 bg-gray-200 px-3 py-2 text-gray-600" %>
+          <span class="text-xs text-gray-500"><%= t(".email_fixed") %></span>
+        </div>
+        <div class="flex flex-col gap-1">
+          <%= form.label :username, t(".username"), class: "font-medium required" %>
+          <%= form.text_field :username, required: true, autofocus: true, class: "rounded-md border border-gray-400 px-3 py-2 dark:text-slate-800" %>
+        </div>
+        <div class="flex flex-col gap-1">
+          <%= form.label :password, t(".password"), class: "font-medium required" %>
+          <%= form.password_field :password, required: true, minlength: User::MINIMUM_PASSWORD_LENGTH, autocomplete: "new-password",
+                class: "rounded-md border border-gray-400 px-3 py-2 dark:text-slate-800" %>
+          <span class="text-xs text-gray-500"><%= t("registrations.new.password_hint", count: User::MINIMUM_PASSWORD_LENGTH) %></span>
+        </div>
+        <div class="flex flex-col gap-1">
+          <%= form.label :password_confirmation, t(".password_confirmation"), class: "font-medium required" %>
+          <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password",
+                class: "rounded-md border border-gray-400 px-3 py-2 dark:text-slate-800" %>
+        </div>
+        <%= render "shared/time_zone_select", form: form %>
+        <%= form.submit t(".join_button", household: household_name(household)),
+              class: "mx-auto rounded-md px-3.5 py-2.5 text-white bg-softBlue font-medium cursor-pointer hover:opacity-90" %>
+      <% end %>
+
+      <div class="relative flex py-2 items-center">
+        <div class="flex-grow border-t border-gray-400"></div>
+        <span class="flex-shrink text-sm mx-4 text-gray-400"><%= t(".or_continue_with") %></span>
+        <div class="flex-grow border-t border-gray-400"></div>
+      </div>
+      <div class="flex justify-center items-center gap-6">
+        <%= form_with url: "/auth/google_oauth2", method: :post, data: { controller: "time-zone", action: "submit->time-zone#setAuthUrl" } do %>
+          <button type="submit" class="flex items-center py-2 cursor-pointer">
+            <%= image_tag "icons8-google-40.png", style: "width: 20px; height: 20px;" %>
+            <span class="ml-2 text-softBlue font-semibold underline">Google</span>
+          </button>
+        <% end %>
+        <%= form_with url: "/auth/line", method: :post, data: { controller: "time-zone", action: "submit->time-zone#setAuthUrl" } do %>
+          <button type="submit" class="flex items-center py-2 cursor-pointer">
+            <%= image_tag "icons8-line-48.png", style: "width: 25px; height: 25px;" %>
+            <span class="ml-2 text-softBlue font-semibold underline">LINE</span>
+          </button>
+        <% end %>
+      </div>
+      <p class="text-center text-sm text-gray-500"><%= t(".same_email_note", email: @invitation.email) %></p>
+
+      <p class="text-center">
+        <%= t(".already_have_account") %>
+        <%= link_to t(".sign_in"), new_session_path, class: "font-bold text-softBlue hover:underline" %>
+      </p>
+    <% end %>
+  </div>
+</div>

@@ -1,4 +1,5 @@
 class OmniAuth::SessionsController < ApplicationController
+  include HouseholdArrival
   allow_unauthenticated_access only: [ :create, :failure ]
   before_action :set_service, only: [ :create ]
   before_action :set_user, only: [ :create ]
@@ -10,8 +11,8 @@ class OmniAuth::SessionsController < ApplicationController
     end
 
     if Current.user.present?
-      flash[:notice] = t("omni_auth.sessions.create.connected", provider: @service.provider.to_s.humanize)
-      redirect_to pets_path
+      arrival = claim_household_invitation(@user)
+      redirect_to landing_path_for(@user), arrival || { notice: t("omni_auth.sessions.create.connected", provider: @service.provider.to_s.humanize) }
     else
       start_new_session_for @user
       @user.last_sign_in_at = @user.current_sign_in_at
@@ -19,13 +20,9 @@ class OmniAuth::SessionsController < ApplicationController
       @user.sign_in_count = @user.sign_in_count.to_i + 1
       @user.save(validate: false)
 
-      if @user.new_user?
-        flash[:notice] = t("omni_auth.sessions.create.first_time_sign_in")
-        redirect_to new_pet_path
-      else
-        flash[:notice] = t("omni_auth.sessions.create.welcome_back", username: Current.user.username.capitalize)
-        redirect_to pets_path
-      end
+      greeting = @user.new_user? ? t("omni_auth.sessions.create.first_time_sign_in") : t("omni_auth.sessions.create.welcome_back", username: @user.username.capitalize)
+      arrival = claim_household_invitation(@user)
+      redirect_to landing_path_for(@user), arrival || { notice: greeting }
     end
   end
 

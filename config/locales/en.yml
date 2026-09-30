@@ -1,4 +1,44 @@
 en:
+  household_joins:
+    joined: "You've joined %{household}."
+    create:
+      rate_limited: "Too many tries. Please try again later."
+    show:
+      page_title: "Join a household"
+      invited: "%{owner} invited you to help with %{pets}, as a caregiver"
+      own_household: "This is your own household."
+      signed_in_as: "You're signed in as %{email}."
+      join_button: "Join %{household}"
+      wrong_account: "This invitation was sent to %{email}, but you're signed in as %{current}. Sign out, then open the link again."
+      sign_out: "Sign out"
+      email: "Email"
+      email_fixed: "From the invitation; it can't be changed."
+      username: "Your name"
+      password: "Password"
+      password_confirmation: "Confirm password"
+      or_continue_with: "or continue with"
+      same_email_note: "With Google or LINE, use the account for %{email}."
+      already_have_account: "Already have an account?"
+      sign_in: "Sign in"
+    expired:
+      title: "This invitation is no longer valid"
+      body: "Invitations work once and for 7 days. Ask the owner to send you a new one."
+  today:
+    show:
+      title: "Today"
+      nothing_yet: "You don't have any cats here yet."
+      add_a_cat: "Add a cat"
+      my_cats: "My cats"
+      you_are_a:
+        caregiver: "you're a caregiver"
+        viewer: "you're a viewer"
+      no_cats: "No cats here yet."
+      charts: "Charts"
+      trackers_and_charts: "Trackers and charts"
+      favorites: "Favorites"
+  household_memberships:
+    destroy:
+      notice: "You've left %{household}."
   shared_trackers:
     read_only_view: "Public read-only view of feeding and weight data"
   hero_section:
@@ -195,6 +235,9 @@ en:
       edit: "Edit"
       cat_list: "Cat List"
       my_household: "🏠 My household"
+      today: "Today"
+      read_only: "(read-only)"
+      view_pet_charts: "%{petname}'s Charts"
       delete: "Delete"
       delete_confirmation: "Are you sure to delete this user account? The user and associated trackers will all gone.."
       my_cats_list: "My Cats List"
@@ -610,6 +653,12 @@ en:
       pets: "Pets"
       go_to_cats_list: "go to %{username}'s cats list"
       household_button: "🏠 My household"
+      households: "Households you help with"
+      leave: "Leave"
+      leave_confirm: "Leave %{household}? You'll no longer see these cats."
+      add_my_own_cat: "🐱 Add my own cat"
+      add_my_own_cat_note: "This creates your own household. %{households} won't change."
+      go_to_today: "Go to Today"
       edit_profile_button: "Edit Profile"
       delete_profile_button: "Delete Profile"
       delete_confirm: "Are you sure to delete this user account? The user and associated trackers will all gone.."
@@ -908,6 +957,10 @@ en:
       models:
         household_invitation:
           attributes:
+            base:
+              not_pending: "This invitation is no longer valid. Ask the owner to send a new one."
+              wrong_email: "This invitation was sent to a different email address."
+              is_owner: "This is your own household."
             email:
               is_owner: "That's your own email address."
               already_member: "That person is already in your household."

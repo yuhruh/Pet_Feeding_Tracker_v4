@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+  include HouseholdArrival
   allow_unauthenticated_access only: %i[ new create ]
   rate_limit to: 10, within: 5.minutes, only: :create, with: -> { redirect_to new_session_url, alert: t("sessions.create.alert_rate_limit") }
 
@@ -18,11 +19,9 @@ class SessionsController < ApplicationController
         sign_in_count: @user.sign_in_count.to_i + 1
       )
 
-      if @user.new_user?
-        redirect_to new_pet_path, notice: t(".notice_new_user", username: Current.user.username.capitalize)
-      else
-        redirect_to pets_path, notice: t(".notice_welcome_back", username: Current.user.username.capitalize)
-      end
+      greeting = @user.new_user? ? t(".notice_new_user", username: @user.username.capitalize) : t(".notice_welcome_back", username: @user.username.capitalize)
+      arrival = claim_household_invitation(@user)
+      redirect_to landing_path_for(@user), arrival || { notice: greeting }
     else
       # One message for an unknown email and a wrong password, and no provider names,
       # so the sign-in form can't be used to find out who has an account. The form is

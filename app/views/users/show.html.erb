@@ -53,8 +53,33 @@
       <p class="text-sm italic text-gray-500 dark:text-gray-300"><%= t(".session_timeout_note", idle_days: Session::IDLE_TIMEOUT.in_days.to_i, absolute_days: Session::ABSOLUTE_TIMEOUT.in_days.to_i) %></p>
     </div>
 
+    <% memberships = Current.user.household_memberships.includes(household: :owner).order(:id) %>
+    <% if memberships.any? %>
+      <div id="households" class="flex flex-col items-center text-center gap-2 py-4">
+        <h2 class="text-lg font-semibold md:text-xl"><%= t(".households") %></h2>
+        <% memberships.each do |membership| %>
+          <div class="flex flex-wrap justify-center items-center gap-3">
+            <span><%= household_name(membership.household) %> · <%= t("households.roles.#{membership.role}") %></span>
+            <%= button_to t(".leave"), leave_household_path(household_id: membership.household_id), method: :delete,
+                  form: { data: { turbo_confirm: t(".leave_confirm", household: household_name(membership.household)) } },
+                  class: "text-sm text-red-600 underline cursor-pointer" %>
+          </div>
+        <% end %>
+        <% unless Current.user.owned_household %>
+          <%= link_to t(".add_my_own_cat"), new_pet_path, class: "mt-2 px-4 py-2 text-sm font-semibold text-orange-600 bg-orange-200 rounded shadow-md border-2 border-orange-200 hover:bg-white md:text-base" %>
+          <p class="text-sm italic text-gray-500 dark:text-gray-300">
+            <%= t(".add_my_own_cat_note", households: memberships.map { |membership| household_name(membership.household) }.to_sentence) %>
+          </p>
+        <% end %>
+      </div>
+    <% end %>
+
     <div class="flex justify-center text-center space-x-4 mt-3">
+      <% if Current.user.helper_only? %>
+        <%= link_to t(".go_to_today"), today_path, class: "p-4 mt-4 text-sm font-semibold text-orange-600 bg-orange-200 rounded shadow-md border-2 border-orange-200 transition duration-300 ease-in-out hover:scale-110 md:text-base hover:bg-white hover:text-orange-500" %>
+      <% else %>
       <%= link_to t(".go_to_cats_list", username: Current.user.username.split(" ").map(&:capitalize).join(" ")), pets_path, class: "p-4 mt-4 text-sm font-semibold text-orange-600 bg-orange-200 rounded shadow-md border-2 border-orange-200 transition duration-300 ease-in-out hover:scale-110 md:text-base hover:bg-white hover:text-orange-500 capitalize" %>
+      <% end %>
       <% if Current.user.owned_household %>
         <%= link_to t(".household_button"), household_path, class: "p-4 mt-4 text-sm font-semibold text-teal-600 bg-teal-200 rounded shadow-md border-2 border-teal-200 transition duration-300 ease-in-out hover:scale-110 md:text-base hover:bg-white hover:text-teal-500 capitalize" %>
       <% end %>

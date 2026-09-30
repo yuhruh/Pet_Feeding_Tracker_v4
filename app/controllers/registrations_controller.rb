@@ -1,4 +1,5 @@
 class RegistrationsController < ApplicationController
+  include HouseholdArrival
   allow_unauthenticated_access only: %i[new create]
   rate_limit to: 10, within: 1.hour, only: :create, with: -> { redirect_to new_registrations_url, alert: t("registrations.create.alert_rate_limit") }
   before_action :resume_session, only: %i[new create]
@@ -42,7 +43,8 @@ class RegistrationsController < ApplicationController
       end
       start_new_session_for @user
       UserMailer.with(user: @user).welcome_email.deliver_later
-      redirect_to new_pet_path, notice: t(".notice", username: @user.username.capitalize)
+      arrival = claim_household_invitation(@user)
+      redirect_to landing_path_for(@user), arrival || { notice: t(".notice", username: @user.username.capitalize) }
     else
       flash[:alert] = @user.errors.full_messages.join(", ")
       render :new, status: :unprocessable_entity
