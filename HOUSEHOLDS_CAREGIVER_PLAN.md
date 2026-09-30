@@ -9,7 +9,7 @@
 | 0 — Decisions | ✅ Done (2026-09-29). No open questions |
 | A — Households and memberships (no visible change) | ✅ Done (2026-09-30). Committed on `feature/households` and pushed. See [Checkpoint A result](#checkpoint-a-result-2026-09-30) |
 | B — Access by household and role | ✅ Done (2026-09-30). Committed on `feature/households` and pushed. See [Checkpoint B result](#checkpoint-b-result-2026-09-30) |
-| C — Caregiver invitations, viewer links, members, transfer ownership | Not started |
+| C — Caregiver invitations, viewer links, members, transfer ownership | ✅ Done (2026-09-30). Committed on `feature/households` in five parts and pushed. See [Checkpoint C result](#checkpoint-c-result-2026-09-30) |
 | D — Care events and the Today page (fed, litter, water, weight) | Not started |
 | E — Medications | Not started |
 | F — Litter observations | Not started |
@@ -19,6 +19,42 @@
 | J — Clean-up, docs, CI, merge | Not started |
 
 **Commits:** each checkpoint is committed on `feature/households` once `bin/rails test` passes, then pushed. Merged into `main` only when you ask.
+
+## Checkpoint C result (2026-09-30)
+
+**What was built**, in five commits:
+
+| Part | What people see | Main files |
+|---|---|---|
+| 1. Models | Nothing yet | `household_invitations`, `viewer_links`, `ownership_transfers` tables; `SecretToken` concern (a long random token shown once, stored only as a SHA-256 digest); `HouseholdInvitation#accept!`, `ViewerLink.find_active` / `#revoke!` / `#record_use!`, `OwnershipTransfer#accept!` |
+| 2. Household page (`/household`, owners only) | Members with **Remove**; **Invite a caregiver** by email; invitations waiting to join, with **Cancel**; **viewer links**: name, expiry (never, 7, 30 or 90 days), the new link shown **once** with a **Copy** button, when each was last opened, **Turn off**. Linked from the account page and the account menu as "🏠 My household" | `HouseholdsController`, `HouseholdInvitationsController`, `ViewerLinksController`, `HouseholdMembersController`, `OwnedHousehold` concern, `HouseholdMailer#invitation`, `copy_controller.js` |
+| 3. Joining and landing | **Join page** (`/join/:token`): "Rita invited you to help with Aji and Umi, as a caregiver", email fixed from the invitation, name and password; or Google / LINE; or "Already have an account? Sign in". **Landing rules** (below). A first **Today page** (`/today`): the user's own cats first, then each household they help with and their role, with links to trackers and charts. **Menus:** "Today" at the top; the Trackers menu lists other households' cats under "Rita's cats (read-only)" (charts only for a viewer); someone who only helps gets the **smaller menu** (no cat list, food bags or health checks). **Account page:** "Households you help with" with **Leave**, and **🐱 Add my own cat** ("This creates your own household. Rita's cats won't change.") | `HouseholdJoinsController`, `HouseholdArrival` concern (used by password sign-in, sign-up and Google / LINE / GitHub), `TodayController`, `HouseholdMembershipsController`, `User#member_households` / `#helper_only?` |
+| 4. Viewer page (`/view/:token`) | "🐾 Rita's cats · shared with Grandma", a cat picker and range, the amount and weight chart; no sign-in and no app menu. **Sign up** / **Sign in** buttons (or **Add to my account** when signed in) add the household as a viewer membership. Turned-off, expired and unknown links show "This link is no longer active" | `ViewerPagesController`, `shared/_tracker_chart` (the share page's chart, now shared by both pages), `content_for :without_app_menu` in the layouts |
+| 5. Transfer ownership | On the household page: pick a member and **Offer household**; "Waiting for Mom to accept (until …)" with **Cancel**. The member gets an **email** and a notice on **Today**, and accepts on `/transfers/:id`. **Deleting an account** whose household has members goes to the household page first: hand it over, or **Delete my account, household and cats** | `OwnershipTransfersController`, `OwnershipTransferOffersController`, `HouseholdMailer#ownership_transfer`, `UsersController#destroy` |
+
+**Where people land after signing in** (password, sign-up, Google, LINE, GitHub):
+
+| Person | Lands on |
+|---|---|
+| Member of anyone else's household (caregiver or viewer), even on the first sign-in or while also owning cats | Today |
+| New user with no household | Add A Cat, as before |
+| Everyone else | The pet list, as before |
+
+An invitation or viewer link opened before signing in is kept in the (encrypted) session and applied right after signing in or up, with "You've joined Rita's cats." or "Rita's cats is now in your account."
+
+**Decisions made while building:**
+- **A first, simple Today page now.** Caregivers land on Today from this checkpoint, so it exists already, listing the cats by household with links to trackers and charts. Checkpoint D adds the buttons, status and timeline.
+- **The viewer page shows the charts only for now.** The status rows and today's timeline come with care events in D.
+- **Following a household from a viewer link needs a click** on Sign up / Sign in / Add to my account. Just opening the link and later signing in on the same browser adds nothing.
+- **Invitation emails with Google or LINE must use the invited email**; a different account gets "This invitation was sent to a different email address." and lands as usual.
+- **Ownership offers are accepted by the signed-in member**, by the offer's id (`/transfers/:id`): only that member can open it, so the email link needs no secret. The token column made in part 1 stays unused for now; J can drop it.
+- **The invitation token is passed to the email job** as an argument, so it's stored in the job queue table until the job is cleaned up. It's single use, expires in 7 days and works only for the invited email.
+- **Pets list** keeps showing only the user's own cats; other households' cats are on Today and in the Trackers menu.
+- **Error messages are shown as written** (full sentences like "That's your own email address."), not prefixed with the field name.
+
+**Checks:**
+- **38 new tests**: household page (owner-only; invite, replace and cancel invitations; viewer link shown once and turned off; removing members; another owner's records not reachable); joining (sign up with the invited email, sign in, one-button join, Google, wrong email, expired / used / made-up links); landing for new users, owners, caregivers and owners who also help; Today grouped by household; the smaller menu, "Add my own cat" and leaving; viewer page (no index, no referrer, only its household's cats, stops when turned off or expired, following by sign-in, sign-up and one button, only on request, never downgrading a caregiver); transfer (email, in-app accept, replacing and withdrawing offers, only to members, no one else can accept, account deletion asks first).
+- `bin/rails test`: 337 runs, 0 failures. `bin/rails test:system`: 32 runs, 0 failures. RuboCop and Brakeman clean.
 
 ## Checkpoint B result (2026-09-30)
 
@@ -504,7 +540,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 | 0 | Decisions | ✅ Done |
 | A | `households`, `household_memberships`, `care_spots` (one box, one bowl each), `pets.household_id`, `dry_foods.household_id`; data migration | ✅ Done — existing tests unchanged; migration and rollback checked on PostgreSQL; every current user with pets or bags owns one household with them, a litter box and a water bowl |
 | B | `Pet.accessible_by`, `HouseholdPolicy`; replace every lookup listed above; food-bag rule by household; jobs, mailers and brand names via the household's owner | ✅ Done — role × page matrix (owner, caregiver, viewer, outsider on 22 pages and actions); all existing tests unchanged |
-| C | Caregiver invitations and the join page (prefilled email, Google / LINE); the new landing rules (caregivers and people in several households land on Today; new users with no household still get "Add A Cat"); "Add my own cat" under Account; menus and cat lists grouped by household; the caregiver menu; viewer links (create, name, expiry, turn off) and the viewer page with charts; member list, removing, leaving; transfer ownership; account deletion asks to transfer | Invite → join → caregiver role applies; expired, reused and wrong-email invitations refused; a viewer link opens only its household's viewer page, and stops at once when turned off or expired; signing in from a viewer link adds a viewer membership; transfer swaps owner and caregiver in one transaction |
+| C | ✅ Done — Caregiver invitations and the join page (prefilled email, Google / LINE); the new landing rules (caregivers and people in several households land on Today; new users with no household still get "Add A Cat"); "Add my own cat" under Account; menus and cat lists grouped by household; the caregiver menu; viewer links (create, name, expiry, turn off) and the viewer page with charts; member list, removing, leaving; transfer ownership; account deletion asks to transfer | Invite → join → caregiver role applies; expired, reused and wrong-email invitations refused; a viewer link opens only its household's viewer page, and stops at once when turned off or expired; signing in from a viewer link adds a viewer membership; transfer swaps owner and caregiver in one transaction |
 | D | `care_events`; Today page with litter-box and water-spot rows and cat cards; one-tap fed, scooped, full change, refilled, cleaned, filter changed (several actions in one record, with checkboxes in the notice); weight form; change time; feeding "Add details" with suggestions by food type; "Add to trackers"; undo; double-tap guard; status and today's timeline on the viewer page; managing boxes and water spots | Browser test: caregiver taps Fed and adds details, refills and cleans the fountain in one record, changes a time, undoes a tap; owner adds a feeding to trackers; the viewer link shows the new records with no buttons; tests that every save refuses a household mismatch (record, food bag, box, water spot, medication) and a person without rights in that household |
 | E | `medications`; meds button with Given / Couldn't give; due / given / overdue | Doses shown per schedule; double dose guarded |
 | F | Litter observations in "Add details" (optional fields; which cat) | Old records unchanged; observations show on the timeline and, with a cat, in that cat's history |
@@ -521,7 +557,8 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 | Data migration on production | Additive columns first, backfilled by a migration tested on PostgreSQL; old `user_id` columns removed only in J |
 | Caregivers or viewers seeing private data | Health checks, vet visits, kibble prices, the Gemini API key, the share link and owner emails stay owner-only; viewers see charts and today's timeline only |
 | Owner leaves or deletes their account | Transfer ownership; account deletion asks to transfer first |
-| Invitation or transfer links forwarded | Single use, 7-day expiry, bound to the invited email / chosen member |
+| Invitation or transfer links forwarded | Single use, 7-day expiry, bound to the invited email / chosen member (a transfer is accepted only by that member, signed in) |
+| Invitation tokens in the job queue | The token is an argument of the email job, so it sits in the queue table until cleanup; it's single use, expires in 7 days and works only for the invited email |
 | Viewer link forwarded | One link per viewer, turned off by the owner at any time, optional expiry; read-only; shows no private data; not indexed by search engines |
 | New caregivers sent to "Add A Cat" | Landing depends on what the person has: caregivers land on Today; only a new user with no household gets "Add A Cat" |
 | Records ending up in the wrong household | No household picker; the server sets the household from the cat, box or spot and refuses any mismatch (see [Keeping households apart](#keeping-households-apart)) |
@@ -536,6 +573,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 
 ## Change log
 
+- **Checkpoint C (2026-09-30):** household page (members, invitations, viewer links), join page with Google / LINE, landing rules, a first Today page, grouped and smaller menus, leaving and "Add my own cat", the viewer page with charts, transfer ownership, and account deletion asking to hand over first. Today's buttons and the viewer page's status and timeline come in D.
 - **Checkpoint B (2026-09-30):** access by household and role on every page; CSV export and the pet profile are owner-only; refused actions say "Only Aji's owner can do that."
 - **Checkpoint A (2026-09-30):** households, memberships and care spots built; existing pets and food bags moved into their owner's household. Names stored empty and shown in each viewer's language; users without pets or bags get a household with their first one.
 - **v6 (2026-09-30):** landing after sign-in depends on what the person has (new user with no household → "Add A Cat"; caregivers → Today). Caregivers can create their own household with **"Add my own cat" under Account** ("This creates your own household. Rita's cats are not affected."), becoming owner and caregiver. Pages for someone in several households: owner menu once they own cats, Today grouped by household (own first), cat lists grouped by household with the role shown. **Keeping households apart:** no household picker; the household comes from the cat, box or spot and is set by the server, which refuses any mismatch.
