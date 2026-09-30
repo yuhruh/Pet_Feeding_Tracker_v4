@@ -1,5 +1,11 @@
  ja:
   care_spots:
+    create:
+      notice: "%{name}を追加しました。"
+    update:
+      notice: "保存しました。"
+    destroy:
+      notice: "%{name}を削除しました。過去の記録は残ります。"
     kinds:
       litter_box: "トイレ"
       water_bowl: "水入れ"
@@ -111,6 +117,7 @@
     show:
       title: "%{household} · %{name}さんと共有"
       read_only_note: "閲覧のみ：食べた量と体重です。"
+      status: "今日"
       no_cats: "まだ猫がいません。"
       charts: "グラフ"
       cat: "猫"
@@ -849,6 +856,16 @@
       delete_anyway_explanation: "または、アカウントと一緒に家庭・猫・記録をすべて削除します。メンバーは見られなくなります。"
       delete_anyway: "アカウント・家庭・猫を削除"
       delete_anyway_confirm: "アカウント、家庭、猫、すべての記録を削除しますか？ 元に戻せません。"
+      care_spots: "トイレと水の場所"
+      care_spots_explanation: "それぞれに今日のページのボタンが付きます。給水器には「🔄 フィルター交換」もあります。"
+      spot_name: "名前"
+      spot_kind: "種類"
+      spot_name_placeholder: "例：2階のトイレ"
+      save: "保存"
+      move_up: "上へ"
+      move_down: "下へ"
+      remove_spot_confirm: "%{name}を削除しますか？ 今日のページから消えますが、過去の記録は残ります。"
+      add_spot: "追加"
   household_invitations:
     create:
       notice: "%{email} に招待を送りました。"
@@ -1103,6 +1120,12 @@
               too_long: "名前は40文字以内にしてください。"
             expires_at:
               in_the_past: "期限は未来の日付にしてください。"
+        care_spot:
+          attributes:
+            name:
+              too_long: "名前は40文字以内にしてください。"
+            kind:
+              inclusion: "トイレ、水入れ、給水器から選んでください。"
         care_event:
           attributes:
             occurred_at:

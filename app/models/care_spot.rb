@@ -5,5 +5,7 @@ class CareSpot < ApplicationRecord
 
   enum :kind, { litter_box: "litter_box", water_bowl: "water_bowl", water_fountain: "water_fountain" }, validate: true
 
+  validates :name, length: { maximum: 40 }
+
   scope :active, -> { where(archived_at: nil) }
 end

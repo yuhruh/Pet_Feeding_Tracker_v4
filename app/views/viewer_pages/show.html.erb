@@ -10,6 +10,12 @@
     <p class="text-sm italic text-gray-500 mt-2"><%= t(".read_only_note") %></p>
   </div>
 
+  <section id="today_status" class="border-2 border-slate-200 rounded-xl shadow-lg p-4">
+    <h2 class="font-semibold text-xl mb-3"><%= t(".status") %></h2>
+    <%= render "care_events/status", day: @day, can_record: false %>
+    <%= render "care_events/timeline", day: @day, reader: nil %>
+  </section>
+
   <% if @pet.nil? %>
     <p class="text-center text-gray-600 dark:text-gray-300"><%= t(".no_cats") %></p>
   <% else %>

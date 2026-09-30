@@ -1,5 +1,11 @@
 zh-TW:
   care_spots:
+    create:
+      notice: "已新增 %{name}。"
+    update:
+      notice: "已儲存。"
+    destroy:
+      notice: "已移除 %{name}，過去的紀錄會保留。"
     kinds:
       litter_box: "貓砂盆"
       water_bowl: "水碗"
@@ -111,6 +117,7 @@ zh-TW:
     show:
       title: "%{household} · 與 %{name} 分享"
       read_only_note: "唯讀：食量與體重。"
+      status: "今天"
       no_cats: "這裡還沒有貓咪。"
       charts: "圖表"
       cat: "貓咪"
@@ -849,6 +856,16 @@ zh-TW:
       delete_anyway_explanation: "或者，連同帳號一起刪除你的家庭、貓咪和所有紀錄。成員將無法再查看。"
       delete_anyway: "刪除我的帳號、家庭和貓咪"
       delete_anyway_confirm: "要刪除你的帳號、家庭、貓咪和所有紀錄嗎？此動作無法復原。"
+      care_spots: "貓砂盆與喝水地點"
+      care_spots_explanation: "每一個在今天頁面都有自己的按鈕。飲水機另外有「🔄 換濾心」。"
+      spot_name: "名稱"
+      spot_kind: "類型"
+      spot_name_placeholder: "例如：樓上的砂盆"
+      save: "儲存"
+      move_up: "上移"
+      move_down: "下移"
+      remove_spot_confirm: "要移除 %{name} 嗎？它會從今天頁面消失，過去的紀錄會保留。"
+      add_spot: "新增"
   household_invitations:
     create:
       notice: "已寄出邀請給 %{email}。"
@@ -1103,6 +1120,12 @@ zh-TW:
               too_long: "名字請在 40 個字以內。"
             expires_at:
               in_the_past: "到期日必須在未來。"
+        care_spot:
+          attributes:
+            name:
+              too_long: "名稱請在 40 字以內。"
+            kind:
+              inclusion: "請選擇貓砂盆、水碗或飲水機。"
         care_event:
           attributes:
             occurred_at:

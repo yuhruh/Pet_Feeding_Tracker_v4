@@ -1,5 +1,11 @@
 en:
   care_spots:
+    create:
+      notice: "%{name} added."
+    update:
+      notice: "Saved."
+    destroy:
+      notice: "%{name} removed. Its past records stay."
     kinds:
       litter_box: "Litter box"
       water_bowl: "Water bowl"
@@ -111,6 +117,7 @@ en:
     show:
       title: "%{household} · shared with %{name}"
       read_only_note: "Read-only: how much they eat and their weight."
+      status: "Today"
       no_cats: "No cats here yet."
       charts: "Charts"
       cat: "Cat"
@@ -849,6 +856,16 @@ en:
       delete_anyway_explanation: "Or delete your account together with your household, its cats and their records. Your members lose access."
       delete_anyway: "Delete my account, household and cats"
       delete_anyway_confirm: "Delete your account, your household, its cats and all their records? This can't be undone."
+      care_spots: "Litter boxes and water spots"
+      care_spots_explanation: "Each one gets its own buttons on the Today page. A fountain also has 🔄 Filter changed."
+      spot_name: "Name"
+      spot_kind: "Kind"
+      spot_name_placeholder: "e.g. Upstairs box"
+      save: "Save"
+      move_up: "Move up"
+      move_down: "Move down"
+      remove_spot_confirm: "Remove %{name}? It disappears from the Today page; its past records stay."
+      add_spot: "Add"
   household_invitations:
     create:
       notice: "Invitation sent to %{email}."
@@ -1118,6 +1135,12 @@ en:
               too_long: "Keep the name to 40 characters."
             expires_at:
               in_the_past: "The expiry must be in the future."
+        care_spot:
+          attributes:
+            name:
+              too_long: "Keep the name to 40 characters."
+            kind:
+              inclusion: "Pick litter box, water bowl or water fountain."
         care_event:
           attributes:
             occurred_at:

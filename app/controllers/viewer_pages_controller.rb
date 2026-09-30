@@ -14,7 +14,8 @@ class ViewerPagesController < ApplicationController
     @link.record_use!
 
     @household = @link.household
-    @pets = @household.pets.order(:petname).to_a
+    @day = HouseholdDay.new(@household)
+    @pets = @day.pets
     @pet = @pets.find { |pet| pet.id.to_s == params[:pet_id].to_s } || @pets.first
     @range = params[:range].presence_in(RANGES) || "30"
     @following = authenticated? && (@household.owner_id == Current.user.id || @household.memberships.exists?(user: Current.user))

@@ -105,4 +105,20 @@ class ViewerPagesTest < ActionDispatch::IntegrationTest
       post page_url
     end
   end
+
+  test "the page shows the household's status and today's timeline, without buttons or notes" do
+    box = @household.care_spots.create!(kind: :litter_box, name: "Upstairs box")
+    mom = new_user("mom")
+    @household.memberships.create!(user: mom, role: :caregiver)
+    CareEvent.create!(kind: :litter, care_spot: box, actions: [ "scooped" ], actor: mom, occurred_at: 5.minutes.ago)
+    CareEvent.create!(kind: :fed, pet: pets(:one), actor: mom, occurred_at: 3.minutes.ago, note: "private note")
+
+    get page_url
+    assert_select "#today_status", text: /Upstairs box: scooped · Mom/
+    assert_select "#today_status", text: /Fed \d\d:\d\d by Mom/
+    assert_select "#today_status button", count: 0
+    assert_select "#today_status a", count: 0
+    assert_no_match "private note", response.body
+    assert_no_match "mom@example.com", response.body
+  end
 end

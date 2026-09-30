@@ -8,12 +8,13 @@ module CareEventsHelper
 
   # The button label for one of a spot's jobs: "🧽 Fountain cleaned".
   def care_action_label(spot, action)
-    t("care_events.actions.#{spot.kind}.#{action}")
+    # A fountain turned into a bowl keeps its past "filter changed" records.
+    t("care_events.actions.#{spot.kind}.#{action}", default: t("care_events.actions.water_fountain.#{action}"))
   end
 
   # The same job in a sentence: "fountain cleaned".
   def care_action_done(spot, action)
-    t("care_events.done.#{spot.kind}.#{action}")
+    t("care_events.done.#{spot.kind}.#{action}", default: t("care_events.done.water_fountain.#{action}"))
   end
 
   def care_time(time, zone)

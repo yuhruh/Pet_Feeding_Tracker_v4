@@ -37,6 +37,9 @@ Rails.application.routes.draw do
       resources :viewer_links, only: %i[create destroy]
       resources :members, only: :destroy, controller: "household_members"
       resources :ownership_transfers, only: %i[create destroy]
+      resources :care_spots, only: %i[create update destroy] do
+        patch :move, on: :member
+      end
     end
     # An invited caregiver joins from the link in their invitation email.
     get "join/:token", to: "household_joins#show", as: :join_household

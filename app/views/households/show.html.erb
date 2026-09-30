@@ -99,6 +99,46 @@
       </ul>
     <% end %>
   </section>
+  <%# Litter boxes and water spots %>
+  <section id="care_spots" class="border-2 border-slate-200 rounded-xl shadow-lg p-4">
+    <h2 class="font-semibold text-xl mb-1"><%= t(".care_spots") %></h2>
+    <p class="text-sm text-gray-600 dark:text-gray-300 mb-3"><%= t(".care_spots_explanation") %></p>
+    <ul class="divide-y divide-slate-200">
+      <% @care_spots.each_with_index do |spot, index| %>
+        <li id="<%= dom_id(spot) %>" class="flex flex-wrap items-center gap-2 py-2">
+          <%= form_with model: spot, url: household_care_spot_path(spot), method: :patch, class: "flex flex-1 flex-wrap items-center gap-2" do |form| %>
+            <%= form.text_field :name, placeholder: t("care_spots.kinds.#{spot.kind}"), maxlength: 40, "aria-label": t(".spot_name"),
+                  class: "flex-1 min-w-32 rounded-md border px-2 py-1 dark:text-black" %>
+            <% if spot.litter_box? %>
+              <span class="text-sm text-gray-500"><%= t("care_spots.kinds.litter_box") %></span>
+            <% else %>
+              <%= form.select :kind, %w[water_bowl water_fountain].map { |kind| [ t("care_spots.kinds.#{kind}"), kind ] }, {},
+                    "aria-label": t(".spot_kind"), class: "rounded-md border px-2 py-1 dark:text-black" %>
+            <% end %>
+            <%= form.submit t(".save"), class: "rounded-md px-2 py-1 text-sm bg-sky-100 text-sky-800 cursor-pointer" %>
+          <% end %>
+          <span class="flex items-center gap-1">
+            <% unless index.zero? %>
+              <%= button_to "↑", move_household_care_spot_path(spot), method: :patch, params: { direction: "up" }, "aria-label": t(".move_up"), class: "px-2 cursor-pointer" %>
+            <% end %>
+            <% unless index == @care_spots.size - 1 %>
+              <%= button_to "↓", move_household_care_spot_path(spot), method: :patch, params: { direction: "down" }, "aria-label": t(".move_down"), class: "px-2 cursor-pointer" %>
+            <% end %>
+            <%= button_to t(".remove"), household_care_spot_path(spot), method: :delete,
+                  form: { data: { turbo_confirm: t(".remove_spot_confirm", name: care_spot_name(spot)) } }, class: "text-sm text-red-600 underline cursor-pointer" %>
+          </span>
+        </li>
+      <% end %>
+    </ul>
+    <%= form_with model: CareSpot.new, url: household_care_spots_path, method: :post, class: "mt-3 flex flex-col gap-2 sm:flex-row sm:items-center" do |form| %>
+      <%= form.text_field :name, maxlength: 40, placeholder: t(".spot_name_placeholder"), "aria-label": t(".spot_name"),
+            class: "flex-1 rounded-md border px-3 py-2 dark:text-black" %>
+      <%= form.select :kind, CareSpot.kinds.keys.map { |kind| [ t("care_spots.kinds.#{kind}"), kind ] }, {}, "aria-label": t(".spot_kind"),
+            class: "rounded-md border px-2 py-2 dark:text-black" %>
+      <%= form.submit t(".add_spot"), class: "rounded-md px-3.5 py-2 text-sky-700 bg-sky-200 border-2 border-sky-200 font-medium cursor-pointer hover:bg-gray-100" %>
+    <% end %>
+  </section>
+
   <%# Handing the household to a member %>
   <section id="transfer" class="border-2 border-slate-200 rounded-xl shadow-lg p-4">
     <h2 class="font-semibold text-xl mb-1"><%= t(".transfer") %></h2>
