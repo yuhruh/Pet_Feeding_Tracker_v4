@@ -1,0 +1,102 @@
+<% content_for :title, household_name(@household) %>
+
+<div class="container mx-auto w-full px-2 md:w-2/3 mb-8 space-y-6">
+  <div class="text-center">
+    <h1 class="font-bold text-3xl md:text-4xl mb-2"><%= household_name(@household) %></h1>
+    <p class="text-sm text-gray-600 dark:text-gray-300"><%= t(".intro") %></p>
+  </div>
+
+  <%# Caregivers and viewers with an account %>
+  <section class="border-2 border-slate-200 rounded-xl shadow-lg p-4">
+    <h2 class="font-semibold text-xl mb-3"><%= t(".members") %></h2>
+    <% if @members.empty? %>
+      <p class="text-gray-600 dark:text-gray-300"><%= t(".no_members") %></p>
+    <% else %>
+      <ul class="divide-y divide-slate-200">
+        <% @members.each do |membership| %>
+          <li class="flex flex-wrap justify-between items-center gap-2 py-2">
+            <span>
+              <span class="font-medium"><%= membership.user.username %></span>
+              <span class="text-sm text-gray-500"><%= membership.user.email_address %></span>
+              <span class="ml-2 rounded-full px-2 py-0.5 text-xs bg-sky-100 text-sky-700"><%= t("households.roles.#{membership.role}") %></span>
+            </span>
+            <%= button_to t(".remove"), household_member_path(membership), method: :delete,
+                  form: { data: { turbo_confirm: t(".remove_confirm", name: membership.user.username) } },
+                  class: "text-sm text-red-600 underline cursor-pointer" %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </section>
+
+  <%# Inviting a caregiver %>
+  <section class="border-2 border-slate-200 rounded-xl shadow-lg p-4">
+    <h2 class="font-semibold text-xl mb-1"><%= t(".invite_caregiver") %></h2>
+    <p class="text-sm text-gray-600 dark:text-gray-300 mb-3"><%= t(".invite_explanation") %></p>
+    <%= form_with url: household_invitations_path, method: :post, class: "flex flex-col gap-2 sm:flex-row" do |form| %>
+      <%= form.email_field :email, required: true, placeholder: t(".email_placeholder"), autocomplete: "off",
+            class: "flex-1 shadow-sm rounded-md border px-3 py-2 dark:text-black" %>
+      <%= form.submit t(".send_invitation"), class: "rounded-md px-3.5 py-2 text-sky-700 bg-sky-200 border-2 border-sky-200 font-medium cursor-pointer hover:bg-gray-100" %>
+    <% end %>
+
+    <% if @invitations.any? %>
+      <h3 class="font-medium mt-4 mb-1"><%= t(".pending_invitations") %></h3>
+      <ul class="divide-y divide-slate-200 text-sm">
+        <% @invitations.each do |invitation| %>
+          <li class="flex flex-wrap justify-between items-center gap-2 py-2">
+            <span><%= invitation.email %> · <%= t(".expires", date: l(invitation.expires_at.to_date, format: :long)) %></span>
+            <%= button_to t(".cancel"), household_invitation_path(invitation), method: :delete, class: "text-red-600 underline cursor-pointer" %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </section>
+
+  <%# Viewer links %>
+  <section class="border-2 border-slate-200 rounded-xl shadow-lg p-4">
+    <h2 class="font-semibold text-xl mb-1"><%= t(".viewer_links") %></h2>
+    <p class="text-sm text-gray-600 dark:text-gray-300 mb-3"><%= t(".viewer_links_explanation") %></p>
+
+    <% if @new_viewer_link_url %>
+      <div class="mb-4 p-3 rounded-lg border-2 border-emerald-200 bg-emerald-50 dark:text-gray-800">
+        <p class="text-sm font-medium mb-2"><%= t(".new_link_once") %></p>
+        <div class="flex flex-col gap-2 sm:flex-row">
+          <input type="text" readonly value="<%= @new_viewer_link_url %>" class="flex-1 rounded-md border px-2 py-1 text-sm" id="new_viewer_link">
+          <button type="button" data-controller="copy" data-copy-text-value="<%= @new_viewer_link_url %>" data-copy-done-value="<%= t(".copied") %>"
+                  data-action="copy#copy" class="rounded-md px-3 py-1 text-emerald-800 bg-emerald-200 font-medium cursor-pointer"><%= t(".copy") %></button>
+        </div>
+      </div>
+    <% end %>
+
+    <%= form_with url: household_viewer_links_path, method: :post, class: "flex flex-col gap-2 sm:flex-row sm:items-center" do |form| %>
+      <%= form.text_field :name, required: true, maxlength: 40, placeholder: t(".viewer_name_placeholder"),
+            class: "flex-1 shadow-sm rounded-md border px-3 py-2 dark:text-black" %>
+      <%= form.label :expires_in, t(".expires_in"), class: "text-sm" %>
+      <%= form.select :expires_in, ViewerLinksController::EXPIRY.keys.map { |key| [ t(".expiry.#{key}"), key ] }, {},
+            class: "rounded-md border px-2 py-2 dark:text-black" %>
+      <%= form.submit t(".create_link"), class: "rounded-md px-3.5 py-2 text-sky-700 bg-sky-200 border-2 border-sky-200 font-medium cursor-pointer hover:bg-gray-100" %>
+    <% end %>
+
+    <% if @viewer_links.any? %>
+      <ul class="divide-y divide-slate-200 text-sm mt-4">
+        <% @viewer_links.each do |link| %>
+          <li class="flex flex-wrap justify-between items-center gap-2 py-2">
+            <span>
+              <span class="font-medium"><%= link.name %></span> ·
+              <% if link.active? %>
+                <span class="text-emerald-700"><%= link.expires_at ? t(".active_until", date: l(link.expires_at.to_date, format: :long)) : t(".active") %></span>
+              <% else %>
+                <span class="text-gray-500"><%= link.revoked_at ? t(".turned_off") : t(".expired") %></span>
+              <% end %>
+              · <span class="text-gray-500"><%= link.last_used_at ? t(".last_used", time: time_ago_in_words(link.last_used_at)) : t(".never_used") %></span>
+            </span>
+            <% if link.active? %>
+              <%= button_to t(".turn_off"), household_viewer_link_path(link), method: :delete,
+                    form: { data: { turbo_confirm: t(".turn_off_confirm", name: link.name) } }, class: "text-red-600 underline cursor-pointer" %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </section>
+</div>

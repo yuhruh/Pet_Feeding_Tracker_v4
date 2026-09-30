@@ -42,6 +42,9 @@
                 <%= link_to t('layouts.navigation.view'), users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-blue-100 focus:text-softRed focus:outline-hidden" %>
                 <%= link_to t('layouts.navigation.edit'), edit_users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-green-100 hover:text-green-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
                 <%= link_to t('layouts.navigation.cat_list'), pets_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+                <% if Current.user.owned_household %>
+                  <%= link_to t('layouts.navigation.my_household'), household_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-teal-100 hover:text-teal-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+                <% end %>
                 <%= link_to t('layouts.navigation.delete'), users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-red-100 hover:text-softRed focus:bg-gray-100 focus:text-softRed focus:outline-hidden", 
                 data: {"turbo-confirm": t('layouts.navigation.delete_confirmation'), "turbo-method": "delete"} %>
               </div>
@@ -253,6 +256,9 @@
         <%= link_to t('layouts.navigation.mobile.delete_profile'), users_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-red-100 hover:text-softRed focus:bg-gray-100 focus:text-softRed focus:outline-hidden", 
         data: {"turbo-confirm": t('layouts.navigation.mobile.delete_confirmation'), "turbo-method": "delete"} %>
         <%= link_to t('layouts.navigation.mobile.cats_list'), pets_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+        <% if Current.user.owned_household %>
+          <%= link_to t('layouts.navigation.my_household'), household_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-teal-100 hover:text-teal-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+        <% end %>
       </div>
       <div class="w-full py-3 text-center">
         <div class="flex flex-row justify-center gap-3">

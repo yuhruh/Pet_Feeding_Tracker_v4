@@ -194,6 +194,7 @@
       view: "表示"
       edit: "編集"
       cat_list: "猫リスト"
+      my_household: "🏠 わが家のメンバー"
       delete: "削除"
       delete_confirmation: "このユーザーアカウントを削除してもよろしいですか？ユーザーと関連するトラッカーはすべて削除されます。"
       my_cats_list: "私の猫リスト"
@@ -608,6 +609,7 @@
       pets_count: "ペット数："
       pets: "匹"
       go_to_cats_list: "%{username}の猫リストに移動"
+      household_button: "🏠 わが家のメンバー"
       edit_profile_button: "プロフィールを編集"
       delete_profile_button: "プロフィールを削除"
       delete_confirm: "このユーザーアカウントを削除してもよろしいですか？ユーザーと関連するトラッカーはすべて削除されます。"
@@ -619,6 +621,68 @@
       alert: "%{name}および関連するすべての記録は正常に削除されました。"
   households:
     owner_only: "これは%{petname}の飼い主だけができます。"
+    default_name: "%{owner}の猫たち"
+    needs_a_cat: "先に猫を追加してください。そのときに世帯が作られます。"
+    roles:
+      owner: "オーナー"
+      caregiver: "ケアする人"
+      viewer: "見るだけの人"
+    show:
+      intro: "猫のお世話を手伝ってくれる人たち。"
+      members: "ケアする人・見るだけの人"
+      no_members: "まだいません。下からケアする人を招待しましょう。"
+      remove: "外す"
+      remove_confirm: "%{name}さんを世帯から外しますか？"
+      invite_caregiver: "ケアする人を招待"
+      invite_explanation: "ケアする人は、ごはん・トイレ・水・お薬を記録でき、記録とグラフを閲覧できます。アカウントが必要で、招待メールから作成できます。"
+      email_placeholder: "相手のメールアドレス"
+      send_invitation: "招待を送る"
+      pending_invitations: "参加待ち"
+      expires: "リンクの期限 %{date}"
+      cancel: "取り消す"
+      viewer_links: "閲覧リンク"
+      viewer_links_explanation: "見るだけの人（おばあちゃんなど）のための個人リンク。猫のグラフと今日の記録を閲覧専用で見られ、アカウントは不要です。いつでもリンクを無効にできます。"
+      new_link_once: "新しいリンクです。今コピーしてLINEやメールで送ってください。再表示されません。"
+      copy: "コピー"
+      copied: "コピーしました！"
+      viewer_name_placeholder: "相手（例：おばあちゃん）"
+      expires_in: "期限"
+      expiry:
+        never: "なし"
+        7_days: "7日後"
+        30_days: "30日後"
+        90_days: "90日後"
+      create_link: "リンクを作成"
+      active: "有効"
+      active_until: "%{date}まで有効"
+      turned_off: "無効"
+      expired: "期限切れ"
+      last_used: "%{time}前に開かれました"
+      never_used: "まだ開かれていません"
+      turn_off: "無効にする"
+      turn_off_confirm: "%{name}さんのリンクを無効にしますか？すぐに使えなくなります。"
+  household_invitations:
+    create:
+      notice: "%{email} に招待を送りました。"
+      rate_limited: "招待が多すぎます。しばらくしてからお試しください。"
+    destroy:
+      notice: "招待を取り消しました。"
+  viewer_links:
+    create:
+      notice: "%{name}さんの閲覧リンクを作成しました。"
+    destroy:
+      notice: "%{name}さんのリンクを無効にしました。"
+  household_members:
+    destroy:
+      notice: "%{name}さんを世帯から外しました。"
+  household_mailer:
+    invitation:
+      subject: "%{owner}さんから猫のお世話のお手伝いに招待されました"
+      intro: "%{owner}さんが、Pet Trackerで%{pets}のお世話を手伝う「ケアする人」としてあなたを招待しました。"
+      their_cats: "猫たち"
+      what_you_can_do: "ケアする人は、ごはん・トイレ・水・お薬をワンタップで記録でき、記録とグラフを見られます。"
+      join: "%{owner}さんの世帯に参加する"
+      fine_print: "この招待は %{email} 専用で、%{date}まで一度だけ使えます。心当たりがない場合は、このメールを無視してください。"
   kibble_prices:
     index:
       title: "%{petname}のドライフード価格"
@@ -827,6 +891,25 @@
         visit_date: "訪問日"
     errors:
       models:
+        household_invitation:
+          attributes:
+            email:
+              is_owner: "ご自身のメールアドレスです。"
+              already_member: "その方はすでに世帯のメンバーです。"
+              invalid: "メールアドレスの形式ではありません。"
+              blank: "メールアドレスを入力してください。"
+        viewer_link:
+          attributes:
+            name:
+              blank: "リンクの相手を入力してください。"
+              too_long: "名前は40文字以内にしてください。"
+            expires_at:
+              in_the_past: "期限は未来の日付にしてください。"
+        ownership_transfer:
+          attributes:
+            to_user:
+              not_a_member: "世帯のメンバーにのみ引き継げます。"
+              already_owns: "その方はすでに自分の世帯を持っています。"
         tracker:
           attributes:
             amount:

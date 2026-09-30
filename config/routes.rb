@@ -31,6 +31,17 @@ Rails.application.routes.draw do
       resources :kibble_prices, only: [ :index, :create ]
     end
     get "shared/:share_token", to: "shared_trackers#show", as: :shared_pet_trackers
+    # The owner's household: members, caregiver invitations, viewer links.
+    resource :household, only: :show do
+      resources :invitations, only: %i[create destroy], controller: "household_invitations"
+      resources :viewer_links, only: %i[create destroy]
+      resources :members, only: :destroy, controller: "household_members"
+    end
+    # An invited caregiver joins from the link in their invitation email.
+    get "join/:token", to: "household_joins#show", as: :join_household
+    post "join/:token", to: "household_joins#create"
+    # A viewer's personal read-only page (no account needed).
+    get "view/:token", to: "viewer_pages#show", as: :viewer_page
     resource :session, except: [ :new ]
     delete "session/others", to: "sessions#destroy_others", as: :other_sessions
     resource :registrations, only: [ :new, :create ]

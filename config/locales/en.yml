@@ -194,6 +194,7 @@ en:
       view: "View"
       edit: "Edit"
       cat_list: "Cat List"
+      my_household: "🏠 My household"
       delete: "Delete"
       delete_confirmation: "Are you sure to delete this user account? The user and associated trackers will all gone.."
       my_cats_list: "My Cats List"
@@ -608,6 +609,7 @@ en:
       pets_count: "pets count:"
       pets: "Pets"
       go_to_cats_list: "go to %{username}'s cats list"
+      household_button: "🏠 My household"
       edit_profile_button: "Edit Profile"
       delete_profile_button: "Delete Profile"
       delete_confirm: "Are you sure to delete this user account? The user and associated trackers will all gone.."
@@ -619,6 +621,68 @@ en:
       alert: "%{name} and all associated records were successfully deleted."
   households:
     owner_only: "Only %{petname}'s owner can do that."
+    default_name: "%{owner}'s cats"
+    needs_a_cat: "Add a cat first; your household is created with it."
+    roles:
+      owner: "Owner"
+      caregiver: "Caregiver"
+      viewer: "Viewer"
+    show:
+      intro: "The people who help look after your cats."
+      members: "Caregivers and viewers"
+      no_members: "No one yet. Invite a caregiver below."
+      remove: "Remove"
+      remove_confirm: "Remove %{name} from your household?"
+      invite_caregiver: "Invite a caregiver"
+      invite_explanation: "A caregiver records feeding, litter, water and meds, and can read your trackers and charts. They'll need an account; the invitation email lets them create one."
+      email_placeholder: "their@email.com"
+      send_invitation: "Send invitation"
+      pending_invitations: "Waiting to join"
+      expires: "link expires %{date}"
+      cancel: "Cancel"
+      viewer_links: "Viewer links"
+      viewer_links_explanation: "A personal link for someone who just wants to look, like Grandma: your cats' charts and today's records, read-only, no account needed. You can turn each link off at any time."
+      new_link_once: "Here's the new link. Copy it now and send it by LINE or email; it won't be shown again."
+      copy: "Copy"
+      copied: "Copied!"
+      viewer_name_placeholder: "Who it's for, e.g. Grandma"
+      expires_in: "Expires"
+      expiry:
+        never: "Never"
+        7_days: "In 7 days"
+        30_days: "In 30 days"
+        90_days: "In 90 days"
+      create_link: "Create link"
+      active: "active"
+      active_until: "active until %{date}"
+      turned_off: "turned off"
+      expired: "expired"
+      last_used: "last opened %{time} ago"
+      never_used: "not opened yet"
+      turn_off: "Turn off"
+      turn_off_confirm: "Turn off %{name}'s link? It stops working right away."
+  household_invitations:
+    create:
+      notice: "Invitation sent to %{email}."
+      rate_limited: "Too many invitations. Please try again later."
+    destroy:
+      notice: "Invitation cancelled."
+  viewer_links:
+    create:
+      notice: "Viewer link for %{name} created."
+    destroy:
+      notice: "%{name}'s link is turned off."
+  household_members:
+    destroy:
+      notice: "%{name} was removed from your household."
+  household_mailer:
+    invitation:
+      subject: "%{owner} invited you to help look after their cats"
+      intro: "%{owner} invited you to help look after %{pets} on Pet Tracker, as a caregiver."
+      their_cats: "their cats"
+      what_you_can_do: "As a caregiver you can record feeding, litter, water and meds with one tap, and see their trackers and charts."
+      join: "Join %{owner}'s household"
+      fine_print: "This invitation is for %{email} only and works once, until %{date}. If you weren't expecting it, you can ignore this email."
   kibble_prices:
     index:
       title: "%{petname}'s Kibble Prices"
@@ -842,6 +906,25 @@ en:
         visit_date: "Visit Date"
     errors:
       models:
+        household_invitation:
+          attributes:
+            email:
+              is_owner: "That's your own email address."
+              already_member: "That person is already in your household."
+              invalid: "That doesn't look like an email address."
+              blank: "Enter an email address."
+        viewer_link:
+          attributes:
+            name:
+              blank: "Enter who the link is for."
+              too_long: "Keep the name to 40 characters."
+            expires_at:
+              in_the_past: "The expiry must be in the future."
+        ownership_transfer:
+          attributes:
+            to_user:
+              not_a_member: "You can only hand the household to one of its members."
+              already_owns: "That person already has a household of their own."
         tracker:
           attributes:
             amount:

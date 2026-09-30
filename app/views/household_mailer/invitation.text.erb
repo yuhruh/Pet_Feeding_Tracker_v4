@@ -1,0 +1,7 @@
+<%= t(".intro", owner: @owner_name, pets: @pet_names.presence || t(".their_cats")) %>
+
+<%= t(".what_you_can_do") %>
+
+<%= t(".join", owner: @owner_name) %>: <%= @join_url %>
+
+<%= t(".fine_print", email: @invitation.email, date: l(@invitation.expires_at.to_date, format: :long)) %>

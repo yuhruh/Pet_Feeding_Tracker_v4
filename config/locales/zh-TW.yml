@@ -194,6 +194,7 @@ zh-TW:
       view: "顯示"
       edit: "編輯"
       cat_list: "寵物清單"
+      my_household: "🏠 我的家庭成員"
       delete: "刪除"
       delete_confirmation: "您確定要刪除此使用者帳戶嗎？使用者及其相關的飲食紀錄都會被刪除.."
       my_cats_list: "我的寵物清單"
@@ -608,6 +609,7 @@ zh-TW:
       pets_count: "寵物數量："
       pets: "隻"
       go_to_cats_list: "前往 %{username} 的寵物列表"
+      household_button: "🏠 我的家庭成員"
       edit_profile_button: "編輯個人資料"
       delete_profile_button: "刪除個人資料"
       delete_confirm: "您確定要刪除此使用者帳戶嗎？使用者和相關的飲食紀錄將全部被刪除.."
@@ -619,6 +621,68 @@ zh-TW:
       alert: "%{name}及其所有相關紀錄已成功刪除。"
   households:
     owner_only: "只有 %{petname} 的主人可以這麼做。"
+    default_name: "%{owner} 的貓咪"
+    needs_a_cat: "請先新增一隻貓，新增時會建立你的家庭。"
+    roles:
+      owner: "主人"
+      caregiver: "照顧者"
+      viewer: "觀看者"
+    show:
+      intro: "幫忙照顧你的貓咪的人。"
+      members: "照顧者與觀看者"
+      no_members: "目前還沒有人。可以在下方邀請照顧者。"
+      remove: "移除"
+      remove_confirm: "要把 %{name} 從家庭移除嗎？"
+      invite_caregiver: "邀請照顧者"
+      invite_explanation: "照顧者可以記錄餵食、貓砂、飲水和用藥，也能查看你的紀錄和圖表。對方需要帳號，可以從邀請信建立。"
+      email_placeholder: "對方的 Email"
+      send_invitation: "送出邀請"
+      pending_invitations: "等待加入"
+      expires: "連結 %{date} 到期"
+      cancel: "取消"
+      viewer_links: "觀看連結"
+      viewer_links_explanation: "給只想看看的人（例如奶奶）的個人連結：唯讀查看貓咪的圖表和今天的紀錄，不需要帳號。你隨時可以關閉任何一個連結。"
+      new_link_once: "這是新的連結，請現在複製，用 LINE 或 Email 傳給對方；之後不會再顯示。"
+      copy: "複製"
+      copied: "已複製！"
+      viewer_name_placeholder: "給誰，例如：奶奶"
+      expires_in: "到期"
+      expiry:
+        never: "不到期"
+        7_days: "7 天後"
+        30_days: "30 天後"
+        90_days: "90 天後"
+      create_link: "建立連結"
+      active: "有效"
+      active_until: "有效至 %{date}"
+      turned_off: "已關閉"
+      expired: "已到期"
+      last_used: "%{time}前開啟過"
+      never_used: "還沒開啟過"
+      turn_off: "關閉"
+      turn_off_confirm: "要關閉 %{name} 的連結嗎？會立即失效。"
+  household_invitations:
+    create:
+      notice: "已寄出邀請給 %{email}。"
+      rate_limited: "邀請次數太多，請稍後再試。"
+    destroy:
+      notice: "已取消邀請。"
+  viewer_links:
+    create:
+      notice: "已建立 %{name} 的觀看連結。"
+    destroy:
+      notice: "已關閉 %{name} 的連結。"
+  household_members:
+    destroy:
+      notice: "已將 %{name} 從家庭移除。"
+  household_mailer:
+    invitation:
+      subject: "%{owner} 邀請你一起照顧貓咪"
+      intro: "%{owner} 邀請你在 Pet Tracker 當照顧者，一起照顧 %{pets}。"
+      their_cats: "他的貓咪"
+      what_you_can_do: "照顧者可以一鍵記錄餵食、貓砂、飲水和用藥，也能查看紀錄和圖表。"
+      join: "加入 %{owner} 的家庭"
+      fine_print: "這份邀請只限 %{email} 使用，只能用一次，%{date} 前有效。如果你沒有預期收到這封信，可以直接忽略。"
   kibble_prices:
     index:
       title: "%{petname} 的飼料價格"
@@ -827,6 +891,25 @@ zh-TW:
         visit_date: "門診日期"
     errors:
       models:
+        household_invitation:
+          attributes:
+            email:
+              is_owner: "這是你自己的 Email。"
+              already_member: "這個人已經在你的家庭裡了。"
+              invalid: "這看起來不是 Email 地址。"
+              blank: "請輸入 Email。"
+        viewer_link:
+          attributes:
+            name:
+              blank: "請輸入連結是給誰的。"
+              too_long: "名字請在 40 個字以內。"
+            expires_at:
+              in_the_past: "到期日必須在未來。"
+        ownership_transfer:
+          attributes:
+            to_user:
+              not_a_member: "只能交給家庭裡的成員。"
+              already_owns: "這個人已經有自己的家庭了。"
         tracker:
           attributes:
             amount:
