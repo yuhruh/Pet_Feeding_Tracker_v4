@@ -2,6 +2,8 @@
 # owner lets help (caregivers and viewers). A user owns at most one household.
 class Household < ApplicationRecord
   belongs_to :owner, class_name: "User"
+  # First, so they go before the cats and spots they point to.
+  has_many :care_events, dependent: :delete_all
   has_many :pets, dependent: :destroy
   has_many :dry_foods, dependent: :destroy
   has_many :care_spots, -> { order(:position, :id) }, dependent: :destroy
@@ -18,6 +20,13 @@ class Household < ApplicationRecord
   after_create :create_default_care_spots
 
   # The owner's household, created the first time they add a pet or a food bag.
+  scope :reachable_by, ->(user) { where(owner_id: user.id).or(where(id: user.household_memberships.select(:household_id))) }
+
+  # The household's day and times follow its owner's time zone, as its trackers do.
+  def time_zone
+    ActiveSupport::TimeZone[owner&.timezone.to_s] || ActiveSupport::TimeZone["UTC"]
+  end
+
   def self.for_owner(user)
     user.owned_household || user.create_owned_household!
   rescue ActiveRecord::RecordNotUnique

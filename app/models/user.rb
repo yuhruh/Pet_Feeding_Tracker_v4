@@ -12,6 +12,8 @@ class User < ApplicationRecord
   has_many :outgoing_ownership_transfers, class_name: "OwnershipTransfer", foreign_key: :from_user_id, dependent: :destroy
   has_many :incoming_ownership_transfers, class_name: "OwnershipTransfer", foreign_key: :to_user_id, dependent: :destroy
   has_many :pets, dependent: :destroy
+  has_many :care_events, foreign_key: :actor_id, dependent: :nullify
+  has_many :edited_care_events, class_name: "CareEvent", foreign_key: :edited_by_id, dependent: :nullify
 
   # The cats and food bags of the household the user owns (not ones they help with).
   def owned_pets = Pet.owned_by(self)

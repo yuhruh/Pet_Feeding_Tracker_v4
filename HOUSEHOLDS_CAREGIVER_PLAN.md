@@ -10,7 +10,7 @@
 | A — Households and memberships (no visible change) | ✅ Done (2026-09-30). Committed on `feature/households` and pushed. See [Checkpoint A result](#checkpoint-a-result-2026-09-30) |
 | B — Access by household and role | ✅ Done (2026-09-30). Committed on `feature/households` and pushed. See [Checkpoint B result](#checkpoint-b-result-2026-09-30) |
 | C — Caregiver invitations, viewer links, members, transfer ownership | ✅ Done (2026-09-30). Committed on `feature/households` in five parts and pushed. See [Checkpoint C result](#checkpoint-c-result-2026-09-30) |
-| D — Care events and the Today page (fed, litter, water, weight) | Not started |
+| D — Care events and the Today page (fed, litter, water, weight) | In progress. See [Checkpoint D build plan](#checkpoint-d-build-plan-2026-09-30) |
 | E — Medications | Not started |
 | F — Litter observations | Not started |
 | G — Live updates and care events on the charts | Not started |
@@ -19,6 +19,24 @@
 | J — Clean-up, docs, CI, merge | Not started |
 
 **Commits:** each checkpoint is committed on `feature/households` once `bin/rails test` passes, then pushed. Merged into `main` only when you ask.
+
+## Checkpoint D build plan (2026-09-30)
+
+Built in five parts, each committed after `bin/rails test` passes:
+
+| Part | Build |
+|---|---|
+| 1. Care events | `care_events` table (fields for D only: medications come in E, litter observations in F, both additive); `CareEvent` model with every household check in the model; `record_care` permission for owners and caregivers |
+| 2. Today page buttons | Litter box and water spot rows, cat cards with 🍽 Fed and ⚖️ Weight, "last done" next to each; one-tap saving; the saved notice with **Undo** (10 s), **5 · 10 · 15 min ago**, **Add details**, and the water checkboxes; the double-tap guard; today's timeline, including the owner's trackers |
+| 3. Details | A page per care event for changing the time, the water or litter actions, the feeding details (suggestions by food type, from the cat's household only), the weight and a note; "(changed)" on edited entries; the owner's **Add to trackers** |
+| 4. Viewer page and spots | Status rows and today's timeline on the viewer page, without buttons; adding, renaming, choosing bowl or fountain, reordering and removing litter boxes and water spots on the household page |
+| 5. Checks | A browser test of the whole flow; tests that every save refuses a household mismatch and a person without rights |
+
+**Decisions for D:**
+- **Pages refresh after each tap** (the tapper's own page, using Turbo's page refresh, which keeps the scroll position). Seeing other people's taps without reloading comes with live updates in G.
+- **A household's day and times use the owner's time zone**, the same zone its trackers already use, so "today" means the same thing for everyone in the household.
+- **Weight** is saved as a care event only; the cat's profile weight and the charts are unchanged until G puts care events on the charts.
+- **Due dates** ("Cleaning due today") need the reminder intervals from H; until then each row shows the last time it was done.
 
 ## Checkpoint C result (2026-09-30)
 

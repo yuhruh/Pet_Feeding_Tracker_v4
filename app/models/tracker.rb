@@ -1,6 +1,7 @@
 class Tracker < ApplicationRecord
   belongs_to :pet
   belongs_to :dry_food, optional: true
+  has_one :care_event, dependent: :nullify
   before_save { self.brand = brand.downcase }
   before_save { self.description = description.downcase }
 

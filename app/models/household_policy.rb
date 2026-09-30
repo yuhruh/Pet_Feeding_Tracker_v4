@@ -4,7 +4,7 @@ class HouseholdPolicy
   # The owner may do everything. A caregiver reads the trackers and charts (and,
   # from later checkpoints, records care); a viewer sees the charts.
   PERMISSIONS = {
-    caregiver: %i[view_trackers view_charts].freeze,
+    caregiver: %i[record_care view_trackers view_charts].freeze,
     viewer: %i[view_charts].freeze
   }.freeze
 

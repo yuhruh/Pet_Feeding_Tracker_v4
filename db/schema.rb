@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_30_150000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_01_090000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -37,6 +37,31 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_30_150000) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "care_events", force: :cascade do |t|
+    t.json "actions", default: [], null: false
+    t.integer "actor_id"
+    t.integer "care_spot_id"
+    t.datetime "created_at", null: false
+    t.json "details", default: {}, null: false
+    t.datetime "edited_at"
+    t.integer "edited_by_id"
+    t.integer "household_id", null: false
+    t.string "kind", null: false
+    t.string "note"
+    t.datetime "occurred_at", null: false
+    t.integer "pet_id"
+    t.integer "tracker_id"
+    t.datetime "undone_at"
+    t.datetime "updated_at", null: false
+    t.decimal "value", precision: 5, scale: 2
+    t.index ["actor_id"], name: "index_care_events_on_actor_id"
+    t.index ["care_spot_id", "occurred_at"], name: "index_care_events_on_care_spot_id_and_occurred_at"
+    t.index ["household_id", "occurred_at"], name: "index_care_events_on_household_id_and_occurred_at"
+    t.index ["household_id"], name: "index_care_events_on_household_id"
+    t.index ["pet_id", "kind", "occurred_at"], name: "index_care_events_on_pet_id_and_kind_and_occurred_at"
+    t.index ["tracker_id"], name: "index_care_events_on_tracker_id"
   end
 
   create_table "care_spots", force: :cascade do |t|
@@ -450,6 +475,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_30_150000) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "care_events", "care_spots"
+  add_foreign_key "care_events", "households"
+  add_foreign_key "care_events", "pets"
+  add_foreign_key "care_events", "trackers"
+  add_foreign_key "care_events", "users", column: "actor_id"
+  add_foreign_key "care_events", "users", column: "edited_by_id"
   add_foreign_key "care_spots", "households"
   add_foreign_key "connected_services", "users"
   add_foreign_key "dry_foods", "Users", column: "user_id"

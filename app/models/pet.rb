@@ -13,6 +13,7 @@ class Pet < ApplicationRecord
   # The owner of the pet's household: the one person who manages it.
   delegate :owner, to: :household, allow_nil: true
   delegate :timezone, to: :owner, allow_nil: true
+  has_many :care_events, dependent: :delete_all
   has_many :trackers, dependent: :destroy
   has_many :health_checks, dependent: :destroy
   has_many :vet_visits, dependent: :destroy
