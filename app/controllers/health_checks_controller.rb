@@ -1,4 +1,5 @@
 class HealthChecksController < ApplicationController
+  include PetAccess
   # Each extraction holds a server thread while Gemini reads the images.
   rate_limit to: 10, within: 1.minute, only: :extract_data, by: -> { Current.user&.id || request.remote_ip },
              with: -> { render_json_error(t("services.gemini_ocr.rate_limited"), status: :too_many_requests) }
@@ -100,15 +101,9 @@ class HealthChecksController < ApplicationController
   end
 
   private
-    # Only the signed-in user's own pets; anyone else's pet is treated as not found.
+    # Health records are the owner's only.
     def set_pet
-      @pet = Current.user.pets.find(params[:pet_id])
-    rescue ActiveRecord::RecordNotFound
-      respond_to do |format|
-        format.html { redirect_to pets_path, alert: t("pets.not_found") }
-        format.json { render_json_error(t("pets.not_found"), status: :not_found) }
-        format.any { head :not_found }
-      end
+      load_pet(params[:pet_id], :manage_health)
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_health_check

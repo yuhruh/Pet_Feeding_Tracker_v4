@@ -1,5 +1,6 @@
 class TrackersController < ApplicationController
   include TrackersCalculable
+  include PetAccess
   # Imports parse a whole CSV file inside the request, so limit them per user.
   rate_limit to: 5, within: 10.minutes, only: :import, by: -> { Current.user.id },
              with: -> { redirect_to pet_trackers_url(params[:pet_id]), alert: t("trackers.import.alert_rate_limit") }
@@ -168,15 +169,14 @@ class TrackersController < ApplicationController
   end
 
   private
-    # Only the signed-in user's own pets; anyone else's pet is treated as not found.
+    # What each action needs: a caregiver reads the list, a viewer only the charts,
+    # and only the owner adds, changes, imports or exports.
+    READ_PERMISSIONS = { index: :view_charts, show: :view_trackers, favorite_food: :view_trackers }.freeze
+
     def set_pet
-      @pet = Current.user.pets.find(params[:pet_id])
-    rescue ActiveRecord::RecordNotFound
-      respond_to do |format|
-        format.html { redirect_to pets_path, alert: t("pets.not_found") }
-        format.json { render_json_error(t("pets.not_found"), status: :not_found) }
-        format.any { head :not_found }
-      end
+      permission = READ_PERMISSIONS.fetch(action_name.to_sym, :manage_trackers)
+      permission = :export_trackers if action_name == "index" && request.format.csv?
+      load_pet(params[:pet_id], permission)
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_tracker

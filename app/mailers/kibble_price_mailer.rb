@@ -8,7 +8,7 @@ class KibblePriceMailer < ApplicationMailer
   def monthly_report(check)
     @check = check
     @pet = check.pet
-    @user = @pet.user
+    @user = @pet.owner
 
     I18n.with_locale(LOCALE_BY_TIME_ZONE.fetch(@user.timezone.to_s, I18n.default_locale)) do
       @petname = @pet.petname.split(" ").map(&:capitalize).join(" ")

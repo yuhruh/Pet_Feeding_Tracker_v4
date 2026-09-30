@@ -1,12 +1,16 @@
+<%# Checkboxes, edit and delete are the owner's; caregivers see the list read-only. %>
+<% can_manage = household_policy.can?(:manage_trackers) %>
 <div class="container mx-auto w-full shadow-lg rounded-xl mb-4" data-controller="bulk-delete">
   <div class="flex flex-col gap-8 justify-center mt-4 lg:flex-row lg:items-center">
     <div class="hidden lg:block overflow-auto max-h-[70vh] w-full shadow-inner">
       <table class="table-auto mb-2 px-2 w-full dark:bg-slate-100">
         <thead>
           <tr class="bg-gray-100 dark:bg-black">
+            <% if can_manage %>
             <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white">
               <input type="checkbox" data-bulk-delete-target="selectAll" data-action="bulk-delete#toggleAll">
             </th>
+            <% end %>
             <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.number') %></th>
             <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.date') %></th>
             <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.time') %></th>
@@ -22,8 +26,10 @@
             <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.favorite_score') %></th>
             <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.weight') %></th>
             <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.note') %></th>
+            <% if can_manage %>
             <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.edit') %></th>
             <th class="sticky top-0 z-20 bg-gray-100 dark:bg-black border-b-4 border-gray-200 dark:border-gray-800 capitalize text-sm text-center p-2 dark:text-white"><%= t('trackers.tracker.delete') %></th>
+            <% end %>
           </tr>
         </thead>
         <tbody>
@@ -32,9 +38,11 @@
             <% next_record = persisted_trackers[idx + 1] %>
             <% date_changed = (next_record && next_record.date != record.date) %>
             <tr id="<%= dom_id(record) %>" class="<%= tracker_row_class(record) %> <%= 'border-b-2 border-gray-400' if date_changed %>">
+              <% if can_manage %>
               <td class="capitalize text-sm text-center p-2">
                 <%= check_box_tag "tracker_ids[]", record.id, false, class: "tracker-checkbox", "data-bulk-delete-target": "checkbox", "data-action": "bulk-delete#updateSelectAll" %>
               </td>
+              <% end %>
               <td class="capitalize text-sm text-center p-2 font-semibold p-2"><%= idx+1 %></td>
               <td class="capitalize text-sm text-center p-2"><%= record.date.strftime("%Y-%m-%d") %></td>
               <td class="capitalize text-sm text-center p-2"><%= record.feed_time&.strftime("%H:%M") %></td>
@@ -50,6 +58,7 @@
               <td class="capitalize text-sm text-center p-2"><%= record.favorite_score %></td>
               <td class="capitalize text-sm text-center p-2"><%= record.weight %></td>
               <td class="capitalize text-sm text-center p-2"><%= record.note %></td>
+              <% if can_manage %>
               <td class="capitalize text-sm text-center p-2">
                 <%= link_to edit_pet_tracker_path(@pet, record, page: params[:page]), class: "inline-block transition-transform text-emerald-400 hover:text-emerald-600 hover:scale-110" do %>
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -65,6 +74,7 @@
                   </svg>
                 <% end %>
               </td>
+              <% end %>
             </tr>
           <% end %>
         </tbody>
@@ -75,6 +85,7 @@
     <div class="lg:hidden overflow-x-auto">
       <table class="table-auto mb-2">
         <tbody>
+          <% if can_manage %>
           <tr class="border-b bg-gray-100">
             <th class="sticky left-0 z-10 bg-gray-100 dark:bg-black capitalize text-sm text-left p-2 border-r-4 whitespace-nowrap">
               <input type="checkbox" data-bulk-delete-target="selectAll" data-action="bulk-delete#toggleAll">
@@ -87,6 +98,7 @@
               </td>
             <% end %>
           </tr>
+          <% end %>
           <tr class="border-b bg-gray-100">
             <th class="sticky left-0 z-10 bg-gray-100 dark:bg-black capitalize text-sm text-left p-2 border-r-4 whitespace-nowrap"><%= t('trackers.tracker.number') %></th>
             <% persisted_trackers.each_with_index do |record, idx| %>
@@ -207,6 +219,7 @@
               <td class="<%= tracker_row_class(record) %> <%= 'border-r-2 border-gray-400' if date_changed %> capitalize text-sm text-center p-2"><%= record.note %></td>
             <% end %>
           </tr>
+          <% if can_manage %>
           <tr class="border-b bg-gray-100">
             <th class="sticky left-0 z-10 bg-gray-100 dark:bg-black capitalize text-sm text-left p-2 border-r-4 whitespace-nowrap"><%= t('trackers.tracker.edit') %></th>
             <% persisted_trackers.each_with_index do |record, idx| %>
@@ -236,6 +249,7 @@
               </td>
             <% end %>
           </tr>
+          <% end %>
         </tbody>
       </table>
     </div>

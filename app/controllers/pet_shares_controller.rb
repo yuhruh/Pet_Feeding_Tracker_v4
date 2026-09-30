@@ -1,5 +1,6 @@
 # Turns a pet's public share link on (with a new token each time) and off.
 class PetSharesController < ApplicationController
+  include PetAccess
   before_action :set_pet
 
   def create
@@ -17,13 +18,8 @@ class PetSharesController < ApplicationController
   end
 
   private
+    # Only the owner turns a public link on or off.
     def set_pet
-      @pet = Current.user.pets.find(params[:pet_id])
-    rescue ActiveRecord::RecordNotFound
-      respond_to do |format|
-        format.html { redirect_to pets_path, alert: t("pets.not_found") }
-        format.json { render_json_error(t("pets.not_found"), status: :not_found) }
-        format.any { head :not_found }
-      end
+      load_pet(params[:pet_id], :manage_share)
     end
 end

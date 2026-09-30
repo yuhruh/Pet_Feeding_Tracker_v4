@@ -8,7 +8,7 @@
 |---|---|
 | 0 — Decisions | ✅ Done (2026-09-29). No open questions |
 | A — Households and memberships (no visible change) | ✅ Done (2026-09-30). Committed on `feature/households` and pushed. See [Checkpoint A result](#checkpoint-a-result-2026-09-30) |
-| B — Access by household and role | Not started |
+| B — Access by household and role | ✅ Done (2026-09-30). Committed on `feature/households` and pushed. See [Checkpoint B result](#checkpoint-b-result-2026-09-30) |
 | C — Caregiver invitations, viewer links, members, transfer ownership | Not started |
 | D — Care events and the Today page (fed, litter, water, weight) | Not started |
 | E — Medications | Not started |
@@ -19,6 +19,46 @@
 | J — Clean-up, docs, CI, merge | Not started |
 
 **Commits:** each checkpoint is committed on `feature/households` once `bin/rails test` passes, then pushed. Merged into `main` only when you ask.
+
+## Checkpoint B result (2026-09-30)
+
+**What was built** (nothing visible changes for today's one-person households):
+
+| File | What it does |
+|---|---|
+| `app/models/household_policy.rb` | The one place that decides: the **owner** may do everything; a **caregiver** may `view_trackers` and `view_charts`; a **viewer** may `view_charts`; anyone else nothing |
+| `app/controllers/concerns/pet_access.rb` | `load_pet(id, permission)`: finds the pet among `Pet.accessible_by(user)` (their own household and those they're a member of); a pet outside those is **"not found"**, as before; a reachable pet whose action the role doesn't allow redirects to its tracker page (or the pet list) with **"Only Aji's owner can do that."** (JSON: 403) |
+| Trackers, pets, health checks, share link, kibble prices controllers | Use `load_pet` with a permission per action (below) |
+| `Pet.accessible_by` / `Pet.owned_by`, `User#owned_pets` / `#owned_dry_foods`, `Pet#owner` | Lookups by household |
+| Vet visits | "Owner" now means the household's owner (`@pet.owner`); the vet-visit member rule is unchanged, so caregivers and viewers get nothing extra there |
+| Food bags | Listed and found through the owner's household; a tracker may only use a bag of **the pet's household** (was: the pet owner's bags) |
+| Trackers pages | Owner-only controls hidden for others: import, share link and share settings, "new tracker", CSV export, bulk delete, the row checkboxes, edit and delete. Viewers don't see the list at all, only the charts. The favorite list's "Kibble prices" link is owner-only |
+| Navigation, account page, pets list | The user's **own** household's cats (households they help with appear there in checkpoint C) |
+| `UserBackupJob` / `UserBackupMailer`, `PetWeightReminderJob` / `notifications:weigh_pets`, `KibblePriceMailer`, `KibblePrices::BrandNames` / `Lookup` | Go through the household's **owner**, so backups, weight reminders, kibble price emails and brand names never reach caregivers or viewers |
+| `config/locales/{en,ja,zh-TW}.yml` | `households.owner_only` |
+
+**Permission per action:**
+
+| Action | Owner | Caregiver | Viewer |
+|---|---|---|---|
+| Trackers page with charts (`trackers#index`) | ✅ | ✅ list read-only | ✅ charts only |
+| Favorite list | ✅ | ✅ | ❌ |
+| New, add, edit, update, delete, bulk delete, import trackers | ✅ | ❌ | ❌ |
+| **CSV export** | ✅ | ❌ | ❌ |
+| Pet profile, edit, delete | ✅ | ❌ | ❌ |
+| Health checks, share link, kibble prices | ✅ | ❌ | ❌ |
+
+**Decisions made while building:**
+- **CSV export is owner-only.** It's the owner's full data download (like the backups), not part of reading the list.
+- **The pet profile page is owner-only**, matching "My cats … not shown" for caregivers.
+- **A refused action says so** ("Only Aji's owner can do that.") and returns to what the person may see, instead of "not found"; "not found" stays for pets outside their households, so nothing reveals that another person's cat exists.
+
+**Checks:**
+- **All 290 existing tests pass unchanged**, so one-person households behave exactly as before.
+- **9 new tests**, including a **role × page matrix**: owner, caregiver, viewer and an outsider on 22 pages and actions, each classified as allowed / refused / not found; refused changes leave trackers, the pet and its share link untouched; a caregiver's tracker page has the list but none of the owner's controls; a viewer's has the charts but no list; JSON refusals are 403 and outsiders get 404; food bags stay with their household; backups, brand names and owned pets never go to a caregiver.
+- `bin/rails test`: 299 runs, 0 failures. `bin/rails test:system`: 32 runs, 0 failures. RuboCop and Brakeman clean.
+
+**Found (older than this work, not changed):** the single tracker page (`GET /pets/:pet_id/trackers/:id`) always fails: its row partial expects the whole list (`@trackers`), which that page doesn't set. Nothing links to it and its test has been commented out, so it went unnoticed; its JSON version has the separate issue ARCHITECTURE.md A1 already lists. It's left out of the role matrix.
 
 ## Checkpoint A result (2026-09-30)
 
@@ -463,7 +503,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 |---|---|---|
 | 0 | Decisions | ✅ Done |
 | A | `households`, `household_memberships`, `care_spots` (one box, one bowl each), `pets.household_id`, `dry_foods.household_id`; data migration | ✅ Done — existing tests unchanged; migration and rollback checked on PostgreSQL; every current user with pets or bags owns one household with them, a litter box and a water bowl |
-| B | `Pet.accessible_by`, `HouseholdPolicy`; replace every lookup listed above; food-bag rule by household; jobs, mailers and brand names via the household's owner | A test matrix of **each role on each page** (allowed and refused); single-member households behave exactly as today |
+| B | `Pet.accessible_by`, `HouseholdPolicy`; replace every lookup listed above; food-bag rule by household; jobs, mailers and brand names via the household's owner | ✅ Done — role × page matrix (owner, caregiver, viewer, outsider on 22 pages and actions); all existing tests unchanged |
 | C | Caregiver invitations and the join page (prefilled email, Google / LINE); the new landing rules (caregivers and people in several households land on Today; new users with no household still get "Add A Cat"); "Add my own cat" under Account; menus and cat lists grouped by household; the caregiver menu; viewer links (create, name, expiry, turn off) and the viewer page with charts; member list, removing, leaving; transfer ownership; account deletion asks to transfer | Invite → join → caregiver role applies; expired, reused and wrong-email invitations refused; a viewer link opens only its household's viewer page, and stops at once when turned off or expired; signing in from a viewer link adds a viewer membership; transfer swaps owner and caregiver in one transaction |
 | D | `care_events`; Today page with litter-box and water-spot rows and cat cards; one-tap fed, scooped, full change, refilled, cleaned, filter changed (several actions in one record, with checkboxes in the notice); weight form; change time; feeding "Add details" with suggestions by food type; "Add to trackers"; undo; double-tap guard; status and today's timeline on the viewer page; managing boxes and water spots | Browser test: caregiver taps Fed and adds details, refills and cleans the fountain in one record, changes a time, undoes a tap; owner adds a feeding to trackers; the viewer link shows the new records with no buttons; tests that every save refuses a household mismatch (record, food bag, box, water spot, medication) and a person without rights in that household |
 | E | `medications`; meds button with Given / Couldn't give; due / given / overdue | Doses shown per schedule; double dose guarded |
@@ -496,6 +536,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 
 ## Change log
 
+- **Checkpoint B (2026-09-30):** access by household and role on every page; CSV export and the pet profile are owner-only; refused actions say "Only Aji's owner can do that."
 - **Checkpoint A (2026-09-30):** households, memberships and care spots built; existing pets and food bags moved into their owner's household. Names stored empty and shown in each viewer's language; users without pets or bags get a household with their first one.
 - **v6 (2026-09-30):** landing after sign-in depends on what the person has (new user with no household → "Add A Cat"; caregivers → Today). Caregivers can create their own household with **"Add my own cat" under Account** ("This creates your own household. Rita's cats are not affected."), becoming owner and caregiver. Pages for someone in several households: owner menu once they own cats, Today grouped by household (own first), cat lists grouped by household with the role shown. **Keeping households apart:** no household picker; the household comes from the cat, box or spot and is set by the server, which refuses any mismatch.
 - **v5 (2026-09-29):** caregivers **need an account**, joining through a one-step invitation page (prefilled email, or Google / LINE), landing on Today instead of "Add A Cat", with a smaller menu. Viewers use a **personal link** with no account: a read-only viewer page with status, today's timeline and charts; one link per viewer, revocable, optional expiry; signing in from it adds the household to their account. Invitations are for caregivers only; new `viewer_links` table.

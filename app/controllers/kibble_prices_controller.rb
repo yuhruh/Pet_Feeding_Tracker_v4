@@ -1,5 +1,6 @@
 # A pet's latest kibble price check, and "Refresh now". Owner only.
 class KibblePricesController < ApplicationController
+  include PetAccess
   # Each refresh queues a search of BigGo and PChome, so a user can't queue many at once.
   rate_limit to: 5, within: 10.minutes, only: :create, by: -> { Current.user.id },
              with: -> { redirect_to pet_kibble_prices_path(params[:pet_id]), alert: t("kibble_prices.create.rate_limited") }
@@ -21,9 +22,8 @@ class KibblePricesController < ApplicationController
 
   private
 
+  # The owner does the buying and gets the monthly email.
   def set_pet
-    @pet = Current.user.pets.find(params[:pet_id])
-  rescue ActiveRecord::RecordNotFound
-    redirect_to pets_path, alert: t("pets.not_found")
+    load_pet(params[:pet_id], :view_kibble_prices)
   end
 end

@@ -17,7 +17,7 @@ module KibblePrices
     def call
       kibbles = @pet.favorite_kibbles(**@favorite_options)
       species = self.class.species_of(kibbles)
-      brand_groups = BrandNames.for_user(@pet.user)
+      brand_groups = BrandNames.for_user(@pet.owner)
       kibbles.map { |kibble| prices_for(kibble, species, brand_groups) }
     end
 

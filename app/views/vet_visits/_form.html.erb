@@ -1,4 +1,4 @@
-<% owner = @pet.user == Current.user %>
+<% owner = @pet.owner == Current.user %>
 <%= form_with(model: [@pet, vet_visit], id: "vet-visit-form", class: "space-y-6") do |form| %>
   <% if vet_visit.errors.any? %>
     <div id="error_explanation" class="bg-red-50 border-l-4 border-red-500 p-4 mb-4 text-red-700 rounded-lg">

@@ -30,11 +30,11 @@
         <div class="flex justify-center text-lg space-x-3 mb-2 md:text-2xl">
           <strong class="capitalize"><%= t(".pets_count") %></strong>
           <div class="flex flex-col">
-            <%= Current.user.pets.count %> <%= t(".pets") %>
+            <%= Current.user.owned_pets.count %> <%= t(".pets") %>
           </div>
         </div>
         <div class="flex justify-center text-lg space-x-3 mb-2 md:text-2xl">
-          <% Current.user.pets.each do |pet| %>
+          <% Current.user.owned_pets.each do |pet| %>
             <%= link_to "#{pet.petname.capitalize}", pet_path(pet), class: "text-grayishBlue underline decoration-2 decoration-grayishBlue transition duration-300 ease-in-out hover:text-softRed hover:decoration-softRed hover:scale-110" %>
           <% end %>
         </div>

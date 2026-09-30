@@ -617,6 +617,8 @@ en:
       notice: "Account was successfully updated."
     destroy:
       alert: "%{name} and all associated records were successfully deleted."
+  households:
+    owner_only: "Only %{petname}'s owner can do that."
   kibble_prices:
     index:
       title: "%{petname}'s Kibble Prices"

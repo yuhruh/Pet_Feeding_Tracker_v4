@@ -6,7 +6,7 @@ class VetVisitsController < ApplicationController
   before_action :verify_owner!, only: %i[new create destroy]
 
   def index
-    if @pet.user == Current.user
+    if @pet.owner == Current.user
       @vet_visits = @pet.vet_visits.order(visit_date: :desc)
     else
       @vet_visits = @pet.vet_visits.joins(:vet_visit_members).where(vet_visit_members: { user_id: Current.user.id }).order(visit_date: :desc)
@@ -38,8 +38,8 @@ class VetVisitsController < ApplicationController
   end
 
   def update
-    if @vet_visit.update(@pet.user == Current.user ? vet_visit_params : member_vet_visit_params)
-      sync_members if @pet.user == Current.user # Only owner can modify members
+    if @vet_visit.update(@pet.owner == Current.user ? vet_visit_params : member_vet_visit_params)
+      sync_members if @pet.owner == Current.user # Only owner can modify members
       redirect_to pet_vet_visits_path(@pet), notice: t(".notice")
     else
       render :edit, status: :unprocessable_entity
@@ -58,12 +58,12 @@ class VetVisitsController < ApplicationController
           raise ActiveRecord::Rollback
         end
 
-        unless @pet.user == Current.user || visit.members.include?(Current.user)
+        unless @pet.owner == Current.user || visit.members.include?(Current.user)
           @errors << t("vet_visits.unauthorized")
           raise ActiveRecord::Rollback
         end
 
-        permitted = if @pet.user == Current.user
+        permitted = if @pet.owner == Current.user
                       visit_params.permit(:question, :answer, :visit_date, :vet_name, :consultation_time, :waiting_time, :purpose)
         else
                       visit_params.permit(:answer)
@@ -79,7 +79,7 @@ class VetVisitsController < ApplicationController
     if @errors.empty?
       redirect_to pet_vet_visits_path(@pet), notice: t(".notice", default: "All changes saved successfully!")
     else
-      if @pet.user == Current.user
+      if @pet.owner == Current.user
         @vet_visits = @pet.vet_visits.order(visit_date: :desc)
       else
         @vet_visits = @pet.vet_visits.joins(:vet_visit_members).where(vet_visit_members: { user_id: Current.user.id }).order(visit_date: :desc)
@@ -105,13 +105,13 @@ class VetVisitsController < ApplicationController
   end
 
   def verify_access!
-    unless @pet.user == Current.user || @vet_visit.members.include?(Current.user)
+    unless @pet.owner == Current.user || @vet_visit.members.include?(Current.user)
       redirect_to pets_path, alert: t("vet_visits.unauthorized")
     end
   end
 
   def verify_owner!
-    unless @pet.user == Current.user
+    unless @pet.owner == Current.user
       redirect_to pets_path, alert: t("vet_visits.unauthorized_owner")
     end
   end

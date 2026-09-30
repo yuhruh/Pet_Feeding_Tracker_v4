@@ -10,13 +10,23 @@ class Pet < ApplicationRecord
   belongs_to :household
   before_validation :join_owners_household, if: -> { household_id.nil? && user }
   validate :household_owned_by_user
-  delegate :timezone, to: :user, allow_nil: true
+  # The owner of the pet's household: the one person who manages it.
+  delegate :owner, to: :household, allow_nil: true
+  delegate :timezone, to: :owner, allow_nil: true
   has_many :trackers, dependent: :destroy
   has_many :health_checks, dependent: :destroy
   has_many :vet_visits, dependent: :destroy
   has_many :kibble_price_checks, dependent: :destroy
   validates :petname, presence: true,
                       length: { minimum: 2, maximum: 25 }
+
+  # Pets in households the user owns or is a member of (caregiver or viewer).
+  scope :accessible_by, ->(user) {
+    where(household_id: Household.where(owner_id: user.id).select(:id))
+      .or(where(household_id: HouseholdMembership.where(user_id: user.id).select(:household_id)))
+  }
+  # Pets in the household the user owns.
+  scope :owned_by, ->(user) { where(household_id: Household.where(owner_id: user.id).select(:id)) }
 
   # New pets are not shared until the owner turns on a share link.
   scope :shared, -> { where.not(share_token: nil).where("share_expires_at IS NULL OR share_expires_at > ?", Time.current) }

@@ -6,6 +6,10 @@ class User < ApplicationRecord
   has_one :owned_household, class_name: "Household", foreign_key: :owner_id, inverse_of: :owner, dependent: :destroy
   has_many :household_memberships, dependent: :destroy
   has_many :pets, dependent: :destroy
+
+  # The cats and food bags of the household the user owns (not ones they help with).
+  def owned_pets = Pet.owned_by(self)
+  def owned_dry_foods = DryFood.owned_by(self)
   has_many :dry_foods, dependent: :destroy
   has_many :vet_visit_members, dependent: :destroy
   has_many :shared_vet_visits, through: :vet_visit_members, source: :vet_visit

@@ -45,12 +45,12 @@ class Tracker < ApplicationRecord
 
   private
 
-  # A tracker may only draw from a dry-food bag owned by the pet's owner.
-  # Another user's bag gets the same error as a missing one.
+  # A tracker may only draw from a food bag of the pet's household.
+  # Another household's bag gets the same error as a missing one.
   def dry_food_belongs_to_pet_owner
     return if dry_food_id.blank?
 
-    errors.add(:dry_food_id, :invalid) unless DryFood.exists?(id: dry_food_id, user_id: pet&.user_id)
+    errors.add(:dry_food_id, :invalid) unless DryFood.exists?(id: dry_food_id, household_id: pet&.household_id)
   end
 
   def dry_food?

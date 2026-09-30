@@ -6,7 +6,7 @@ class UserBackupJob < ApplicationJob
 
     # Only send emails to users who have created or updated at least one tracker in the last 25 hours (1 day with safety buffer)
     User.find_each do |user|
-      has_recent_trackers = Tracker.joins(:pet).where(pets: { user_id: user.id }).where("trackers.updated_at >= ?", 25.hours.ago).exists?
+      has_recent_trackers = Tracker.joins(:pet).where(pets: { household_id: Household.where(owner_id: user.id).select(:id) }).where("trackers.updated_at >= ?", 25.hours.ago).exists?
 
       if has_recent_trackers
         UserBackupMailer.backup_email(user).deliver_later

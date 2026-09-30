@@ -1,9 +1,10 @@
 class PetsController < ApplicationController
+  include PetAccess
   before_action :set_pet, only: %i[ show edit update destroy ]
 
   # GET /pets or /pets.json
   def index
-    @pets = Current.user.pets.paginate(page: params[:page], per_page: 5)
+    @pets = Current.user.owned_pets.paginate(page: params[:page], per_page: 5)
   end
 
   # GET /pets/1 or /pets/1.json
@@ -60,15 +61,9 @@ class PetsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    # Only the signed-in user's own pets; anyone else's pet is treated as not found.
+    # A pet's profile is its owner's to see and change; anyone else's pet is not found.
     def set_pet
-      @pet = Current.user.pets.find(params.expect(:id))
-    rescue ActiveRecord::RecordNotFound
-      respond_to do |format|
-        format.html { redirect_to pets_path, alert: t("pets.not_found") }
-        format.json { render_json_error(t("pets.not_found"), status: :not_found) }
-        format.any { head :not_found }
-      end
+      load_pet(params.expect(:id), :manage_pet)
     end
 
     # Only allow a list of trusted parameters through.

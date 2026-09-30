@@ -1,6 +1,8 @@
+<% if household_policy.can?(:view_kibble_prices) %>
 <div class="flex justify-center mt-4">
   <%= link_to "🏷️ " + t(".kibble_prices", petname: @pet.petname.split(" ").map(&:capitalize).join(" ")), pet_kibble_prices_path(@pet), class: "rounded-md px-3.5 py-2 text-sky-700 bg-sky-200 border-2 border-sky-200 font-medium transition duration-300 hover:bg-gray-100 hover:border-sky-700" %>
 </div>
+<% end %>
 <div class="flex justify-center">
   <% if @favorite_foods.blank? %>
     <div class="items-center p-8 mb-8 border-2 border-orange-200 bg-orange-100 rounded-lg shadow-lg">

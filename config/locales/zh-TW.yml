@@ -617,6 +617,8 @@ zh-TW:
       notice: "帳戶已成功更新。"
     destroy:
       alert: "%{name}及其所有相關紀錄已成功刪除。"
+  households:
+    owner_only: "只有 %{petname} 的主人可以這麼做。"
   kibble_prices:
     index:
       title: "%{petname} 的飼料價格"

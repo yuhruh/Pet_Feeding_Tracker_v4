@@ -8,6 +8,9 @@ class DryFood < ApplicationRecord
 
   enum :food_type, { kibble: "Kibble", freeze_dried: "Freeze-Dried" }
 
+  # Food bags in the household the user owns.
+  scope :owned_by, ->(user) { where(household_id: Household.where(owner_id: user.id).select(:id)) }
+
   before_create :set_left_amount
 
   def brand_with_description

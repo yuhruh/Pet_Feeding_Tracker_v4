@@ -17,7 +17,7 @@ module KibblePrices
     # Sets of names for the same brand, from the kibble the owner fed in the window,
     # merged whenever two of the owner's entries share a name.
     def self.for_user(user, since: WINDOW.ago)
-      trackers = Tracker.kibble.joins(:pet).where(pets: { user_id: user.id }).where(date: since.to_date..)
+      trackers = Tracker.kibble.joins(:pet).where(pets: { household_id: Household.where(owner_id: user.id).select(:id) }).where(date: since.to_date..)
       brands = trackers.distinct.pluck(:brand) + DryFood.where(id: trackers.select(:dry_food_id)).pluck(:brand)
 
       brands.map { |brand| split(brand) }.reject(&:empty?).each_with_object([]) do |names, groups|

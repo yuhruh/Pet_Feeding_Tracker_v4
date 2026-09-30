@@ -50,7 +50,7 @@
               </div>
               <div>
                 <%= link_to t('layouts.navigation.add_a_cat'), new_pet_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
-                <% Current.user.pets.select(&:persisted?).each do |pet| %>
+                <% Current.user.owned_pets.each do |pet| %>
                   <%= link_to t('layouts.navigation.view_pet_profile', petname: pet.petname.split(" ").map(&:capitalize).join(" ")), pet_path(pet), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden font-semibold" %>
                   <%= link_to "🏥 Vet Visits (#{pet.petname.capitalize})", pet_vet_visits_path(pet), class: "block px-4 py-2 text-xs text-amber-700 hover:bg-amber-100 hover:text-amber-800 focus:bg-amber-100 focus:text-softRed focus:outline-hidden pl-6 italic font-medium" %>
                 <% end %>
@@ -81,7 +81,7 @@
           </div>
           <div id="btn-2" class="absolute hidden w-max top-full mt-2 py-2 bg-white text-grayishBlue border border-gray-200 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out menu" data-target="menu-2">
             <div class="py-1">
-              <% Current.user.pets.select(&:persisted?).each do |pet| %>
+              <% Current.user.owned_pets.each do |pet| %>
                 <div class="px-4 py-2 text-sm text-gray-700 font-semibold border-b-2 border-gray-200">
                   <%= pet.petname %>
                 </div>
@@ -119,7 +119,7 @@
           </div>
           <div id="btn-4" class="absolute hidden w-max top-full mt-2 py-2 bg-white text-grayishBlue border border-gray-200 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out menu" data-target="menu-4">
             <div class="py-1">
-              <% Current.user.pets.select(&:persisted?).each do |pet| %>
+              <% Current.user.owned_pets.each do |pet| %>
                 <div class="px-4 py-2 text-sm text-gray-700 font-semibold border-b-2 border-gray-200">
                   <%= pet.petname %>
                 </div>
@@ -268,7 +268,7 @@
           </div>
         </div>
         <%= link_to t('layouts.navigation.mobile.add_a_cat'), new_pet_path, class: "block px-2 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
-        <% Current.user.pets.select(&:persisted?).each do |pet| %>
+        <% Current.user.owned_pets.each do |pet| %>
           <%= link_to t('layouts.navigation.mobile.view_pet_profile', petname: pet.petname.split(" ").map(&:capitalize).join(" ")), pet_path(pet), class: "block px-2 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
           <%= link_to "🏥 Vet Visits (#{pet.petname.capitalize})", pet_vet_visits_path(pet), class: "block px-2 py-1.5 text-xs text-amber-300 hover:bg-amber-100 hover:text-amber-800 focus:bg-gray-100 focus:text-softRed focus:outline-hidden italic font-medium" %>
         <% end %>
@@ -361,7 +361,7 @@
           </svg>
           <div class="font-bold"><%= t('layouts.navigation.health_checkup') %></div>
         </div>
-        <% Current.user.pets.select(&:persisted?).each do |pet| %>
+        <% Current.user.owned_pets.each do |pet| %>
           <%= link_to t('layouts.navigation.add_report'), new_pet_health_check_path(pet), class: "block px-4 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
           <%= link_to t('layouts.navigation.view_annual_reports'), pet_health_checks_path(pet), class: "block px-4 py-2 text-sm text-gray-300 hover:bg-blue-100 hover:text-blue-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
         <% end %>
@@ -400,7 +400,7 @@
             <%= t('layouts.navigation.mobile.trackers') %>
           </div>
         </div>
-        <% Current.user.pets.select(&:persisted?).each do |pet| %>
+        <% Current.user.owned_pets.each do |pet| %>
           <div class="flex flex-col justify-center p-2">
             <div class="flex flex-row justify-center gap-3">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">

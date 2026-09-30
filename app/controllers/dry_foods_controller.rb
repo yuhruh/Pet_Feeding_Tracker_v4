@@ -3,7 +3,7 @@ class DryFoodsController < ApplicationController
 
   # GET /dry_foods or /dry_foods.json
   def index
-    @dry_foods = Current.user.dry_foods
+    @dry_foods = Current.user.owned_dry_foods
     respond_to do |format|
       format.html
       format.json { render json: @dry_foods }
@@ -69,7 +69,7 @@ class DryFoodsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_dry_food
-      @dry_food = Current.user.dry_foods.find(params[:id])
+      @dry_food = Current.user.owned_dry_foods.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       respond_to do |format|
         format.html do

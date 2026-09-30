@@ -1,5 +1,6 @@
 <% content_for :title, t('trackers.index.title', petname: @pet.petname.capitalize) %>
 
+  <% if household_policy.can?(:manage_trackers) %>
   <details class="container mx-auto border-2 border-garyishBlue rounded-md shadow-md w-full lg:w-1/2">
     <summary class="text-center font-bold text-lg cursor-pointer p-2 md:text-base"><%= t('trackers.index.import_csv') %></summary>
     <div class="flex flex-col justify-center items-center mb-4">
@@ -12,6 +13,7 @@
       <% end %>
     </div>
   </details>
+  <% end %>
   
   <div class="flex flex-col justify-center items-center mb-3">
     <h1 class="font-bold text-center text-2xl mt-5 md:text-4xl"><%= t('trackers.index.title', petname: @pet.petname.capitalize) %></h1>
@@ -22,6 +24,7 @@
          data-share-and-download-chart-id-value="pet-chart"
          data-share-and-download-filename-value="<%= @pet.petname %>_feeding_chart">
       
+      <% if household_policy.can?(:manage_share) %>
       <% if @pet.sharing? %>
         <button data-controller="share-bridge" 
                 data-action="click->share-and-download#copy click->share-bridge#trigger" 
@@ -34,6 +37,7 @@
           <span data-share-and-download-target="buttonText"><%= t('trackers.index.share_link') %></span>
         </button>
       <% end %>
+      <% end %>
 
       <button data-action="click->share-and-download#download" class="flex items-center space-x-2 px-4 py-2 bg-sky-100 text-sky-800 rounded-full border border-sky-300 hover:bg-sky-200 transition-colors shadow-sm font-bold text-sm">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -43,6 +47,7 @@
       </button>
     </div>
 
+    <% if household_policy.can?(:manage_share) %>
     <%# Share link settings: anyone with the link can see this pet's feeding records without signing in. %>
     <details id="share_settings" class="mt-3 w-full max-w-md px-4 text-sm">
       <summary class="text-center cursor-pointer font-semibold text-amber-800 dark:text-amber-400"><%= t('trackers.index.share_settings.title') %></summary>
@@ -74,18 +79,24 @@
         <% end %>
       </div>
     </details>
+    <% end %>
   </div>
 
+  <% if household_policy.can?(:manage_trackers) %>
   <div class="flex flex-row justify-center space-x-3">
     <%= image_tag('add_tracker_removebg.png', width:'40px', height: '40px') %>
     <%= link_to t('trackers.index.new_tracker_link', petname: @pet.petname.capitalize), new_pet_tracker_path(@pet), class: "text-purple-500 text-lg underline decoration-2 decoration-purple-500 font-bold transition duration-300 ease-in-out hover:scale-110 capitalize md:text-xl" %>
   </div>
+  <% end %>
 
+  <% if household_policy.can?(:export_trackers) %>
   <fieldset class="flex flex-row gap-3 justify-center mb-3">
     <%= image_tag('download.png', width: '25px', height: '25px') %>
     <%= link_to t('trackers.index.export_csv'), pet_trackers_path(@pet, format: :csv), class: "text-base font-bold text-sky-500 transition duration-300 ease-in-out hover:scale-110 capitalize md:text-lg dark:text-white" %>
   </fieldset>
+  <% end %>
 
+  <% if household_policy.can?(:view_trackers) %>
   <div class="flex flex-col digg_pagination justify-center italic mt-4">
     <div class="page_info text-center">
       <%= page_entries_info @trackers %>
@@ -101,6 +112,7 @@
       <% end %>
     </div>
   </div>
+  <% end %>
 
   <div class="flex flex-col mt-5 mb-4 justify-center items-center mx-auto w-full">
     <div class="flex justify-end items-end pr-8 pt-4 mb-4 w-full" data-controller="range-form">
@@ -234,6 +246,7 @@
     </div>
   </div>
 
+  <% if household_policy.can?(:view_trackers) %>
   <div id="trackers" class="container mx-auto flex flex-col divide-y divide-gray-200 space-y-5">
     <%= form_with url: pet_trackers_path(@pet), method: :get, data: { controller: "filter-form" } do |form| %>
       <div class="flex flex-row gap-4">
@@ -261,16 +274,20 @@
 
     <%= form_with url: bulk_delete_pet_trackers_path(@pet), method: :delete, data: { confirm: t('trackers.index.confirm_delete') } do |form| %>
       <% if @trackers.any?%>
+        <% if household_policy.can?(:manage_trackers) %>
         <div class="flex justify-start mt-4">
           <%= form.submit t('trackers.index.delete_selected'), class: "p-2 rounded-md shadow-lg font-semibold border-2 border-red-300 text-gray-700 bg-red-200 hover:bg-gray-100 hover:border-gray-300 hover:text-red-700 hover:scale-110" %>
         </div>
+        <% end %>
         <%= render 'tracker' %>
       <% else %>
         <p class="text-lg text-center my-10"><%= t('trackers.index.no_trackers_found', petname: @pet.petname.capitalize) %></p>
       <% end %>
     <% end %>
   </div>
+  <% end %>
 
+  <% if household_policy.can?(:view_trackers) %>
   <div class="flex digg_pagination justify-center mb-4 mt-4">
     <div class="page_info italic">
       <%= page_entries_info @trackers %>
@@ -279,4 +296,5 @@
   <div class="flex digg_pagination justify-center mt-4 mb-4 italic">
     <%= will_paginate @trackers, :container => true %>
   </div>
+  <% end %>
 <%# The extra div was here %>

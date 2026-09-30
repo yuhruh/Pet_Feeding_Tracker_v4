@@ -617,6 +617,8 @@
       notice: "アカウントは正常に更新されました。"
     destroy:
       alert: "%{name}および関連するすべての記録は正常に削除されました。"
+  households:
+    owner_only: "これは%{petname}の飼い主だけができます。"
   kibble_prices:
     index:
       title: "%{petname}のドライフード価格"
