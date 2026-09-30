@@ -6,6 +6,10 @@ class Pet < ApplicationRecord
 
   has_one_attached :pet_avatar
   belongs_to :user
+  # Until pets.user_id is removed, a pet's household is its owner's household.
+  belongs_to :household
+  before_validation :join_owners_household, if: -> { household_id.nil? && user }
+  validate :household_owned_by_user
   delegate :timezone, to: :user, allow_nil: true
   has_many :trackers, dependent: :destroy
   has_many :health_checks, dependent: :destroy
@@ -60,6 +64,14 @@ class Pet < ApplicationRecord
   end
 
   private
+
+  def join_owners_household
+    self.household = Household.for_owner(user)
+  end
+
+  def household_owned_by_user
+    errors.add(:household, :invalid) if household && user_id && household.owner_id != user_id
+  end
 
   # Feedings with a hungry or love rating, latest first.
   def rated_trackers

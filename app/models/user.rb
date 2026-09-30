@@ -2,6 +2,9 @@ class User < ApplicationRecord
   has_secure_password
   has_many :connected_services, dependent: :destroy
   has_many :sessions, dependent: :destroy
+  # The household of the user's own cats (nil until they add a pet or a food bag).
+  has_one :owned_household, class_name: "Household", foreign_key: :owner_id, inverse_of: :owner, dependent: :destroy
+  has_many :household_memberships, dependent: :destroy
   has_many :pets, dependent: :destroy
   has_many :dry_foods, dependent: :destroy
   has_many :vet_visit_members, dependent: :destroy

@@ -10,10 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_28_150000) do
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_catalog.plpgsql"
-
+ActiveRecord::Schema[8.1].define(version: 2026_09_30_120000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -42,6 +39,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_28_150000) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "care_spots", force: :cascade do |t|
+    t.datetime "archived_at"
+    t.datetime "created_at", null: false
+    t.integer "household_id", null: false
+    t.string "kind", null: false
+    t.string "name"
+    t.integer "position", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["household_id"], name: "index_care_spots_on_household_id"
+  end
+
   create_table "connected_services", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "provider"
@@ -59,11 +67,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_28_150000) do
     t.date "days_remaining"
     t.string "description"
     t.string "food_type"
+    t.integer "household_id", null: false
     t.decimal "left_amount"
     t.decimal "total_ate_amount"
     t.datetime "updated_at", null: false
     t.decimal "used_amount"
     t.integer "user_id", null: false
+    t.index ["household_id"], name: "index_dry_foods_on_household_id"
     t.index ["user_id"], name: "index_dry_foods_on_user_id"
   end
 
@@ -116,6 +126,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_28_150000) do
     t.index ["pet_id"], name: "index_health_checks_on_pet_id"
   end
 
+  create_table "household_memberships", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "household_id", null: false
+    t.string "role", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["household_id", "user_id"], name: "index_household_memberships_on_household_id_and_user_id", unique: true
+    t.index ["household_id"], name: "index_household_memberships_on_household_id"
+    t.index ["user_id"], name: "index_household_memberships_on_user_id"
+  end
+
+  create_table "households", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.integer "owner_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_id"], name: "index_households_on_owner_id", unique: true
+  end
+
   create_table "kibble_price_checks", force: :cascade do |t|
     t.date "checked_on", null: false
     t.datetime "created_at", null: false
@@ -152,12 +181,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_28_150000) do
     t.string "breed"
     t.datetime "created_at", null: false
     t.string "gender"
+    t.integer "household_id", null: false
     t.string "petname"
     t.datetime "share_expires_at"
     t.string "share_token"
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.decimal "weight"
+    t.index ["household_id"], name: "index_pets_on_household_id"
     t.index ["share_token"], name: "index_pets_on_share_token", unique: true
     t.index ["user_id"], name: "index_pets_on_user_id"
   end
@@ -175,11 +206,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_28_150000) do
   end
 
   create_table "solid_cache_entries", force: :cascade do |t|
-    t.bigint "byte_size", default: 0, null: false
+    t.integer "byte_size", limit: 8, default: 0, null: false
     t.datetime "created_at", null: false
-    t.binary "key", null: false
-    t.bigint "key_hash", null: false
-    t.binary "value", null: false
+    t.binary "key", limit: 1024, null: false
+    t.integer "key_hash", limit: 8, null: false
+    t.binary "value", limit: 536870912, null: false
     t.index ["key_hash", "created_at"], name: "index_solid_cache_entries_on_key_hash_and_created_at"
     t.index ["key_hash"], name: "index_solid_cache_entries_on_key_hash", unique: true
   end
@@ -372,11 +403,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_28_150000) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "care_spots", "households"
   add_foreign_key "connected_services", "users"
-  add_foreign_key "dry_foods", "users"
+  add_foreign_key "dry_foods", "Users", column: "user_id"
+  add_foreign_key "dry_foods", "households"
   add_foreign_key "health_checks", "pets"
+  add_foreign_key "household_memberships", "households"
+  add_foreign_key "household_memberships", "users"
+  add_foreign_key "households", "users", column: "owner_id"
   add_foreign_key "kibble_price_checks", "pets"
   add_foreign_key "kibble_prices", "kibble_price_checks"
+  add_foreign_key "pets", "households"
   add_foreign_key "pets", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade

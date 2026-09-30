@@ -1,0 +1,6 @@
+# Each fixture user owns the household of their fixture pet and food bag.
+one:
+  owner: one
+
+two:
+  owner: two

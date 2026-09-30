@@ -7,7 +7,7 @@
 | Checkpoint | Status |
 |---|---|
 | 0 — Decisions | ✅ Done (2026-09-29). No open questions |
-| A — Households and memberships (no visible change) | Not started |
+| A — Households and memberships (no visible change) | ✅ Done (2026-09-30). Committed on `feature/households` and pushed. See [Checkpoint A result](#checkpoint-a-result-2026-09-30) |
 | B — Access by household and role | Not started |
 | C — Caregiver invitations, viewer links, members, transfer ownership | Not started |
 | D — Care events and the Today page (fed, litter, water, weight) | Not started |
@@ -19,6 +19,29 @@
 | J — Clean-up, docs, CI, merge | Not started |
 
 **Commits:** each checkpoint is committed on `feature/households` once `bin/rails test` passes, then pushed. Merged into `main` only when you ask.
+
+## Checkpoint A result (2026-09-30)
+
+**What was built** (nothing visible changes for anyone):
+
+| File | What it does |
+|---|---|
+| `db/migrate/20260930120000_create_households.rb` | Creates `households` (one per owner: unique `owner_id`), `household_memberships` (caregiver · viewer, once per household), `care_spots` (litter box · water bowl · water fountain), and `household_id` on `pets` and `dry_foods`. Then, in plain SQL: one household for every user with pets or food bags, a litter box and a water bowl for each, and every pet and bag moved into its owner's household; `household_id` then becomes required |
+| `app/models/household.rb` | Owner, pets, food bags, care spots, memberships and members; every new household gets one litter box and one water bowl; `Household.for_owner(user)` finds or creates a user's household |
+| `app/models/household_membership.rb`, `care_spot.rb` | Roles `caregiver` / `viewer` (never the owner, once each); spot kinds `litter_box` / `water_bowl` / `water_fountain`, `active` = not archived |
+| `app/models/user.rb`, `pet.rb`, `dry_food.rb` | `User#owned_household` (deleted with the user, with its pets, bags and spots) and `#household_memberships`. **Until checkpoint J**, pets and bags keep `user_id`: one created through today's pages joins its owner's household automatically (the first one creates it), and a pet or bag in another owner's household is invalid |
+| `test/fixtures/households.yml`, `pets.yml`, `dry_foods.yml`; `test/models/household_test.rb` | Fixture households; 8 new tests |
+
+**Details decided while building:**
+- **Names can be empty.** `households.name` and `care_spots.name` start empty and will show as "Rita's cats" and "Litter box" / "Water bowl" in each viewer's own language (checkpoints C and D), instead of storing English or Chinese text.
+- **A user with no pets and no food bags has no household yet** (e.g. a new sign-up). It's created with their first cat or bag, which is also how "Add my own cat" will work.
+
+**Checks:**
+- **Local data** (development database): Rita, test2 and testuser_csv each own one household with their pets, Rita's 2 food bags, a litter box and a water bowl; the user with no pets has none; no pet or bag is in another owner's household; all 9,193 trackers still belong to their pets.
+- **PostgreSQL 15** (throwaway database, deleted afterwards): from the schema before this change, with users who have pets, only a food bag, or nothing, the migration created exactly the right households, moved all pets and bags, gave each household 2 care spots, and made `household_id` required. Rolling back and migrating again both worked.
+- `bin/rails test`: 290 runs, 0 failures (the 282 existing tests unchanged, plus 8 new). `bin/rails test:system`: 32 runs, 0 failures. RuboCop and Brakeman clean.
+
+**`db/schema.rb` flavor:** the Change F commit (`4d4a454`, kibble prices) accidentally committed a `schema.rb` dumped from a throwaway PostgreSQL database, because running `db:migrate` against it rewrote the file. It's back to being dumped from the development SQLite database, as before, so the dry-food foreign key shows as `"Users"` again (ARCHITECTURE.md D1, a separate fix). PostgreSQL checks now save and restore `schema.rb` around them.
 
 ## Decisions
 
@@ -439,7 +462,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 | # | Build | Checkpoint |
 |---|---|---|
 | 0 | Decisions | ✅ Done |
-| A | `households`, `household_memberships`, `care_spots` (one box, one bowl each), `pets.household_id`, `dry_foods.household_id`; data migration | All existing tests pass unchanged; migration checked on PostgreSQL; every current user owns one household with their pets, bags, a litter box and a water bowl |
+| A | `households`, `household_memberships`, `care_spots` (one box, one bowl each), `pets.household_id`, `dry_foods.household_id`; data migration | ✅ Done — existing tests unchanged; migration and rollback checked on PostgreSQL; every current user with pets or bags owns one household with them, a litter box and a water bowl |
 | B | `Pet.accessible_by`, `HouseholdPolicy`; replace every lookup listed above; food-bag rule by household; jobs, mailers and brand names via the household's owner | A test matrix of **each role on each page** (allowed and refused); single-member households behave exactly as today |
 | C | Caregiver invitations and the join page (prefilled email, Google / LINE); the new landing rules (caregivers and people in several households land on Today; new users with no household still get "Add A Cat"); "Add my own cat" under Account; menus and cat lists grouped by household; the caregiver menu; viewer links (create, name, expiry, turn off) and the viewer page with charts; member list, removing, leaving; transfer ownership; account deletion asks to transfer | Invite → join → caregiver role applies; expired, reused and wrong-email invitations refused; a viewer link opens only its household's viewer page, and stops at once when turned off or expired; signing in from a viewer link adds a viewer membership; transfer swaps owner and caregiver in one transaction |
 | D | `care_events`; Today page with litter-box and water-spot rows and cat cards; one-tap fed, scooped, full change, refilled, cleaned, filter changed (several actions in one record, with checkboxes in the notice); weight form; change time; feeding "Add details" with suggestions by food type; "Add to trackers"; undo; double-tap guard; status and today's timeline on the viewer page; managing boxes and water spots | Browser test: caregiver taps Fed and adds details, refills and cleans the fountain in one record, changes a time, undoes a tap; owner adds a feeding to trackers; the viewer link shows the new records with no buttons; tests that every save refuses a household mismatch (record, food bag, box, water spot, medication) and a person without rights in that household |
@@ -473,6 +496,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 
 ## Change log
 
+- **Checkpoint A (2026-09-30):** households, memberships and care spots built; existing pets and food bags moved into their owner's household. Names stored empty and shown in each viewer's language; users without pets or bags get a household with their first one.
 - **v6 (2026-09-30):** landing after sign-in depends on what the person has (new user with no household → "Add A Cat"; caregivers → Today). Caregivers can create their own household with **"Add my own cat" under Account** ("This creates your own household. Rita's cats are not affected."), becoming owner and caregiver. Pages for someone in several households: owner menu once they own cats, Today grouped by household (own first), cat lists grouped by household with the role shown. **Keeping households apart:** no household picker; the household comes from the cat, box or spot and is set by the server, which refuses any mismatch.
 - **v5 (2026-09-29):** caregivers **need an account**, joining through a one-step invitation page (prefilled email, or Google / LINE), landing on Today instead of "Add A Cat", with a smaller menu. Viewers use a **personal link** with no account: a read-only viewer page with status, today's timeline and charts; one link per viewer, revocable, optional expiry; signing in from it adds the household to their account. Invitations are for caregivers only; new `viewer_links` table.
 - **v4 (2026-09-29):** water spots use **buttons + checkboxes** (one tap saves; the notice's checkboxes add the other actions to the same record). **Reminders** per spot and job, counted from the last time it was done (twice a week, twice a month, …), once at 9am local time plus one follow-up, to the owner and caregivers who turn them on; meds overdue too. Channels: **LINE, else email (H)**, then **Android app push via Firebase (I)**. Clean-up moves to J.
