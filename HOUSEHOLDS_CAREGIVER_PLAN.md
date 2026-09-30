@@ -10,7 +10,7 @@
 | A — Households and memberships (no visible change) | ✅ Done (2026-09-30). Committed on `feature/households` and pushed. See [Checkpoint A result](#checkpoint-a-result-2026-09-30) |
 | B — Access by household and role | ✅ Done (2026-09-30). Committed on `feature/households` and pushed. See [Checkpoint B result](#checkpoint-b-result-2026-09-30) |
 | C — Caregiver invitations, viewer links, members, transfer ownership | ✅ Done (2026-09-30). Committed on `feature/households` in five parts and pushed. See [Checkpoint C result](#checkpoint-c-result-2026-09-30) |
-| D — Care events and the Today page (fed, litter, water, weight) | In progress. See [Checkpoint D build plan](#checkpoint-d-build-plan-2026-09-30) |
+| D — Care events and the Today page (fed, litter, water, weight) | ✅ Done (2026-09-30). Committed on `feature/households` in five parts and pushed. See [Checkpoint D result](#checkpoint-d-result-2026-09-30) |
 | E — Medications | Not started |
 | F — Litter observations | Not started |
 | G — Live updates and care events on the charts | Not started |
@@ -19,6 +19,33 @@
 | J — Clean-up, docs, CI, merge | Not started |
 
 **Commits:** each checkpoint is committed on `feature/households` once `bin/rails test` passes, then pushed. Merged into `main` only when you ask.
+
+## Checkpoint D result (2026-09-30)
+
+**What people see now:**
+- **Today page**, per household: a row for each litter box (🚽 Scooped · ♻️ Full change) and water spot (💧 Refilled · 🧽 Bowl/Fountain cleaned, plus 🔄 Filter changed on fountains), then each cat (🍽 Fed · ⚖️ Weight). Next to each: the last time it was done and by whom ("refilled, fountain cleaned 07:30 by Mom", "Fed 08:12 by Mom", "4.2 kg (yesterday 20:10)"). Below: **today's timeline**, newest first, including the owner's trackers ("(tracker)"). Viewers with an account see the same without buttons.
+- **After a tap:** a notice with **Undo** (disappears after 10 seconds), **Change time: 5 · 10 · 15 min ago**, **Add details**, and, for water, the spot's jobs as **checkboxes** that save as soon as they're ticked. A second water tap on the same spot within 2 minutes joins the same record.
+- **Double-tap guard:** "Mom recorded “Aji: fed” at 08:05. Record it again?" (fed and water within 30 minutes; the same litter job within 2 hours).
+- **Details page** ("Add details" or **Change** on a timeline entry): the time (up to 7 days back), the jobs, a note, the weight, and for feedings the **food type, suggestions, brand, description and amount**. Suggestions follow the food type: the household's **bags** with what's left (kibble, freeze-dried), the cat's **favorite wet foods** (score 30+, last date), its **past "other" foods**. Edited entries show "(changed)".
+- **Add to trackers** (owner only): the tracker form opens prefilled with the feeding's date, time, food type, brand, description, amount and bag; the owner adds hunger and the rest, and the timeline then shows the feeding once.
+- **Viewer page:** the same status rows and today's timeline, read-only, above the charts. No notes or emails.
+- **Household page:** **Litter boxes and water spots**: add, rename, bowl or fountain, move up or down, remove (archived: gone from Today, past records keep the name).
+
+**Main files:** `CareEvent` (all household checks, undo and edit rules, the repeat check), `HouseholdDay` (one household's day for Today and the viewer page), `FeedingSuggestions`, `CareEventsController`, `CareSpotsController`, `care_events/_status`, `_timeline`, `_notice`, `_repeat_prompt`, `edit`; `care_details_controller.js`, `expire_controller.js`; `db/migrate/20261001090000_create_care_events.rb` (checked on PostgreSQL: migrate, rollback, migrate).
+
+**Decisions made while building:**
+- **The tapper's page refreshes after each tap** (Turbo page refresh with morphing, so the scroll position stays). Other people see new records when they reload, until live updates in G.
+- **A household's "today" and its times use the owner's time zone**, like its trackers.
+- **Weight** is a care event only; the cat's profile weight and the charts don't change until G.
+- **Rows show "last done"**, not "due"; due dates need the reminder intervals from H.
+- **A spot's jobs are always stored in the spot's order** ("refilled, fountain cleaned"), whichever was tapped first.
+- **A litter box stays a litter box**; a water spot can switch between bowl and fountain, and its past "filter changed" records keep their label.
+
+**Found and fixed:** the **Copy** button for new viewer links (checkpoint C) did nothing, because its Stimulus controller wasn't registered in `controllers/index.js`. It's registered now, with the new ones. (`bin/rails stimulus:manifest:update` also rewrites every import to a relative path, so new controllers are added to that file by hand.)
+
+**Checks:**
+- **32 new tests** and **1 browser test**. Model: household from the cat or spot, subject and jobs per kind, time limits, feeding details and another household's bag refused, weight range, tracker of the same cat only, repeats, who may undo and change, records removed with their cat or household and kept (without a name) when a member is deleted. Pages: buttons for caregivers but not viewers; one tap; the repeat question; water records built from taps and checkboxes; litter jobs separate; quick time change; undo within 10 seconds only; weight; the owner's trackers on the timeline; another household's cat or spot, an archived spot, and a viewer refused; caregivers change only their own records for a day; a tampered request can't choose the household, person, cat, spot or tracker; details and suggestions; Add to trackers (prefilled, linked, bag stock updated, shown once, owner only); spots managed by the owner only; the viewer page's status and timeline. The **browser test** runs the whole flow: a caregiver taps Fed and adds details from a suggestion, refills and ticks "Fountain cleaned" in one record, scoops and moves it 10 minutes back, undoes an accidental tap; the owner adds the feeding to trackers; the viewer link shows the records with no buttons. The **Content-Security-Policy** browser test now also loads Today, the household page and the viewer page.
+- `bin/rails test`: 369 runs, 0 failures. `bin/rails test:system`: 33 runs, 0 failures. RuboCop and Brakeman clean.
 
 ## Checkpoint D build plan (2026-09-30)
 
@@ -559,7 +586,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 | A | `households`, `household_memberships`, `care_spots` (one box, one bowl each), `pets.household_id`, `dry_foods.household_id`; data migration | ✅ Done — existing tests unchanged; migration and rollback checked on PostgreSQL; every current user with pets or bags owns one household with them, a litter box and a water bowl |
 | B | `Pet.accessible_by`, `HouseholdPolicy`; replace every lookup listed above; food-bag rule by household; jobs, mailers and brand names via the household's owner | ✅ Done — role × page matrix (owner, caregiver, viewer, outsider on 22 pages and actions); all existing tests unchanged |
 | C | ✅ Done — Caregiver invitations and the join page (prefilled email, Google / LINE); the new landing rules (caregivers and people in several households land on Today; new users with no household still get "Add A Cat"); "Add my own cat" under Account; menus and cat lists grouped by household; the caregiver menu; viewer links (create, name, expiry, turn off) and the viewer page with charts; member list, removing, leaving; transfer ownership; account deletion asks to transfer | Invite → join → caregiver role applies; expired, reused and wrong-email invitations refused; a viewer link opens only its household's viewer page, and stops at once when turned off or expired; signing in from a viewer link adds a viewer membership; transfer swaps owner and caregiver in one transaction |
-| D | `care_events`; Today page with litter-box and water-spot rows and cat cards; one-tap fed, scooped, full change, refilled, cleaned, filter changed (several actions in one record, with checkboxes in the notice); weight form; change time; feeding "Add details" with suggestions by food type; "Add to trackers"; undo; double-tap guard; status and today's timeline on the viewer page; managing boxes and water spots | Browser test: caregiver taps Fed and adds details, refills and cleans the fountain in one record, changes a time, undoes a tap; owner adds a feeding to trackers; the viewer link shows the new records with no buttons; tests that every save refuses a household mismatch (record, food bag, box, water spot, medication) and a person without rights in that household |
+| D | ✅ Done — `care_events`; Today page with litter-box and water-spot rows and cat cards; one-tap fed, scooped, full change, refilled, cleaned, filter changed (several actions in one record, with checkboxes in the notice); weight form; change time; feeding "Add details" with suggestions by food type; "Add to trackers"; undo; double-tap guard; status and today's timeline on the viewer page; managing boxes and water spots | Browser test: caregiver taps Fed and adds details, refills and cleans the fountain in one record, changes a time, undoes a tap; owner adds a feeding to trackers; the viewer link shows the new records with no buttons; tests that every save refuses a household mismatch (record, food bag, box, water spot, medication) and a person without rights in that household |
 | E | `medications`; meds button with Given / Couldn't give; due / given / overdue | Doses shown per schedule; double dose guarded |
 | F | Litter observations in "Add details" (optional fields; which cat) | Old records unchanged; observations show on the timeline and, with a cat, in that cat's history |
 | G | Turbo Streams broadcast (Today pages and viewer pages); care events on charts and in CSV | Two browser sessions: a tap in one appears in the other, including on a viewer page |
@@ -591,6 +618,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 
 ## Change log
 
+- **Checkpoint D (2026-09-30):** one-tap care on the Today page (fed, weight, litter, water), undo, quick time changes, water checkboxes, the double-tap guard, today's timeline with trackers, details with suggestions by food type, Add to trackers, status and timeline on the viewer page, and managing litter boxes and water spots. Fixed the viewer link Copy button.
 - **Checkpoint C (2026-09-30):** household page (members, invitations, viewer links), join page with Google / LINE, landing rules, a first Today page, grouped and smaller menus, leaving and "Add my own cat", the viewer page with charts, transfer ownership, and account deletion asking to hand over first. Today's buttons and the viewer page's status and timeline come in D.
 - **Checkpoint B (2026-09-30):** access by household and role on every page; CSV export and the pet profile are owner-only; refused actions say "Only Aji's owner can do that."
 - **Checkpoint A (2026-09-30):** households, memberships and care spots built; existing pets and food bags moved into their owner's household. Names stored empty and shown in each viewer's language; users without pets or bags get a household with their first one.
