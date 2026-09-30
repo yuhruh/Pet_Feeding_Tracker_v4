@@ -5,6 +5,12 @@ class User < ApplicationRecord
   # The household of the user's own cats (nil until they add a pet or a food bag).
   has_one :owned_household, class_name: "Household", foreign_key: :owner_id, inverse_of: :owner, dependent: :destroy
   has_many :household_memberships, dependent: :destroy
+  # Links to other people's records, so deleting an account never blocks on them.
+  has_many :sent_household_invitations, class_name: "HouseholdInvitation", foreign_key: :invited_by_id, dependent: :nullify
+  has_many :accepted_household_invitations, class_name: "HouseholdInvitation", foreign_key: :accepted_by_id, dependent: :nullify
+  has_many :created_viewer_links, class_name: "ViewerLink", foreign_key: :created_by_id, dependent: :nullify
+  has_many :outgoing_ownership_transfers, class_name: "OwnershipTransfer", foreign_key: :from_user_id, dependent: :destroy
+  has_many :incoming_ownership_transfers, class_name: "OwnershipTransfer", foreign_key: :to_user_id, dependent: :destroy
   has_many :pets, dependent: :destroy
 
   # The cats and food bags of the household the user owns (not ones they help with).

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_30_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_30_150000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -126,6 +126,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_30_120000) do
     t.index ["pet_id"], name: "index_health_checks_on_pet_id"
   end
 
+  create_table "household_invitations", force: :cascade do |t|
+    t.datetime "accepted_at"
+    t.integer "accepted_by_id"
+    t.datetime "created_at", null: false
+    t.string "email", null: false
+    t.datetime "expires_at", null: false
+    t.integer "household_id", null: false
+    t.integer "invited_by_id"
+    t.string "token_digest", null: false
+    t.datetime "updated_at", null: false
+    t.index ["accepted_by_id"], name: "index_household_invitations_on_accepted_by_id"
+    t.index ["household_id"], name: "index_household_invitations_on_household_id"
+    t.index ["invited_by_id"], name: "index_household_invitations_on_invited_by_id"
+    t.index ["token_digest"], name: "index_household_invitations_on_token_digest", unique: true
+  end
+
   create_table "household_memberships", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "household_id", null: false
@@ -174,6 +190,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_30_120000) do
     t.string "url"
     t.string "variant"
     t.index ["kibble_price_check_id"], name: "index_kibble_prices_on_kibble_price_check_id"
+  end
+
+  create_table "ownership_transfers", force: :cascade do |t|
+    t.datetime "accepted_at"
+    t.datetime "cancelled_at"
+    t.datetime "created_at", null: false
+    t.datetime "expires_at", null: false
+    t.integer "from_user_id", null: false
+    t.integer "household_id", null: false
+    t.integer "to_user_id", null: false
+    t.string "token_digest", null: false
+    t.datetime "updated_at", null: false
+    t.index ["from_user_id"], name: "index_ownership_transfers_on_from_user_id"
+    t.index ["household_id"], name: "index_ownership_transfers_on_household_id"
+    t.index ["to_user_id"], name: "index_ownership_transfers_on_to_user_id"
+    t.index ["token_digest"], name: "index_ownership_transfers_on_token_digest", unique: true
   end
 
   create_table "pets", force: :cascade do |t|
@@ -401,6 +433,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_30_120000) do
     t.index ["pet_id"], name: "index_vet_visits_on_pet_id"
   end
 
+  create_table "viewer_links", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "created_by_id"
+    t.datetime "expires_at"
+    t.integer "household_id", null: false
+    t.datetime "last_used_at"
+    t.string "name", null: false
+    t.datetime "revoked_at"
+    t.string "token_digest", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_viewer_links_on_created_by_id"
+    t.index ["household_id"], name: "index_viewer_links_on_household_id"
+    t.index ["token_digest"], name: "index_viewer_links_on_token_digest", unique: true
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "care_spots", "households"
@@ -408,11 +455,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_30_120000) do
   add_foreign_key "dry_foods", "Users", column: "user_id"
   add_foreign_key "dry_foods", "households"
   add_foreign_key "health_checks", "pets"
+  add_foreign_key "household_invitations", "households"
+  add_foreign_key "household_invitations", "users", column: "accepted_by_id"
+  add_foreign_key "household_invitations", "users", column: "invited_by_id"
   add_foreign_key "household_memberships", "households"
   add_foreign_key "household_memberships", "users"
   add_foreign_key "households", "users", column: "owner_id"
   add_foreign_key "kibble_price_checks", "pets"
   add_foreign_key "kibble_prices", "kibble_price_checks"
+  add_foreign_key "ownership_transfers", "households"
+  add_foreign_key "ownership_transfers", "users", column: "from_user_id"
+  add_foreign_key "ownership_transfers", "users", column: "to_user_id"
   add_foreign_key "pets", "households"
   add_foreign_key "pets", "users"
   add_foreign_key "sessions", "users"
@@ -427,4 +480,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_30_120000) do
   add_foreign_key "vet_visit_members", "users"
   add_foreign_key "vet_visit_members", "vet_visits"
   add_foreign_key "vet_visits", "pets"
+  add_foreign_key "viewer_links", "households"
+  add_foreign_key "viewer_links", "users", column: "created_by_id"
 end

@@ -7,6 +7,9 @@ class Household < ApplicationRecord
   has_many :care_spots, -> { order(:position, :id) }, dependent: :destroy
   has_many :memberships, class_name: "HouseholdMembership", dependent: :destroy
   has_many :members, through: :memberships, source: :user
+  has_many :invitations, class_name: "HouseholdInvitation", dependent: :destroy
+  has_many :viewer_links, dependent: :destroy
+  has_many :ownership_transfers, dependent: :destroy
 
   validates :owner_id, uniqueness: true
 
