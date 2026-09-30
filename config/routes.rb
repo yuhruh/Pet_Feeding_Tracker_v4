@@ -36,6 +36,7 @@ Rails.application.routes.draw do
       resources :invitations, only: %i[create destroy], controller: "household_invitations"
       resources :viewer_links, only: %i[create destroy]
       resources :members, only: :destroy, controller: "household_members"
+      resources :ownership_transfers, only: %i[create destroy]
     end
     # An invited caregiver joins from the link in their invitation email.
     get "join/:token", to: "household_joins#show", as: :join_household
@@ -45,6 +46,8 @@ Rails.application.routes.draw do
     post "view/:token", to: "viewer_pages#create"
     delete "households/:household_id/leave", to: "household_memberships#destroy", as: :leave_household
     get "today", to: "today#show", as: :today
+    # The member a household was offered to accepts it.
+    resources :ownership_transfer_offers, only: %i[show update], path: "transfers"
     resource :session, except: [ :new ]
     delete "session/others", to: "sessions#destroy_others", as: :other_sessions
     resource :registrations, only: [ :new, :create ]

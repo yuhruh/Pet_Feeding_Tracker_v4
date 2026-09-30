@@ -1,0 +1,16 @@
+<% household = @transfer.household %>
+<% content_for :title, t(".title") %>
+
+<div class="container mx-auto mt-6 px-2 md:w-2/3 space-y-4 text-center">
+  <h1 class="font-semibold text-2xl"><%= t(".title") %></h1>
+  <% if @transfer.pending? %>
+    <p><%= t(".offer", owner: @transfer.from_user.username.capitalize, household: household_name(household)) %></p>
+    <p class="text-sm text-gray-600 dark:text-gray-300"><%= t(".what_it_means", owner: @transfer.from_user.username.capitalize) %></p>
+    <%= button_to t(".accept"), ownership_transfer_offer_path(@transfer), method: :patch,
+          form: { data: { turbo_confirm: t(".accept_confirm", household: household_name(household)) } },
+          class: "mx-auto rounded-md px-4 py-2 text-white bg-softBlue font-medium cursor-pointer" %>
+    <p class="text-xs text-gray-500"><%= t(".expires", date: l(@transfer.expires_at.to_date, format: :long)) %></p>
+  <% else %>
+    <p class="text-gray-600 dark:text-gray-300"><%= t(".no_longer_pending") %></p>
+  <% end %>
+</div>

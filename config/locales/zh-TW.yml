@@ -1,4 +1,21 @@
 zh-TW:
+  ownership_transfers:
+    create:
+      notice: "已向 %{name} 提出移交。"
+    destroy:
+      notice: "已撤回移交。"
+  ownership_transfer_offers:
+    not_found: "這個移交不是給你的，或已不存在。"
+    show:
+      title: "接手家庭"
+      offer: "%{owner} 想把 %{household} 移交給你。"
+      what_it_means: "你會成為貓咪、飼料袋和紀錄的主人，%{owner} 會以照顧者身分留下。"
+      accept: "接受並成為主人"
+      accept_confirm: "要成為 %{household} 的主人嗎？"
+      expires: "這個移交在 %{date} 前有效。"
+      no_longer_pending: "這個移交已被接受、撤回或已過期。"
+    update:
+      notice: "你現在是 %{household} 的主人了。"
   viewer_pages:
     following: "已將 %{household} 加入你的帳號。"
     show:
@@ -53,6 +70,8 @@ zh-TW:
       no_cats: "這裡還沒有貓咪。"
       charts: "圖表"
       trackers_and_charts: "紀錄與圖表"
+      transfer_offer: "%{owner} 想把 %{household} 移交給你。"
+      review_offer: "查看"
       favorites: "最愛清單"
   household_memberships:
     destroy:
@@ -686,6 +705,7 @@ zh-TW:
       notice: "帳戶已成功更新。"
     destroy:
       alert: "%{name}及其所有相關紀錄已成功刪除。"
+      transfer_first: "有其他人在幫忙照顧你的貓咪。請先把家庭移交給其中一位，或用下方按鈕連同帳號一起刪除。"
   households:
     owner_only: "只有 %{petname} 的主人可以這麼做。"
     default_name: "%{owner} 的貓咪"
@@ -728,6 +748,15 @@ zh-TW:
       never_used: "還沒開啟過"
       turn_off: "關閉"
       turn_off_confirm: "要關閉 %{name} 的連結嗎？會立即失效。"
+      transfer: "把家庭移交給別人"
+      transfer_explanation: "你選的成員接受後，會成為貓咪、飼料袋和紀錄的主人。你會以照顧者身分留下，之後可以離開。"
+      transfer_waiting: "等待 %{name} 接受（%{date} 前）。"
+      transfer_confirm: "要把家庭移交給這位成員嗎？對方接受後就會成為主人。"
+      transfer_button: "提出移交"
+      transfer_needs_member: "請先邀請照顧者；家庭只能移交給成員。"
+      delete_anyway_explanation: "或者，連同帳號一起刪除你的家庭、貓咪和所有紀錄。成員將無法再查看。"
+      delete_anyway: "刪除我的帳號、家庭和貓咪"
+      delete_anyway_confirm: "要刪除你的帳號、家庭、貓咪和所有紀錄嗎？此動作無法復原。"
   household_invitations:
     create:
       notice: "已寄出邀請給 %{email}。"
@@ -743,6 +772,12 @@ zh-TW:
     destroy:
       notice: "已將 %{name} 從家庭移除。"
   household_mailer:
+    ownership_transfer:
+      subject: "%{owner} 想把家庭移交給你"
+      intro: "%{owner} 想把 Pet Tracker 上的家庭（%{pets}）移交給你。"
+      what_it_means: "接受後，你會成為貓咪、飼料袋和紀錄的主人，%{owner} 會以照顧者身分留下。"
+      review: "查看移交"
+      fine_print: "請用這個 Email 登入後接受。移交在 %{date} 前有效。如果你沒有預期收到這封信，可以忽略。"
     invitation:
       subject: "%{owner} 邀請你一起照顧貓咪"
       intro: "%{owner} 邀請你在 Pet Tracker 當照顧者，一起照顧 %{pets}。"
@@ -978,6 +1013,11 @@ zh-TW:
               in_the_past: "到期日必須在未來。"
         ownership_transfer:
           attributes:
+            base:
+              not_pending: "這個移交已被接受、撤回或已過期。"
+              wrong_person: "這個移交是給別人的。"
+              still_owner_changed: "這個家庭已經換了主人。"
+              already_owns: "你已經有自己的家庭。請先移交它，或刪除其中的貓咪。"
             to_user:
               not_a_member: "只能交給家庭裡的成員。"
               already_owns: "這個人已經有自己的家庭了。"

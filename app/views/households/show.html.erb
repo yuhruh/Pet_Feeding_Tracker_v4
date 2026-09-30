@@ -99,4 +99,32 @@
       </ul>
     <% end %>
   </section>
+  <%# Handing the household to a member %>
+  <section id="transfer" class="border-2 border-slate-200 rounded-xl shadow-lg p-4">
+    <h2 class="font-semibold text-xl mb-1"><%= t(".transfer") %></h2>
+    <p class="text-sm text-gray-600 dark:text-gray-300 mb-3"><%= t(".transfer_explanation") %></p>
+    <% if @pending_transfer %>
+      <div class="flex flex-wrap justify-between items-center gap-2">
+        <span><%= t(".transfer_waiting", name: @pending_transfer.to_user.username, date: l(@pending_transfer.expires_at.to_date, format: :long)) %></span>
+        <%= button_to t(".cancel"), household_ownership_transfer_path(@pending_transfer), method: :delete, class: "text-sm text-red-600 underline cursor-pointer" %>
+      </div>
+    <% elsif @members.any? %>
+      <%= form_with url: household_ownership_transfers_path, method: :post, class: "flex flex-col gap-2 sm:flex-row sm:items-center",
+            data: { turbo_confirm: t(".transfer_confirm") } do |form| %>
+        <%= form.select :to_user_id, @members.map { |membership| [ membership.user.username, membership.user_id ] }, {},
+              class: "flex-1 rounded-md border px-2 py-2 dark:text-black" %>
+        <%= form.submit t(".transfer_button"), class: "rounded-md px-3.5 py-2 text-amber-800 bg-amber-200 border-2 border-amber-200 font-medium cursor-pointer hover:bg-gray-100" %>
+      <% end %>
+    <% else %>
+      <p class="text-sm"><%= t(".transfer_needs_member") %></p>
+    <% end %>
+
+    <% if @members.any? %>
+      <div class="mt-4 pt-3 border-t border-slate-200">
+        <p class="text-sm text-gray-600 dark:text-gray-300 mb-2"><%= t(".delete_anyway_explanation") %></p>
+        <%= button_to t(".delete_anyway"), users_path, method: :delete, params: { household: "delete" },
+              form: { data: { turbo_confirm: t(".delete_anyway_confirm") } }, class: "text-sm text-red-600 underline cursor-pointer" %>
+      </div>
+    <% end %>
+  </section>
 </div>

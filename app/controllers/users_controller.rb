@@ -36,6 +36,12 @@ class UsersController < ApplicationController
   end
 
   def destroy
+    # Someone else helps with these cats: offer the household to them first, unless
+    # the owner chose to delete the household and its cats anyway.
+    if @user.owned_household&.memberships&.exists? && params[:household] != "delete"
+      return redirect_to household_path(anchor: "transfer"), alert: t("users.destroy.transfer_first"), status: :see_other
+    end
+
     @user.destroy!
     name = @user.username.split(" ").map(&:capitalize).join(" ")
     session[:user_id] = nil if @user == Current.user

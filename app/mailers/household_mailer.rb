@@ -13,4 +13,16 @@ class HouseholdMailer < ApplicationMailer
       mail(to: @invitation.email, subject: t(".subject", owner: @owner_name))
     end
   end
+
+  # To the member the owner offered the household to.
+  def ownership_transfer
+    @transfer = params[:transfer]
+    @household = @transfer.household
+    I18n.with_locale(params[:locale].presence || I18n.default_locale) do
+      @owner_name = @transfer.from_user.username.split(" ").map(&:capitalize).join(" ")
+      @pet_names = @household.pets.order(:created_at).map { |pet| pet.petname.capitalize }.to_sentence
+      @offer_url = ownership_transfer_offer_url(@transfer, locale: I18n.locale)
+      mail(to: @transfer.to_user.email_address, subject: t(".subject", owner: @owner_name))
+    end
+  end
 end

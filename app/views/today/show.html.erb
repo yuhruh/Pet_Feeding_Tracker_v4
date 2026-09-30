@@ -3,6 +3,13 @@
 <div class="container mx-auto w-full px-2 md:w-2/3 mb-8 space-y-6">
   <h1 class="text-center font-bold text-3xl md:text-4xl"><%= t(".title") %></h1>
 
+  <% Current.user.incoming_ownership_transfers.pending.includes(:from_user, household: :owner).each do |transfer| %>
+    <div class="p-3 rounded-lg border-2 border-amber-200 bg-amber-50 text-center dark:text-gray-800">
+      <%= t(".transfer_offer", owner: transfer.from_user.username.capitalize, household: household_name(transfer.household)) %>
+      <%= link_to t(".review_offer"), ownership_transfer_offer_path(transfer), class: "ml-2 font-semibold text-amber-800 underline" %>
+    </div>
+  <% end %>
+
   <% if @households.empty? %>
     <div class="text-center space-y-3">
       <p class="text-gray-600 dark:text-gray-300"><%= t(".nothing_yet") %></p>

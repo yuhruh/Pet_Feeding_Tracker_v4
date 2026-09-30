@@ -1,4 +1,5 @@
-# The owner's household: who helps, pending invitations and viewer links.
+# The owner's household: who helps, pending invitations, viewer links and
+# handing the household to a member.
 class HouseholdsController < ApplicationController
   include OwnedHousehold
 
@@ -8,5 +9,6 @@ class HouseholdsController < ApplicationController
     @viewer_links = @household.viewer_links.order(created_at: :desc)
     # Shown once, right after the link is made: only its digest is stored.
     @new_viewer_link_url = flash[:new_viewer_link_url]
+    @pending_transfer = @household.ownership_transfers.pending.includes(:to_user).last
   end
 end

@@ -1,4 +1,21 @@
  ja:
+  ownership_transfers:
+    create:
+      notice: "%{name}さんに引き継ぎを依頼しました。"
+    destroy:
+      notice: "引き継ぎの依頼を取り消しました。"
+  ownership_transfer_offers:
+    not_found: "この依頼はあなた宛てではないか、すでに存在しません。"
+    show:
+      title: "家庭を引き継ぐ"
+      offer: "%{owner}さんが%{household}をあなたに引き継ぎたいそうです。"
+      what_it_means: "猫・フードの袋・記録のオーナーになり、%{owner}さんはお世話メンバーとして残ります。"
+      accept: "引き継いでオーナーになる"
+      accept_confirm: "%{household}のオーナーになりますか？"
+      expires: "この依頼は%{date}まで有効です。"
+      no_longer_pending: "この依頼は承諾済み・取り消し済み、または期限切れです。"
+    update:
+      notice: "%{household}のオーナーになりました。"
   viewer_pages:
     following: "%{household}をアカウントに追加しました。"
     show:
@@ -53,6 +70,8 @@
       no_cats: "まだ猫がいません。"
       charts: "グラフ"
       trackers_and_charts: "記録とグラフ"
+      transfer_offer: "%{owner}さんが%{household}をあなたに引き継ぎたいそうです。"
+      review_offer: "確認する"
       favorites: "お気に入り"
   household_memberships:
     destroy:
@@ -686,6 +705,7 @@
       notice: "アカウントは正常に更新されました。"
     destroy:
       alert: "%{name}および関連するすべての記録は正常に削除されました。"
+      transfer_first: "猫のお世話を手伝っている人がいます。先に家庭をその人に引き継ぐか、下のボタンでアカウントと一緒に削除してください。"
   households:
     owner_only: "これは%{petname}の飼い主だけができます。"
     default_name: "%{owner}の猫たち"
@@ -728,6 +748,15 @@
       never_used: "まだ開かれていません"
       turn_off: "無効にする"
       turn_off_confirm: "%{name}さんのリンクを無効にしますか？すぐに使えなくなります。"
+      transfer: "家庭をほかの人に引き継ぐ"
+      transfer_explanation: "選んだメンバーが承諾すると、猫・フードの袋・記録のオーナーになります。あなたはお世話メンバーとして残り、あとで退出できます。"
+      transfer_waiting: "%{name}さんの承諾待ちです（%{date}まで）。"
+      transfer_confirm: "このメンバーに家庭を引き継ぎますか？ 承諾されるとオーナーが替わります。"
+      transfer_button: "引き継ぎを依頼"
+      transfer_needs_member: "先にお世話メンバーを招待してください。引き継げるのはメンバーだけです。"
+      delete_anyway_explanation: "または、アカウントと一緒に家庭・猫・記録をすべて削除します。メンバーは見られなくなります。"
+      delete_anyway: "アカウント・家庭・猫を削除"
+      delete_anyway_confirm: "アカウント、家庭、猫、すべての記録を削除しますか？ 元に戻せません。"
   household_invitations:
     create:
       notice: "%{email} に招待を送りました。"
@@ -743,6 +772,12 @@
     destroy:
       notice: "%{name}さんを世帯から外しました。"
   household_mailer:
+    ownership_transfer:
+      subject: "%{owner}さんから家庭の引き継ぎ依頼が届きました"
+      intro: "%{owner}さんが、Pet Tracker の家庭（%{pets}）をあなたに引き継ぎたいそうです。"
+      what_it_means: "承諾すると、猫・フードの袋・記録のオーナーになり、%{owner}さんはお世話メンバーとして残ります。"
+      review: "依頼を確認する"
+      fine_print: "このメールアドレスでログインして承諾してください。%{date}まで有効です。心当たりがない場合は、このメールを無視してください。"
     invitation:
       subject: "%{owner}さんから猫のお世話のお手伝いに招待されました"
       intro: "%{owner}さんが、Pet Trackerで%{pets}のお世話を手伝う「ケアする人」としてあなたを招待しました。"
@@ -978,6 +1013,11 @@
               in_the_past: "期限は未来の日付にしてください。"
         ownership_transfer:
           attributes:
+            base:
+              not_pending: "この依頼は承諾済み・取り消し済み、または期限切れです。"
+              wrong_person: "この依頼は別の方宛てです。"
+              still_owner_changed: "この家庭のオーナーはすでに替わっています。"
+              already_owns: "すでにご自身の家庭があります。先にそれを引き継ぐか、猫を削除してください。"
             to_user:
               not_a_member: "世帯のメンバーにのみ引き継げます。"
               already_owns: "その方はすでに自分の世帯を持っています。"

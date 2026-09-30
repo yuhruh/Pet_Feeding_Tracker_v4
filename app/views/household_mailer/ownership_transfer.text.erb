@@ -1,0 +1,7 @@
+<%= t(".intro", owner: @owner_name, pets: @pet_names.presence || t("household_mailer.invitation.their_cats")) %>
+
+<%= t(".what_it_means", owner: @owner_name) %>
+
+<%= t(".review") %>: <%= @offer_url %>
+
+<%= t(".fine_print", date: l(@transfer.expires_at.to_date, format: :long)) %>

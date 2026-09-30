@@ -1,4 +1,21 @@
 en:
+  ownership_transfers:
+    create:
+      notice: "Offer sent to %{name}."
+    destroy:
+      notice: "Offer withdrawn."
+  ownership_transfer_offers:
+    not_found: "That offer isn't for you, or no longer exists."
+    show:
+      title: "Take over a household"
+      offer: "%{owner} wants to hand %{household} to you."
+      what_it_means: "You'll become the owner of the cats, food bags and records, and %{owner} stays on as a caregiver."
+      accept: "Accept and become the owner"
+      accept_confirm: "Become the owner of %{household}?"
+      expires: "This offer is open until %{date}."
+      no_longer_pending: "This offer was accepted, withdrawn or has expired."
+    update:
+      notice: "You're now the owner of %{household}."
   viewer_pages:
     following: "%{household} is now in your account."
     show:
@@ -53,6 +70,8 @@ en:
       no_cats: "No cats here yet."
       charts: "Charts"
       trackers_and_charts: "Trackers and charts"
+      transfer_offer: "%{owner} wants to hand %{household} to you."
+      review_offer: "Review"
       favorites: "Favorites"
   household_memberships:
     destroy:
@@ -686,6 +705,7 @@ en:
       notice: "Account was successfully updated."
     destroy:
       alert: "%{name} and all associated records were successfully deleted."
+      transfer_first: "Other people help with your cats. Hand your household to one of them first, or delete it with your account below."
   households:
     owner_only: "Only %{petname}'s owner can do that."
     default_name: "%{owner}'s cats"
@@ -728,6 +748,15 @@ en:
       never_used: "not opened yet"
       turn_off: "Turn off"
       turn_off_confirm: "Turn off %{name}'s link? It stops working right away."
+      transfer: "Hand the household to someone else"
+      transfer_explanation: "The member you choose becomes the owner of your cats, food bags and records once they accept. You stay on as a caregiver and can leave afterwards."
+      transfer_waiting: "Waiting for %{name} to accept (until %{date})."
+      transfer_confirm: "Offer your household to this member? They become the owner if they accept."
+      transfer_button: "Offer household"
+      transfer_needs_member: "Invite a caregiver first; the household can only go to one of its members."
+      delete_anyway_explanation: "Or delete your account together with your household, its cats and their records. Your members lose access."
+      delete_anyway: "Delete my account, household and cats"
+      delete_anyway_confirm: "Delete your account, your household, its cats and all their records? This can't be undone."
   household_invitations:
     create:
       notice: "Invitation sent to %{email}."
@@ -743,6 +772,12 @@ en:
     destroy:
       notice: "%{name} was removed from your household."
   household_mailer:
+    ownership_transfer:
+      subject: "%{owner} wants to hand their household to you"
+      intro: "%{owner} wants to hand their household on Pet Tracker, with %{pets}, to you."
+      what_it_means: "If you accept, you become the owner of the cats, food bags and records, and %{owner} stays on as a caregiver."
+      review: "Review the offer"
+      fine_print: "Sign in with this email address to accept. The offer is open until %{date}. If you weren't expecting it, you can ignore this email."
     invitation:
       subject: "%{owner} invited you to help look after their cats"
       intro: "%{owner} invited you to help look after %{pets} on Pet Tracker, as a caregiver."
@@ -993,6 +1028,11 @@ en:
               in_the_past: "The expiry must be in the future."
         ownership_transfer:
           attributes:
+            base:
+              not_pending: "This offer was accepted, withdrawn or has expired."
+              wrong_person: "This offer is for someone else."
+              still_owner_changed: "The household has a different owner now."
+              already_owns: "You already have a household of your own. Hand it to someone, or delete its cats, first."
             to_user:
               not_a_member: "You can only hand the household to one of its members."
               already_owns: "That person already has a household of their own."
