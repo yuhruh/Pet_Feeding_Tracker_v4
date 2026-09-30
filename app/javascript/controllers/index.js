@@ -13,6 +13,9 @@ application.register("bulk-delete", BulkDeleteController)
 import BulkEditController from "controllers/bulk_edit_controller"
 application.register("bulk-edit", BulkEditController)
 
+import CareDetailsController from "controllers/care_details_controller"
+application.register("care-details", CareDetailsController)
+
 import CopyController from "controllers/copy_controller"
 application.register("copy", CopyController)
 

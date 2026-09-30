@@ -1,0 +1,87 @@
+<% household = @event.household %>
+<% zone = household.time_zone %>
+<% content_for :title, t(".title") %>
+
+<div class="container mx-auto w-full px-2 md:w-1/2 mb-8">
+  <h1 class="text-center font-bold text-2xl md:text-3xl mb-1">
+    <%= CareEventsHelper::KIND_ICONS[@event.kind] %> <%= care_event_summary(@event) %>
+  </h1>
+  <p class="text-center text-sm text-gray-500 mb-4">
+    <%= household_name(household) %> · <%= t(".recorded_by", person: care_person(@event.actor)) %>
+    <% if @event.edited? %> · <%= t(".changed_by", person: care_person(@event.edited_by)) %><% end %>
+  </p>
+
+  <%= form_with url: care_event_path(@event), method: :patch, class: "flex flex-col gap-4 border-2 border-slate-200 rounded-xl shadow-lg p-4" do |form| %>
+    <div class="flex flex-col gap-1">
+      <%= label_tag :occurred_at, t(".time"), class: "font-medium" %>
+      <%= datetime_local_field_tag :occurred_at, @event.occurred_at.in_time_zone(zone).strftime("%Y-%m-%dT%H:%M"), required: true,
+            min: CareEvent::EARLIEST.ago.in_time_zone(zone).strftime("%Y-%m-%dT%H:%M"), max: Time.current.in_time_zone(zone).strftime("%Y-%m-%dT%H:%M"),
+            class: "rounded-md border px-3 py-2 dark:text-black" %>
+      <span class="text-xs text-gray-500"><%= t(".time_zone_note", zone: zone.tzinfo.friendly_identifier(true)) %></span>
+    </div>
+
+    <% if @event.litter? || @event.water? %>
+      <fieldset class="flex flex-wrap gap-4">
+        <legend class="font-medium mb-1"><%= t(".jobs") %></legend>
+        <% @event.available_actions.each do |action| %>
+          <label class="flex items-center gap-1">
+            <%= check_box_tag "care_actions[]", action, @event.actions.include?(action), id: "care_action_#{action}" %>
+            <%= care_action_label(@event.care_spot, action) %>
+          </label>
+        <% end %>
+      </fieldset>
+    <% end %>
+
+    <% if @event.fed? %>
+      <fieldset class="flex flex-col gap-3" data-controller="care-details" data-care-details-options-value="<%= @suggestions.to_json %>">
+        <legend class="font-medium mb-1"><%= t(".feeding_details") %> <span class="text-sm font-normal text-gray-500"><%= t(".optional") %></span></legend>
+        <div class="flex flex-col gap-1">
+          <%= label_tag "details_food_type", t(".food_type") %>
+          <%= select_tag "details[food_type]", options_for_select(CareEvent::FOOD_TYPES.map { |type| [ t("trackers.food_types.#{type}"), type ] }, @event.details["food_type"]),
+                include_blank: true, id: "details_food_type", class: "rounded-md border px-3 py-2 dark:text-black",
+                data: { care_details_target: "foodType", action: "change->care-details#refresh" } %>
+        </div>
+        <div class="flex flex-col gap-1 hidden" data-care-details-target="suggestionsField">
+          <%= label_tag "details_suggestion", t(".suggestions") %>
+          <select id="details_suggestion" class="rounded-md border px-3 py-2 dark:text-black" data-care-details-target="suggestions"
+                  data-action="change->care-details#pick" data-placeholder="<%= t(".pick_suggestion") %>"></select>
+        </div>
+        <div class="flex flex-col gap-1">
+          <%= label_tag "details_brand", t(".brand") %>
+          <%= text_field_tag "details[brand]", @event.details["brand"], id: "details_brand", maxlength: 100, class: "rounded-md border px-3 py-2 dark:text-black",
+                data: { care_details_target: "brand", action: "input->care-details#typed" } %>
+        </div>
+        <div class="flex flex-col gap-1">
+          <%= label_tag "details_description", t(".description") %>
+          <%= text_field_tag "details[description]", @event.details["description"], id: "details_description", maxlength: 100, class: "rounded-md border px-3 py-2 dark:text-black",
+                data: { care_details_target: "description", action: "input->care-details#typed" } %>
+        </div>
+        <div class="flex flex-col gap-1">
+          <%= label_tag "details_amount_g", t(".amount") %>
+          <%= number_field_tag "details[amount_g]", @event.details["amount_g"], id: "details_amount_g", min: 0.1, max: 2000, step: "any", class: "rounded-md border px-3 py-2 dark:text-black" %>
+        </div>
+        <%= hidden_field_tag "details[dry_food_id]", @event.details["dry_food_id"], id: "details_dry_food_id", data: { care_details_target: "dryFood" } %>
+      </fieldset>
+    <% end %>
+
+    <% if @event.weight? %>
+      <div class="flex flex-col gap-1">
+        <%= label_tag :value, t("care_events.weight_label"), class: "font-medium" %>
+        <%= number_field_tag :value, @event.value, min: 0.1, max: 30, step: 0.01, required: true, class: "rounded-md border px-3 py-2 dark:text-black" %>
+      </div>
+    <% end %>
+
+    <div class="flex flex-col gap-1">
+      <%= label_tag :note, t(".note"), class: "font-medium" %>
+      <%= text_field_tag :note, @event.note, maxlength: 200, class: "rounded-md border px-3 py-2 dark:text-black" %>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-4">
+      <%= form.submit t("care_events.save"), class: "rounded-md px-4 py-2 text-white bg-softBlue font-medium cursor-pointer" %>
+      <%= link_to t(".back"), today_path, class: "underline" %>
+      <% if @event.fed? && @event.tracker_id.nil? && HouseholdPolicy.new(Current.user, household).owner? %>
+        <%= link_to t("care_events.timeline.add_to_trackers"), new_pet_tracker_path(@event.pet, care_event_id: @event.id), class: "ml-auto text-emerald-700 underline" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

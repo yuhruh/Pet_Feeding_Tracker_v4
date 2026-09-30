@@ -68,6 +68,7 @@ class TrackersController < ApplicationController
   def new
     # @tracker = Tracker.new
     @tracker = @pet.trackers.build
+    prefill_from_care_event
   end
 
   # GET /trackers/1/edit
@@ -79,9 +80,11 @@ class TrackersController < ApplicationController
     # @tracker = Tracker.new(tracker_params)
     @tracker = @pet.trackers.build(tracker_params)
     @tracker.dry_food_id = nil if params[:tracker][:dry_food_id].blank?
+    @care_event = unlinked_care_event
 
     respond_to do |format|
       if @tracker.save
+        @care_event&.update_columns(tracker_id: @tracker.id, updated_at: Time.current)
         format.html { redirect_to pet_trackers_path(@pet, page: params[:tracker][:page], per_page: session[:per_page]), notice: t(".create.notice") }
         format.json { render :show, status: :created, location: pet_trackers_path }
       else
@@ -188,6 +191,25 @@ class TrackersController < ApplicationController
           format.json { render_json_error(t("trackers.set_tracker.alert"), status: :not_found) }
           format.any { head :not_found }
         end
+    end
+
+    # "Add to trackers" from a feeding on the Today page: the tracker form starts
+    # with that feeding's time and details.
+    def prefill_from_care_event
+      @care_event = unlinked_care_event
+      return unless @care_event
+
+      details = @care_event.details
+      local = @care_event.occurred_at.in_time_zone(Current.user.timezone)
+      @prefill_date, @prefill_time = local.strftime("%Y-%m-%d"), local.strftime("%H:%M")
+      @tracker.assign_attributes(food_type: details["food_type"].presence_in(Tracker.food_types.keys), brand: details["brand"],
+                                 description: details["description"], amount: details["amount_g"],
+                                 dry_food_id: @pet.household.dry_foods.find_by(id: details["dry_food_id"])&.id)
+    end
+
+    # Once the tracker is saved, the feeding is shown once, as this tracker's.
+    def unlinked_care_event
+      @pet.care_events.kept.fed.find_by(id: params[:care_event_id], tracker_id: nil) if params[:care_event_id].present?
     end
 
     def set_current_time

@@ -5,6 +5,9 @@
     tracker_form_new_dry_food_url_value: new_dry_food_url(locale: I18n.locale)
   }) do |form| %>
   <%= form.hidden_field :page, value: params[:page] %>
+  <% if @care_event %>
+    <%= hidden_field_tag :care_event_id, @care_event.id %>
+  <% end %>
   <div class="flex flex-col justify-center mb-4 md:flex-row">
     <%= render 'shared/errors', obj: @tracker %>
   </div>
@@ -15,7 +18,7 @@
       <%= form.label :date, t('trackers.form.date'), class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize required md:text-base" %>
     </div>
     <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.date_field :date, required: true, value: set_current_date, class: "input-field mt-2" %>
+      <%= form.date_field :date, required: true, value: @prefill_date || set_current_date, class: "input-field mt-2" %>
     </div>
   </div>
 
@@ -24,7 +27,7 @@
       <%= form.label :feed_time, t('trackers.form.feed_time'), class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize required md:text-base" %>
     </div>
     <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.time_field :feed_time, required: true, value: set_current_time, class: "input-field mt-2" %>
+      <%= form.time_field :feed_time, required: true, value: @prefill_time || set_current_time, class: "input-field mt-2" %>
     </div>
   </div>
 

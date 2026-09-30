@@ -2,7 +2,7 @@
 # person must be its owner or a caregiver. Each tap returns to Today, which shows
 # the saved notice (Undo, Change time, Add details, the water checkboxes).
 class CareEventsController < ApplicationController
-  before_action :set_care_event, only: %i[update undo]
+  before_action :set_care_event, only: %i[edit update undo]
 
   def create
     subject = CareEvent.subject_for(Current.user, pet_id: params[:pet_id], care_spot_id: params[:care_spot_id])
@@ -23,6 +23,13 @@ class CareEventsController < ApplicationController
     end
   rescue ActiveRecord::RecordNotFound
     redirect_to today_path, alert: t("care_events.not_found")
+  end
+
+  # "Add details" / "Change": the time, the jobs, feeding details, weight, note.
+  def edit
+    return refuse unless @event.editable_by?(Current.user)
+
+    @suggestions = FeedingSuggestions.new(@event.pet).by_food_type if @event.fed?
   end
 
   # Change time (quick picks or a time), the water checkboxes, and details.
