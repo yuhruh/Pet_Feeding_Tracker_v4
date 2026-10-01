@@ -1,0 +1,61 @@
+<% content_for :title, t(".title", petname: pet_display_name(@pet)) %>
+
+<div class="container mx-auto w-full px-2 md:w-2/3 mb-8 space-y-6">
+  <div class="text-center">
+    <h1 class="font-bold text-3xl md:text-4xl mb-2">💊 <%= t(".title", petname: pet_display_name(@pet)) %></h1>
+    <p class="text-sm text-gray-600 dark:text-gray-300"><%= t(".intro") %></p>
+  </div>
+
+  <section class="border-2 border-slate-200 rounded-xl shadow-lg p-4">
+    <h2 class="font-semibold text-xl mb-3"><%= t(".current") %></h2>
+    <% if @medications.empty? %>
+      <p class="text-gray-600 dark:text-gray-300"><%= t(".none") %></p>
+    <% end %>
+    <ul class="divide-y divide-slate-200">
+      <% @medications.each do |medication| %>
+        <li id="<%= dom_id(medication) %>" class="py-3 space-y-2">
+          <p class="font-medium">
+            <%= medication.label %> ·
+            <%= medication.as_needed? ? t(".as_needed") : medication.times.join(", ") %>
+            <span class="text-sm text-gray-500">
+              <%= t(".from", date: l(medication.starts_on, format: :long)) %><%= t(".until", date: l(medication.ends_on, format: :long)) if medication.ends_on %>
+            </span>
+          </p>
+          <details>
+            <summary class="text-sm text-sky-700 underline cursor-pointer"><%= t(".change") %></summary>
+            <%= form_with model: medication, url: pet_medication_path(@pet, medication), method: :patch, class: "mt-2 flex flex-col gap-2" do |form| %>
+              <%= render "medications/fields", form: form, medication: medication, prefix: dom_id(medication) %>
+              <%= form.submit t(".save"), class: "self-start rounded-md px-3 py-1 bg-sky-200 text-sky-800 cursor-pointer" %>
+            <% end %>
+          </details>
+          <%= button_to t(".stop"), pet_medication_path(@pet, medication), method: :delete,
+                form: { data: { turbo_confirm: t(".stop_confirm", name: medication.name) } }, class: "text-sm text-red-600 underline cursor-pointer" %>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+
+  <section class="border-2 border-slate-200 rounded-xl shadow-lg p-4">
+    <h2 class="font-semibold text-xl mb-3"><%= t(".add") %></h2>
+    <%= form_with model: @medication, url: pet_medications_path(@pet), method: :post, class: "flex flex-col gap-2" do |form| %>
+      <%= render "medications/fields", form: form, medication: @medication, prefix: "new_medication" %>
+      <%= form.submit t(".add_button"), class: "self-start rounded-md px-3.5 py-2 text-rose-700 bg-rose-200 border-2 border-rose-200 font-medium cursor-pointer hover:bg-gray-100" %>
+    <% end %>
+  </section>
+
+  <% if @stopped.any? %>
+    <section class="text-sm text-gray-600 dark:text-gray-300">
+      <h2 class="font-semibold mb-1"><%= t(".stopped") %></h2>
+      <ul>
+        <% @stopped.each do |medication| %>
+          <li><%= medication.label %> · <%= t(".stopped_on", date: l(medication.stopped_at.to_date, format: :long)) %></li>
+        <% end %>
+      </ul>
+    </section>
+  <% end %>
+
+  <p class="text-center flex justify-center gap-6">
+    <%= link_to t(".back_to_today"), today_path, class: "underline" %>
+    <%= link_to t(".back_to_profile", petname: pet_display_name(@pet)), pet_path(@pet), class: "underline" %>
+  </p>
+</div>

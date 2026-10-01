@@ -1,4 +1,37 @@
  ja:
+  medications:
+    index:
+      title: "%{petname}のお薬"
+      intro: "お世話メンバーは今日のページで確認し、毎回の投薬を記録します。中止しても過去の記録は残ります。"
+      current: "現在のお薬"
+      none: "お薬はありません。"
+      as_needed: "必要なときに"
+      from: "%{date}から"
+      until: "%{date}まで"
+      change: "変更"
+      save: "保存"
+      stop: "中止"
+      stop_confirm: "%{name}を中止しますか？ 今日のページから消えますが、過去の記録は残ります。"
+      add: "お薬を追加"
+      add_button: "追加"
+      stopped: "中止したお薬"
+      stopped_on: "%{date}に中止"
+      back_to_today: "今日のページに戻る"
+      back_to_profile: "%{petname}のプロフィール"
+      name: "名前"
+      name_placeholder: "名前（例：クラバモックス）"
+      dose: "用量"
+      dose_placeholder: "用量（例：1錠）"
+      time_n: "時刻 %{n}"
+      times_hint: "1日の時刻（4回まで）。必要なときだけあげる薬は空欄のままにしてください。"
+      starts_on: "開始"
+      ends_on: "終了（任意）"
+    create:
+      notice: "%{name}を追加しました。"
+    update:
+      notice: "%{name}を保存しました。"
+    destroy:
+      notice: "%{name}を中止しました。"
   care_spots:
     create:
       notice: "%{name}を追加しました。"
@@ -490,6 +523,7 @@
       destroy_profile: "%{petname}のプロフィールと記録を破棄"
       confirm: "よろしいですか？"
       vet_visits: "獣医の質問・記録"
+      medications: "お薬"
       kibble_prices: "フードの価格"
     create:
       notice: "猫は正常に作成されました。"

@@ -63,6 +63,8 @@ class HouseholdAccessTest < ActionDispatch::IntegrationTest
       [ "turn on share link",     :post,   pet_share_url(pet, **L), { expires_in: "7_days" },   %i[allowed denied denied not_found] ],
       [ "turn off share link",    :delete, pet_share_url(pet, **L), {},                         %i[allowed denied denied not_found] ],
       [ "kibble prices",          :get,    pet_kibble_prices_url(pet, **L), {},                 %i[allowed denied denied not_found] ],
+      [ "medications",            :get,    pet_medications_url(pet, **L), {},                   %i[allowed denied denied not_found] ],
+      [ "add medication",         :post,   pet_medications_url(pet, **L), { medication: { name: "x", starts_on: Date.current } }, %i[allowed denied denied not_found] ],
       [ "refresh kibble prices",  :post,   pet_kibble_prices_url(pet, **L), {},                 %i[allowed denied denied not_found] ],
       # Vet visits keep their own rule (owner, or a member of that visit), and its own messages.
       [ "vet visits",             :get,    pet_vet_visits_url(pet, **L), {},                    %i[allowed denied denied denied] ],

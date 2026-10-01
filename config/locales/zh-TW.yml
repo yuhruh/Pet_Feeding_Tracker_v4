@@ -1,4 +1,37 @@
 zh-TW:
+  medications:
+    index:
+      title: "%{petname} 的用藥"
+      intro: "照顧者會在今天頁面看到並記錄每次給藥。停用後過去的紀錄會保留。"
+      current: "目前用藥"
+      none: "沒有用藥。"
+      as_needed: "需要時給"
+      from: "從 %{date}"
+      until: " 到 %{date}"
+      change: "修改"
+      save: "儲存"
+      stop: "停用"
+      stop_confirm: "要停用 %{name} 嗎？它會從今天頁面消失，過去的紀錄會保留。"
+      add: "新增用藥"
+      add_button: "新增"
+      stopped: "已停用"
+      stopped_on: "%{date} 停用"
+      back_to_today: "回到今天頁面"
+      back_to_profile: "%{petname} 的檔案"
+      name: "名稱"
+      name_placeholder: "名稱，例如：速除炎"
+      dose: "劑量"
+      dose_placeholder: "劑量，例如：1 顆"
+      time_n: "時間 %{n}"
+      times_hint: "每天的時間，最多 4 個。需要時才給的藥請留空。"
+      starts_on: "開始"
+      ends_on: "結束（選填）"
+    create:
+      notice: "已新增 %{name}。"
+    update:
+      notice: "已儲存 %{name}。"
+    destroy:
+      notice: "已停用 %{name}。"
   care_spots:
     create:
       notice: "已新增 %{name}。"
@@ -490,6 +523,7 @@ zh-TW:
       destroy_profile: "刪除 %{petname} 的個人資料和記錄"
       confirm: "您確定嗎？"
       vet_visits: "門診提問 & 記錄"
+      medications: "用藥"
       kibble_prices: "飼料價格"
     create:
       notice: "寵物已成功建立。"

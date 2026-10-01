@@ -1,4 +1,37 @@
 en:
+  medications:
+    index:
+      title: "%{petname}'s medications"
+      intro: "Caregivers see these on the Today page and record each dose. Stopping one keeps its past doses."
+      current: "Current medications"
+      none: "No medications."
+      as_needed: "as needed"
+      from: "from %{date}"
+      until: " until %{date}"
+      change: "Change"
+      save: "Save"
+      stop: "Stop"
+      stop_confirm: "Stop %{name}? It leaves the Today page; past doses stay."
+      add: "Add a medication"
+      add_button: "Add medication"
+      stopped: "Stopped"
+      stopped_on: "stopped %{date}"
+      back_to_today: "Back to Today"
+      back_to_profile: "%{petname}'s profile"
+      name: "Name"
+      name_placeholder: "Name, e.g. Clavamox"
+      dose: "Dose"
+      dose_placeholder: "Dose, e.g. 1 tablet"
+      time_n: "Time %{n}"
+      times_hint: "Times of day, up to 4. Leave them empty for a medication given as needed."
+      starts_on: "Starts"
+      ends_on: "Ends (optional)"
+    create:
+      notice: "%{name} added."
+    update:
+      notice: "%{name} saved."
+    destroy:
+      notice: "%{name} stopped."
   care_spots:
     create:
       notice: "%{name} added."
@@ -490,6 +523,7 @@ en:
       destroy_profile: "Destroy %{petname}'s profile and records"
       confirm: "Are you sure?"
       vet_visits: "Vet Visits & Questions"
+      medications: "Medications"
       kibble_prices: "Kibble Prices"
     create:
       notice: "Cat was successfully created."

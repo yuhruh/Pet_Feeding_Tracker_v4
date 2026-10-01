@@ -1,0 +1,13 @@
+<div class="flex flex-col gap-2 sm:flex-row">
+  <%= form.text_field :name, required: true, maxlength: 60, placeholder: t("medications.index.name_placeholder"), id: "#{prefix}_name",
+        "aria-label": t("medications.index.name"), class: "flex-1 rounded-md border px-3 py-2 dark:text-black" %>
+  <%= form.text_field :dose, maxlength: 40, placeholder: t("medications.index.dose_placeholder"), id: "#{prefix}_dose",
+        "aria-label": t("medications.index.dose"), class: "sm:w-40 rounded-md border px-3 py-2 dark:text-black" %>
+</div>
+<%= render "medications/times_fields", medication: medication, prefix: prefix %>
+<div class="flex flex-wrap items-center gap-2 text-sm">
+  <%= form.label :starts_on, t("medications.index.starts_on"), for: "#{prefix}_starts_on" %>
+  <%= form.date_field :starts_on, required: true, id: "#{prefix}_starts_on", class: "rounded-md border px-2 py-1 dark:text-black" %>
+  <%= form.label :ends_on, t("medications.index.ends_on"), for: "#{prefix}_ends_on" %>
+  <%= form.date_field :ends_on, id: "#{prefix}_ends_on", class: "rounded-md border px-2 py-1 dark:text-black" %>
+</div>

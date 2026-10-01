@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     end
     resources :pets do
       resource :share, only: [ :create, :destroy ], controller: "pet_shares"
+      resources :medications, only: %i[index create update destroy]
       resources :health_checks do
         collection do
           delete :bulk_delete
