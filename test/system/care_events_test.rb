@@ -24,7 +24,7 @@ class CareEventsTest < ApplicationSystemTestCase
     find("#email_address").set(user.email_address)
     find("#password").set("password123")
     click_on "Sign in"
-    assert_selector "h1", text: lands_on
+    assert_selector "h1", text: lands_on, wait: 10 # the first page after sign-in can be slow when the whole suite runs
   end
 
   # Waits for a change the page doesn't show.

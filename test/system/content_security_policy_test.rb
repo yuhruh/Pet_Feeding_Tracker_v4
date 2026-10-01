@@ -55,7 +55,7 @@ class ContentSecurityPolicyTest < ApplicationSystemTestCase
       pet_health_check_url(pet_id: @pet, id: health_check, locale: LOCALE), edit_pet_health_check_url(pet_id: @pet, id: health_check, locale: LOCALE),
       pet_vet_visits_url(pet_id: @pet, locale: LOCALE), new_pet_vet_visit_url(pet_id: @pet, locale: LOCALE),
       dry_foods_url(locale: LOCALE), new_dry_food_url(locale: LOCALE), users_url(locale: LOCALE), edit_users_url(locale: LOCALE),
-      today_url(locale: LOCALE), household_url(locale: LOCALE) ].each do |url|
+      today_url(locale: LOCALE), household_url(locale: LOCALE), pet_medications_url(pet_id: @pet, locale: LOCALE) ].each do |url|
       visit url
       assert_no_csp_violations url
     end
