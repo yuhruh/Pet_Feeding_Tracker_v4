@@ -144,4 +144,13 @@
       <% end %>
     </div>
   <% end %>
+
+  <% if @event.deletable_by?(Current.user) %>
+    <%# Delete a mistaken record (checkpoint H3); outside the form above, after a confirmation. %>
+    <div class="mt-4 text-right">
+      <%= button_to t("care_events.timeline.delete"), care_event_path(@event), method: :delete,
+            form: { data: { turbo_confirm: care_delete_confirm(@event, zone) } },
+            class: "rounded-md px-4 py-2 text-red-700 bg-red-100 border border-red-200 font-medium cursor-pointer hover:bg-red-200" %>
+    </div>
+  <% end %>
 </div>

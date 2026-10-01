@@ -2,7 +2,7 @@
 # person must be its owner or a caregiver. Each tap returns to Today, which shows
 # the saved notice (Undo, Change time, Add details, the water checkboxes).
 class CareEventsController < ApplicationController
-  before_action :set_care_event, only: %i[edit update undo]
+  before_action :set_care_event, only: %i[edit update undo destroy]
 
   def create
     subject = CareEvent.subject_for(Current.user, pet_id: params[:pet_id], care_spot_id: params[:care_spot_id])
@@ -55,6 +55,17 @@ class CareEventsController < ApplicationController
 
     @event.undo!
     redirect_to today_path, notice: t(".notice")
+  end
+
+  # Delete a mistaken record (checkpoint H3), after a confirmation.
+  def destroy
+    return refuse unless @event.deletable_by?(Current.user)
+
+    linked_tracker = @event.tracker_id.present?
+    @event.delete_by!(Current.user)
+    notice = t(".notice", what: helpers.care_event_summary(@event), time: helpers.care_time(@event.occurred_at, @event.household.time_zone))
+    notice = "#{notice} #{t('.tracker_kept')}" if linked_tracker
+    redirect_to today_path, notice: notice, status: :see_other
   end
 
   private

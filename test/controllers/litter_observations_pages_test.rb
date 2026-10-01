@@ -49,7 +49,7 @@ class LitterObservationsPagesTest < ActionDispatch::IntegrationTest
 
     get today_url(**L)
     assert_select "##{dom_id(@scooped)}", text: /Upstairs box: scooped · Mom · Aji · pee normal · 2 poops · stool soft.*\(changed\)/m
-    assert_select "##{dom_id(@scooped)} .text-red-600", count: 0
+    assert_select "##{dom_id(@scooped)} span.text-red-600.font-semibold", count: 0
   end
 
   test "diarrhea or something unusual stands out in red" do
@@ -57,7 +57,7 @@ class LitterObservationsPagesTest < ActionDispatch::IntegrationTest
     observe(pet_id: "", stool: "diarrhea", unusual: [ "", "blood" ])
 
     get today_url(**L)
-    assert_select "##{dom_id(@scooped)} .text-red-600", text: "stool diarrhea · blood"
+    assert_select "##{dom_id(@scooped)} span.text-red-600.font-semibold", text: "stool diarrhea · blood"
   end
 
   test "observations can be cleared again" do

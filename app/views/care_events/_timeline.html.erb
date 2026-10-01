@@ -19,6 +19,10 @@
             <% if reader && event.editable_by?(reader) %>
               <%= link_to t("care_events.timeline.change"), edit_care_event_path(event), class: "text-sky-700 underline" %>
             <% end %>
+            <% if reader && event.deletable_by?(reader) %>
+              <%= button_to t("care_events.timeline.delete"), care_event_path(event), method: :delete,
+                    form: { class: "inline", data: { turbo_confirm: care_delete_confirm(event, day.zone) } }, class: "text-red-600 underline cursor-pointer" %>
+            <% end %>
             <% if reader && event.fed? && event.tracker_id.nil? && HouseholdPolicy.new(reader, day.household).owner? %>
               <%= link_to t("care_events.timeline.add_to_trackers"), new_pet_tracker_path(event.pet, care_event_id: event.id), class: "text-emerald-700 underline" %>
             <% end %>

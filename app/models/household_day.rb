@@ -27,7 +27,7 @@ class HouseholdDay
   # Trackers dated today, except ones already shown through their care event.
   def trackers
     @trackers ||= Tracker.where(pet_id: pets.map(&:id), date: date)
-                         .where.not(id: household.care_events.where.not(tracker_id: nil).select(:tracker_id))
+                         .where.not(id: household.care_events.kept.where.not(tracker_id: nil).select(:tracker_id))
                          .includes(:pet).to_a
   end
 

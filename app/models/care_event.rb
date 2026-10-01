@@ -37,6 +37,7 @@ class CareEvent < ApplicationRecord
   belongs_to :household
   belongs_to :actor, class_name: "User", optional: true
   belongs_to :edited_by, class_name: "User", optional: true
+  belongs_to :deleted_by, class_name: "User", optional: true
   belongs_to :pet, optional: true
   belongs_to :care_spot, optional: true
   belongs_to :tracker, optional: true
@@ -81,6 +82,20 @@ class CareEvent < ApplicationRecord
     return true if policy.owner?
 
     policy.can?(:record_care) && actor_id == user.id && created_at > now - EDIT_WINDOW
+  end
+
+  # Delete (checkpoint H3): the same people as Change, for records up to 7 days old.
+  def deletable_by?(user, now: Time.current)
+    !undone? && editable_by?(user, now: now) && occurred_at >= now - EARLIEST
+  end
+
+  def deleted? = deleted_by_id.present?
+
+  # Hidden like an undone tap, with who deleted it. A feeding added to trackers
+  # is unlinked, so the owner's tracker shows on the timeline on its own.
+  def delete_by!(user)
+    update_columns(undone_at: Time.current, deleted_by_id: user.id, tracker_id: nil, updated_at: Time.current)
+    refresh_household_pages
   end
 
   # The same care recorded shortly before, by anyone, if there is one.

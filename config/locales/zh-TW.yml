@@ -152,6 +152,12 @@ zh-TW:
         one: "便便 1 次"
         other: "便便 %{count} 次"
       stool_text: "糞便：%{value}"
+    delete:
+      confirm: "要刪除 %{time} 的「%{what}」嗎？它會從「今天」、圖表和提醒中移除。"
+      tracker_stays: "%{pet}的追蹤紀錄會保留；如果也錯了，請到追蹤紀錄頁刪除。"
+    destroy:
+      notice: "已刪除：%{time} 的%{what}"
+      tracker_kept: "從這筆加入的追蹤紀錄會保留。"
     edit:
       title: "修改或加入細節"
       recorded_by: "由 %{person} 記錄"
@@ -220,6 +226,7 @@ zh-TW:
       empty: "今天還沒有紀錄。"
       changed: "（已修改）"
       change: "修改"
+      delete: "刪除"
       add_to_trackers: "加入紀錄表"
       from_trackers: "（紀錄表）"
     notice:

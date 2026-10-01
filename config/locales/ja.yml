@@ -152,6 +152,12 @@
         one: "うんち1個"
         other: "うんち%{count}個"
       stool_text: "うんち：%{value}"
+    delete:
+      confirm: "%{time}の「%{what}」を削除しますか？「今日」、グラフ、お知らせから消えます。"
+      tracker_stays: "%{pet}のトラッカーは残ります。間違いなら記録ページで削除してください。"
+    destroy:
+      notice: "削除しました：%{time}の%{what}"
+      tracker_kept: "ここから追加したトラッカーは残ります。"
     edit:
       title: "変更・詳細を追加"
       recorded_by: "記録：%{person}"
@@ -220,6 +226,7 @@
       empty: "今日はまだ記録がありません。"
       changed: "（変更あり）"
       change: "変更"
+      delete: "削除"
       add_to_trackers: "記録に追加"
       from_trackers: "（トラッカー）"
     notice:

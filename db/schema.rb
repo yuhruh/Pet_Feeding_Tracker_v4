@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_01_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_02_090000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -44,6 +44,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_01_120000) do
     t.integer "actor_id"
     t.integer "care_spot_id"
     t.datetime "created_at", null: false
+    t.integer "deleted_by_id"
     t.json "details", default: {}, null: false
     t.string "dose_status"
     t.string "dose_time"
@@ -62,6 +63,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_01_120000) do
     t.decimal "value", precision: 5, scale: 2
     t.index ["actor_id"], name: "index_care_events_on_actor_id"
     t.index ["care_spot_id", "occurred_at"], name: "index_care_events_on_care_spot_id_and_occurred_at"
+    t.index ["deleted_by_id"], name: "index_care_events_on_deleted_by_id"
     t.index ["household_id", "occurred_at"], name: "index_care_events_on_household_id_and_occurred_at"
     t.index ["household_id"], name: "index_care_events_on_household_id"
     t.index ["medication_id", "occurred_at"], name: "index_care_events_on_medication_id_and_occurred_at"
@@ -541,6 +543,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_01_120000) do
   add_foreign_key "care_events", "pets"
   add_foreign_key "care_events", "trackers"
   add_foreign_key "care_events", "users", column: "actor_id"
+  add_foreign_key "care_events", "users", column: "deleted_by_id"
   add_foreign_key "care_events", "users", column: "edited_by_id"
   add_foreign_key "care_reminders", "care_routines", on_delete: :cascade
   add_foreign_key "care_reminders", "households"

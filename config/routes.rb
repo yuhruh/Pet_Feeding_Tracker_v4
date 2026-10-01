@@ -52,7 +52,7 @@ Rails.application.routes.draw do
     delete "households/:household_id/leave", to: "household_memberships#destroy", as: :leave_household
     patch "households/:household_id/reminders", to: "reminder_settings#update", as: :household_reminders
     get "today", to: "today#show", as: :today
-    resources :care_events, only: %i[create edit update] do
+    resources :care_events, only: %i[create edit update destroy] do
       post :undo, on: :member
     end
     # The member a household was offered to accepts it.

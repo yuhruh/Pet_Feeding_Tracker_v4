@@ -82,6 +82,12 @@ module CareEventsHelper
     end
   end
 
+  # "Delete “Aji: fed” at 08:12? ..." (checkpoint H3), with a word about a linked tracker.
+  def care_delete_confirm(event, zone)
+    text = t("care_events.delete.confirm", what: care_event_summary(event), time: care_time(event.occurred_at, zone))
+    event.tracker_id ? "#{text} #{t('care_events.delete.tracker_stays', pet: pet_display_name(event.pet))}" : text
+  end
+
   # "Aji · pee normal · 2 poops · stool soft · blood", only what was observed.
   def litter_observations_text(event, with_cat: true)
     details = event.details

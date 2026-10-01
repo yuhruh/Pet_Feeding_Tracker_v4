@@ -152,6 +152,12 @@ en:
         one: "1 poop"
         other: "%{count} poops"
       stool_text: "stool %{value}"
+    delete:
+      confirm: "Delete “%{what}” at %{time}? It's removed from Today, the charts and reminders."
+      tracker_stays: "%{pet}'s tracker stays; delete it on the trackers page if it's wrong too."
+    destroy:
+      notice: "Deleted. %{what} at %{time}"
+      tracker_kept: "The tracker added from it stays."
     edit:
       title: "Change or add details"
       recorded_by: "recorded by %{person}"
@@ -220,6 +226,7 @@ en:
       empty: "Nothing recorded today yet."
       changed: "(changed)"
       change: "Change"
+      delete: "Delete"
       add_to_trackers: "Add to trackers"
       from_trackers: "(tracker)"
     notice:
