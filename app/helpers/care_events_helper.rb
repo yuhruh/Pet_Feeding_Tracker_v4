@@ -73,6 +73,18 @@ module CareEventsHelper
 
   DOSE_CLASSES = { "given" => "text-emerald-700", "couldnt_give" => "text-amber-700", "overdue" => "text-red-600 font-semibold", "due" => "text-gray-600" }.freeze
 
+  # "Aji · pee normal · 2 poops · stool soft · blood", only what was observed.
+  def litter_observations_text(event, with_cat: true)
+    details = event.details
+    [
+      (pet_display_name(event.pet) if with_cat && event.pet),
+      (t("care_events.observations.pee_text", value: t("care_events.observations.pee_values.#{details['pee']}")) if details["pee"]),
+      (t("care_events.observations.poops_text", count: details["poop_count"].to_i) if details.key?("poop_count")),
+      (t("care_events.observations.stool_text", value: t("care_events.observations.stool_values.#{details['stool']}")) if details["stool"]),
+      *Array(details["unusual"]).map { |value| t("care_events.observations.unusual_values.#{value}") }
+    ].compact.join(" · ")
+  end
+
   # "曙光 無穀滋養鴨肉 · 40 g"
   def fed_details_text(brand, description, amount)
     [ [ brand, description ].compact_blank.join(" ").presence, (t("care_events.grams", amount: format("%g", amount.to_f)) if amount.present?) ].compact.join(" · ")

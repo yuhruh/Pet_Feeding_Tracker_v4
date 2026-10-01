@@ -28,7 +28,8 @@ class CareEventsController < ApplicationController
     redirect_to today_path, alert: t("care_events.not_found")
   end
 
-  # "Add details" / "Change": the time, the jobs, feeding details, weight, note.
+  # "Add details" / "Change": the time, the jobs, feeding details, litter
+  # observations, weight, note.
   def edit
     return refuse unless @event.editable_by?(Current.user)
 
@@ -120,7 +121,9 @@ class CareEventsController < ApplicationController
       changes[:occurred_at] = @event.household.time_zone.parse(params[:occurred_at].to_s)
     end
     changes[:actions] = Array(params[:care_actions]) if params.key?(:care_actions)
-    changes[:details] = params.fetch(:details, {}).permit(*CareEvent::FED_DETAILS).to_h if params.key?(:details)
+    changes[:details] = details_params if params.key?(:details)
+    # Litter observations: "which cat", checked against the box's household by the model.
+    changes[:pet_id] = params[:pet_id].presence if @event.litter? && params.key?(:pet_id)
     changes[:value] = params[:value] if params.key?(:value)
     changes[:note] = params[:note].to_s.first(200) if params.key?(:note)
     if @event.meds?
@@ -128,6 +131,11 @@ class CareEventsController < ApplicationController
       changes[:reason] = params[:reason].presence if params.key?(:reason)
     end
     changes
+  end
+
+  def details_params
+    details = params.fetch(:details, {})
+    @event.litter? ? details.permit(*CareEvent::LITTER_DETAILS - [ "unusual" ], unusual: []).to_h : details.permit(*CareEvent::FED_DETAILS).to_h
   end
 
   def refuse

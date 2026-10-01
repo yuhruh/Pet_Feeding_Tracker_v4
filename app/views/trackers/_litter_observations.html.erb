@@ -1,0 +1,21 @@
+<%# The cat's litter observations (litter records that name it), newest first. Owner and caregivers only. %>
+<section id="litter_observations" class="container mx-auto w-full lg:w-1/2 px-4 mb-8">
+  <h2 class="font-bold text-xl mb-2">🚽 <%= t("trackers.index.litter_observations.title") %></h2>
+  <% if events.empty? %>
+    <p class="text-sm text-gray-600 dark:text-gray-300"><%= t("trackers.index.litter_observations.empty") %></p>
+  <% else %>
+    <ol class="space-y-1 text-sm">
+      <% events.each do |event| %>
+        <% local = event.occurred_at.in_time_zone(zone) %>
+        <li class="flex flex-wrap gap-x-2">
+          <span class="font-mono text-gray-500"><%= "#{local.month}/#{local.day} #{local.strftime("%H:%M")}" %></span>
+          <span>
+            <%= care_event_summary(event) %> · <%= care_person(event.actor) %>
+            <% if event.details.any? %>· <span class="<%= event.observation_warning? ? "text-red-600 font-semibold" : "" %>"><%= litter_observations_text(event, with_cat: false) %></span><% end %>
+            <% if event.note.present? %><span class="text-gray-500">· <%= event.note %></span><% end %>
+          </span>
+        </li>
+      <% end %>
+    </ol>
+  <% end %>
+</section>

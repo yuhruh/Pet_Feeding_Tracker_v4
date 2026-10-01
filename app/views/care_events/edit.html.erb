@@ -32,6 +32,47 @@
       </fieldset>
     <% end %>
 
+    <% if @event.litter? %>
+      <fieldset id="litter_observations" class="flex flex-col gap-3">
+        <legend class="font-medium mb-1"><%= t("care_events.observations.title") %> <span class="text-sm font-normal text-gray-500"><%= t("care_events.observations.optional") %></span></legend>
+        <div class="flex flex-col gap-1">
+          <%= label_tag :pet_id, t("care_events.observations.which_cat") %>
+          <%= select_tag :pet_id, options_for_select(household.pets.order(:petname).map { |pet| [ pet_display_name(pet), pet.id ] }, @event.pet_id),
+                include_blank: t("care_events.observations.not_sure"), class: "rounded-md border px-3 py-2 dark:text-black" %>
+        </div>
+        <div class="flex flex-wrap gap-4">
+          <div class="flex flex-col gap-1">
+            <%= label_tag "details_pee", t("care_events.observations.pee") %>
+            <%= select_tag "details[pee]", options_for_select(CareEvent::PEE.map { |value| [ t("care_events.observations.pee_values.#{value}"), value ] }, @event.details["pee"]),
+                  include_blank: true, id: "details_pee", class: "rounded-md border px-3 py-2 dark:text-black" %>
+          </div>
+          <div class="flex flex-col gap-1">
+            <%= label_tag "details_poop_count", t("care_events.observations.poop_count") %>
+            <%= number_field_tag "details[poop_count]", @event.details["poop_count"], id: "details_poop_count", min: 0, max: CareEvent::MAX_POOPS, step: 1,
+                  class: "w-24 rounded-md border px-3 py-2 dark:text-black" %>
+          </div>
+          <div class="flex flex-col gap-1">
+            <%= label_tag "details_stool", t("care_events.observations.stool") %>
+            <%= select_tag "details[stool]", options_for_select(CareEvent::STOOL.map { |value| [ t("care_events.observations.stool_values.#{value}"), value ] }, @event.details["stool"]),
+                  include_blank: true, id: "details_stool", class: "rounded-md border px-3 py-2 dark:text-black" %>
+          </div>
+        </div>
+        <div class="flex flex-col gap-1">
+          <span><%= t("care_events.observations.unusual") %></span>
+          <div class="flex flex-wrap gap-4">
+            <%= hidden_field_tag "details[unusual][]", "", id: nil %>
+            <% CareEvent::UNUSUAL.each do |value| %>
+              <label class="flex items-center gap-1">
+                <%= check_box_tag "details[unusual][]", value, Array(@event.details["unusual"]).include?(value), id: "details_unusual_#{value}" %>
+                <%= t("care_events.observations.unusual_values.#{value}") %>
+              </label>
+            <% end %>
+          </div>
+          <span class="text-xs text-gray-500"><%= t("care_events.observations.unusual_note") %></span>
+        </div>
+      </fieldset>
+    <% end %>
+
     <% if @event.fed? %>
       <fieldset class="flex flex-col gap-3" data-controller="care-details" data-care-details-options-value="<%= @suggestions.to_json %>">
         <legend class="font-medium mb-1"><%= t(".feeding_details") %> <span class="text-sm font-normal text-gray-500"><%= t(".optional") %></span></legend>

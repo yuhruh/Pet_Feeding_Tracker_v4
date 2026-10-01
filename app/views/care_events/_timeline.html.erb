@@ -13,6 +13,7 @@
             <span>
               <%= CareEventsHelper::KIND_ICONS[event.kind] %> <%= care_event_summary(event) %> · <%= care_person(event.actor) %>
               <% if event.fed? && event.details.any? %>· <%= fed_details_text(event.details["brand"], event.details["description"], event.details["amount_g"]) %><% end %>
+              <% if event.observations? %>· <span class="<%= event.observation_warning? ? "text-red-600 font-semibold" : "text-gray-700 dark:text-gray-300" %>"><%= litter_observations_text(event) %></span><% end %>
               <% if event.edited? %><span class="text-gray-500"><%= t("care_events.timeline.changed") %></span><% end %>
             </span>
             <% if reader && event.editable_by?(reader) %>

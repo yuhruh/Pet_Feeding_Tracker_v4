@@ -297,4 +297,7 @@
     <%= will_paginate @trackers, :container => true %>
   </div>
   <% end %>
+  <% if household_policy.can?(:view_trackers) %>
+  <%= render "trackers/litter_observations", events: @litter_observations, zone: @pet.household.time_zone %>
+  <% end %>
 <%# The extra div was here %>

@@ -4,6 +4,9 @@ class TrackersController < ApplicationController
   # Imports parse a whole CSV file inside the request, so limit them per user.
   rate_limit to: 5, within: 10.minutes, only: :import, by: -> { Current.user.id },
              with: -> { redirect_to pet_trackers_url(params[:pet_id]), alert: t("trackers.import.alert_rate_limit") }
+  # The cat's litter observations shown under its records.
+  LITTER_HISTORY = 30.days
+
   before_action :set_pet
   before_action :set_tracker, only: %i[ show edit update destroy ]
   before_action :set_current_date, :set_current_time
@@ -45,7 +48,10 @@ class TrackersController < ApplicationController
     @trackers = @all_trackers.reorder(Arel.sql(order_sql)).paginate(page: page, per_page: per_page)
 
     respond_to do |format|
-      format.html
+      format.html do
+        @litter_observations = @pet.care_events.kept.litter.where(occurred_at: LITTER_HISTORY.ago..)
+                                   .includes(:actor, :care_spot).order(occurred_at: :desc)
+      end
       format.csv do
         # Sort in Ruby using local time strings to avoid UTC-offset ordering issues
         # Use safe navigation or default value for strftime to prevent nil error
