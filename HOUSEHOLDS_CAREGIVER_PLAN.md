@@ -12,13 +12,51 @@
 | C — Caregiver invitations, viewer links, members, transfer ownership | ✅ Done (2026-09-30). Committed on `feature/households` in five parts and pushed. See [Checkpoint C result](#checkpoint-c-result-2026-09-30) |
 | D — Care events and the Today page (fed, litter, water, weight) | ✅ Done (2026-09-30). Committed on `feature/households` in five parts and pushed. See [Checkpoint D result](#checkpoint-d-result-2026-09-30) |
 | E — Medications | ✅ Done (2026-10-01). Committed on `feature/households` in four parts and pushed. See [Checkpoint E result](#checkpoint-e-result-2026-10-01) |
-| F — Litter observations | Not started |
+| F — Litter observations | ✅ Done (2026-10-01). Committed on `feature/households` in three parts and pushed. See [Checkpoint F result](#checkpoint-f-result-2026-10-01) |
 | G — Live updates and care events on the charts | Not started |
 | H — Reminders by LINE and email | Not started |
 | I — Android app push notifications (Firebase) | Not started |
 | J — Clean-up, docs, CI, merge | Not started |
 
 **Commits:** each checkpoint is committed on `feature/households` once `bin/rails test` passes, then pushed. Merged into `main` only when you ask.
+
+## Checkpoint F result (2026-10-01)
+
+**What people see now:**
+- **A litter record's details page** (Add details in the saved notice, or Change on the timeline) has **Litter observations**, all optional: **which cat** (the household's cats, or "Not sure"), **pee clumps** (none, few, normal, many), **poops** (0 to 10), **stool** (normal, soft, diarrhea, hard), **something unusual** (blood, very large clumps, other; "other" is explained in the note). Saving with everything empty adds nothing, and observations can be cleared again.
+- **Timeline** (Today and the viewer page): "🚽 Upstairs box: scooped · Mom · Aji · pee normal · 2 poops · stool soft". **Diarrhea and anything unusual are in red.** Older records show as before.
+- **The cat's history** (its feeding records page, owner and caregivers): **"Litter observations, last 30 days"**, newest first, with the note; "None in the last 30 days." when there are none.
+- **Viewer page:** the observations, never the note.
+- In English, Japanese and Traditional Chinese.
+
+**Main files:** `CareEvent` (`LITTER_DETAILS`, the checks, `observations?`, `observation_warning?`; the box stays the record's subject when a cat is named), `CareEventsController#details_params`, `care_events/edit`, `_timeline`, `CareEventsHelper#litter_observations_text`, `trackers/_litter_observations`, `Pet` (keeps litter records on delete). No migration: observations use the `details` and `pet_id` columns from D.
+
+**Decisions made while building:** as in the [build plan](#checkpoint-f-build-plan-2026-10-01), plus:
+- **Naming a cat doesn't change the box's record**: the household, the repeat question and the box's "last done" still come from the box.
+- **A cat can only be named on a litter record**; the form's cat is ignored on feedings and water records, and the model refuses it.
+- **The poop count is stored as a number**, and the "unusual" items always in the list's order.
+
+**Checks:**
+- **14 new tests** and **1 browser test**. Model: values checked and tidied, empty fields dropped, the red warning, only litter takes observations or a cat, another household's cat refused, the repeat question unchanged, deleting a cat keeps its litter records. Pages: an old record unchanged and the form offered, a caregiver adds observations and the cat (timeline, "(changed)"), red for diarrhea and blood, clearing, another household's cat and made-up values refused, no cat on feedings or water records, the cat's history for the owner and a caregiver (30 days, its own records only, the note), the empty history, the viewer page without the note, deleting the cat. The **browser test**: Mom scoops, adds Aji, pee, poops, diarrhea and blood with a note; the timeline shows it in red; the owner finds it in Aji's history; the viewer link shows it without the note. The **CSP** browser test also loads a litter record's details page.
+- `bin/rails test`: 401 runs, 0 failures. `bin/rails test:system`: 35 runs, 0 failures. RuboCop and Brakeman clean.
+
+## Checkpoint F build plan (2026-10-01)
+
+| Part | Build |
+|---|---|
+| 1. Data | No migration: observations go in the litter record's `details` (pee, poop count, stool, unusual) and "which cat" in its `pet_id`. The model checks the values, that the cat is in the box's household, and that only litter records take observations or a cat |
+| 2. Add details | An "Observations" section on a litter record's details page (from the saved notice's Add details, or Change on the timeline): which cat, pee clumps, poop count, stool, something unusual, and the note |
+| 3. Where they show | The timeline (Today and the viewer page): "🚽 Upstairs box: scooped · Dad · Aji · pee normal · 2 poops · stool soft", with diarrhea or anything unusual in red. The cat's history (its feeding records page, for the owner and caregivers): "Litter observations, last 30 days" |
+| 4. Checks | Tests for the checks, old records, the timeline, the cat's history and the household checks; a browser test |
+
+**Decisions for F:**
+- **Every observation field is optional**, and older litter records simply show none. Saving the form with nothing filled adds nothing.
+- **Pee clumps:** none, few, normal, many. **Poop count:** 0 to 10. **Stool:** normal, soft, diarrhea, hard. **Something unusual:** blood, very large clumps, other (more than one can be ticked; "other" is described in the note).
+- **Which cat** lists the cats of the box's household only; a cat from another household is refused.
+- **Diarrhea and anything unusual are shown in red** on the timeline and in the cat's history, so they stand out.
+- **The note stays off the viewer page**, as in D; viewers see the observations themselves.
+- **Deleting a cat keeps the litter records it was named on**, without the cat (the box's records are the household's).
+- Observations on the charts come with G.
 
 ## Checkpoint E result (2026-10-01)
 
@@ -629,7 +667,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 | C | ✅ Done — Caregiver invitations and the join page (prefilled email, Google / LINE); the new landing rules (caregivers and people in several households land on Today; new users with no household still get "Add A Cat"); "Add my own cat" under Account; menus and cat lists grouped by household; the caregiver menu; viewer links (create, name, expiry, turn off) and the viewer page with charts; member list, removing, leaving; transfer ownership; account deletion asks to transfer | Invite → join → caregiver role applies; expired, reused and wrong-email invitations refused; a viewer link opens only its household's viewer page, and stops at once when turned off or expired; signing in from a viewer link adds a viewer membership; transfer swaps owner and caregiver in one transaction |
 | D | ✅ Done — `care_events`; Today page with litter-box and water-spot rows and cat cards; one-tap fed, scooped, full change, refilled, cleaned, filter changed (several actions in one record, with checkboxes in the notice); weight form; change time; feeding "Add details" with suggestions by food type; "Add to trackers"; undo; double-tap guard; status and today's timeline on the viewer page; managing boxes and water spots | Browser test: caregiver taps Fed and adds details, refills and cleans the fountain in one record, changes a time, undoes a tap; owner adds a feeding to trackers; the viewer link shows the new records with no buttons; tests that every save refuses a household mismatch (record, food bag, box, water spot, medication) and a person without rights in that household |
 | E | ✅ Done — `medications`; meds button with Given / Couldn't give; due / given / overdue | Doses shown per schedule; double dose guarded |
-| F | Litter observations in "Add details" (optional fields; which cat) | Old records unchanged; observations show on the timeline and, with a cat, in that cat's history |
+| F | ✅ Done — Litter observations in "Add details" (optional fields; which cat) | Old records unchanged; observations show on the timeline and, with a cat, in that cat's history |
 | G | Turbo Streams broadcast (Today pages and viewer pages); care events on charts and in CSV | Two browser sessions: a tap in one appears in the other, including on a viewer page |
 | H | `care_routines`, `care_reminders`; interval settings per spot and job; "due" on the Today page; hourly reminder job; LINE, else email; per-member on/off; overdue meds | A due routine is sent once at 9am local time, one follow-up 2 days later, none after it's recorded; viewers never get one; doing the job early moves the due date |
 | I | Firebase in the Android app (FCM SDK, notification permission, token registration); `device_tokens`; sending through FCM HTTP v1; fallback to LINE or email | A reminder arrives as an Android notification and opens the Today page; an invalid token falls back to LINE or email |
@@ -659,6 +697,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 
 ## Change log
 
+- **Checkpoint F (2026-10-01):** litter observations (which cat, pee, poops, stool, something unusual) on a litter record's details page, on the timeline and viewer page (diarrhea and anything unusual in red), and in the cat's history for 30 days.
 - **Checkpoint E (2026-10-01):** medications per cat (owner), 💊 with Given / Couldn't give and a reason, due / given / couldn't give / overdue on Today and the viewer page, the double-dose question, and the owner's one-off medicine.
 - **Checkpoint D (2026-09-30):** one-tap care on the Today page (fed, weight, litter, water), undo, quick time changes, water checkboxes, the double-tap guard, today's timeline with trackers, details with suggestions by food type, Add to trackers, status and timeline on the viewer page, and managing litter boxes and water spots. Fixed the viewer link Copy button.
 - **Checkpoint C (2026-09-30):** household page (members, invitations, viewer links), join page with Google / LINE, landing rules, a first Today page, grouped and smaller menus, leaving and "Add my own cat", the viewer page with charts, transfer ownership, and account deletion asking to hand over first. Today's buttons and the viewer page's status and timeline come in D.
