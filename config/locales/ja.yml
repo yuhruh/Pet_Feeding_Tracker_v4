@@ -1123,12 +1123,37 @@
               too_long: "名前は40文字以内にしてください。"
             kind:
               inclusion: "トイレ、水入れ、給水器から選んでください。"
+        medication:
+          attributes:
+            name:
+              blank: "薬の名前を入力してください。"
+              too_long: "名前は60文字以内にしてください。"
+            dose:
+              too_long: "用量は40文字以内にしてください。"
+            times:
+              too_many: "1日%{count}回までです。"
+              invalid: "時刻は 08:00 のように入力してください。"
+            ends_on:
+              before_start: "終了日は開始日より前にできません。"
+            starts_on:
+              blank: "開始日を入力してください。"
         care_event:
           attributes:
+            medication:
+              other_cat: "その薬は別の猫のものです。"
+              present: "薬は投薬の記録にだけ付けられます。"
+            dose_status:
+              inclusion: "「あげた」か「あげられなかった」を選んでください。"
+            reason:
+              inclusion: "あげられなかった理由を選んでください。"
+            dose_time:
+              inclusion: "この薬の時刻ではありません。"
+              present: "臨時の薬には時刻がありません。"
             occurred_at:
               in_the_future: "未来の時刻は指定できません。"
               too_long_ago: "7日より前の時刻は指定できません。"
             details:
+              medicine_name: "薬の名前を入力してください。"
               other_household_bag: "そのフードの袋は別の家庭のものです。"
               food_type: "一覧からフードの種類を選んでください。"
               amount: "量は0.1〜2000 gで入力してください。"

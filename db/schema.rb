@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_01_090000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_01_100000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -45,13 +45,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_01_090000) do
     t.integer "care_spot_id"
     t.datetime "created_at", null: false
     t.json "details", default: {}, null: false
+    t.string "dose_status"
+    t.string "dose_time"
     t.datetime "edited_at"
     t.integer "edited_by_id"
     t.integer "household_id", null: false
     t.string "kind", null: false
+    t.integer "medication_id"
     t.string "note"
     t.datetime "occurred_at", null: false
     t.integer "pet_id"
+    t.string "reason"
     t.integer "tracker_id"
     t.datetime "undone_at"
     t.datetime "updated_at", null: false
@@ -60,6 +64,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_01_090000) do
     t.index ["care_spot_id", "occurred_at"], name: "index_care_events_on_care_spot_id_and_occurred_at"
     t.index ["household_id", "occurred_at"], name: "index_care_events_on_household_id_and_occurred_at"
     t.index ["household_id"], name: "index_care_events_on_household_id"
+    t.index ["medication_id", "occurred_at"], name: "index_care_events_on_medication_id_and_occurred_at"
     t.index ["pet_id", "kind", "occurred_at"], name: "index_care_events_on_pet_id_and_kind_and_occurred_at"
     t.index ["tracker_id"], name: "index_care_events_on_tracker_id"
   end
@@ -215,6 +220,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_01_090000) do
     t.string "url"
     t.string "variant"
     t.index ["kibble_price_check_id"], name: "index_kibble_prices_on_kibble_price_check_id"
+  end
+
+  create_table "medications", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "dose"
+    t.date "ends_on"
+    t.string "name", null: false
+    t.integer "pet_id", null: false
+    t.date "starts_on", null: false
+    t.datetime "stopped_at"
+    t.json "times", default: [], null: false
+    t.datetime "updated_at", null: false
+    t.index ["pet_id"], name: "index_medications_on_pet_id"
   end
 
   create_table "ownership_transfers", force: :cascade do |t|
@@ -477,6 +495,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_01_090000) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "care_events", "care_spots"
   add_foreign_key "care_events", "households"
+  add_foreign_key "care_events", "medications"
   add_foreign_key "care_events", "pets"
   add_foreign_key "care_events", "trackers"
   add_foreign_key "care_events", "users", column: "actor_id"
@@ -494,6 +513,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_01_090000) do
   add_foreign_key "households", "users", column: "owner_id"
   add_foreign_key "kibble_price_checks", "pets"
   add_foreign_key "kibble_prices", "kibble_price_checks"
+  add_foreign_key "medications", "pets"
   add_foreign_key "ownership_transfers", "households"
   add_foreign_key "ownership_transfers", "users", column: "from_user_id"
   add_foreign_key "ownership_transfers", "users", column: "to_user_id"

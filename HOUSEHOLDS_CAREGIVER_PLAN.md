@@ -11,7 +11,7 @@
 | B — Access by household and role | ✅ Done (2026-09-30). Committed on `feature/households` and pushed. See [Checkpoint B result](#checkpoint-b-result-2026-09-30) |
 | C — Caregiver invitations, viewer links, members, transfer ownership | ✅ Done (2026-09-30). Committed on `feature/households` in five parts and pushed. See [Checkpoint C result](#checkpoint-c-result-2026-09-30) |
 | D — Care events and the Today page (fed, litter, water, weight) | ✅ Done (2026-09-30). Committed on `feature/households` in five parts and pushed. See [Checkpoint D result](#checkpoint-d-result-2026-09-30) |
-| E — Medications | Not started |
+| E — Medications | In progress. See [Checkpoint E build plan](#checkpoint-e-build-plan-2026-10-01) |
 | F — Litter observations | Not started |
 | G — Live updates and care events on the charts | Not started |
 | H — Reminders by LINE and email | Not started |
@@ -19,6 +19,24 @@
 | J — Clean-up, docs, CI, merge | Not started |
 
 **Commits:** each checkpoint is committed on `feature/households` once `bin/rails test` passes, then pushed. Merged into `main` only when you ask.
+
+## Checkpoint E build plan (2026-10-01)
+
+| Part | Build |
+|---|---|
+| 1. Data | `medications` (cat, name, dose, times of day or none for "as needed", start and end dates, stopped); care events get `meds` with the medication, the dose time, **given** or **couldn't give** and a reason; the checks in the model (the medication must be that cat's, the dose time one of its times) |
+| 2. Owner's medications page | Per cat: add, change and stop medications; linked from the cat's card on Today and its profile |
+| 3. Today | 💊 on cats with medications opens the confirmation: "Give Aji 1 tablet Clavamox (20:00 dose)?" → **Given** or **Couldn't give** with a reason; each dose shows **due**, **given**, **couldn't give** or **overdue**; the double-dose guard; the timeline and the details page; the owner's one-off "Other medicine" |
+| 4. Checks | Tests for schedules, statuses, the guard and the household and cat checks; a browser test |
+
+**Decisions for E:**
+- **Up to 4 times a day**; a medication with no times is **as needed**.
+- **Overdue** = 1 hour after the dose time with nothing recorded (the same hour H will use for the reminder).
+- **The 💊 confirmation lists today's doses not yet recorded**, the one closest to now first, plus as-needed medications. A dose missed earlier in the day can still be recorded.
+- **Double dose:** a scheduled dose already **given** today at that time, or an as-needed medication given in the last 2 hours, asks before recording again ("Mom gave the 20:00 dose at 19:55. Record it again?").
+- **Changing or stopping a medication keeps past records**: each record keeps its medication and dose time.
+- **One-off medicine** (owner only): "💊 Other medicine" with a name and dose, on any cat, for something not on the list.
+- **Caregivers see the medications and record doses**; only the owner adds or changes them. Viewers see the statuses and the timeline.
 
 ## Checkpoint D result (2026-09-30)
 

@@ -1123,12 +1123,37 @@ zh-TW:
               too_long: "名稱請在 40 字以內。"
             kind:
               inclusion: "請選擇貓砂盆、水碗或飲水機。"
+        medication:
+          attributes:
+            name:
+              blank: "請輸入藥名。"
+              too_long: "藥名請在 60 字以內。"
+            dose:
+              too_long: "劑量請在 40 字以內。"
+            times:
+              too_many: "一天最多 %{count} 次。"
+              invalid: "時間格式請像 08:00。"
+            ends_on:
+              before_start: "結束日期不能早於開始日期。"
+            starts_on:
+              blank: "請輸入開始日期。"
         care_event:
           attributes:
+            medication:
+              other_cat: "那個藥是另一隻貓的。"
+              present: "只有給藥紀錄才有藥物。"
+            dose_status:
+              inclusion: "請選擇「已給」或「沒給成」。"
+            reason:
+              inclusion: "請選擇沒給成的原因。"
+            dose_time:
+              inclusion: "這不是這個藥的服藥時間。"
+              present: "臨時用藥沒有服藥時間。"
             occurred_at:
               in_the_future: "時間不能在未來。"
               too_long_ago: "時間最多只能是 7 天前。"
             details:
+              medicine_name: "請輸入藥名。"
               other_household_bag: "那包飼料屬於另一個家庭。"
               food_type: "請從清單中選擇食物類型。"
               amount: "份量必須介於 0.1 到 2000 g。"

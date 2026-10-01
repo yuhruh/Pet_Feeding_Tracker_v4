@@ -1138,12 +1138,37 @@ en:
               too_long: "Keep the name to 40 characters."
             kind:
               inclusion: "Pick litter box, water bowl or water fountain."
+        medication:
+          attributes:
+            name:
+              blank: "Enter the medication's name."
+              too_long: "Keep the name to 60 characters."
+            dose:
+              too_long: "Keep the dose to 40 characters."
+            times:
+              too_many: "Up to %{count} times a day."
+              invalid: "Times must look like 08:00."
+            ends_on:
+              before_start: "The end date can't be before the start date."
+            starts_on:
+              blank: "Enter the start date."
         care_event:
           attributes:
+            medication:
+              other_cat: "That medication is for another cat."
+              present: "Only a medicine record has a medication."
+            dose_status:
+              inclusion: "Choose Given or Couldn't give."
+            reason:
+              inclusion: "Choose why it couldn't be given."
+            dose_time:
+              inclusion: "That isn't one of this medication's times."
+              present: "A one-off medicine has no dose time."
             occurred_at:
               in_the_future: "The time can't be in the future."
               too_long_ago: "The time can be at most 7 days ago."
             details:
+              medicine_name: "Enter the medicine's name."
               other_household_bag: "That food bag belongs to another household."
               food_type: "Pick a food type from the list."
               amount: "The amount must be between 0.1 and 2000 g."
