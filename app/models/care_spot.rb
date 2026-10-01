@@ -4,6 +4,7 @@ class CareSpot < ApplicationRecord
 
   belongs_to :household
   has_many :care_events, dependent: :delete_all
+  has_many :care_routines, dependent: :destroy
 
   enum :kind, { litter_box: "litter_box", water_bowl: "water_bowl", water_fountain: "water_fountain" }, validate: true
 

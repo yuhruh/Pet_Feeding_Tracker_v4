@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_01_110000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_01_120000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -67,6 +67,36 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_01_110000) do
     t.index ["medication_id", "occurred_at"], name: "index_care_events_on_medication_id_and_occurred_at"
     t.index ["pet_id", "kind", "occurred_at"], name: "index_care_events_on_pet_id_and_kind_and_occurred_at"
     t.index ["tracker_id"], name: "index_care_events_on_tracker_id"
+  end
+
+  create_table "care_reminders", force: :cascade do |t|
+    t.integer "care_routine_id"
+    t.string "channel", null: false
+    t.datetime "created_at", null: false
+    t.date "due_on", null: false
+    t.datetime "follow_up_sent_at"
+    t.integer "household_id", null: false
+    t.string "key", null: false
+    t.integer "medication_id"
+    t.datetime "sent_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["care_routine_id"], name: "index_care_reminders_on_care_routine_id"
+    t.index ["household_id"], name: "index_care_reminders_on_household_id"
+    t.index ["medication_id"], name: "index_care_reminders_on_medication_id"
+    t.index ["user_id", "key"], name: "index_care_reminders_on_user_id_and_key", unique: true
+    t.index ["user_id"], name: "index_care_reminders_on_user_id"
+  end
+
+  create_table "care_routines", force: :cascade do |t|
+    t.string "action", null: false
+    t.integer "care_spot_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "every_days", null: false
+    t.date "started_on", null: false
+    t.datetime "updated_at", null: false
+    t.index ["care_spot_id", "action"], name: "index_care_routines_on_care_spot_id_and_action", unique: true
+    t.index ["care_spot_id"], name: "index_care_routines_on_care_spot_id"
   end
 
   create_table "care_spots", force: :cascade do |t|
@@ -175,6 +205,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_01_110000) do
   create_table "household_memberships", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "household_id", null: false
+    t.boolean "reminders_enabled", default: false, null: false
     t.string "role", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
@@ -187,6 +218,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_01_110000) do
     t.datetime "created_at", null: false
     t.string "name"
     t.integer "owner_id", null: false
+    t.boolean "owner_reminders_enabled", default: false, null: false
     t.datetime "updated_at", null: false
     t.index ["owner_id"], name: "index_households_on_owner_id", unique: true
   end
@@ -510,6 +542,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_01_110000) do
   add_foreign_key "care_events", "trackers"
   add_foreign_key "care_events", "users", column: "actor_id"
   add_foreign_key "care_events", "users", column: "edited_by_id"
+  add_foreign_key "care_reminders", "care_routines", on_delete: :cascade
+  add_foreign_key "care_reminders", "households"
+  add_foreign_key "care_reminders", "medications", on_delete: :cascade
+  add_foreign_key "care_reminders", "users"
+  add_foreign_key "care_routines", "care_spots"
   add_foreign_key "care_spots", "households"
   add_foreign_key "connected_services", "users"
   add_foreign_key "dry_foods", "Users", column: "user_id"

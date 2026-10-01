@@ -3,6 +3,7 @@
 class Household < ApplicationRecord
   belongs_to :owner, class_name: "User"
   # First, so they go before the cats and spots they point to.
+  has_many :care_reminders, dependent: :delete_all
   has_many :care_events, dependent: :delete_all
   has_many :pets, dependent: :destroy
   has_many :dry_foods, dependent: :destroy
@@ -25,6 +26,18 @@ class Household < ApplicationRecord
   # The household's day and times follow its owner's time zone, as its trackers do.
   def time_zone
     ActiveSupport::TimeZone[owner&.timezone.to_s] || ActiveSupport::TimeZone["UTC"]
+  end
+
+  # The owner and the caregivers who turned reminders on; never viewers.
+  def reminder_recipients
+    caregivers = memberships.caregiver.where(reminders_enabled: true).includes(user: :connected_services).map(&:user)
+    [ (owner if owner_reminders_enabled?), *caregivers ].compact
+  end
+
+  def reminders_on_for?(user)
+    return owner_reminders_enabled? if user.id == owner_id
+
+    memberships.caregiver.exists?(user: user, reminders_enabled: true)
   end
 
   def self.for_owner(user)

@@ -19,6 +19,7 @@ class Medication < ApplicationRecord
 
   belongs_to :pet
   has_many :care_events, dependent: :restrict_with_error
+  has_many :care_reminders, dependent: :delete_all
 
   normalizes :times, with: ->(times) { Array(times).map { |time| time.to_s.strip.first(5) }.compact_blank.uniq.sort }
 
