@@ -22,10 +22,11 @@ class ViewerPagesController < ApplicationController
     return unless @pet
 
     Time.zone = @pet.timezone if @pet.timezone
-    result = calculate_tracker_data(@pet, { range: @range }, nil)
+    result = calculate_tracker_data(@pet, { range: @range }, nil, care: true)
     @data, @chart_interval = result[:chart_data], result[:chart_interval]
     @min_weight, @max_weight = result[:min_weight], result[:max_weight]
     @dry_properties, @wet_properties = result[:dry_properties], result[:wet_properties]
+    @care = result[:care]
   end
 
   # "Sign up or sign in" from the page: the household is added to the account

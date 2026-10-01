@@ -43,6 +43,36 @@ en:
       litter_box: "Litter box"
       water_bowl: "Water bowl"
       water_fountain: "Water fountain"
+  care_chart:
+    title: "Care by day"
+    explanation: "Litter and water jobs are the household's; feedings, doses and litter observations are this cat's."
+    series:
+      fed: "🍽 Fed (taps)"
+      litter: "🚽 Litter jobs"
+      water: "💧 Water jobs"
+      given: "💊 Doses given"
+      not_given: "💊 Couldn't give"
+      observations: "🔍 Litter observations"
+  care_records:
+    columns:
+      date: "Date"
+      time: "Time"
+      kind: "Type"
+      cat: "Cat"
+      spot: "Litter box or water spot"
+      jobs: "Jobs"
+      details: "Details"
+      weight: "Weight (kg)"
+      note: "Note"
+      recorded_by: "Recorded by"
+      changed: "Changed"
+    kinds:
+      fed: "Fed"
+      weight: "Weight"
+      litter: "Litter"
+      water: "Water"
+      meds: "Medicine"
+    changed: "%{time} by %{person}"
   care_events:
     dose:
       given: "given"
@@ -904,6 +934,9 @@ en:
       caregiver: "Caregiver"
       viewer: "Viewer"
     show:
+      care_records: "Care records"
+      care_records_explanation: "Every feeding, litter, water, medicine and weight record, in your household's time zone."
+      download_care_records: "Download care records (CSV)"
       intro: "The people who help look after your cats."
       members: "Caregivers and viewers"
       no_members: "No one yet. Invite a caregiver below."

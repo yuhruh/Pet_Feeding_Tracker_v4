@@ -28,7 +28,7 @@ class TrackersController < ApplicationController
   # GET /trackers or /trackers.json
   def index
     # Use the shared calculation logic from TrackersCalculable concern
-    result = calculate_tracker_data(@pet, params, Current.user)
+    result = calculate_tracker_data(@pet, params, Current.user, care: true)
 
     @all_trackers = result[:all_trackers]
     @data = result[:chart_data]
@@ -39,6 +39,7 @@ class TrackersController < ApplicationController
     @max_date = result[:max_date]
     @dry_properties = result[:dry_properties]
     @wet_properties = result[:wet_properties]
+    @care = result[:care]
 
     page = params[:page].blank? ? 1 : params[:page]
     session[:per_page] = params[:per_page] if params[:per_page].present?

@@ -1,0 +1,19 @@
+<%# "Care by day" under the amount chart: the household's litter and water jobs and the cat's tapped feedings, doses and litter observations (CareChart). %>
+<% if care&.any? %>
+  <section id="care_chart" class="w-full px-8 md:px-12 mx-auto mb-6">
+    <h3 class="text-center font-bold text-lg text-gray-700 dark:text-gray-200 mb-1"><%= t("care_chart.title") %></h3>
+    <p class="text-center text-xs text-gray-500 dark:text-gray-300 mb-2"><%= t("care_chart.explanation") %></p>
+    <div class="w-full overflow-x-auto border border-gray-100 rounded-lg shadow-sm bg-white dark:bg-slate-800">
+      <div style="min-width: <%= [ care.dates.size * 40, 600 ].max %>px;">
+        <%= column_chart care.series, adapter: "google", height: "260px", id: "care-chart", library: {
+              colors: CareChart::COLORS,
+              bar: { groupWidth: "80%" },
+              chartArea: { left: 40, right: 20, bottom: 70, top: 40 },
+              hAxis: { slantedText: true, slantedTextAngle: 45, textStyle: { fontSize: 9 } },
+              vAxis: { format: "0", minValue: 0, viewWindow: { min: 0 } },
+              legend: { position: "top", alignment: "center", maxLines: 2 }
+            } %>
+      </div>
+    </div>
+  </section>
+<% end %>

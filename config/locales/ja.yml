@@ -43,6 +43,36 @@
       litter_box: "トイレ"
       water_bowl: "水入れ"
       water_fountain: "給水器"
+  care_chart:
+    title: "日ごとのお世話"
+    explanation: "トイレと水は家庭全体、ごはん・お薬・トイレの観察はこの猫の記録です。"
+    series:
+      fed: "🍽 ごはん（タップ）"
+      litter: "🚽 トイレ"
+      water: "💧 水"
+      given: "💊 飲ませた"
+      not_given: "💊 飲ませられなかった"
+      observations: "🔍 トイレの観察"
+  care_records:
+    columns:
+      date: "日付"
+      time: "時刻"
+      kind: "種類"
+      cat: "猫"
+      spot: "トイレ・水飲み場"
+      jobs: "作業"
+      details: "詳細"
+      weight: "体重（kg）"
+      note: "メモ"
+      recorded_by: "記録した人"
+      changed: "変更"
+    kinds:
+      fed: "ごはん"
+      weight: "体重"
+      litter: "トイレ"
+      water: "水"
+      meds: "お薬"
+    changed: "%{time}（%{person}）"
   care_events:
     dose:
       given: "あげた"
@@ -904,6 +934,9 @@
       caregiver: "ケアする人"
       viewer: "見るだけの人"
     show:
+      care_records: "お世話の記録"
+      care_records_explanation: "ごはん・トイレ・水・お薬・体重の記録をすべて、家庭のタイムゾーンで。"
+      download_care_records: "お世話の記録をダウンロード（CSV）"
       intro: "猫のお世話を手伝ってくれる人たち。"
       members: "ケアする人・見るだけの人"
       no_members: "まだいません。下からケアする人を招待しましょう。"

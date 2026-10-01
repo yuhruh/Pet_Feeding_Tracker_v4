@@ -140,6 +140,14 @@
     <% end %>
   </section>
 
+  <%# Every care record as a CSV file %>
+  <section id="care_records" class="border-2 border-slate-200 rounded-xl shadow-lg p-4">
+    <h2 class="font-semibold text-xl mb-1"><%= t(".care_records") %></h2>
+    <p class="text-sm text-gray-600 dark:text-gray-300 mb-3"><%= t(".care_records_explanation") %></p>
+    <%= link_to t(".download_care_records"), household_care_records_path(format: :csv), data: { turbo: false },
+          class: "inline-block rounded-md px-3.5 py-2 text-sky-700 bg-sky-200 border-2 border-sky-200 font-medium hover:bg-gray-100" %>
+  </section>
+
   <%# Handing the household to a member %>
   <section id="transfer" class="border-2 border-slate-200 rounded-xl shadow-lg p-4">
     <h2 class="font-semibold text-xl mb-1"><%= t(".transfer") %></h2>

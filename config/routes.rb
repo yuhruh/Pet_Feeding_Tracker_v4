@@ -41,6 +41,7 @@ Rails.application.routes.draw do
       resources :care_spots, only: %i[create update destroy] do
         patch :move, on: :member
       end
+      resource :care_records, only: :show
     end
     # An invited caregiver joins from the link in their invitation email.
     get "join/:token", to: "household_joins#show", as: :join_household

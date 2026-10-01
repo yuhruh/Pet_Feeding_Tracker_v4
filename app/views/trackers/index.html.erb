@@ -244,6 +244,7 @@
         <% end %>
       </div>
     </div>
+    <%= render "shared/care_chart", care: @care %>
   </div>
 
   <% if household_policy.can?(:view_trackers) %>

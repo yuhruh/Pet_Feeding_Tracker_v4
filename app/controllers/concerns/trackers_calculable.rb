@@ -1,7 +1,9 @@
 module TrackersCalculable
   extend ActiveSupport::Concern
 
-  def calculate_tracker_data(pet, params, user)
+  # care: also the household's care records (⚖️ weights on the weight line and
+  # the "Care by day" chart); not on the public share page.
+  def calculate_tracker_data(pet, params, user, care: false)
     all_trackers = pet.trackers
     trackers_table = Tracker.arel_table
 
@@ -15,17 +17,19 @@ module TrackersCalculable
     else
       case params[:range]
       when "7"
-        all_trackers = all_trackers.where("date >= ?", 7.days.ago.to_date)
+        start_date = 7.days.ago.to_date
       when "30"
-        all_trackers = all_trackers.where("date >= ?", 30.days.ago.to_date)
+        start_date = 30.days.ago.to_date
       when "120"
-        all_trackers = all_trackers.where("date >= ?", 120.days.ago.to_date)
+        start_date = 120.days.ago.to_date
       when "180"
-        all_trackers = all_trackers.where("date >= ?", 180.days.ago.to_date)
+        start_date = 180.days.ago.to_date
       when "YTD"
-        all_trackers = all_trackers.where("date >= ?", Date.today.beginning_of_year)
+        start_date = Date.today.beginning_of_year
       end
+      all_trackers = all_trackers.where("date >= ?", start_date) if start_date
     end
+    care_chart = CareChart.new(pet, from: start_date, to: end_date) if care && pet.household
 
     # Apply filters
     all_trackers = all_trackers.where(trackers_table[:food_type].matches("%#{params[:food_type].strip}%")) if params[:food_type].present?
@@ -43,7 +47,13 @@ module TrackersCalculable
     wet_raw = all_trackers.where(food_type: "Wet").where(normal_conditions).where.not(total_ate_amount: nil).group(:date).sum(:total_ate_amount)
     wet_hotel_raw = all_trackers.where(food_type: "Wet").where(hotel_conditions).where.not(total_ate_amount: nil).group(:date).sum(:total_ate_amount)
 
-    all_dates = (dry_raw.keys + dry_hotel_raw.keys + wet_raw.keys + wet_hotel_raw.keys).uniq.sort
+    # Every tracker weight, plus the ⚖️ records, averaged per day.
+    weight_points = all_trackers.where.not(weight: nil).pluck(:date, :weight).map { |date, kg| [ date, kg.to_f ] }
+    weight_points += care_chart.weights if care_chart
+    weight_by_date = weight_points.group_by(&:first).transform_values { |points| points.sum(&:last) / points.size }.sort.to_h
+
+    # A day with only a weight still gets its place in date order.
+    all_dates = (dry_raw.keys + dry_hotel_raw.keys + wet_raw.keys + wet_hotel_raw.keys + weight_by_date.keys).uniq.sort
     data_points_count = all_dates.size
 
     chart_interval = case data_points_count
@@ -57,7 +67,7 @@ module TrackersCalculable
       dates.map { |date| [ date.strftime("%y/%m/%d"), hash[date].to_f ] }.to_h
     }
 
-    weight_data = all_trackers.where.not(weight: nil).group(:date).order(:date).average(:weight).transform_keys { |key| key.strftime("%y/%m/%d") }.transform_values(&:to_f)
+    weight_data = weight_by_date.transform_keys { |key| key.strftime("%y/%m/%d") }
     weight_values = weight_data.values
     if weight_values.present?
       min_val = weight_values.min
@@ -86,7 +96,8 @@ module TrackersCalculable
       min_date: min_date,
       max_date: max_date,
       dry_properties: format_chart_data.call(dry_raw, all_dates),
-      wet_properties: format_chart_data.call(wet_raw, all_dates)
+      wet_properties: format_chart_data.call(wet_raw, all_dates),
+      care: care_chart
     }
   end
 end

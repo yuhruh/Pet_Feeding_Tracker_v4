@@ -2,7 +2,10 @@
 <% content_for :without_app_menu, true %>
 <% content_for :head do %>
   <meta name="robots" content="noindex, nofollow">
+  <%# Live updates: the household's changes refresh this page in place. %>
+  <%= turbo_refreshes_with(method: :morph, scroll: :preserve) %>
 <% end %>
+<%= turbo_stream_from @household %>
 
 <div class="container mx-auto w-full px-2 md:w-5/6 py-6 space-y-6">
   <div class="text-center">
@@ -31,7 +34,11 @@
               { selected: @range }, class: "p-1 rounded-md border-2 border-blue-300 text-gray-700 bg-sky-100" %>
         <%= form.submit t(".show"), name: nil, class: "px-3 py-1 rounded-md bg-sky-200 text-sky-800 font-medium cursor-pointer hover:bg-gray-100" %>
       <% end %>
-      <%= render "shared/tracker_chart" %>
+      <%# A live update doesn't redraw the charts (only a reload or another cat or range does). %>
+      <div id="viewer_charts_<%= @pet.id %>_<%= @range %>" data-turbo-permanent>
+        <%= render "shared/tracker_chart" %>
+        <%= render "shared/care_chart", care: @care %>
+      </div>
     </section>
   <% end %>
 

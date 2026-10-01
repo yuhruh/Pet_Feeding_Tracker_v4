@@ -43,6 +43,36 @@ zh-TW:
       litter_box: "貓砂盆"
       water_bowl: "水碗"
       water_fountain: "飲水機"
+  care_chart:
+    title: "每日照顧紀錄"
+    explanation: "貓砂盆與水是全家的紀錄；餵食、給藥與貓砂盆觀察是這隻貓的。"
+    series:
+      fed: "🍽 餵食（按鈕）"
+      litter: "🚽 貓砂盆"
+      water: "💧 水"
+      given: "💊 已給藥"
+      not_given: "💊 無法給藥"
+      observations: "🔍 貓砂盆觀察"
+  care_records:
+    columns:
+      date: "日期"
+      time: "時間"
+      kind: "類型"
+      cat: "貓"
+      spot: "貓砂盆或水"
+      jobs: "工作"
+      details: "細節"
+      weight: "體重（kg）"
+      note: "備註"
+      recorded_by: "紀錄者"
+      changed: "修改"
+    kinds:
+      fed: "餵食"
+      weight: "體重"
+      litter: "貓砂盆"
+      water: "水"
+      meds: "給藥"
+    changed: "%{time}（%{person}）"
   care_events:
     dose:
       given: "已給"
@@ -904,6 +934,9 @@ zh-TW:
       caregiver: "照顧者"
       viewer: "觀看者"
     show:
+      care_records: "照顧紀錄"
+      care_records_explanation: "所有餵食、貓砂盆、水、給藥與體重紀錄，以家庭的時區顯示。"
+      download_care_records: "下載照顧紀錄（CSV）"
       intro: "幫忙照顧你的貓咪的人。"
       members: "照顧者與觀看者"
       no_members: "目前還沒有人。可以在下方邀請照顧者。"
