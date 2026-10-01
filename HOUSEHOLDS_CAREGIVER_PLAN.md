@@ -14,11 +14,51 @@
 | E — Medications | ✅ Done (2026-10-01). Committed on `feature/households` in four parts and pushed. See [Checkpoint E result](#checkpoint-e-result-2026-10-01) |
 | F — Litter observations | ✅ Done (2026-10-01). Committed on `feature/households` in three parts and pushed. See [Checkpoint F result](#checkpoint-f-result-2026-10-01) |
 | G — Live updates and care events on the charts | ✅ Done (2026-10-01). Committed on `feature/households` in three parts and pushed. See [Checkpoint G result](#checkpoint-g-result-2026-10-01) |
-| H — Reminders by LINE and email | Not started |
+| H — Reminders by LINE and email | ✅ Done (2026-10-01). Committed on `feature/households` in four parts and pushed. See [Checkpoint H result](#checkpoint-h-result-2026-10-01) |
 | I — Android app push notifications (Firebase) | Not started |
 | J — Clean-up, docs, CI, merge | Not started |
 
 **Commits:** each checkpoint is committed on `feature/households` once `bin/rails test` passes, then pushed. Merged into `main` only when you ask.
+
+## Checkpoint H result (2026-10-01)
+
+**What people see now:**
+- **Household page** (owner), each litter box and water spot: **"Reminders: every"** with one line per job (🚽 Scooped, ♻️ Full change; 💧 Refilled, 🧽 Cleaned, 🔄 Filter changed): Off, Twice a week (4 days), Weekly (7), Every 2 weeks (14), Twice a month (15), Monthly (30) or Custom (1 to 365 days), saved with the spot's name. A fountain turned into a bowl loses its filter interval.
+- **Today page**, each litter box and water spot: "🧽 Fountain cleaned due in 4 days", "💧 Refilled due today" (amber), "🚽 Scooped 2 days overdue" (red). The viewer page shows the same.
+- **Today page**, under each household's name, for the owner and caregivers: **"🔕 Reminders: off · Turn on"** / **"🔔 Reminders by LINE: on · Turn off"** (or "by email"): each person's own choice; viewers have none.
+- **The reminder** (LINE, or email if they didn't sign in with LINE or the LINE push fails), in their language: "🔔 Reminders for Rita's cats", then e.g. "🧽 Fountain cleaned · Kitchen fountain: might be time. Last: 9/28 by Dad." or "💊 Aji: Clavamox 1 tablet (20:00 dose) hasn't been recorded.", and a link to the Today page.
+
+**Main files:** `CareRoutine` (`due_on`, `apply`, presets), `CareReminder`, `HouseholdReminders` (who gets what, when), `CareReminderNotifier` (LINE or email, the text), `CareReminderJob` (hourly, `config/recurring.yml`), `CareReminderMailer`, `ReminderSettingsController`, `CareSpotsController` (intervals), `HouseholdDay#routines`, `care_events/_status`, `today/show`, `households/show`; `db/migrate/20261001120000_create_care_routines_and_reminders.rb` (checked on PostgreSQL: up, down, up).
+
+**Decisions made while building:** as in the [build plan](#checkpoint-h-build-plan-2026-10-01), plus:
+- **The job runs every hour at :05** and each person is checked against their own clock, so 9am works in every time zone.
+- **A reminder is recorded after it's sent**: if LINE and email both fail, nothing is recorded and the next hour tries again.
+- **Dose reminders go out any time of day** (the owner chose the dose times), only within 3 hours after the dose became late.
+- **The language** of a reminder follows the person's time zone (Taipei → 繁體中文, Tokyo → 日本語, else English), as the kibble price emails do.
+
+**Also changed:** the household page's spot rows now put the name and kind on one line, the reminder lines below, then Save; on phones each job's name has its own line.
+
+**Checks:**
+- **18 new tests** and **1 browser test**. Due dates: from the day the interval was set, from the latest record of that job only (not other jobs, not undone taps), doing it early moves the date; the household page's choices (presets, custom, off, bad numbers, a bowl has no filter). Sending: not before 9am or after 9pm, once, one follow-up 2 days later and nothing after, nothing once recorded, due again a week after it was done, the person's own time zone, only people with reminders on and never viewers, several things in one message, LINE (and email when LINE fails), the email's text and link, overdue doses once and not too late, the hourly job. Pages: the owner saves intervals with the spot, bad custom days explained, caregivers can't change them, due lines on Today and the viewer page, each person's switch (owner, caregiver, LINE or email shown), viewers and outsiders refused. The **browser test**: the owner sets "Twice a week" and a custom 10 days, sees both due on Today and turns reminders on.
+- `bin/rails test`: 433 runs, 0 failures. `bin/rails test:system`: 38 runs, 0 failures. RuboCop and Brakeman clean.
+
+## Checkpoint H build plan (2026-10-01)
+
+| Part | Build |
+|---|---|
+| 1. Data | `care_routines` (a litter box or water spot, one of its jobs, every N days, the day it was set; one per spot and job); `care_reminders` (who, which routine's due day or which dose, by LINE or email, when sent, when followed up; unique per person and reminder, so nothing is sent twice); `reminders_enabled` on memberships and `owner_reminders_enabled` on households |
+| 2. Settings | **Household page**, each litter box and water spot: one line per job, "every [Off · Twice a week · Weekly · Every 2 weeks · Twice a month · Monthly · Custom] (N days)", saved with the spot's name. **Today page**, each household: "🔔 Reminders: on / off" for the owner and each caregiver, their own choice |
+| 3. Due on Today | Each litter box and water spot row: "🧽 Cleaning due today", "🔄 Filter changed in 6 days", "🚽 Scooping 2 days overdue", from the latest record of that job (or the day the interval was set) plus the interval |
+| 4. Sending | An hourly job: for each owner and caregiver with reminders on, what's due in each household is sent **once** at or after **9am in their time zone** (until 9pm), with **one follow-up 2 days later** if still not done; overdue doses (1 hour after the dose time, nothing recorded) once, within 3 hours. One message per person per household per run, **LINE** if they signed in with LINE (email if LINE fails), else **email**, with a link to the Today page; in their language |
+| 5. Checks | Tests for due dates, the job (9am, once, follow-up, none after it's done, early jobs move the date, viewers and people with reminders off never, LINE or email, meds), the settings (owner only) and the switch; a browser test |
+
+**Decisions for H:**
+- **Reminders are off until each person turns them on** (owner included), so nobody gets messages they didn't ask for.
+- **Due days are counted in the household's time zone; sending waits for 9am in the person's own time zone.** Nothing is sent between 9pm and 9am.
+- **Several things due at once go in one message** per person and household.
+- **A dose reminder is only for a dose that was due in the last few hours**, so adding a medication mid-day doesn't send reminders for this morning's dose.
+- **Stopping an interval (Off) removes its routine**; past records stay. A changed interval keeps the day it was first set.
+- **Weight reminders stay as they are** (every 14 days, owner).
 
 ## Checkpoint G result (2026-10-01)
 
@@ -709,7 +749,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 | E | ✅ Done — `medications`; meds button with Given / Couldn't give; due / given / overdue | Doses shown per schedule; double dose guarded |
 | F | ✅ Done — Litter observations in "Add details" (optional fields; which cat) | Old records unchanged; observations show on the timeline and, with a cat, in that cat's history |
 | G | ✅ Done — Turbo Streams broadcast (Today pages and viewer pages); care events on charts and in CSV | Two browser sessions: a tap in one appears in the other, including on a viewer page |
-| H | `care_routines`, `care_reminders`; interval settings per spot and job; "due" on the Today page; hourly reminder job; LINE, else email; per-member on/off; overdue meds | A due routine is sent once at 9am local time, one follow-up 2 days later, none after it's recorded; viewers never get one; doing the job early moves the due date |
+| H | ✅ Done — `care_routines`, `care_reminders`; interval settings per spot and job; "due" on the Today page; hourly reminder job; LINE, else email; per-member on/off; overdue meds | A due routine is sent once at 9am local time, one follow-up 2 days later, none after it's recorded; viewers never get one; doing the job early moves the due date |
 | I | Firebase in the Android app (FCM SDK, notification permission, token registration); `device_tokens`; sending through FCM HTTP v1; fallback to LINE or email | A reminder arrives as an Android notification and opens the Today page; an invalid token falls back to LINE or email |
 | J | Remove `pets.user_id` / `dry_foods.user_id`; docs (README, ARCHITECTURE, USAGE) | CI green; merged into `main` when you ask |
 
@@ -737,6 +777,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 
 ## Change log
 
+- **Checkpoint H (2026-10-01):** reminder intervals per litter box and water spot job, due dates on Today, each owner's and caregiver's reminders switch, and the hourly job sending due jobs at 9am local time (one follow-up after 2 days) and overdue doses, by LINE or email.
 - **Checkpoint G (2026-10-01):** live updates on Today and viewer pages (Solid Cable, with its missing production table added), the saved notice kept open on others' refreshes, ⚖️ weights on the weight line, the "Care by day" chart, and the owner's care records CSV. Fixed the household page's forms overflowing on small screens.
 - **Checkpoint F (2026-10-01):** litter observations (which cat, pee, poops, stool, something unusual) on a litter record's details page, on the timeline and viewer page (diarrhea and anything unusual in red), and in the cat's history for 30 days.
 - **Checkpoint E (2026-10-01):** medications per cat (owner), 💊 with Given / Couldn't give and a reason, due / given / couldn't give / overdue on Today and the viewer page, the double-dose question, and the owner's one-off medicine.
