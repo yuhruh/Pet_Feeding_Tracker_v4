@@ -8,6 +8,9 @@ class KibblePricesTest < ApplicationSystemTestCase
     @pet = pets(:one)
   end
 
+  # The page's "today" is the owner's (Asia/Taipei), not the test server's UTC.
+  def owners_today = Time.current.in_time_zone(@user.timezone).to_date
+
   def add_check(checked_on)
     check = @pet.kibble_price_checks.create!(checked_on: checked_on, status: :done, kibbles: [
       { "brand" => "曙光", "description" => "無穀滋養鴨肉食譜", "favorite_score" => 45, "queries" => [], "found" => 2 },
@@ -45,14 +48,14 @@ class KibblePricesTest < ApplicationSystemTestCase
     assert_text "Checking prices now" # waits for the request, which the browser sends in the background
     assert_equal [ PetKibblePriceJob ], enqueued_jobs.map { |job| job[:job] }
 
-    add_check(Date.current)
+    add_check(owners_today)
     visit pet_kibble_prices_url(@pet, locale: I18n.default_locale)
     assert_no_button "Refresh now"
     assert_text "Checked today; you can refresh again tomorrow."
   end
 
   test "phones get one card per price instead of the table" do
-    add_check(Date.current)
+    add_check(owners_today)
     sign_in_as @user
     page.driver.browser.manage.window.resize_to(390, 900)
 
