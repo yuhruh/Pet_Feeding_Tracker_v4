@@ -71,6 +71,8 @@ class CareEventTest < ActiveSupport::TestCase
     assert_nil event(kind: :fed, pet: @pet).recent_repeat
 
     event(kind: :litter, care_spot: @box, actions: [ "scooped" ], occurred_at: 1.hour.ago).save!
+    assert_nil event(kind: :litter, care_spot: @box, actions: [ "scooped" ]).recent_repeat, "scooping again an hour later is normal (H2)"
+    event(kind: :litter, care_spot: @box, actions: [ "scooped" ], occurred_at: 20.minutes.ago).save!
     assert event(kind: :litter, care_spot: @box, actions: [ "scooped" ]).recent_repeat
     assert_nil event(kind: :litter, care_spot: @box, actions: [ "full_change" ]).recent_repeat, "a full change after scooping is normal"
     assert_nil event(kind: :weight, pet: @pet, value: 4).recent_repeat

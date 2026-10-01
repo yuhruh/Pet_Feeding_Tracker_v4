@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_02_090000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_02_100000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -94,8 +94,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_02_090000) do
     t.string "action", null: false
     t.integer "care_spot_id", null: false
     t.datetime "created_at", null: false
-    t.integer "every_days", null: false
+    t.integer "every_hours"
+    t.string "mode", default: "every", null: false
     t.date "started_on", null: false
+    t.json "times", default: [], null: false
     t.datetime "updated_at", null: false
     t.index ["care_spot_id", "action"], name: "index_care_routines_on_care_spot_id_and_action", unique: true
     t.index ["care_spot_id"], name: "index_care_routines_on_care_spot_id"

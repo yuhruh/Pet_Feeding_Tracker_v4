@@ -82,6 +82,28 @@ module CareEventsHelper
     end
   end
 
+  SLOT_CLASSES = { "done" => "text-emerald-700", "due" => "text-gray-600", "late" => "text-red-600 font-semibold" }.freeze
+
+  # One set time: "08:00 ✓ 07:55 by Mom", "20:00 due", "20:00 not done" (checkpoint H2).
+  def routine_slot_text(slot, status, zone)
+    if status == "done"
+      t("care_routines.slot.done", time: slot.time, at: care_time(slot.event.occurred_at, zone), person: care_person(slot.event.actor))
+    else
+      t("care_routines.slot.#{status}", time: slot.time)
+    end
+  end
+
+  # "🚽 Scooped due at 20:00", "... due tomorrow at 03:00", "... overdue since 20:00" (checkpoint H2).
+  def routine_due_at_text(job, due_at, day)
+    local = due_at.in_time_zone(day.zone)
+    return t("care_routines.due.overdue_since", job: job, when: care_when(due_at, day)) if due_at <= Time.current
+
+    if local.to_date == day.date then t("care_routines.due.at", job: job, time: local.strftime("%H:%M"))
+    elsif local.to_date == day.date + 1 then t("care_routines.due.tomorrow_at", job: job, time: local.strftime("%H:%M"))
+    else t("care_routines.due.on", job: job, when: "#{local.month}/#{local.day} #{local.strftime('%H:%M')}")
+    end
+  end
+
   # "Delete “Aji: fed” at 08:12? ..." (checkpoint H3), with a word about a linked tracker.
   def care_delete_confirm(event, zone)
     text = t("care_events.delete.confirm", what: care_event_summary(event), time: care_time(event.occurred_at, zone))

@@ -52,6 +52,9 @@ application.register("password-field", PasswordFieldController)
 import RangeFormController from "controllers/range_form_controller"
 application.register("range-form", RangeFormController)
 
+import RoutineFieldsController from "controllers/routine_fields_controller"
+application.register("routine-fields", RoutineFieldsController)
+
 import ShareAndDownloadController from "controllers/share_and_download_controller"
 application.register("share-and-download", ShareAndDownloadController)
 

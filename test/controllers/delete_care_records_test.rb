@@ -88,7 +88,7 @@ class DeleteCareRecordsTest < ActionDispatch::IntegrationTest
     medication = @pet.medications.create!(name: "Clavamox", dose: "1 tablet", times: [ 30.minutes.ago.in_time_zone(@zone).strftime("%H:%M") ], starts_on: 1.day.ago.to_date)
     dose = CareEvent.create!(kind: :meds, pet: @pet, medication: medication, dose_time: medication.times.first, dose_status: "given", actor: @mom, occurred_at: 10.minutes.ago)
     box = @household.care_spots.create!(kind: :litter_box, name: "Upstairs box")
-    routine = box.care_routines.create!(action: "scooped", every_days: 2, started_on: 5.days.ago.to_date)
+    routine = box.care_routines.create!(action: "scooped", every_hours: 48, started_on: 5.days.ago.to_date)
     scooped = CareEvent.create!(kind: :litter, care_spot: box, actions: [ "scooped" ], actor: @mom, occurred_at: 1.hour.ago)
     weight = CareEvent.create!(kind: :weight, pet: @pet, value: 4.4, actor: @mom, occurred_at: 5.minutes.ago)
     due_after_scoop = routine.due_on

@@ -13,6 +13,9 @@ class CareReminder < ApplicationRecord
   validates :channel, inclusion: { in: CHANNELS }
   validates :due_on, :sent_at, presence: true
 
-  def self.routine_key(routine, due_on) = "routine:#{routine.id}:#{due_on.iso8601}"
+  # "routine:12:2026-10-03" for a due day, "routine:12:2026-10-03T20:00" for a due time.
+  def self.routine_key(routine, due)
+    "routine:#{routine.id}:#{due.respond_to?(:hour) ? due.strftime('%Y-%m-%dT%H:%M') : due.iso8601}"
+  end
   def self.dose_key(medication, date, time) = "dose:#{medication.id}:#{date.iso8601}:#{time}"
 end

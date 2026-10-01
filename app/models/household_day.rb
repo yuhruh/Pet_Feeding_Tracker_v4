@@ -54,6 +54,12 @@ class HouseholdDay
     spot.care_events.kept.order(occurred_at: :desc).includes(:actor).first
   end
 
+  # How many times each of the spot's jobs was done today: { "scooped" => 3 }.
+  def today_counts(spot)
+    events.select { |event| event.care_spot_id == spot.id }.flat_map(&:actions).tally
+          .sort_by { |action, _| CareEvent::SPOT_ACTIONS.fetch(spot.kind).index(action) || 99 }.to_h
+  end
+
   # The spot's reminder intervals (checkpoint H).
   def routines(spot)
     @routines ||= CareRoutine.where(care_spot_id: spots.map(&:id)).includes(:care_spot).order(:id).to_a.group_by(&:care_spot_id)

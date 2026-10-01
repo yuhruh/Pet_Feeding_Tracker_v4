@@ -77,6 +77,8 @@
     subject: "🔔 %{household}のお知らせ"
     routine: "%{job} · %{spot}：そろそろ時期です。前回：%{last}。"
     follow_up: "%{job} · %{spot}：まだ記録がありません。前回：%{last}。"
+    routine_at: "%{job} · %{spot}：%{time}の分です。前回：%{last}。"
+    follow_up_at: "%{job} · %{spot}：%{time}の分がまだです。前回：%{last}。"
     dose: "💊 %{pet}：%{medicine}（%{time}の分）がまだ記録されていません。"
     last: "%{date}（%{person}）"
     never: "記録なし"
@@ -87,6 +89,10 @@
       fine_print: "お知らせをオンにしているため届いています。「今日」ページでオフにできます。"
   care_routines:
     due:
+      at: "%{job}：%{time}が目安"
+      tomorrow_at: "%{job}：明日%{time}が目安"
+      "on": "%{job}：%{when}が目安"
+      overdue_since: "%{job}：%{when}から過ぎています"
       today: "%{job}：今日が目安"
       in_days:
         one: "%{job}：明日が目安"
@@ -94,6 +100,10 @@
       overdue:
         one: "%{job}：1日過ぎています"
         other: "%{job}：%{count}日過ぎています"
+    slot:
+      done: "%{time} ✓ %{at}（%{person}）"
+      due: "%{time} 予定"
+      late: "%{time} 未完了"
   reminder_settings:
     update:
       "on": "%{household}のお知らせをオンにしました。"
@@ -216,6 +226,10 @@
       weight: "%{pet}：%{kg} kg"
       meds: "%{pet}：%{medicine}、%{outcome}"
     status:
+      today_counts: "今日：%{counts} · 最後 %{when}（%{person}）"
+      times:
+        one: "%{job} %{count}回"
+        other: "%{job} %{count}回"
       last: "%{actions} %{when}（%{person}）"
       not_yet: "まだ記録がありません"
       fed: "ごはん %{when}（%{person}）"
@@ -976,16 +990,25 @@
     show:
       reminders_every: "お知らせの間隔"
       reminder_for: "%{job}のお知らせ"
-      custom_days: "%{job}の日数（カスタム）"
-      days: "日"
+      unit:
+        hours: "時間"
+        days: "日"
+      custom_amount: "%{job}の間隔"
+      custom_unit: "%{job}の単位（時間・日）"
+      set_time: "%{job}の時刻 %{number}"
+      set_times_hint: "最大%{count}回。保存すると欄が増えます。"
       every:
         "off": "オフ"
+        three_times_a_day: "1日3回"
+        twice_a_day: "1日2回"
+        daily: "毎日"
         twice_a_week: "週2回"
         weekly: "毎週"
         every_2_weeks: "2週間ごと"
         twice_a_month: "月2回"
         monthly: "毎月"
         custom: "カスタム"
+        set_times: "決まった時刻"
       care_records: "お世話の記録"
       care_records_explanation: "ごはん・トイレ・水・お薬・体重の記録をすべて、家庭のタイムゾーンで。"
       download_care_records: "お世話の記録をダウンロード（CSV）"
@@ -1317,11 +1340,15 @@
               blank: "開始日を入力してください。"
         care_routine:
           attributes:
-            every_days:
-              not_a_number: "日数は1〜365で入力してください。"
-              not_an_integer: "日数は1〜365で入力してください。"
-              greater_than_or_equal_to: "日数は1〜365で入力してください。"
-              less_than_or_equal_to: "日数は1〜365で入力してください。"
+            every_hours:
+              not_a_number: "間隔は365日以内の時間か日数で入力してください。"
+              not_an_integer: "間隔は365日以内の時間か日数で入力してください。"
+              greater_than_or_equal_to: "間隔は365日以内の時間か日数で入力してください。"
+              less_than_or_equal_to: "間隔は365日以内の時間か日数で入力してください。"
+            times:
+              blank: "時刻を1つ以上入力してください。"
+              too_many: "1日%{count}回までです。"
+              invalid: "時刻は08:00の形で入力してください。"
             action:
               inclusion: "その作業はこの場所に合いません。"
         care_event:

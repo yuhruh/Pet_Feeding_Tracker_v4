@@ -77,6 +77,8 @@ en:
     subject: "🔔 Reminders for %{household}"
     routine: "%{job} · %{spot}: might be time. Last: %{last}."
     follow_up: "%{job} · %{spot}: still not done. Last: %{last}."
+    routine_at: "%{job} · %{spot}: the %{time} time. Last: %{last}."
+    follow_up_at: "%{job} · %{spot}: the %{time} time, still not done. Last: %{last}."
     dose: "💊 %{pet}: %{medicine} (%{time} dose) hasn't been recorded."
     last: "%{date} by %{person}"
     never: "not recorded yet"
@@ -87,6 +89,10 @@ en:
       fine_print: "You get these because you turned reminders on. Turn them off on the Today page."
   care_routines:
     due:
+      at: "%{job} due at %{time}"
+      tomorrow_at: "%{job} due tomorrow at %{time}"
+      "on": "%{job} due %{when}"
+      overdue_since: "%{job} overdue since %{when}"
       today: "%{job} due today"
       in_days:
         one: "%{job} due tomorrow"
@@ -94,6 +100,10 @@ en:
       overdue:
         one: "%{job} 1 day overdue"
         other: "%{job} %{count} days overdue"
+    slot:
+      done: "%{time} ✓ %{at} by %{person}"
+      due: "%{time} due"
+      late: "%{time} not done"
   reminder_settings:
     update:
       "on": "Reminders on for %{household}."
@@ -216,6 +226,10 @@ en:
       weight: "%{pet}: %{kg} kg"
       meds: "%{pet}: %{medicine}, %{outcome}"
     status:
+      today_counts: "%{counts} today · last %{when} by %{person}"
+      times:
+        one: "%{job} %{count}×"
+        other: "%{job} %{count}×"
       last: "%{actions} %{when} by %{person}"
       not_yet: "Nothing recorded yet"
       fed: "Fed %{when} by %{person}"
@@ -976,16 +990,25 @@ en:
     show:
       reminders_every: "Reminders: every"
       reminder_for: "Reminder for %{job}"
-      custom_days: "Custom days for %{job}"
-      days: "days"
+      unit:
+        hours: "hours"
+        days: "days"
+      custom_amount: "How many for %{job}"
+      custom_unit: "Hours or days for %{job}"
+      set_time: "Set time %{number} for %{job}"
+      set_times_hint: "Up to %{count} times; save to add more."
       every:
         "off": "Off"
+        three_times_a_day: "3 times a day"
+        twice_a_day: "Twice a day"
+        daily: "Daily"
         twice_a_week: "Twice a week"
         weekly: "Weekly"
         every_2_weeks: "Every 2 weeks"
         twice_a_month: "Twice a month"
         monthly: "Monthly"
         custom: "Custom"
+        set_times: "At set times"
       care_records: "Care records"
       care_records_explanation: "Every feeding, litter, water, medicine and weight record, in your household's time zone."
       download_care_records: "Download care records (CSV)"
@@ -1332,11 +1355,15 @@ en:
               blank: "Enter the start date."
         care_routine:
           attributes:
-            every_days:
-              not_a_number: "Enter how many days, from 1 to 365."
-              not_an_integer: "Enter how many days, from 1 to 365."
-              greater_than_or_equal_to: "Enter how many days, from 1 to 365."
-              less_than_or_equal_to: "Enter how many days, from 1 to 365."
+            every_hours:
+              not_a_number: "Enter how many hours or days, up to 365 days."
+              not_an_integer: "Enter how many hours or days, up to 365 days."
+              greater_than_or_equal_to: "Enter how many hours or days, up to 365 days."
+              less_than_or_equal_to: "Enter how many hours or days, up to 365 days."
+            times:
+              blank: "Enter at least one time."
+              too_many: "Up to %{count} times a day."
+              invalid: "Times must look like 08:00."
             action:
               inclusion: "That job doesn't fit this spot."
         care_event:

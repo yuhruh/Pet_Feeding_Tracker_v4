@@ -60,6 +60,6 @@ class CareSpotsController < ApplicationController
 
   def routine_params
     actions = CareEvent::SPOT_ACTIONS.values.flatten.uniq
-    params.fetch(:routines, {}).permit(*actions.map { |action| { action => %i[every days] } }).to_h
+    params.fetch(:routines, {}).permit(*actions.map { |action| { action => [ :every, :amount, :unit, { times: [] } ] } }).to_h
   end
 end

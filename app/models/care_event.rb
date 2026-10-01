@@ -11,7 +11,8 @@ class CareEvent < ApplicationRecord
   # A second water tap on the same spot within this time adds to the open record.
   WATER_MERGE_WINDOW = 2.minutes
   # "Mom fed Aji at 08:05; record again?" within these times.
-  REPEAT_WINDOWS = { "fed" => 30.minutes, "water" => 30.minutes, "litter" => 2.hours }.freeze
+  # Litter is often scooped several times a day (checkpoint H2), so 30 minutes too.
+  REPEAT_WINDOWS = { "fed" => 30.minutes, "water" => 30.minutes, "litter" => 30.minutes }.freeze
 
   SPOT_ACTIONS = {
     "litter_box" => %w[scooped full_change],

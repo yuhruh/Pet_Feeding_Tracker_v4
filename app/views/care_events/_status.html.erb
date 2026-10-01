@@ -15,17 +15,19 @@
         </span>
       <% end %>
       <span class="text-sm text-gray-600 dark:text-gray-300">
-        <% if last %>
+        <% counts = day.today_counts(spot) %>
+        <% if last && counts.values.any? { |count| count > 1 } %>
+          <%# Several times today (checkpoint H2): "scooped 3× today · last 15:20 by Mom". %>
+          <%= t("care_events.status.today_counts", counts: counts.map { |action, count| t("care_events.status.times", job: care_action_done(spot, action), count: count) }.join(", "),
+                when: care_when(last.occurred_at, day), person: care_person(last.actor)) %>
+        <% elsif last %>
           <%= t("care_events.status.last", actions: last.actions.map { |action| care_action_done(spot, action) }.join(t("support.array.words_connector")),
                 when: care_when(last.occurred_at, day), person: care_person(last.actor)) %>
         <% else %>
           <%= t("care_events.status.not_yet") %>
         <% end %>
         <% day.routines(spot).each do |routine| %>
-          <% due_in = (routine.due_on - day.date).to_i %>
-          <span class="block <%= due_in.negative? ? "text-red-600 font-semibold" : due_in.zero? ? "text-amber-700 font-semibold" : "" %>">
-            <%= routine_due_text(routine, due_in) %>
-          </span>
+          <%= render "care_events/routine_due", routine: routine, day: day %>
         <% end %>
       </span>
     </li>

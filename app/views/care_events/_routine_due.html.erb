@@ -1,0 +1,21 @@
+<%# One reminder line on a litter box or water spot row (checkpoints H, H2):
+    set times with their status, a due time (under a day) or a due day. %>
+<% job = care_action_label(routine.care_spot, routine.action) %>
+<% if routine.mode_set_times? %>
+  <span class="block">
+    <%= job %>:
+    <% routine.slots(day.date).each_with_index do |slot, index| %>
+      <% status = slot.status %>
+      <%= "·" unless index.zero? %>
+      <span class="<%= CareEventsHelper::SLOT_CLASSES[status] %>"><%= routine_slot_text(slot, status, day.zone) %></span>
+    <% end %>
+  </span>
+<% elsif routine.hourly? %>
+  <% due_at = routine.due_at %>
+  <span class="block <%= "text-red-600 font-semibold" if due_at <= Time.current %>"><%= routine_due_at_text(job, due_at, day) %></span>
+<% else %>
+  <% due_in = (routine.due_on - day.date).to_i %>
+  <span class="block <%= due_in.negative? ? "text-red-600 font-semibold" : due_in.zero? ? "text-amber-700 font-semibold" : "" %>">
+    <%= routine_due_text(routine, due_in) %>
+  </span>
+<% end %>

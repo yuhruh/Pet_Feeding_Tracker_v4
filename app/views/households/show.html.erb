@@ -116,22 +116,38 @@
               <%= form.select :kind, %w[water_bowl water_fountain].map { |kind| [ t("care_spots.kinds.#{kind}"), kind ] }, {},
                     "aria-label": t(".spot_kind"), class: "rounded-md border px-2 py-1 dark:text-black" %>
             <% end %>
-            <%# Reminder intervals per job, saved with the name. %>
-            <div id="<%= dom_id(spot, :routines) %>" class="basis-full flex flex-col gap-1 text-sm">
+            <%# Reminders per job, saved with the name: every … or at set times (checkpoints H, H2). %>
+            <div id="<%= dom_id(spot, :routines) %>" class="basis-full flex flex-col gap-2 text-sm">
               <span class="text-gray-600 dark:text-gray-300"><%= t(".reminders_every") %></span>
               <% CareEvent::SPOT_ACTIONS.fetch(spot.kind).each do |action| %>
                 <% routine = spot.care_routines.find { |r| r.action == action } %>
-                <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <% amount, unit = routine ? routine.custom_amount : [ nil, "days" ] %>
+                <% job = care_action_done(spot, action) %>
+                <div class="flex flex-wrap items-center gap-x-2 gap-y-1" data-controller="routine-fields">
                   <span class="basis-full sm:basis-auto sm:w-36"><%= care_action_label(spot, action) %></span>
                   <%= select_tag "routines[#{action}][every]",
-                        options_for_select([ [ t(".every.off"), "off" ], *CareRoutine::PRESETS.keys.map { |key| [ t(".every.#{key}"), key ] }, [ t(".every.custom"), "custom" ] ],
+                        options_for_select([ [ t(".every.off"), "off" ], *CareRoutine::PRESETS.keys.map { |key| [ t(".every.#{key}"), key ] },
+                                             [ t(".every.custom"), "custom" ], [ t(".every.set_times"), "set_times" ] ],
                                            routine ? routine.preset : "off"),
-                        id: "routines_#{spot.id}_#{action}_every", "aria-label": t(".reminder_for", job: care_action_done(spot, action)),
+                        id: "routines_#{spot.id}_#{action}_every", "aria-label": t(".reminder_for", job: job),
+                        data: { routine_fields_target: "choice", action: "change->routine-fields#show" },
                         class: "rounded-md border px-2 py-1 dark:text-black" %>
-                  <%= number_field_tag "routines[#{action}][days]", routine&.every_days, min: 1, max: CareRoutine::MAX_DAYS, step: 1,
-                        id: "routines_#{spot.id}_#{action}_days", "aria-label": t(".custom_days", job: care_action_done(spot, action)),
-                        class: "w-20 rounded-md border px-2 py-1 dark:text-black" %>
-                  <span class="text-gray-500"><%= t(".days") %></span>
+                  <span class="flex items-center gap-1" data-routine-fields-target="custom">
+                    <%= number_field_tag "routines[#{action}][amount]", amount, min: 1, max: CareRoutine::MAX_HOURS, step: 1,
+                          id: "routines_#{spot.id}_#{action}_amount", "aria-label": t(".custom_amount", job: job),
+                          class: "w-20 rounded-md border px-2 py-1 dark:text-black" %>
+                    <%= select_tag "routines[#{action}][unit]", options_for_select([ [ t(".unit.hours"), "hours" ], [ t(".unit.days"), "days" ] ], unit),
+                          id: "routines_#{spot.id}_#{action}_unit", "aria-label": t(".custom_unit", job: job),
+                          class: "rounded-md border px-2 py-1 dark:text-black" %>
+                  </span>
+                  <span class="basis-full flex flex-wrap items-center gap-1" data-routine-fields-target="times">
+                    <% set_times = routine&.mode_set_times? ? routine.times : [] %>
+                    <% [ set_times.size + 2, 2 ].max.clamp(..CareRoutine::MAX_TIMES).times do |slot| %>
+                      <%= time_field_tag "routines[#{action}][times][]", set_times[slot], id: "routines_#{spot.id}_#{action}_time_#{slot}",
+                            "aria-label": t(".set_time", job: job, number: slot + 1), class: "rounded-md border px-2 py-1 dark:text-black" %>
+                    <% end %>
+                    <span class="text-xs text-gray-500"><%= t(".set_times_hint", count: CareRoutine::MAX_TIMES) %></span>
+                  </span>
                 </div>
               <% end %>
             </div>

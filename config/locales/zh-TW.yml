@@ -77,6 +77,8 @@ zh-TW:
     subject: "🔔 %{household}的提醒"
     routine: "%{job} · %{spot}：差不多該做了。上次：%{last}。"
     follow_up: "%{job} · %{spot}：還沒有紀錄。上次：%{last}。"
+    routine_at: "%{job} · %{spot}：%{time} 那次。上次：%{last}。"
+    follow_up_at: "%{job} · %{spot}：%{time} 那次還沒做。上次：%{last}。"
     dose: "💊 %{pet}：%{medicine}（%{time} 那次）還沒有紀錄。"
     last: "%{date}（%{person}）"
     never: "尚無紀錄"
@@ -87,6 +89,10 @@ zh-TW:
       fine_print: "因為你開啟了提醒才會收到。可以在「今天」頁面關閉。"
   care_routines:
     due:
+      at: "%{job}：%{time} 該做"
+      tomorrow_at: "%{job}：明天 %{time} 該做"
+      "on": "%{job}：%{when} 該做"
+      overdue_since: "%{job}：%{when} 起已過時"
       today: "%{job}：今天該做了"
       in_days:
         one: "%{job}：明天該做"
@@ -94,6 +100,10 @@ zh-TW:
       overdue:
         one: "%{job}：已過 1 天"
         other: "%{job}：已過 %{count} 天"
+    slot:
+      done: "%{time} ✓ %{at}（%{person}）"
+      due: "%{time} 待做"
+      late: "%{time} 未完成"
   reminder_settings:
     update:
       "on": "已開啟%{household}的提醒。"
@@ -216,6 +226,10 @@ zh-TW:
       weight: "%{pet}：%{kg} kg"
       meds: "%{pet}：%{medicine}，%{outcome}"
     status:
+      today_counts: "今天：%{counts} · 最近 %{when}（%{person}）"
+      times:
+        one: "%{job} %{count} 次"
+        other: "%{job} %{count} 次"
       last: "%{actions} %{when}（%{person}）"
       not_yet: "還沒有紀錄"
       fed: "已餵食 %{when}（%{person}）"
@@ -976,16 +990,25 @@ zh-TW:
     show:
       reminders_every: "提醒頻率"
       reminder_for: "%{job}的提醒"
-      custom_days: "%{job}的天數（自訂）"
-      days: "天"
+      unit:
+        hours: "小時"
+        days: "天"
+      custom_amount: "%{job}的間隔"
+      custom_unit: "%{job}的單位（小時或天）"
+      set_time: "%{job}的時間 %{number}"
+      set_times_hint: "最多 %{count} 個時間；儲存後會多出空欄。"
       every:
         "off": "關閉"
+        three_times_a_day: "一天三次"
+        twice_a_day: "一天兩次"
+        daily: "每天"
         twice_a_week: "每週兩次"
         weekly: "每週"
         every_2_weeks: "每兩週"
         twice_a_month: "每月兩次"
         monthly: "每月"
         custom: "自訂"
+        set_times: "固定時間"
       care_records: "照顧紀錄"
       care_records_explanation: "所有餵食、貓砂盆、水、給藥與體重紀錄，以家庭的時區顯示。"
       download_care_records: "下載照顧紀錄（CSV）"
@@ -1317,11 +1340,15 @@ zh-TW:
               blank: "請輸入開始日期。"
         care_routine:
           attributes:
-            every_days:
-              not_a_number: "請輸入 1 到 365 的天數。"
-              not_an_integer: "請輸入 1 到 365 的天數。"
-              greater_than_or_equal_to: "請輸入 1 到 365 的天數。"
-              less_than_or_equal_to: "請輸入 1 到 365 的天數。"
+            every_hours:
+              not_a_number: "請輸入 365 天以內的小時數或天數。"
+              not_an_integer: "請輸入 365 天以內的小時數或天數。"
+              greater_than_or_equal_to: "請輸入 365 天以內的小時數或天數。"
+              less_than_or_equal_to: "請輸入 365 天以內的小時數或天數。"
+            times:
+              blank: "請至少輸入一個時間。"
+              too_many: "一天最多 %{count} 次。"
+              invalid: "時間格式要像 08:00。"
             action:
               inclusion: "這個工作不適用這個地方。"
         care_event:

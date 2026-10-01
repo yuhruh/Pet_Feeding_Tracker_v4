@@ -1,18 +1,24 @@
-# What's due in one household and who to tell (checkpoint H), run by the hourly
-# CareReminderJob. Each owner or caregiver with reminders on gets one message
-# with whatever is due for them: litter box and water spot jobs at or after 9am
-# in their own time zone (not after 9pm), with one follow-up 2 days later if
-# still not done, and a dose not recorded an hour after its time. A CareReminder
-# row per person makes each of these go out once.
+# What's due in one household and who to tell (checkpoints H, H2), run by the
+# hourly CareReminderJob. Each owner or caregiver with reminders on gets one
+# message with whatever is due for them. A CareReminder row per person makes
+# each of these go out once:
+# - "every" in whole days: on the due day, at or after 9am in their time zone
+#   (not after 9pm); one follow-up 2 days later if still not done.
+# - "every" under a day: once the due time has passed, between 9am and 9pm in
+#   their time zone; one follow-up after one more interval if still not done.
+# - set times: at each set time not done yet, at any hour (the owner chose it);
+#   one follow-up 2 hours later if still not done.
+# - a dose not recorded an hour after its time, once.
 class HouseholdReminders
   SEND_HOURS = 9...21
   FOLLOW_UP_AFTER = 2 # days
+  SET_TIME_FOLLOW_UP = 2.hours
   DOSE_LATE = Medication::OVERDUE_AFTER
   # A dose is reminded about only this soon after it became late, so a
   # medication added mid-day doesn't remind about this morning's dose.
   DOSE_WINDOW = 3.hours
 
-  Item = Struct.new(:kind, :key, :due_on, :routine, :last, :medication, :dose, :reminder, keyword_init: true)
+  Item = Struct.new(:kind, :key, :due_on, :routine, :last, :medication, :dose, :reminder, :time, keyword_init: true)
 
   def initialize(household, now: Time.current)
     @household = household
@@ -43,17 +49,55 @@ class HouseholdReminders
   private
 
   def routine_items(local, reminders)
-    return [] unless SEND_HOURS.cover?(local.hour)
+    waking = SEND_HOURS.cover?(local.hour)
+    routine_dues.flat_map do |routine, last|
+      if routine.mode_set_times? then set_time_items(routine, last, reminders)
+      elsif !waking then []
+      elsif routine.hourly? then [ hourly_item(routine, last, reminders) ].compact
+      else [ daily_item(routine, last, local, reminders) ].compact
+      end
+    end
+  end
 
-    routine_dues.filter_map do |routine, due_on, last|
-      next if due_on > local.to_date
+  def daily_item(routine, last, local, reminders)
+    due_on = routine.due_on(last)
+    return if due_on > local.to_date
 
-      key = CareReminder.routine_key(routine, due_on)
+    key = CareReminder.routine_key(routine, due_on)
+    reminder = reminders[key]
+    if reminder.nil?
+      Item.new(kind: :routine, key: key, due_on: due_on, routine: routine, last: last)
+    elsif reminder.follow_up_sent_at.nil? && local.to_date >= reminder.sent_at.in_time_zone(local.time_zone).to_date + FOLLOW_UP_AFTER
+      Item.new(kind: :follow_up, key: key, due_on: due_on, routine: routine, last: last, reminder: reminder)
+    end
+  end
+
+  def hourly_item(routine, last, reminders)
+    due_at = routine.due_at(last).in_time_zone(@zone)
+    return if due_at > @now
+
+    key = CareReminder.routine_key(routine, due_at)
+    reminder = reminders[key]
+    if reminder.nil?
+      Item.new(kind: :routine, key: key, due_on: due_at.to_date, routine: routine, last: last)
+    elsif reminder.follow_up_sent_at.nil? && @now >= reminder.sent_at + routine.every_hours.hours
+      Item.new(kind: :follow_up, key: key, due_on: due_at.to_date, routine: routine, last: last, reminder: reminder)
+    end
+  end
+
+  # Set times that have come and aren't done: once at the time (within its late
+  # window, so an old one isn't sent after a pause), and once more 2 hours later.
+  def set_time_items(routine, last, reminders)
+    today = @now.in_time_zone(@zone).to_date
+    routine.slots([ today - 1, today ]).filter_map do |slot|
+      next if slot.done? || slot.at > @now
+
+      key = CareReminder.routine_key(routine, slot.at)
       reminder = reminders[key]
       if reminder.nil?
-        Item.new(kind: :routine, key: key, due_on: due_on, routine: routine, last: last)
-      elsif reminder.follow_up_sent_at.nil? && local.to_date >= reminder.sent_at.in_time_zone(local.time_zone).to_date + FOLLOW_UP_AFTER
-        Item.new(kind: :follow_up, key: key, due_on: due_on, routine: routine, last: last, reminder: reminder)
+        Item.new(kind: :routine, key: key, due_on: slot.at.to_date, routine: routine, last: last, time: slot.time) if @now < slot.to
+      elsif reminder.follow_up_sent_at.nil? && @now >= slot.at + SET_TIME_FOLLOW_UP && @now < slot.at + SET_TIME_FOLLOW_UP + 1.hour
+        Item.new(kind: :follow_up, key: key, due_on: slot.at.to_date, routine: routine, last: last, reminder: reminder, time: slot.time)
       end
     end
   end
@@ -65,11 +109,11 @@ class HouseholdReminders
     end
   end
 
-  # [routine, due day, latest record] for the household's active spots.
+  # [routine, latest record] for the household's active spots.
   def routine_dues
     @routine_dues ||= CareRoutine.joins(:care_spot).merge(CareSpot.active).where(care_spots: { household_id: @household.id })
                                  .includes(care_spot: :household).order(:care_spot_id, :id)
-                                 .map { |routine| last = routine.last_done; [ routine, routine.due_on(last), last ] }
+                                 .map { |routine| [ routine, routine.last_done ] }
   end
 
   # Scheduled doses that became late within the window and have no record.

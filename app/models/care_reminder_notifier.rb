@@ -50,7 +50,9 @@ class CareReminderNotifier
       I18n.t("care_reminders.dose", pet: helpers.pet_display_name(item.medication.pet), medicine: item.medication.label, time: item.dose.time)
     else
       spot = item.routine.care_spot
-      I18n.t("care_reminders.#{item.kind}", job: helpers.care_action_label(spot, item.routine.action), spot: helpers.care_spot_name(spot), last: last_text(item.last))
+      key = item.time ? "#{item.kind}_at" : item.kind
+      I18n.t("care_reminders.#{key}", job: helpers.care_action_label(spot, item.routine.action), spot: helpers.care_spot_name(spot),
+                                      time: item.time, last: last_text(item.last))
     end
   end
 
