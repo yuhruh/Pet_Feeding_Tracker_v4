@@ -13,12 +13,52 @@
 | D — Care events and the Today page (fed, litter, water, weight) | ✅ Done (2026-09-30). Committed on `feature/households` in five parts and pushed. See [Checkpoint D result](#checkpoint-d-result-2026-09-30) |
 | E — Medications | ✅ Done (2026-10-01). Committed on `feature/households` in four parts and pushed. See [Checkpoint E result](#checkpoint-e-result-2026-10-01) |
 | F — Litter observations | ✅ Done (2026-10-01). Committed on `feature/households` in three parts and pushed. See [Checkpoint F result](#checkpoint-f-result-2026-10-01) |
-| G — Live updates and care events on the charts | Not started |
+| G — Live updates and care events on the charts | ✅ Done (2026-10-01). Committed on `feature/households` in three parts and pushed. See [Checkpoint G result](#checkpoint-g-result-2026-10-01) |
 | H — Reminders by LINE and email | Not started |
 | I — Android app push notifications (Firebase) | Not started |
 | J — Clean-up, docs, CI, merge | Not started |
 
 **Commits:** each checkpoint is committed on `feature/households` once `bin/rails test` passes, then pushed. Merged into `main` only when you ask.
+
+## Checkpoint G result (2026-10-01)
+
+**What people see now:**
+- **Live updates:** a tap, a change of time, details, an undo, a tracker, a medication or a litter box or water spot change in a household appears on everyone's **Today page** and on its **viewer pages** within a moment, without reloading; the page keeps its scroll position.
+- **Your saved notice stays open** (Undo, Change time, Add details, the water checkboxes) when someone else's change refreshes your page.
+- **Charts** (the cat's trackers page and the viewer page): **⚖️ weights** join the weight line (averaged with the trackers' weights that day), and a new **"Care by day"** chart: 🍽 Fed (taps), 🚽 Litter jobs and 💧 Water jobs (the household's), 💊 Doses given, 💊 Couldn't give and 🔍 Litter observations (this cat's). The public share page is unchanged.
+- **Household page:** **Care records → Download care records (CSV)** (owner only): date, time, type, cat, litter box or water spot, jobs, details, weight, note, recorded by, changed; in the household's time zone, undone taps left out.
+- In English, Japanese and Traditional Chinese.
+
+**Main files:** `RefreshesHouseholdPages` (in `CareEvent`, `Tracker`, `Medication`, `CareSpot`; `CareEvent#undo!` too), `ApplicationCable::Connection`, `keep_on_refresh_controller.js`, `today/show`, `viewer_pages/show`, `CareChart`, `TrackersCalculable` (`care:`), `shared/_care_chart`, `CareRecordsCsv`, `CareRecordsController`; `db/migrate/20261001110000_create_solid_cable_messages.rb` (checked on PostgreSQL: up, down, up).
+
+**Decisions made while building:** as in the [build plan](#checkpoint-g-build-plan-2026-10-01), plus:
+- **Production had no Solid Cable table** although `config/cable.yml` named Solid Cable, so the plan's "production already runs it" was wrong; the migration adds it to the shared database.
+- **A day with only a weight now has its place on the amount chart** (in date order), so ⚖️ weights recorded on days without trackers show up.
+- **The refresh broadcasts are jobs** (Solid Queue in production, on the worker), sent once for many changes in a row.
+
+**Also fixed in this round:** on the household page, the litter box and water spot rows overflowed their list on phones, and the "Add" and viewer-link forms ran off the page from 480px up: the name fields took their width from their 40-character limit. A browser test checks 320, 375, 600 and 800px.
+
+**Checks:**
+- **14 new tests** and **2 browser tests**. Refreshes: a care record (saved, changed, undone), a tracker, a medication and a care spot refresh their household only, and a refresh carries no data. Cable: a signed-in person connects as themselves, a viewer page without an account; a signed household stream is accepted and a made-up one refused. Pages: Today listens to each of its households and the notice keeps itself on others' refreshes; the viewer page listens to its household only and keeps its charts. Charts: care counted per local day (household litter and water, the cat's own feedings, doses and observations; undone taps and other cats left out; date limits), weights averaged into the weight line in date order, the care chart on the trackers and viewer pages but not on the share page or without care. CSV: columns, details, time zone, undone taps left out, caregivers refused. The **browser test** opens three browsers: the owner taps Fed, Mom scoops; the owner's Today and the viewer page show it without reloading, the owner's notice stays open; Mom moves the time back 10 minutes and the viewer page follows.
+- `bin/rails test`: 415 runs, 0 failures. `bin/rails test:system`: 37 runs, 0 failures. RuboCop and Brakeman clean.
+
+## Checkpoint G build plan (2026-10-01)
+
+| Part | Build |
+|---|---|
+| 1. Live updates | Each change in a household (a care record saved, changed or undone; a tracker; a medication; a litter box or water spot) sends a **page refresh** to that household over Turbo Streams. The Today page listens to each household it shows, the viewer page to its household; they refresh in place (morphing, scroll kept) |
+| 2. Production | **Solid Cable's table is created by a migration**: production's database has no `solid_cable_messages` yet (only Solid Queue's and Solid Cache's), so live updates wouldn't work there. Cable connections are allowed without signing in, for the viewer page; stream names are signed, so a page only hears the household it was given |
+| 3. Charts | **Weight** from ⚖️ records joins the weight line. A **"Care by day"** chart under the amount chart (trackers page and viewer page): per day, litter jobs and water jobs (the household's), this cat's doses given and not given, and this cat's litter observations |
+| 4. CSV | **Download care records (CSV)** on the household page, owner only: every record (not undone), in the household's time zone |
+| 5. Checks | Tests for the broadcasts, the cable connection, the charts and the CSV; a browser test with two sessions (a caregiver taps, the owner's Today page and a viewer page show it without reloading) |
+
+**Decisions for G:**
+- **A refresh carries no data**: each page asks the server again, so everyone still sees only what their role allows (viewers no notes, no buttons).
+- **Your own tap doesn't refresh your page twice**: Turbo skips the refresh a page caused itself.
+- **The saved notice stays open** (Undo, Change time, Add details, the water checkboxes) when someone else's change refreshes the page; it closes when you leave the page or tap again.
+- **The viewer page's chart isn't redrawn by a live update** (the status and timeline are); it updates when the page is reloaded or another cat or range is picked.
+- **The public share link** (the owner's per-cat share page) stays feeding records only: no care chart.
+- **Many changes at once** (a CSV import, deleting a cat) send one refresh, not one per record.
 
 ## Checkpoint F result (2026-10-01)
 
@@ -668,7 +708,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 | D | ✅ Done — `care_events`; Today page with litter-box and water-spot rows and cat cards; one-tap fed, scooped, full change, refilled, cleaned, filter changed (several actions in one record, with checkboxes in the notice); weight form; change time; feeding "Add details" with suggestions by food type; "Add to trackers"; undo; double-tap guard; status and today's timeline on the viewer page; managing boxes and water spots | Browser test: caregiver taps Fed and adds details, refills and cleans the fountain in one record, changes a time, undoes a tap; owner adds a feeding to trackers; the viewer link shows the new records with no buttons; tests that every save refuses a household mismatch (record, food bag, box, water spot, medication) and a person without rights in that household |
 | E | ✅ Done — `medications`; meds button with Given / Couldn't give; due / given / overdue | Doses shown per schedule; double dose guarded |
 | F | ✅ Done — Litter observations in "Add details" (optional fields; which cat) | Old records unchanged; observations show on the timeline and, with a cat, in that cat's history |
-| G | Turbo Streams broadcast (Today pages and viewer pages); care events on charts and in CSV | Two browser sessions: a tap in one appears in the other, including on a viewer page |
+| G | ✅ Done — Turbo Streams broadcast (Today pages and viewer pages); care events on charts and in CSV | Two browser sessions: a tap in one appears in the other, including on a viewer page |
 | H | `care_routines`, `care_reminders`; interval settings per spot and job; "due" on the Today page; hourly reminder job; LINE, else email; per-member on/off; overdue meds | A due routine is sent once at 9am local time, one follow-up 2 days later, none after it's recorded; viewers never get one; doing the job early moves the due date |
 | I | Firebase in the Android app (FCM SDK, notification permission, token registration); `device_tokens`; sending through FCM HTTP v1; fallback to LINE or email | A reminder arrives as an Android notification and opens the Today page; an invalid token falls back to LINE or email |
 | J | Remove `pets.user_id` / `dry_foods.user_id`; docs (README, ARCHITECTURE, USAGE) | CI green; merged into `main` when you ask |
@@ -697,6 +737,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 
 ## Change log
 
+- **Checkpoint G (2026-10-01):** live updates on Today and viewer pages (Solid Cable, with its missing production table added), the saved notice kept open on others' refreshes, ⚖️ weights on the weight line, the "Care by day" chart, and the owner's care records CSV. Fixed the household page's forms overflowing on small screens.
 - **Checkpoint F (2026-10-01):** litter observations (which cat, pee, poops, stool, something unusual) on a litter record's details page, on the timeline and viewer page (diarrhea and anything unusual in red), and in the cat's history for 30 days.
 - **Checkpoint E (2026-10-01):** medications per cat (owner), 💊 with Given / Couldn't give and a reason, due / given / couldn't give / overdue on Today and the viewer page, the double-dose question, and the owner's one-off medicine.
 - **Checkpoint D (2026-09-30):** one-tap care on the Today page (fed, weight, litter, water), undo, quick time changes, water checkboxes, the double-tap guard, today's timeline with trackers, details with suggestions by food type, Add to trackers, status and timeline on the viewer page, and managing litter boxes and water spots. Fixed the viewer link Copy button.
