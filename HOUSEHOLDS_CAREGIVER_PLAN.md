@@ -11,7 +11,7 @@
 | B — Access by household and role | ✅ Done (2026-09-30). Committed on `feature/households` and pushed. See [Checkpoint B result](#checkpoint-b-result-2026-09-30) |
 | C — Caregiver invitations, viewer links, members, transfer ownership | ✅ Done (2026-09-30). Committed on `feature/households` in five parts and pushed. See [Checkpoint C result](#checkpoint-c-result-2026-09-30) |
 | D — Care events and the Today page (fed, litter, water, weight) | ✅ Done (2026-09-30). Committed on `feature/households` in five parts and pushed. See [Checkpoint D result](#checkpoint-d-result-2026-09-30) |
-| E — Medications | In progress. See [Checkpoint E build plan](#checkpoint-e-build-plan-2026-10-01) |
+| E — Medications | ✅ Done (2026-10-01). Committed on `feature/households` in four parts and pushed. See [Checkpoint E result](#checkpoint-e-result-2026-10-01) |
 | F — Litter observations | Not started |
 | G — Live updates and care events on the charts | Not started |
 | H — Reminders by LINE and email | Not started |
@@ -19,6 +19,29 @@
 | J — Clean-up, docs, CI, merge | Not started |
 
 **Commits:** each checkpoint is committed on `feature/households` once `bin/rails test` passes, then pushed. Merged into `main` only when you ask.
+
+## Checkpoint E result (2026-10-01)
+
+**What people see now:**
+- **Medications page per cat** (owner only; from the cat's profile and the 💊 panel): add a medication with a name, dose, up to 4 times a day (none = as needed), start and optional end date; change it; **Stop** it (it leaves Today; its past doses stay, and it's listed under "Stopped").
+- **On the Today page**, under each cat: every medication with today's doses, e.g. "💊 Clavamox 1 tablet: 08:00 given by Mom at 08:05 · 20:00 due", in colour: given (green), couldn't give with the reason (amber), **overdue** an hour after the dose time (red), due (grey). As-needed: "as needed, last given yesterday 21:00 by Mom".
+- **💊 Meds** (cats with medications) opens the confirmation: "Give Aji Clavamox 1 tablet (20:00 dose)?" with **Given**, or a reason (refused, spat it out, vomited, other) and **Couldn't give**. Today's unrecorded doses are listed, the closest to now first, then as-needed medications. A recorded dose isn't offered again. The saved notice has Undo, the quick time changes and Add details, as for other care.
+- **Double dose:** "Mom already gave Aji Clavamox 1 tablet (20:00) at 19:55. Record it again?"
+- **The owner's "Other medicine"** in the 💊 panel (on any cat): a name and dose, recorded as given.
+- **Timeline:** "💊 Aji: Clavamox 1 tablet (20:00), given · Mom" or "couldn't give (spat it out)". The details page can change the outcome and reason.
+- **Viewer page:** the same dose statuses and timeline, without the 💊 panel.
+
+**Main files:** `Medication` (schedule, `doses_on`, overdue), `CareEvent` (meds checks: the cat's own medication, one of its times, status and reason, one-off medicine name; `recent_dose`), `MedicationsController`, `medications/index`, `care_events/_meds_panel`, `_meds_status`; `db/migrate/20261001100000_create_medications.rb` (checked on PostgreSQL: migrate, rollback, migrate).
+
+**Decisions made while building:** as in the [build plan](#checkpoint-e-build-plan-2026-10-01), plus:
+- **A missed dose never blocks another**: only a dose recorded as **given** triggers the double-dose question.
+- **A dose is matched to its day by when it was recorded**, in the household's time zone.
+- **A medication with recorded doses can't be deleted**, only stopped; deleting the cat removes its medications and doses.
+
+**Checks:**
+- **18 new tests** and **1 browser test**. Model: times tidied and checked (up to 4, HH:MM), dates in order, active days, each dose due, given, couldn't give or overdue, the dose record's checks (status, reason, a time of that medication, the cat's own medication, a one-off needs a name), double doses (scheduled, as needed, one-off), stop instead of delete. Pages: the owner adds, changes and stops medications; bad input explained; caregivers, viewers and outsiders can't change the list (also two new rows in the role × page matrix); doses on Today (order, statuses, notice, timeline); couldn't give with a reason; the double-dose question; no 💊 for a caregiver on a cat without medications, the owner's one-off medicine; as-needed; another cat's or a stopped medication and a wrong time refused; changing the outcome; the viewer page. The **browser test**: the owner adds a medication with two times; Mom gives the current dose, which is then no longer offered, and records the other as "couldn't give (spat it out)"; the viewer link shows both. The **CSP** browser test also loads the medications page.
+- One run of the whole browser suite failed once on the first page after sign-in (an earlier care test, passing on its own and in the next two full runs); those tests now wait up to 10 seconds for it.
+- `bin/rails test`: 387 runs, 0 failures. `bin/rails test:system`: 34 runs, 0 failures. RuboCop and Brakeman clean.
 
 ## Checkpoint E build plan (2026-10-01)
 
@@ -605,7 +628,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 | B | `Pet.accessible_by`, `HouseholdPolicy`; replace every lookup listed above; food-bag rule by household; jobs, mailers and brand names via the household's owner | ✅ Done — role × page matrix (owner, caregiver, viewer, outsider on 22 pages and actions); all existing tests unchanged |
 | C | ✅ Done — Caregiver invitations and the join page (prefilled email, Google / LINE); the new landing rules (caregivers and people in several households land on Today; new users with no household still get "Add A Cat"); "Add my own cat" under Account; menus and cat lists grouped by household; the caregiver menu; viewer links (create, name, expiry, turn off) and the viewer page with charts; member list, removing, leaving; transfer ownership; account deletion asks to transfer | Invite → join → caregiver role applies; expired, reused and wrong-email invitations refused; a viewer link opens only its household's viewer page, and stops at once when turned off or expired; signing in from a viewer link adds a viewer membership; transfer swaps owner and caregiver in one transaction |
 | D | ✅ Done — `care_events`; Today page with litter-box and water-spot rows and cat cards; one-tap fed, scooped, full change, refilled, cleaned, filter changed (several actions in one record, with checkboxes in the notice); weight form; change time; feeding "Add details" with suggestions by food type; "Add to trackers"; undo; double-tap guard; status and today's timeline on the viewer page; managing boxes and water spots | Browser test: caregiver taps Fed and adds details, refills and cleans the fountain in one record, changes a time, undoes a tap; owner adds a feeding to trackers; the viewer link shows the new records with no buttons; tests that every save refuses a household mismatch (record, food bag, box, water spot, medication) and a person without rights in that household |
-| E | `medications`; meds button with Given / Couldn't give; due / given / overdue | Doses shown per schedule; double dose guarded |
+| E | ✅ Done — `medications`; meds button with Given / Couldn't give; due / given / overdue | Doses shown per schedule; double dose guarded |
 | F | Litter observations in "Add details" (optional fields; which cat) | Old records unchanged; observations show on the timeline and, with a cat, in that cat's history |
 | G | Turbo Streams broadcast (Today pages and viewer pages); care events on charts and in CSV | Two browser sessions: a tap in one appears in the other, including on a viewer page |
 | H | `care_routines`, `care_reminders`; interval settings per spot and job; "due" on the Today page; hourly reminder job; LINE, else email; per-member on/off; overdue meds | A due routine is sent once at 9am local time, one follow-up 2 days later, none after it's recorded; viewers never get one; doing the job early moves the due date |
@@ -636,6 +659,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 
 ## Change log
 
+- **Checkpoint E (2026-10-01):** medications per cat (owner), 💊 with Given / Couldn't give and a reason, due / given / couldn't give / overdue on Today and the viewer page, the double-dose question, and the owner's one-off medicine.
 - **Checkpoint D (2026-09-30):** one-tap care on the Today page (fed, weight, litter, water), undo, quick time changes, water checkboxes, the double-tap guard, today's timeline with trackers, details with suggestions by food type, Add to trackers, status and timeline on the viewer page, and managing litter boxes and water spots. Fixed the viewer link Copy button.
 - **Checkpoint C (2026-09-30):** household page (members, invitations, viewer links), join page with Google / LINE, landing rules, a first Today page, grouped and smaller menus, leaving and "Add my own cat", the viewer page with charts, transfer ownership, and account deletion asking to hand over first. Today's buttons and the viewer page's status and timeline come in D.
 - **Checkpoint B (2026-09-30):** access by household and role on every page; CSV export and the pet profile are owner-only; refused actions say "Only Aji's owner can do that."
