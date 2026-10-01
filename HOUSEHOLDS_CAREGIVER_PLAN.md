@@ -28,22 +28,32 @@
 - **The double-tap guard asks "Record it again?" for the same litter job within 2 hours**, which gets in the way when a second cat uses the box soon after.
 - **The Today row shows only the last scoop** ("scooped 15:20 by Mom"), not how many times it was done today.
 
-**The fix:**
+**Two kinds of reminder, the owner picks one per job.** Whichever is picked, every tap still records **when it was actually done and by whom** ("scooped 15:20 by Mom"), as since checkpoint D: "Change time" and "Add details" fix a late tap, and the Today row, timeline, "Care by day" chart and CSV show the real times. The reminder only reads those records.
+
+| | **A. Every … after it was last done** | **B. At set times** |
+|---|---|---|
+| Owner sets | 3 times a day (8 hours), twice a day (12 hours), daily, twice a week, weekly, every 2 weeks, twice a month, monthly, or custom hours or days | Up to **6 times of day**, e.g. 08:00 and 20:00 (like medication times) |
+| Due | The last time it was done + the interval. Under 24 hours: to the minute ("due at 20:00"); 24 hours or more: a day, as in H ("due today", "in 3 days") | Each set time, unless it was done since the previous set time (a scoop at 19:40 counts for 20:00; the 08:00 slot looks back to last night's 20:00) |
+| Doing it early | Moves the next due time | Covers the next set time only |
+| Reminder | Once when due, between 9am and 9pm in the person's time zone (overnight waits for 9am); one follow-up after one more interval (under a day) or 2 days later (a day or more), then nothing until it's done | Once at each set time that isn't covered, at that time (the owner chose it, so no 9am–9pm limit); one follow-up 2 hours later if still not done |
+| Today row | "🚽 Scooped due at 20:00" / "overdue since 20:00" / "due in 3 days" | Like doses: "🚽 08:00 ✓ 07:55 by Mom · 20:00 due" (done green, due grey, late red after an hour) |
+
+**Build:**
 
 | Part | Build |
 |---|---|
-| 1. Intervals in hours | `care_routines` stores the interval in **hours** (`every_hours`, filled from `every_days` × 24, then `every_days` removed). New choices for every job, before the day ones: **3 times a day (8 hours)**, **Twice a day (12 hours)**, **Daily (24 hours)**; Custom becomes "every N hours" or "every N days" |
-| 2. Due by the hour for short intervals | **Under 24 hours:** due = the last time it was done + the interval, to the minute ("🚽 Scooped due at 20:00", "overdue since 20:00"). **24 hours or more:** stays a day, as now ("due today", "in 3 days"), so "Twice a week" doesn't start meaning "Thursday 07:31" |
-| 3. Reminders for short intervals | Sent when the due time has passed, between 9am and 9pm in the person's time zone (a due time overnight waits for 9am); one follow-up after one more interval if still not done, then nothing until someone records it. The "sent once" key includes the due time (`routine:12:2026-10-05T20:00`), so each due time is reminded about once. Day intervals keep today's rules (9am, follow-up after 2 days) |
-| 4. Today row | "🚽 Scooped 3× today · last 15:20 by Mom", plus the due line. Same on the viewer page |
+| 1. Data | `care_routines` gets `mode` (`interval` · `times`), the interval in **hours** (`every_hours`, filled from `every_days` × 24, then `every_days` removed) and `times` (a list of "HH:MM", up to 6). Existing routines become `interval` with the same length, so nothing changes for them. The "sent once" key includes the due time (`routine:12:2026-10-05T20:00`) |
+| 2. Settings | Household page, one line per job: **[Off · Every … · At set times]**; "Every …" shows the interval choices, "At set times" shows up to 6 time fields (the other fields hide; without JavaScript both show and only the chosen one is saved) |
+| 3. Due and reminders | `CareRoutine#next_due` for both kinds; `HouseholdReminders` sends each kind by its rules above |
+| 4. Today row | "Scooped 3× today · last 15:20 by Mom", plus the due line (A) or the set times with their status (B). Same on the viewer page |
 | 5. Double-tap guard | The same litter job within **30 minutes** (instead of 2 hours) asks "Record it again?"; water and feeding stay at 30 minutes |
-| 6. Checks | Tests: hours stored and the old day intervals moved over unchanged; due times under 24 hours (scooping early moves it, overnight waits for 9am, one follow-up after one more interval); day intervals unchanged; "3× today"; the 30-minute guard; a browser test setting "Twice a day" and seeing the due time move after a scoop |
+| 6. Checks | Tests: existing intervals moved over unchanged; A under 24 hours (doing it early moves it, overnight waits for 9am, one follow-up after one more interval); A of days unchanged; B (a slot covered by a record since the previous set time, the first slot looking back to yesterday, once per set time, one follow-up 2 hours later, any hour); switching kind; "3× today"; the 30-minute guard; a browser test setting "At set times 08:00, 20:00" on one box and "Twice a day" on another |
 
 **Decisions for H2 (recommended; change any before building):**
-- **Intervals under a day are for any job**, not just scooping (e.g. "refill the bowl twice a day"), since it's the same setting.
-- **No reminders between 9pm and 9am**, even for an 8-hour interval: a box due at 23:00 is reminded about at 9am.
-- **The interval counts from the last time it was done**, not from fixed clock times ("08:00 and 20:00"). Fixed times would be a separate setting, like medications; not planned unless you want it.
-- **Existing intervals keep working**: "Weekly" stays 7 days, and nothing is re-sent for a due day already reminded about.
+- **Both kinds work for any job**, not only scooping (e.g. "refill the bowl at 08:00 and 18:00").
+- **A never reminds between 9pm and 9am; B reminds at the times the owner set**, whatever they are.
+- **B looks back to the previous set time**: one scoop between 08:00 and 20:00 covers 20:00, however early it was. A scoop isn't counted twice for two set times.
+- **Changing kind or times starts fresh**: nothing already sent is sent again, and the new rules apply from the next due time.
 
 ## Checkpoint H result (2026-10-01)
 
@@ -775,7 +785,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 | F | ✅ Done — Litter observations in "Add details" (optional fields; which cat) | Old records unchanged; observations show on the timeline and, with a cat, in that cat's history |
 | G | ✅ Done — Turbo Streams broadcast (Today pages and viewer pages); care events on charts and in CSV | Two browser sessions: a tap in one appears in the other, including on a viewer page |
 | H | ✅ Done — `care_routines`, `care_reminders`; interval settings per spot and job; "due" on the Today page; hourly reminder job; LINE, else email; per-member on/off; overdue meds | A due routine is sent once at 9am local time, one follow-up 2 days later, none after it's recorded; viewers never get one; doing the job early moves the due date |
-| H2 | Intervals in hours (3 times a day, twice a day, daily, custom hours); due times under 24 hours; reminders for them between 9am and 9pm with one follow-up; "3× today" on the Today row; the litter double-tap guard at 30 minutes | A box set to "Twice a day" and scooped at 08:00 is due at 20:00 and reminded about once then; scooping at 15:00 moves it to 03:00, reminded at 9am; existing day intervals unchanged |
+| H2 | Per job, the owner picks **A. every …** (now also in hours: 3 times a day, twice a day, daily, custom) or **B. at set times** (up to 6); due times and reminders for both; "3× today" and set-time statuses on the Today row; the litter double-tap guard at 30 minutes | A: "Twice a day", scooped at 08:00, due and reminded at 20:00; scooped at 15:00 instead, due 03:00, reminded at 9am. B: 08:00 and 20:00, a scoop at 19:40 covers 20:00, an uncovered 20:00 is reminded once at 20:00 with one follow-up at 22:00. Existing day intervals unchanged |
 | I | Firebase in the Android app (FCM SDK, notification permission, token registration); `device_tokens`; sending through FCM HTTP v1; fallback to LINE or email | A reminder arrives as an Android notification and opens the Today page; an invalid token falls back to LINE or email |
 | J | Remove `pets.user_id` / `dry_foods.user_id`; docs (README, ARCHITECTURE, USAGE) | CI green; merged into `main` when you ask |
 
@@ -803,7 +813,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 
 ## Change log
 
-- **v7 (2026-10-01):** planned **H2**: litter boxes scooped several times a day. Intervals in hours (3 times a day, twice a day, daily), due times under 24 hours with reminders between 9am and 9pm, "3× today" on the Today row, and the litter "Record it again?" question after 30 minutes instead of 2 hours.
+- **v7 (2026-10-01):** planned **H2**: litter boxes scooped several times a day. Per job the owner picks **every …** (now also 3 times a day, twice a day, daily or custom hours, counted from the last time it was done) or **at set times** (up to 6, e.g. 08:00 and 20:00, like medications); every tap still records the actual time and person; "3× today" and set-time statuses on the Today row; the litter "Record it again?" question after 30 minutes instead of 2 hours.
 
 - **Checkpoint H (2026-10-01):** reminder intervals per litter box and water spot job, due dates on Today, each owner's and caregiver's reminders switch, and the hourly job sending due jobs at 9am local time (one follow-up after 2 days) and overdue doses, by LINE or email.
 - **Checkpoint G (2026-10-01):** live updates on Today and viewer pages (Solid Cable, with its missing production table added), the saved notice kept open on others' refreshes, ⚖️ weights on the weight line, the "Care by day" chart, and the owner's care records CSV. Fixed the household page's forms overflowing on small screens.
