@@ -1,0 +1,7 @@
+<ul>
+  <% @lines.each do |line| %>
+    <li><%= line %></li>
+  <% end %>
+</ul>
+<p><%= link_to t(".open_today"), @today_url %></p>
+<p style="color: #6b7280; font-size: 12px;"><%= t(".fine_print") %></p>
