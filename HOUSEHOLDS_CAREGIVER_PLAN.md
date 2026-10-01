@@ -15,12 +15,46 @@
 | F — Litter observations | ✅ Done (2026-10-01). Committed on `feature/households` in three parts and pushed. See [Checkpoint F result](#checkpoint-f-result-2026-10-01) |
 | G — Live updates and care events on the charts | ✅ Done (2026-10-01). Committed on `feature/households` in three parts and pushed. See [Checkpoint G result](#checkpoint-g-result-2026-10-01) |
 | H — Reminders by LINE and email | ✅ Done (2026-10-01). Committed on `feature/households` in four parts and pushed. See [Checkpoint H result](#checkpoint-h-result-2026-10-01) |
-| H2 — Litter several times a day | Planned, waiting for your go-ahead. See [Checkpoint H2 plan](#checkpoint-h2-plan-litter-several-times-a-day-2026-10-01) |
-| H3 — Delete a mistaken record | Planned, waiting for your go-ahead. See [Checkpoint H3 plan](#checkpoint-h3-plan-delete-a-mistaken-record-2026-10-02) |
+| H2 — Litter several times a day | ✅ Done (2026-10-02). Committed on `feature/households` and merged into `main`. See [Checkpoint H2 result](#checkpoint-h2-result-2026-10-02) |
+| H3 — Delete a mistaken record | ✅ Done (2026-10-02). Committed on `feature/households` and merged into `main`. See [Checkpoint H3 result](#checkpoint-h3-result-2026-10-02) |
 | I — Android app push notifications (Firebase) | Not started |
 | J — Clean-up, docs, CI, merge | Not started |
 
 **Commits:** each checkpoint is committed on `feature/households` once `bin/rails test` passes, then pushed. Merged into `main` only when you ask.
+
+## Checkpoint H3 result (2026-10-02)
+
+**What people see now:**
+- **Delete** next to **Change** on each timeline entry the person may change, and at the bottom of the record's details page: the **owner** for any record in the household, a **caregiver** for their own records for 24 hours, up to 7 days back. Viewers never see it.
+- **A confirmation first:** "Delete “Aji: fed” at 08:12? It's removed from Today, the charts and reminders." For a feeding added to trackers it adds "Aji's tracker stays; delete it on the trackers page if it's wrong too."
+- **After deleting:** "Deleted. Aji: fed at 08:12". The record leaves the timeline, the status rows ("Not fed yet today"), dose statuses (a deleted "given" makes the dose due again), the "Care by day" bars, the weight line (a ⚖️ record), the CSV and reminder due dates. Everyone's open Today pages and viewer pages update at once; the charts change when they're next opened or reloaded.
+- **A feeding added to trackers:** the tracker stays and shows on the timeline as "(tracker)".
+
+**Main files:** `CareEvent#deletable_by?`, `#delete_by!`, `CareEventsController#destroy`, `care_delete_confirm`, `care_events/_timeline`, `care_events/edit`, `HouseholdDay#trackers`; `db/migrate/20261002090000_add_deleted_by_to_care_events.rb` (checked on PostgreSQL: up, down, up).
+
+**Decisions made while building:** as in the [plan](#checkpoint-h3-plan-delete-a-mistaken-record-2026-10-02), plus:
+- **Found and fixed:** a tracker linked to an **undone** feeding was hidden from the Today timeline; only feedings still on record hide their tracker now.
+
+**Checks:** **6 tests** and **1 browser test**: a caregiver deletes their own feeding (confirmation, notice, gone from the timeline and status, who deleted it kept); the owner deletes anyone's; a caregiver not another's or one older than 24 hours; viewers and outsiders refused; a deleted record leaves Care by day, the weight line, doses, due dates and the CSV; a linked tracker stays and shows; the details page's Delete; other pages hear about it; a record can't be deleted twice. The **browser test**: Mom cancels, then confirms, deleting an accidental "Fed"; it disappears from her Today page and, live, from the owner's.
+
+## Checkpoint H2 result (2026-10-02)
+
+**What people see now:**
+- **Household page**, each job of each litter box and water spot: **[Off · 3 times a day · Twice a day · Daily · Twice a week · Weekly · Every 2 weeks · Twice a month · Monthly · Custom · At set times]**. **Custom** shows a number and **hours / days**; **At set times** shows time fields (the set times plus two empty ones, up to 6; save to add more). Each line shows only the fields its choice needs.
+- **Today row**, e.g. for a box scooped twice today: "scooped 2× today · last 15:20 by Mom", then each job's reminder line:
+  - **At set times:** "🚽 Scooped: 08:00 ✓ 07:55 by Mom · 20:00 due" (done green, due grey, "20:00 not done" red an hour after).
+  - **Every … under a day** (or not whole days): "🚽 Scooped due at 20:00" / "due tomorrow at 03:00" / "overdue since 20:00" (red).
+  - **Every … whole days:** as in H ("due today", "in 3 days", "2 days overdue").
+- **Reminders:** set times at the set time, any hour, with one follow-up 2 hours later; "every …" under a day once the due time passes, between 9am and 9pm, with one follow-up one interval later; whole days as in H. The text names the set time: "🚽 Scooped · Upstairs box: the 20:00 time. Last: 10/2 by Mom."
+- **"Record it again?"** for the same litter job only within **30 minutes** (was 2 hours).
+
+**Main files:** `CareRoutine` (`mode`, `every_hours`, `times`, `hourly?`, `due_at`, `slots`, `apply`, `custom_amount`), `HouseholdReminders` (the three kinds), `CareReminder.routine_key` (a day or a due time), `CareReminderNotifier`, `care_events/_routine_due`, `_status`, `HouseholdDay#today_counts`, `households/show`, `routine_fields_controller.js`, `CareEvent::REPEAT_WINDOWS`; `db/migrate/20261002100000_add_set_times_to_care_routines.rb` (checked on PostgreSQL: up, down, up; an existing "every 4 days" became 96 hours and back).
+
+**Decisions made while building:** as in the [plan](#checkpoint-h2-plan-litter-several-times-a-day-2026-10-01), with one change:
+- **Which set time a scoop counts for:** a scoop up to **2 hours after** a set time counts for that time (done late); anything later counts for the **next** set time (done early). Between set times closer than 4 hours, the gap is split in half. So with 08:00 and 20:00: 07:00–10:00 → 08:00, 10:00–22:00 → 20:00, 22:00–08:00 → the next 08:00. The plan's "looks back to the previous set time" would have let a late 08:30 scoop cover 20:00 and skip that evening's reminder.
+- **A set time is reminded about only within its window** (until 2 hours after it), so after a pause in sending, old set times aren't sent late.
+
+**Checks:** **12 new tests** and the reminders **browser test** reworked. Schedules: whole days as before, due to the minute under a day (never done, from the last record, other jobs ignored), set times (late and early scoops, the night before counting for 08:00, close set times splitting the gap, status due and late), set times checked (none, invalid, more than 6, tidied), the household page's choices (presets in hours, custom hours or days, set times, daily, off, a bad change leaving the old one), a bowl losing its filter reminder. Sending: twice a day (due time, once, 9am to 9pm, the follow-up an interval later waiting for 9am, due again after 9pm waiting for 9am), an early scoop moving it, set times (at 07:00 before 9am, once, follow-up 2 hours later, a scoop before the set time covering it), a late scoop stopping the follow-up, nothing after a set time's window. Pages: saving each kind, set times and custom fields shown back, a bad custom amount explained, set-time statuses and "2× today" on Today, "not done" after an hour, a due time and overdue, the 30-minute question. The **browser test**: the owner sets "At set times 08:00, 20:00" on a box, "Twice a day" and a custom 10 days on a fountain (each showing only its own fields), sees them on Today and turns reminders on.
 
 ## Checkpoint H3 plan: delete a mistaken record (2026-10-02)
 
@@ -58,7 +92,7 @@
 | | **A. Every … after it was last done** | **B. At set times** |
 |---|---|---|
 | Owner sets | 3 times a day (8 hours), twice a day (12 hours), daily, twice a week, weekly, every 2 weeks, twice a month, monthly, or custom hours or days | Up to **6 times of day**, e.g. 08:00 and 20:00 (like medication times) |
-| Due | The last time it was done + the interval. Under 24 hours: to the minute ("due at 20:00"); 24 hours or more: a day, as in H ("due today", "in 3 days") | Each set time, unless it was done since the previous set time (a scoop at 19:40 counts for 20:00; the 08:00 slot looks back to last night's 20:00) |
+| Due | The last time it was done + the interval. Under 24 hours: to the minute ("due at 20:00"); 24 hours or more: a day, as in H ("due today", "in 3 days") | Each set time, unless it was done in its window: up to 2 hours late counts for it, anything later counts for the next set time (a scoop at 19:40 counts for 20:00; one at 22:30 counts for the next morning's 08:00). *(Refined while building; see the result.)* |
 | Doing it early | Moves the next due time | Covers the next set time only |
 | Reminder | Once when due, between 9am and 9pm in the person's time zone (overnight waits for 9am); one follow-up after one more interval (under a day) or 2 days later (a day or more), then nothing until it's done | Once at each set time that isn't covered, at that time (the owner chose it, so no 9am–9pm limit); one follow-up 2 hours later if still not done |
 | Today row | "🚽 Scooped due at 20:00" / "overdue since 20:00" / "due in 3 days" | Like doses: "🚽 08:00 ✓ 07:55 by Mom · 20:00 due" (done green, due grey, late red after an hour) |
@@ -77,7 +111,7 @@
 **Decisions for H2 (recommended; change any before building):**
 - **Both kinds work for any job**, not only scooping (e.g. "refill the bowl at 08:00 and 18:00").
 - **A never reminds between 9pm and 9am; B reminds at the times the owner set**, whatever they are.
-- **B looks back to the previous set time**: one scoop between 08:00 and 20:00 covers 20:00, however early it was. A scoop isn't counted twice for two set times.
+- **Which set time a scoop counts for**: up to 2 hours after a set time, that one (late); otherwise the next one (early). A scoop isn't counted twice for two set times. *(Refined while building: the plan first said "looks back to the previous set time".)*
 - **Changing kind or times starts fresh**: nothing already sent is sent again, and the new rules apply from the next due time.
 
 ## Checkpoint H result (2026-10-01)
@@ -810,8 +844,8 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 | F | ✅ Done — Litter observations in "Add details" (optional fields; which cat) | Old records unchanged; observations show on the timeline and, with a cat, in that cat's history |
 | G | ✅ Done — Turbo Streams broadcast (Today pages and viewer pages); care events on charts and in CSV | Two browser sessions: a tap in one appears in the other, including on a viewer page |
 | H | ✅ Done — `care_routines`, `care_reminders`; interval settings per spot and job; "due" on the Today page; hourly reminder job; LINE, else email; per-member on/off; overdue meds | A due routine is sent once at 9am local time, one follow-up 2 days later, none after it's recorded; viewers never get one; doing the job early moves the due date |
-| H2 | Per job, the owner picks **A. every …** (now also in hours: 3 times a day, twice a day, daily, custom) or **B. at set times** (up to 6); due times and reminders for both; "3× today" and set-time statuses on the Today row; the litter double-tap guard at 30 minutes | A: "Twice a day", scooped at 08:00, due and reminded at 20:00; scooped at 15:00 instead, due 03:00, reminded at 9am. B: 08:00 and 20:00, a scoop at 19:40 covers 20:00, an uncovered 20:00 is reminded once at 20:00 with one follow-up at 22:00. Existing day intervals unchanged |
-| H3 | **Delete** on timeline entries and the details page (owner any record, caregiver their own for 24 hours), with a confirmation; hidden like Undo with who deleted it; a linked tracker unlinked | An accidental "Fed" deleted by the caregiver who tapped it disappears from everyone's Today, the charts, the CSV and reminders; another caregiver's record and viewers refused |
+| H2 | ✅ Done — Per job, the owner picks **A. every …** (now also in hours: 3 times a day, twice a day, daily, custom) or **B. at set times** (up to 6); due times and reminders for both; "3× today" and set-time statuses on the Today row; the litter double-tap guard at 30 minutes | A: "Twice a day", scooped at 08:00, due and reminded at 20:00; scooped at 15:00 instead, due 03:00, reminded at 9am. B: 08:00 and 20:00, a scoop at 19:40 covers 20:00, an uncovered 20:00 is reminded once at 20:00 with one follow-up at 22:00. Existing day intervals unchanged |
+| H3 | ✅ Done — **Delete** on timeline entries and the details page (owner any record, caregiver their own for 24 hours), with a confirmation; hidden like Undo with who deleted it; a linked tracker unlinked | An accidental "Fed" deleted by the caregiver who tapped it disappears from everyone's Today, the charts, the CSV and reminders; another caregiver's record and viewers refused |
 | I | Firebase in the Android app (FCM SDK, notification permission, token registration); `device_tokens`; sending through FCM HTTP v1; fallback to LINE or email | A reminder arrives as an Android notification and opens the Today page; an invalid token falls back to LINE or email |
 | J | Remove `pets.user_id` / `dry_foods.user_id`; docs (README, ARCHITECTURE, USAGE) | CI green; merged into `main` when you ask |
 
@@ -839,6 +873,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 
 ## Change log
 
+- **Checkpoints H2 and H3 (2026-10-02):** reminders per job either **every …** (hours or days) or **at set times** (up to 6), with set-time statuses, due times and "N× today" on the Today row, and the litter "Record it again?" question after 30 minutes; **Delete** for a mistaken record (owner any, caregiver their own for 24 hours), hidden everywhere with who deleted it.
 - **v8 (2026-10-02):** planned **H3**: a **Delete** button on today's records (and the details page) for the owner (any record) and caregivers (their own, for 24 hours), with a confirmation, for taps made by mistake; the record is hidden everywhere, and a feeding added to trackers leaves the tracker in place.
 - **v7 (2026-10-01):** planned **H2**: litter boxes scooped several times a day. Per job the owner picks **every …** (now also 3 times a day, twice a day, daily or custom hours, counted from the last time it was done) or **at set times** (up to 6, e.g. 08:00 and 20:00, like medications); every tap still records the actual time and person; "3× today" and set-time statuses on the Today row; the litter "Record it again?" question after 30 minutes instead of 2 hours.
 
