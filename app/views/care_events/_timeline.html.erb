@@ -1,4 +1,4 @@
-<%# Today's records in one household, newest first. Links to change a record only where the reader may. %>
+<%# The last 24 hours of records in one household, newest first. Links to change or delete a record only where the reader may. %>
 <% entries = day.timeline %>
 <div class="mt-4">
   <h3 class="font-semibold text-lg mb-2"><%= t("care_events.timeline.title") %></h3>
@@ -8,7 +8,7 @@
     <ol class="space-y-1 text-sm">
       <% entries.each do |entry| %>
         <li class="flex flex-wrap gap-x-2" <%= "id=#{dom_id(entry.event)}" if entry.event %>>
-          <span class="font-mono text-gray-500"><%= care_time(entry.at, day.zone) %></span>
+          <span class="font-mono text-gray-500"><%= care_when(entry.at, day) %></span>
           <% if (event = entry.event) %>
             <span>
               <%= CareEventsHelper::KIND_ICONS[event.kind] %> <%= care_event_summary(event) %> · <%= care_person(event.actor) %>

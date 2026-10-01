@@ -236,8 +236,8 @@ zh-TW:
       not_fed: "今天還沒餵"
       weight: "%{kg} kg（%{when}）"
     timeline:
-      title: "今天"
-      empty: "今天還沒有紀錄。"
+      title: "過去 24 小時"
+      empty: "過去 24 小時沒有紀錄。"
       changed: "（已修改）"
       change: "修改"
       delete: "刪除"

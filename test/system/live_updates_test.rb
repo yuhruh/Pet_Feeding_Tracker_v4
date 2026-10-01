@@ -40,7 +40,7 @@ class LiveUpdatesTest < ApplicationSystemTestCase
   test "a caregiver's taps appear on the owner's Today page and the viewer page without reloading" do
     using_session(:viewer) do
       visit viewer_page_url(token: @link.token, locale: LOCALE)
-      assert_text "Nothing recorded today yet."
+      assert_text "Nothing recorded in the last 24 hours."
       mark_page
     end
 

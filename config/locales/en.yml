@@ -236,8 +236,8 @@ en:
       not_fed: "Not fed yet today"
       weight: "%{kg} kg (%{when})"
     timeline:
-      title: "Today"
-      empty: "Nothing recorded today yet."
+      title: "Last 24 hours"
+      empty: "Nothing recorded in the last 24 hours."
       changed: "(changed)"
       change: "Change"
       delete: "Delete"

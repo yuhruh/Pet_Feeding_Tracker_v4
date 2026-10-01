@@ -139,4 +139,27 @@ class DeleteCareRecordsTest < ActionDispatch::IntegrationTest
     assert_equal I18n.t("care_events.not_found"), flash[:alert]
     assert_equal @mom, @fed.reload.deleted_by
   end
+
+  test "the timeline covers the last 24 hours, so last night's tap can be deleted the next morning" do
+    today = Time.current.in_time_zone(@zone).to_date
+    late = CareEvent.create!(kind: :fed, pet: @pet, actor: @owner, occurred_at: @zone.local(today.year, today.month, today.day, 0, 0) - 10.minutes)
+    @fed.update_columns(occurred_at: 2.days.ago, created_at: 2.days.ago)
+    morning = @zone.local(today.year, today.month, today.day, 7, 0)
+
+    travel_to(morning) do
+      log_in_as(@owner)
+      get today_url(**L)
+      assert_select "h3", text: "Last 24 hours"
+      assert_select "##{dom_id(late)}", text: /yesterday 23:50\s+🍽 Aji: fed · Userone/
+      assert_select "##{dom_id(late)} input[name=_method][value=delete]"
+      assert_select "##{dom_id(@fed)}", count: 0, message: "older than 24 hours"
+      assert_select "##{dom_id(@pet, :care)}", text: /Not fed yet today/, message: "the status is still about today"
+    end
+
+    travel_to(late.occurred_at + 24.hours + 5.minutes) do
+      log_in_as(@owner)
+      get today_url(**L)
+      assert_select "##{dom_id(late)}", count: 0, message: "gone 24 hours after it was recorded"
+    end
+  end
 end

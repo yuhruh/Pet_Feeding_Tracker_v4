@@ -236,8 +236,8 @@
       not_fed: "今日はまだごはんの記録がありません"
       weight: "%{kg} kg（%{when}）"
     timeline:
-      title: "今日の記録"
-      empty: "今日はまだ記録がありません。"
+      title: "過去24時間"
+      empty: "過去24時間の記録はありません。"
       changed: "（変更あり）"
       change: "変更"
       delete: "削除"

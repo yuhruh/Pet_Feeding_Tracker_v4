@@ -30,6 +30,8 @@
 - **After deleting:** "Deleted. Aji: fed at 08:12". The record leaves the timeline, the status rows ("Not fed yet today"), dose statuses (a deleted "given" makes the dose due again), the "Care by day" bars, the weight line (a ⚖️ record), the CSV and reminder due dates. Everyone's open Today pages and viewer pages update at once; the charts change when they're next opened or reloaded.
 - **A feeding added to trackers:** the tracker stays and shows on the timeline as "(tracker)".
 
+**Follow-up (2026-10-02): the timeline shows the last 24 hours.** It stopped at midnight, so a tap at 23:50 couldn't be reached the next morning to change or delete it, though a caregiver may do both for 24 hours. The timeline (Today and the viewer page) now lists the **last 24 hours**, newest first, with last night's entries as "yesterday 23:50"; its title is "Last 24 hours". The status rows ("Fed 08:12 by Mom", "Not fed yet today", doses, "2× today") stay about today. The owner's trackers show there too when their feed time is within the 24 hours.
+
 **Main files:** `CareEvent#deletable_by?`, `#delete_by!`, `CareEventsController#destroy`, `care_delete_confirm`, `care_events/_timeline`, `care_events/edit`, `HouseholdDay#trackers`; `db/migrate/20261002090000_add_deleted_by_to_care_events.rb` (checked on PostgreSQL: up, down, up).
 
 **Decisions made while building:** as in the [plan](#checkpoint-h3-plan-delete-a-mistaken-record-2026-10-02), plus:
@@ -873,6 +875,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 
 ## Change log
 
+- **H3 follow-up (2026-10-02):** the Today and viewer timeline shows the **last 24 hours** instead of stopping at midnight, so a late-night tap can still be changed or deleted the next morning.
 - **Checkpoints H2 and H3 (2026-10-02):** reminders per job either **every …** (hours or days) or **at set times** (up to 6), with set-time statuses, due times and "N× today" on the Today row, and the litter "Record it again?" question after 30 minutes; **Delete** for a mistaken record (owner any, caregiver their own for 24 hours), hidden everywhere with who deleted it.
 - **v8 (2026-10-02):** planned **H3**: a **Delete** button on today's records (and the details page) for the owner (any record) and caregivers (their own, for 24 hours), with a confirmation, for taps made by mistake; the record is hidden everywhere, and a feeding added to trackers leaves the tracker in place.
 - **v7 (2026-10-01):** planned **H2**: litter boxes scooped several times a day. Per job the owner picks **every …** (now also 3 times a day, twice a day, daily or custom hours, counted from the last time it was done) or **at set times** (up to 6, e.g. 08:00 and 20:00, like medications); every tap still records the actual time and person; "3× today" and set-time statuses on the Today row; the litter "Record it again?" question after 30 minutes instead of 2 hours.

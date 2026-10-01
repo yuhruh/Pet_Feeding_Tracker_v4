@@ -31,9 +31,18 @@ class HouseholdDay
                          .includes(:pet).to_a
   end
 
-  def timeline
-    entries = events.map { |event| Entry.new(at: event.occurred_at, event: event) } +
-              trackers.map { |tracker| Entry.new(at: tracker_time(tracker), tracker: tracker) }
+  # The timeline covers the last 24 hours, not just today, so a late-night tap
+  # can still be changed or deleted the next morning (checkpoint H3).
+  TIMELINE_SPAN = 24.hours
+
+  def timeline(now: Time.current)
+    since = now - TIMELINE_SPAN
+    recent_events = household.care_events.kept.where(occurred_at: since..).includes(:actor, :pet, :care_spot).to_a
+    recent_trackers = Tracker.where(pet_id: pets.map(&:id), date: (since.in_time_zone(zone).to_date)..date)
+                             .where.not(id: household.care_events.kept.where.not(tracker_id: nil).select(:tracker_id))
+                             .includes(:pet).select { |tracker| tracker_time(tracker) >= since }
+    entries = recent_events.map { |event| Entry.new(at: event.occurred_at, event: event) } +
+              recent_trackers.map { |tracker| Entry.new(at: tracker_time(tracker), tracker: tracker) }
     entries.sort_by(&:at).reverse
   end
 
