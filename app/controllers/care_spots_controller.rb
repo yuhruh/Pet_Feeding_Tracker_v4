@@ -19,10 +19,16 @@ class CareSpotsController < ApplicationController
     attributes = spot_params
     # A litter box stays a litter box; a water spot can be a bowl or a fountain.
     attributes.delete(:kind) if @spot.litter_box? || attributes[:kind] == "litter_box"
-    if @spot.update(attributes)
+    unless @spot.update(attributes)
+      return redirect_to household_path(anchor: "care_spots"), alert: @spot.errors.map(&:message).to_sentence
+    end
+
+    # Reminder intervals per job (checkpoint H), after a change of kind.
+    failed = CareRoutine.apply(@spot, routine_params, today: Time.current.in_time_zone(@household.time_zone).to_date)
+    if failed.empty?
       redirect_to household_path(anchor: "care_spots"), notice: t(".notice")
     else
-      redirect_to household_path(anchor: "care_spots"), alert: @spot.errors.map(&:message).to_sentence
+      redirect_to household_path(anchor: "care_spots"), alert: failed.flat_map { |routine| routine.errors.map(&:message) }.uniq.to_sentence
     end
   end
 
@@ -50,5 +56,10 @@ class CareSpotsController < ApplicationController
 
   def spot_params
     params.expect(care_spot: [ :name, :kind ])
+  end
+
+  def routine_params
+    actions = CareEvent::SPOT_ACTIONS.values.flatten.uniq
+    params.fetch(:routines, {}).permit(*actions.map { |action| { action => %i[every days] } }).to_h
   end
 end

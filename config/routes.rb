@@ -50,6 +50,7 @@ Rails.application.routes.draw do
     get "view/:token", to: "viewer_pages#show", as: :viewer_page
     post "view/:token", to: "viewer_pages#create"
     delete "households/:household_id/leave", to: "household_memberships#destroy", as: :leave_household
+    patch "households/:household_id/reminders", to: "reminder_settings#update", as: :household_reminders
     get "today", to: "today#show", as: :today
     resources :care_events, only: %i[create edit update] do
       post :undo, on: :member

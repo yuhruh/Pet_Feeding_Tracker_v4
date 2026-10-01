@@ -54,6 +54,12 @@ class HouseholdDay
     spot.care_events.kept.order(occurred_at: :desc).includes(:actor).first
   end
 
+  # The spot's reminder intervals (checkpoint H).
+  def routines(spot)
+    @routines ||= CareRoutine.where(care_spot_id: spots.map(&:id)).includes(:care_spot).order(:id).to_a.group_by(&:care_spot_id)
+    @routines.fetch(spot.id, [])
+  end
+
   # The cat's medications in use today.
   def medications(pet)
     @medications ||= Medication.current.where(pet_id: pets.map(&:id)).order(:name).to_a

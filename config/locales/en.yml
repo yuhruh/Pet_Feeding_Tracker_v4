@@ -73,6 +73,31 @@ en:
       water: "Water"
       meds: "Medicine"
     changed: "%{time} by %{person}"
+  care_reminders:
+    subject: "🔔 Reminders for %{household}"
+    routine: "%{job} · %{spot}: might be time. Last: %{last}."
+    follow_up: "%{job} · %{spot}: still not done. Last: %{last}."
+    dose: "💊 %{pet}: %{medicine} (%{time} dose) hasn't been recorded."
+    last: "%{date} by %{person}"
+    never: "not recorded yet"
+    open_today: "Record it on the Today page:"
+  care_reminder_mailer:
+    reminders:
+      open_today: "Open the Today page"
+      fine_print: "You get these because you turned reminders on. Turn them off on the Today page."
+  care_routines:
+    due:
+      today: "%{job} due today"
+      in_days:
+        one: "%{job} due tomorrow"
+        other: "%{job} due in %{count} days"
+      overdue:
+        one: "%{job} 1 day overdue"
+        other: "%{job} %{count} days overdue"
+  reminder_settings:
+    update:
+      "on": "Reminders on for %{household}."
+      "off": "Reminders off for %{household}."
   care_events:
     dose:
       given: "given"
@@ -276,6 +301,14 @@ en:
       body: "Invitations work once and for 7 days. Ask the owner to send you a new one."
   today:
     show:
+      reminders:
+        "on": "🔔 Reminders by %{channel}: on"
+        "off": "🔕 Reminders: off"
+        turn_on: "Turn on"
+        turn_off: "Turn off"
+        channels:
+          line: "LINE"
+          email: "email"
       title: "Today"
       nothing_yet: "You don't have any cats here yet."
       add_a_cat: "Add a cat"
@@ -934,6 +967,18 @@ en:
       caregiver: "Caregiver"
       viewer: "Viewer"
     show:
+      reminders_every: "Reminders: every"
+      reminder_for: "Reminder for %{job}"
+      custom_days: "Custom days for %{job}"
+      days: "days"
+      every:
+        "off": "Off"
+        twice_a_week: "Twice a week"
+        weekly: "Weekly"
+        every_2_weeks: "Every 2 weeks"
+        twice_a_month: "Twice a month"
+        monthly: "Monthly"
+        custom: "Custom"
       care_records: "Care records"
       care_records_explanation: "Every feeding, litter, water, medicine and weight record, in your household's time zone."
       download_care_records: "Download care records (CSV)"
@@ -1278,6 +1323,15 @@ en:
               before_start: "The end date can't be before the start date."
             starts_on:
               blank: "Enter the start date."
+        care_routine:
+          attributes:
+            every_days:
+              not_a_number: "Enter how many days, from 1 to 365."
+              not_an_integer: "Enter how many days, from 1 to 365."
+              greater_than_or_equal_to: "Enter how many days, from 1 to 365."
+              less_than_or_equal_to: "Enter how many days, from 1 to 365."
+            action:
+              inclusion: "That job doesn't fit this spot."
         care_event:
           attributes:
             medication:

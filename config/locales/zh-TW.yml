@@ -73,6 +73,31 @@ zh-TW:
       water: "水"
       meds: "給藥"
     changed: "%{time}（%{person}）"
+  care_reminders:
+    subject: "🔔 %{household}的提醒"
+    routine: "%{job} · %{spot}：差不多該做了。上次：%{last}。"
+    follow_up: "%{job} · %{spot}：還沒有紀錄。上次：%{last}。"
+    dose: "💊 %{pet}：%{medicine}（%{time} 那次）還沒有紀錄。"
+    last: "%{date}（%{person}）"
+    never: "尚無紀錄"
+    open_today: "到「今天」頁面紀錄："
+  care_reminder_mailer:
+    reminders:
+      open_today: "打開「今天」頁面"
+      fine_print: "因為你開啟了提醒才會收到。可以在「今天」頁面關閉。"
+  care_routines:
+    due:
+      today: "%{job}：今天該做了"
+      in_days:
+        one: "%{job}：明天該做"
+        other: "%{job}：%{count} 天後"
+      overdue:
+        one: "%{job}：已過 1 天"
+        other: "%{job}：已過 %{count} 天"
+  reminder_settings:
+    update:
+      "on": "已開啟%{household}的提醒。"
+      "off": "已關閉%{household}的提醒。"
   care_events:
     dose:
       given: "已給"
@@ -276,6 +301,14 @@ zh-TW:
       body: "邀請連結只能使用一次，有效期限 7 天。請主人重新寄一封邀請給你。"
   today:
     show:
+      reminders:
+        "on": "🔔 以 %{channel} 提醒：開啟"
+        "off": "🔕 提醒：關閉"
+        turn_on: "開啟"
+        turn_off: "關閉"
+        channels:
+          line: "LINE"
+          email: "Email"
       title: "今天"
       nothing_yet: "這裡還沒有貓咪。"
       add_a_cat: "新增貓咪"
@@ -934,6 +967,18 @@ zh-TW:
       caregiver: "照顧者"
       viewer: "觀看者"
     show:
+      reminders_every: "提醒頻率"
+      reminder_for: "%{job}的提醒"
+      custom_days: "%{job}的天數（自訂）"
+      days: "天"
+      every:
+        "off": "關閉"
+        twice_a_week: "每週兩次"
+        weekly: "每週"
+        every_2_weeks: "每兩週"
+        twice_a_month: "每月兩次"
+        monthly: "每月"
+        custom: "自訂"
       care_records: "照顧紀錄"
       care_records_explanation: "所有餵食、貓砂盆、水、給藥與體重紀錄，以家庭的時區顯示。"
       download_care_records: "下載照顧紀錄（CSV）"
@@ -1263,6 +1308,15 @@ zh-TW:
               before_start: "結束日期不能早於開始日期。"
             starts_on:
               blank: "請輸入開始日期。"
+        care_routine:
+          attributes:
+            every_days:
+              not_a_number: "請輸入 1 到 365 的天數。"
+              not_an_integer: "請輸入 1 到 365 的天數。"
+              greater_than_or_equal_to: "請輸入 1 到 365 的天數。"
+              less_than_or_equal_to: "請輸入 1 到 365 的天數。"
+            action:
+              inclusion: "這個工作不適用這個地方。"
         care_event:
           attributes:
             medication:

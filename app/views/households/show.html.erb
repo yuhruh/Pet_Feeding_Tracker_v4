@@ -106,7 +106,7 @@
     <ul class="divide-y divide-slate-200">
       <% @care_spots.each_with_index do |spot, index| %>
         <li id="<%= dom_id(spot) %>" class="flex flex-wrap items-center gap-2 py-2">
-          <%= form_with model: spot, url: household_care_spot_path(spot), method: :patch, class: "flex w-full min-w-0 flex-wrap items-center gap-2 md:w-auto md:flex-1" do |form| %>
+          <%= form_with model: spot, url: household_care_spot_path(spot), method: :patch, class: "flex w-full min-w-0 flex-wrap items-center gap-2" do |form| %>
             <%# w-0: the 40-character maxlength mustn't set the box's width; on phones it takes its own line. %>
             <%= form.text_field :name, placeholder: t("care_spots.kinds.#{spot.kind}"), maxlength: 40, "aria-label": t(".spot_name"),
                   class: "w-0 min-w-0 flex-1 basis-full sm:basis-0 sm:min-w-32 rounded-md border px-2 py-1 dark:text-black" %>
@@ -116,6 +116,25 @@
               <%= form.select :kind, %w[water_bowl water_fountain].map { |kind| [ t("care_spots.kinds.#{kind}"), kind ] }, {},
                     "aria-label": t(".spot_kind"), class: "rounded-md border px-2 py-1 dark:text-black" %>
             <% end %>
+            <%# Reminder intervals per job, saved with the name. %>
+            <div id="<%= dom_id(spot, :routines) %>" class="basis-full flex flex-col gap-1 text-sm">
+              <span class="text-gray-600 dark:text-gray-300"><%= t(".reminders_every") %></span>
+              <% CareEvent::SPOT_ACTIONS.fetch(spot.kind).each do |action| %>
+                <% routine = spot.care_routines.find { |r| r.action == action } %>
+                <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <span class="basis-full sm:basis-auto sm:w-36"><%= care_action_label(spot, action) %></span>
+                  <%= select_tag "routines[#{action}][every]",
+                        options_for_select([ [ t(".every.off"), "off" ], *CareRoutine::PRESETS.keys.map { |key| [ t(".every.#{key}"), key ] }, [ t(".every.custom"), "custom" ] ],
+                                           routine ? routine.preset : "off"),
+                        id: "routines_#{spot.id}_#{action}_every", "aria-label": t(".reminder_for", job: care_action_done(spot, action)),
+                        class: "rounded-md border px-2 py-1 dark:text-black" %>
+                  <%= number_field_tag "routines[#{action}][days]", routine&.every_days, min: 1, max: CareRoutine::MAX_DAYS, step: 1,
+                        id: "routines_#{spot.id}_#{action}_days", "aria-label": t(".custom_days", job: care_action_done(spot, action)),
+                        class: "w-20 rounded-md border px-2 py-1 dark:text-black" %>
+                  <span class="text-gray-500"><%= t(".days") %></span>
+                </div>
+              <% end %>
+            </div>
             <%= form.submit t(".save"), class: "rounded-md px-2 py-1 text-sm bg-sky-100 text-sky-800 cursor-pointer" %>
           <% end %>
           <span class="flex items-center gap-1">

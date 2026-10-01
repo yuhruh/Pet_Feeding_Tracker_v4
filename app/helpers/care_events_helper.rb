@@ -73,6 +73,15 @@ module CareEventsHelper
 
   DOSE_CLASSES = { "given" => "text-emerald-700", "couldnt_give" => "text-amber-700", "overdue" => "text-red-600 font-semibold", "due" => "text-gray-600" }.freeze
 
+  # "🧽 Fountain cleaned due today", "... in 3 days", "... 2 days overdue".
+  def routine_due_text(routine, due_in)
+    job = care_action_label(routine.care_spot, routine.action)
+    if due_in.negative? then t("care_routines.due.overdue", job: job, count: -due_in)
+    elsif due_in.zero? then t("care_routines.due.today", job: job)
+    else t("care_routines.due.in_days", job: job, count: due_in)
+    end
+  end
+
   # "Aji · pee normal · 2 poops · stool soft · blood", only what was observed.
   def litter_observations_text(event, with_cat: true)
     details = event.details

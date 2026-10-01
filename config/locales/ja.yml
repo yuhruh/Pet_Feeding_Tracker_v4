@@ -73,6 +73,31 @@
       water: "水"
       meds: "お薬"
     changed: "%{time}（%{person}）"
+  care_reminders:
+    subject: "🔔 %{household}のお知らせ"
+    routine: "%{job} · %{spot}：そろそろ時期です。前回：%{last}。"
+    follow_up: "%{job} · %{spot}：まだ記録がありません。前回：%{last}。"
+    dose: "💊 %{pet}：%{medicine}（%{time}の分）がまだ記録されていません。"
+    last: "%{date}（%{person}）"
+    never: "記録なし"
+    open_today: "「今日」ページで記録："
+  care_reminder_mailer:
+    reminders:
+      open_today: "「今日」ページを開く"
+      fine_print: "お知らせをオンにしているため届いています。「今日」ページでオフにできます。"
+  care_routines:
+    due:
+      today: "%{job}：今日が目安"
+      in_days:
+        one: "%{job}：明日が目安"
+        other: "%{job}：あと%{count}日"
+      overdue:
+        one: "%{job}：1日過ぎています"
+        other: "%{job}：%{count}日過ぎています"
+  reminder_settings:
+    update:
+      "on": "%{household}のお知らせをオンにしました。"
+      "off": "%{household}のお知らせをオフにしました。"
   care_events:
     dose:
       given: "あげた"
@@ -276,6 +301,14 @@
       body: "招待リンクは1回限り、7日間有効です。オーナーに新しい招待を送ってもらってください。"
   today:
     show:
+      reminders:
+        "on": "🔔 %{channel}でお知らせ：オン"
+        "off": "🔕 お知らせ：オフ"
+        turn_on: "オンにする"
+        turn_off: "オフにする"
+        channels:
+          line: "LINE"
+          email: "メール"
       title: "今日"
       nothing_yet: "まだ猫が登録されていません。"
       add_a_cat: "猫を追加"
@@ -934,6 +967,18 @@
       caregiver: "ケアする人"
       viewer: "見るだけの人"
     show:
+      reminders_every: "お知らせの間隔"
+      reminder_for: "%{job}のお知らせ"
+      custom_days: "%{job}の日数（カスタム）"
+      days: "日"
+      every:
+        "off": "オフ"
+        twice_a_week: "週2回"
+        weekly: "毎週"
+        every_2_weeks: "2週間ごと"
+        twice_a_month: "月2回"
+        monthly: "毎月"
+        custom: "カスタム"
       care_records: "お世話の記録"
       care_records_explanation: "ごはん・トイレ・水・お薬・体重の記録をすべて、家庭のタイムゾーンで。"
       download_care_records: "お世話の記録をダウンロード（CSV）"
@@ -1263,6 +1308,15 @@
               before_start: "終了日は開始日より前にできません。"
             starts_on:
               blank: "開始日を入力してください。"
+        care_routine:
+          attributes:
+            every_days:
+              not_a_number: "日数は1〜365で入力してください。"
+              not_an_integer: "日数は1〜365で入力してください。"
+              greater_than_or_equal_to: "日数は1〜365で入力してください。"
+              less_than_or_equal_to: "日数は1〜365で入力してください。"
+            action:
+              inclusion: "その作業はこの場所に合いません。"
         care_event:
           attributes:
             medication:

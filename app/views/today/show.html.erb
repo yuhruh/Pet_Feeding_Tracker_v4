@@ -32,6 +32,15 @@
           <span class="ml-2 rounded-full px-2 py-0.5 text-xs bg-sky-100 text-sky-700 align-middle"><%= t(".you_are_a.#{role}") %></span>
         <% end %>
       </h2>
+      <% if can_record %>
+        <%# Each owner or caregiver's own reminders for this household (checkpoint H). %>
+        <% reminders_on = household.reminders_on_for?(Current.user) %>
+        <div id="<%= dom_id(household, :reminders) %>" class="-mt-2 mb-3 flex flex-wrap items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+          <span><%= t(reminders_on ? ".reminders.on" : ".reminders.off", channel: t(".reminders.channels.#{@reminder_channel}")) %></span>
+          <%= button_to t(reminders_on ? ".reminders.turn_off" : ".reminders.turn_on"), household_reminders_path(household), method: :patch,
+                params: { enabled: !reminders_on }, class: "text-sky-700 underline cursor-pointer" %>
+        </div>
+      <% end %>
 
       <% if @repeat && @repeat["event"]&.household_id == household.id %>
         <%= render "care_events/repeat_prompt", repeat: @repeat %>

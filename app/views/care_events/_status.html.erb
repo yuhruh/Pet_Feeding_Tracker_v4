@@ -21,6 +21,12 @@
         <% else %>
           <%= t("care_events.status.not_yet") %>
         <% end %>
+        <% day.routines(spot).each do |routine| %>
+          <% due_in = (routine.due_on - day.date).to_i %>
+          <span class="block <%= due_in.negative? ? "text-red-600 font-semibold" : due_in.zero? ? "text-amber-700 font-semibold" : "" %>">
+            <%= routine_due_text(routine, due_in) %>
+          </span>
+        <% end %>
       </span>
     </li>
   <% end %>
