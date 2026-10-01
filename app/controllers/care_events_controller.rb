@@ -6,7 +6,10 @@ class CareEventsController < ApplicationController
 
   def create
     subject = CareEvent.subject_for(Current.user, pet_id: params[:pet_id], care_spot_id: params[:care_spot_id])
-    return refuse unless HouseholdPolicy.new(Current.user, subject.household).can?(:record_care)
+    policy = HouseholdPolicy.new(Current.user, subject.household)
+    return refuse unless policy.can?(:record_care)
+    # A one-off medicine, not on the cat's list, is the owner's call.
+    return refuse if params[:kind] == "meds" && params[:medication_id].blank? && !policy.owner?
 
     event = build_event(subject)
     return if merge_water_tap(event)
@@ -63,12 +66,24 @@ class CareEventsController < ApplicationController
   def build_event(subject)
     event = CareEvent.new(actor: Current.user, occurred_at: Time.current)
     if subject.is_a?(Pet)
-      event.assign_attributes(pet: subject, kind: params[:kind].presence_in(%w[fed weight]))
+      event.assign_attributes(pet: subject, kind: params[:kind].presence_in(%w[fed weight meds]))
       event.value = params[:value] if event.weight?
+      assign_dose(event, subject) if event.meds?
     else
       event.assign_attributes(care_spot: subject, kind: subject.litter_box? ? :litter : :water, actions: [ params[:care_action].to_s ])
     end
     event
+  end
+
+  # A medication of this cat (or, for the owner, a one-off medicine by name).
+  def assign_dose(event, pet)
+    event.assign_attributes(dose_status: params[:dose_status], reason: params[:reason].presence)
+    if params[:medication_id].present?
+      event.medication = pet.medications.current.find(params[:medication_id])
+      event.dose_time = params[:dose_time].presence
+    else
+      event.details = { medicine_name: params[:medicine_name], medicine_dose: params[:medicine_dose] }
+    end
   end
 
   # A second water tap on the same spot by the same person, within 2 minutes,
@@ -92,7 +107,8 @@ class CareEventsController < ApplicationController
 
   def repeat_prompt(event, repeat)
     { "pet_id" => event.pet_id, "care_spot_id" => event.care_spot_id, "kind" => event.kind, "care_action" => event.actions.first,
-      "repeat_id" => repeat.id }
+      "medication_id" => event.medication_id, "dose_time" => event.dose_time, "dose_status" => event.dose_status, "reason" => event.reason,
+      "medicine_name" => event.details["medicine_name"], "medicine_dose" => event.details["medicine_dose"], "repeat_id" => repeat.id }
   end
 
   # Times come as "minutes ago" (the quick picks) or a local date and time.
@@ -107,6 +123,10 @@ class CareEventsController < ApplicationController
     changes[:details] = params.fetch(:details, {}).permit(*CareEvent::FED_DETAILS).to_h if params.key?(:details)
     changes[:value] = params[:value] if params.key?(:value)
     changes[:note] = params[:note].to_s.first(200) if params.key?(:note)
+    if @event.meds?
+      changes[:dose_status] = params[:dose_status] if params.key?(:dose_status)
+      changes[:reason] = params[:reason].presence if params.key?(:reason)
+    end
     changes
   end
 

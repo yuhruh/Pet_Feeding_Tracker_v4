@@ -44,6 +44,29 @@ zh-TW:
       water_bowl: "水碗"
       water_fountain: "飲水機"
   care_events:
+    dose:
+      given: "已給"
+      couldnt_give_because: "沒給成（%{reason}）"
+      given_by: "%{time} 由 %{person} 給（%{at}）"
+      due: "%{time} 待給"
+      overdue: "%{time} 逾時未記錄"
+      given_button: "已給"
+      couldnt_give_button: "沒給成"
+    reasons:
+      refused: "拒吃"
+      spat_out: "吐出來"
+      vomited: "嘔吐"
+      other: "其他"
+    meds:
+      give: "要給 %{pet} %{medicine} 嗎？"
+      give_at: "要給 %{pet} %{medicine}（%{time} 那次）嗎？"
+      reason: "原因"
+      all_recorded: "今天的藥都記錄好了。"
+      other_medicine: "其他藥物"
+      record_given: "記錄為已給"
+      manage: "用藥設定"
+      as_needed: "需要時給，尚未給過"
+      as_needed_last: "需要時給，上次 %{when}（%{person}）"
     edit:
       title: "修改或加入細節"
       recorded_by: "由 %{person} 記錄"
@@ -74,6 +97,7 @@ zh-TW:
     buttons:
       fed: "🍽 餵食"
       weight: "⚖️ 體重"
+      meds: "💊 給藥"
     actions:
       litter_box:
         scooped: "🚽 清砂"
@@ -99,6 +123,7 @@ zh-TW:
     summary:
       fed: "%{pet}：已餵食"
       weight: "%{pet}：%{kg} kg"
+      meds: "%{pet}：%{medicine}，%{outcome}"
     status:
       last: "%{actions} %{when}（%{person}）"
       not_yet: "還沒有紀錄"
@@ -122,6 +147,7 @@ zh-TW:
     repeat:
       question: "%{person} 在 %{time} 記錄了「%{what}」。還要再記錄一次嗎？"
       record_again: "再記錄一次"
+      meds_question: "%{person} 已在 %{time} 給 %{pet} %{medicine}。還要再記錄一次嗎？"
       cancel: "取消"
     update:
       notice: "已儲存。"

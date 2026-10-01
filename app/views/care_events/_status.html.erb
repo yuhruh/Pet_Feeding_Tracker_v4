@@ -44,6 +44,7 @@
               <%= form.submit t("care_events.save"), class: "rounded-md px-2 py-1 bg-violet-200 text-violet-800 cursor-pointer" %>
             <% end %>
           </details>
+          <%= render "care_events/meds_panel", day: day, pet: pet %>
         </span>
       <% end %>
       <span class="text-sm text-gray-600 dark:text-gray-300">
@@ -51,6 +52,7 @@
         <% if weight %>
           · <%= t("care_events.status.weight", kg: format("%g", weight.value), when: care_when(weight.occurred_at, day)) %>
         <% end %>
+        <%= render "care_events/meds_status", day: day, pet: pet %>
       </span>
     </li>
   <% end %>

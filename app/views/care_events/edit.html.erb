@@ -64,6 +64,25 @@
       </fieldset>
     <% end %>
 
+    <% if @event.meds? %>
+      <fieldset class="flex flex-col gap-2">
+        <legend class="font-medium mb-1"><%= dose_name(@event) %></legend>
+        <div class="flex flex-wrap gap-4">
+          <% CareEvent::DOSE_STATUSES.each do |status| %>
+            <label class="flex items-center gap-1">
+              <%= radio_button_tag :dose_status, status, @event.dose_status == status %>
+              <%= t("care_events.dose.#{status}_button") %>
+            </label>
+          <% end %>
+        </div>
+        <div class="flex flex-col gap-1">
+          <%= label_tag :reason, t("care_events.meds.reason") %>
+          <%= select_tag :reason, options_for_select(CareEvent::REASONS.map { |reason| [ t("care_events.reasons.#{reason}"), reason ] }, @event.reason),
+                include_blank: true, class: "rounded-md border px-3 py-2 dark:text-black" %>
+        </div>
+      </fieldset>
+    <% end %>
+
     <% if @event.weight? %>
       <div class="flex flex-col gap-1">
         <%= label_tag :value, t("care_events.weight_label"), class: "font-medium" %>

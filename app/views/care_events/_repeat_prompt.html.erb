@@ -2,12 +2,18 @@
 <% previous = repeat["event"] %>
 <div id="care_repeat" class="mb-3 p-3 rounded-lg border-2 border-amber-300 bg-amber-50 text-sm dark:text-gray-800 space-y-2">
   <p class="font-medium">
-    <%= t("care_events.repeat.question", person: care_person(previous&.actor), what: previous ? care_event_summary(previous) : "",
-          time: previous ? care_time(previous.occurred_at, previous.household.time_zone) : "") %>
+    <% if previous&.meds? %>
+      <%= t("care_events.repeat.meds_question", person: care_person(previous.actor), pet: pet_display_name(previous.pet), medicine: dose_name(previous),
+            time: care_time(previous.occurred_at, previous.household.time_zone)) %>
+    <% else %>
+      <%= t("care_events.repeat.question", person: care_person(previous&.actor), what: previous ? care_event_summary(previous) : "",
+            time: previous ? care_time(previous.occurred_at, previous.household.time_zone) : "") %>
+    <% end %>
   </p>
   <div class="flex gap-3">
     <%= button_to t("care_events.repeat.record_again"), care_events_path,
-          params: repeat.slice("pet_id", "care_spot_id", "kind", "care_action").compact.merge("confirmed" => 1),
+          params: repeat.slice("pet_id", "care_spot_id", "kind", "care_action", "medication_id", "dose_time", "dose_status", "reason",
+                               "medicine_name", "medicine_dose").compact.merge("confirmed" => 1),
           class: "rounded px-3 py-1 bg-amber-200 text-amber-900 font-medium cursor-pointer" %>
     <%= link_to t("care_events.repeat.cancel"), today_path, class: "px-3 py-1 underline" %>
   </div>

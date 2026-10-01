@@ -44,6 +44,29 @@ en:
       water_bowl: "Water bowl"
       water_fountain: "Water fountain"
   care_events:
+    dose:
+      given: "given"
+      couldnt_give_because: "couldn't give (%{reason})"
+      given_by: "%{time} given by %{person} at %{at}"
+      due: "%{time} due"
+      overdue: "%{time} overdue"
+      given_button: "Given"
+      couldnt_give_button: "Couldn't give"
+    reasons:
+      refused: "refused"
+      spat_out: "spat it out"
+      vomited: "vomited"
+      other: "other"
+    meds:
+      give: "Give %{pet} %{medicine}?"
+      give_at: "Give %{pet} %{medicine} (%{time} dose)?"
+      reason: "Why?"
+      all_recorded: "Today's doses are all recorded."
+      other_medicine: "Other medicine"
+      record_given: "Record as given"
+      manage: "Medications"
+      as_needed: "as needed, none given yet"
+      as_needed_last: "as needed, last given %{when} by %{person}"
     edit:
       title: "Change or add details"
       recorded_by: "recorded by %{person}"
@@ -74,6 +97,7 @@ en:
     buttons:
       fed: "🍽 Fed"
       weight: "⚖️ Weight"
+      meds: "💊 Meds"
     actions:
       litter_box:
         scooped: "🚽 Scooped"
@@ -99,6 +123,7 @@ en:
     summary:
       fed: "%{pet}: fed"
       weight: "%{pet}: %{kg} kg"
+      meds: "%{pet}: %{medicine}, %{outcome}"
     status:
       last: "%{actions} %{when} by %{person}"
       not_yet: "Nothing recorded yet"
@@ -122,6 +147,7 @@ en:
     repeat:
       question: "%{person} recorded “%{what}” at %{time}. Record it again?"
       record_again: "Record again"
+      meds_question: "%{person} already gave %{pet} %{medicine} at %{time}. Record it again?"
       cancel: "Cancel"
     update:
       notice: "Saved."

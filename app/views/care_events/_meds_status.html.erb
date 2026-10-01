@@ -1,0 +1,14 @@
+<%# Each medication on the cat's line: today's doses (given, couldn't give, due, overdue), or the last as-needed dose. %>
+<% day.medications(pet).each do |medication| %>
+  <span class="block">
+    💊 <%= medication.label %>:
+    <% if medication.as_needed? %>
+      <% last = day.last_given(medication) %>
+      <%= last ? t("care_events.meds.as_needed_last", when: care_when(last.occurred_at, day), person: care_person(last.actor)) : t("care_events.meds.as_needed") %>
+    <% else %>
+      <% medication.doses_on(day.date, day.zone, day.events.select(&:meds?)).each_with_index do |dose, index| %>
+        <%= " · " unless index.zero? %><span class="<%= CareEventsHelper::DOSE_CLASSES[dose.status] %>"><%= dose_status_text(dose, day.zone) %></span>
+      <% end %>
+    <% end %>
+  </span>
+<% end %>

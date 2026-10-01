@@ -1,0 +1,53 @@
+<%# 💊: confirm each dose not yet recorded today (closest to now first), as-needed medications, and the owner's one-off medicine. %>
+<% medications = day.medications(pet) %>
+<% owner = HouseholdPolicy.new(Current.user, day.household).owner? %>
+<% if medications.any? || owner %>
+  <details class="relative" id="<%= dom_id(pet, :meds) %>">
+    <summary class="list-none rounded-full px-3 py-1 text-sm font-medium bg-rose-100 text-rose-800 border border-rose-200 cursor-pointer hover:bg-rose-200"><%= t("care_events.buttons.meds") %></summary>
+    <div class="absolute z-20 mt-1 w-80 max-w-[90vw] p-3 space-y-3 bg-white border rounded-md shadow-lg text-sm dark:bg-slate-700">
+      <% choices = day.pending_doses(pet).map { |dose| [ dose.medication, dose.time ] } + medications.select(&:as_needed?).map { |medication| [ medication, nil ] } %>
+      <% choices.each do |medication, time| %>
+        <div class="space-y-1 border-b pb-2 last:border-0">
+          <p class="font-medium">
+            <%= time ? t("care_events.meds.give_at", pet: pet_display_name(pet), medicine: medication.label, time: time) : t("care_events.meds.give", pet: pet_display_name(pet), medicine: medication.label) %>
+          </p>
+          <div class="flex flex-wrap items-center gap-2">
+            <%= button_to t("care_events.dose.given_button"), care_events_path,
+                  params: { pet_id: pet.id, kind: "meds", medication_id: medication.id, dose_time: time, dose_status: "given" }.compact,
+                  class: "rounded px-3 py-1 bg-emerald-200 text-emerald-900 font-medium cursor-pointer" %>
+            <%= form_with url: care_events_path, method: :post, class: "flex items-center gap-1" do |form| %>
+              <%= hidden_field_tag :pet_id, pet.id, id: nil %>
+              <%= hidden_field_tag :kind, "meds", id: nil %>
+              <%= hidden_field_tag :medication_id, medication.id, id: nil %>
+              <%= hidden_field_tag :dose_time, time, id: nil if time %>
+              <%= hidden_field_tag :dose_status, "couldnt_give", id: nil %>
+              <%= select_tag :reason, options_for_select(CareEvent::REASONS.map { |reason| [ t("care_events.reasons.#{reason}"), reason ] }),
+                    id: nil, "aria-label": t("care_events.meds.reason"), class: "rounded border px-1 py-1 dark:text-black" %>
+              <%= form.submit t("care_events.dose.couldnt_give_button"), class: "rounded px-2 py-1 bg-amber-100 text-amber-900 cursor-pointer" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+      <% if medications.any? && choices.empty? %>
+        <p class="text-gray-600 dark:text-gray-300"><%= t("care_events.meds.all_recorded") %></p>
+      <% end %>
+
+      <% if owner %>
+        <%= form_with url: care_events_path, method: :post, class: "flex flex-col gap-1 pt-1" do |form| %>
+          <p class="font-medium"><%= t("care_events.meds.other_medicine") %></p>
+          <%= hidden_field_tag :pet_id, pet.id, id: nil %>
+          <%= hidden_field_tag :kind, "meds", id: nil %>
+          <%= hidden_field_tag :dose_status, "given", id: nil %>
+          <div class="flex gap-1">
+            <%= text_field_tag :medicine_name, nil, required: true, maxlength: 60, placeholder: t("medications.index.name"), id: nil,
+                  "aria-label": t("medications.index.name"), class: "flex-1 min-w-0 rounded border px-2 py-1 dark:text-black" %>
+            <%= text_field_tag :medicine_dose, nil, maxlength: 40, placeholder: t("medications.index.dose"), id: nil,
+                  "aria-label": t("medications.index.dose"), class: "w-24 rounded border px-2 py-1 dark:text-black" %>
+          </div>
+          <%= form.submit t("care_events.meds.record_given"), class: "self-start rounded px-3 py-1 bg-emerald-100 text-emerald-900 cursor-pointer" %>
+        <% end %>
+        <%= link_to t("care_events.meds.manage"), pet_medications_path(pet), class: "block text-sky-700 underline" %>
+      <% end %>
+    </div>
+  </details>
+<% end %>

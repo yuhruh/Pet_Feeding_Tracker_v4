@@ -44,6 +44,29 @@
       water_bowl: "水入れ"
       water_fountain: "給水器"
   care_events:
+    dose:
+      given: "あげた"
+      couldnt_give_because: "あげられなかった（%{reason}）"
+      given_by: "%{time} %{person}さんがあげた（%{at}）"
+      due: "%{time} 予定"
+      overdue: "%{time} 未記録"
+      given_button: "あげた"
+      couldnt_give_button: "あげられなかった"
+    reasons:
+      refused: "嫌がった"
+      spat_out: "吐き出した"
+      vomited: "吐いた"
+      other: "その他"
+    meds:
+      give: "%{pet}に%{medicine}をあげますか？"
+      give_at: "%{pet}に%{medicine}（%{time}の分）をあげますか？"
+      reason: "理由"
+      all_recorded: "今日の分はすべて記録済みです。"
+      other_medicine: "その他のお薬"
+      record_given: "あげたと記録"
+      manage: "お薬の設定"
+      as_needed: "必要なときに（まだあげていません）"
+      as_needed_last: "必要なときに、最後は %{when}（%{person}）"
     edit:
       title: "変更・詳細を追加"
       recorded_by: "記録：%{person}"
@@ -74,6 +97,7 @@
     buttons:
       fed: "🍽 ごはん"
       weight: "⚖️ 体重"
+      meds: "💊 お薬"
     actions:
       litter_box:
         scooped: "🚽 そうじ"
@@ -99,6 +123,7 @@
     summary:
       fed: "%{pet}：ごはん"
       weight: "%{pet}：%{kg} kg"
+      meds: "%{pet}：%{medicine}、%{outcome}"
     status:
       last: "%{actions} %{when}（%{person}）"
       not_yet: "まだ記録がありません"
@@ -122,6 +147,7 @@
     repeat:
       question: "%{person}さんが %{time} に「%{what}」を記録しています。もう一度記録しますか？"
       record_again: "もう一度記録"
+      meds_question: "%{person}さんが %{time} に%{pet}へ%{medicine}をあげています。もう一度記録しますか？"
       cancel: "キャンセル"
     update:
       notice: "保存しました。"

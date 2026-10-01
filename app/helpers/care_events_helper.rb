@@ -1,5 +1,5 @@
 module CareEventsHelper
-  KIND_ICONS = { "fed" => "🍽", "weight" => "⚖️", "litter" => "🚽", "water" => "💧" }.freeze
+  KIND_ICONS = { "fed" => "🍽", "weight" => "⚖️", "litter" => "🚽", "water" => "💧", "meds" => "💊" }.freeze
 
   # "Litter box" in the reader's language, unless the owner named it.
   def care_spot_name(spot)
@@ -44,9 +44,34 @@ module CareEventsHelper
     case event.kind
     when "fed" then t("care_events.summary.fed", pet: pet_display_name(event.pet))
     when "weight" then t("care_events.summary.weight", pet: pet_display_name(event.pet), kg: format("%g", event.value))
+    when "meds" then t("care_events.summary.meds", pet: pet_display_name(event.pet), medicine: dose_name(event), outcome: dose_outcome(event))
     else "#{care_spot_name(event.care_spot)}: #{event.actions.map { |action| care_action_done(event.care_spot, action) }.join(t('support.array.words_connector'))}"
     end
   end
+
+  # "Clavamox 1 tablet (20:00)"
+  def dose_name(event)
+    [ event.medicine_label, ("(#{event.dose_time})" if event.dose_time) ].compact.join(" ")
+  end
+
+  # "given" / "couldn't give (spat out)"
+  def dose_outcome(event)
+    if event.given? then t("care_events.dose.given")
+    else t("care_events.dose.couldnt_give_because", reason: t("care_events.reasons.#{event.reason}"))
+    end
+  end
+
+  # One dose on a cat's line: "08:00 given by Mom", "20:00 due", "08:00 overdue".
+  def dose_status_text(dose, zone)
+    status = dose.status
+    case status
+    when "given" then t("care_events.dose.given_by", time: dose.time, person: care_person(dose.event.actor), at: care_time(dose.event.occurred_at, zone))
+    when "couldnt_give" then "#{dose.time} #{dose_outcome(dose.event)}"
+    else t("care_events.dose.#{status}", time: dose.time)
+    end
+  end
+
+  DOSE_CLASSES = { "given" => "text-emerald-700", "couldnt_give" => "text-amber-700", "overdue" => "text-red-600 font-semibold", "due" => "text-gray-600" }.freeze
 
   # "曙光 無穀滋養鴨肉 · 40 g"
   def fed_details_text(brand, description, amount)

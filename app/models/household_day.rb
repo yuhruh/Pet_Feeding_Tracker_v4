@@ -54,6 +54,28 @@ class HouseholdDay
     spot.care_events.kept.order(occurred_at: :desc).includes(:actor).first
   end
 
+  # The cat's medications in use today.
+  def medications(pet)
+    @medications ||= Medication.current.where(pet_id: pets.map(&:id)).order(:name).to_a
+                               .select { |medication| medication.active_on?(date) }.group_by(&:pet_id)
+    @medications.fetch(pet.id, [])
+  end
+
+  # Today's scheduled doses for the cat, each with its record if there is one.
+  def doses(pet)
+    meds_events = events.select(&:meds?)
+    medications(pet).reject(&:as_needed?).flat_map { |medication| medication.doses_on(date, zone, meds_events) }.sort_by(&:at)
+  end
+
+  # Doses not recorded yet, the one closest to now first.
+  def pending_doses(pet, now: Time.current)
+    doses(pet).reject(&:recorded?).sort_by { |dose| (dose.at - now).abs }
+  end
+
+  def last_given(medication)
+    medication.care_events.kept.where(dose_status: "given").order(occurred_at: :desc).includes(:actor).first
+  end
+
   def tracker_time(tracker)
     local = tracker.feed_time&.in_time_zone(zone)
     zone.local(tracker.date.year, tracker.date.month, tracker.date.day, local&.hour || 0, local&.min || 0)
