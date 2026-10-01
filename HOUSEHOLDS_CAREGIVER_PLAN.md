@@ -16,10 +16,35 @@
 | G — Live updates and care events on the charts | ✅ Done (2026-10-01). Committed on `feature/households` in three parts and pushed. See [Checkpoint G result](#checkpoint-g-result-2026-10-01) |
 | H — Reminders by LINE and email | ✅ Done (2026-10-01). Committed on `feature/households` in four parts and pushed. See [Checkpoint H result](#checkpoint-h-result-2026-10-01) |
 | H2 — Litter several times a day | Planned, waiting for your go-ahead. See [Checkpoint H2 plan](#checkpoint-h2-plan-litter-several-times-a-day-2026-10-01) |
+| H3 — Delete a mistaken record | Planned, waiting for your go-ahead. See [Checkpoint H3 plan](#checkpoint-h3-plan-delete-a-mistaken-record-2026-10-02) |
 | I — Android app push notifications (Firebase) | Not started |
 | J — Clean-up, docs, CI, merge | Not started |
 
 **Commits:** each checkpoint is committed on `feature/households` once `bin/rails test` passes, then pushed. Merged into `main` only when you ask.
+
+## Checkpoint H3 plan: delete a mistaken record (2026-10-02)
+
+**The problem:** a tap by mistake ("🍽 Fed" when the cat wasn't fed) can only be undone for **10 seconds**, and only by the person who tapped. After that it can be changed (time, details) but **not removed**, so it stays on the timeline, the status ("Fed 08:12 by Mom"), the "Care by day" chart and the CSV, and it moves reminders' due dates as if the job was done.
+
+**The fix: a Delete button**, next to **Change** on each timeline entry and at the bottom of the record's details page:
+
+```
+08:12  🍽 Aji: fed · Mom      Change  Delete
+```
+
+| Part | Build |
+|---|---|
+| 1. Who and which | The same people and records as **Change**: the **owner** any record in the household; a **caregiver** their own records for 24 hours. Viewers never. Records up to 7 days old (the timeline and details page's range) |
+| 2. Asking first | "Delete “Aji: fed” at 08:12? It's removed from Today, the charts and reminders." (**Delete** / Cancel) |
+| 3. What deleting does | The record is **kept but hidden**, like Undo: `undone_at` set, plus a new `deleted_by_id` (who deleted it). It disappears from the timeline, the status rows, doses (a deleted "given" makes that dose due or overdue again), the "Care by day" chart, the CSV and reminder due dates. Everyone's open Today and viewer pages update at once (G's live updates). The page says "Deleted. Aji: fed at 08:12" |
+| 4. Feedings added to trackers | Deleting the care record **leaves the owner's tracker alone** and unlinks it, so the tracker then shows on the timeline as "(tracker)". The confirmation says so: "The tracker stays; delete it on Aji's trackers page if it's wrong too." (Today, a deleted record that was linked would still hide its tracker; this fixes that.) |
+| 5. Checks | Tests: owner deletes anyone's record, caregiver their own within 24 hours but not another's or an older one, viewer and outsider refused; the record leaves the timeline, status, doses, chart, CSV and due dates; who deleted it is kept; a linked tracker reappears on the timeline; the live update reaches the other pages; a browser test deleting an accidental "Fed" from the timeline |
+
+**Decisions for H3 (recommended; change any before building):**
+- **Delete keeps the record hidden rather than erasing it**, so a mistake by the wrong person can be looked into, and the owner's CSV stays consistent. It's never shown again in the app.
+- **No "restore"** for now: tapping the job again records it anew.
+- **Undo stays** for the first 10 seconds after a tap (one tap, no question); Delete is for later.
+- **Deleting a water record removes all its jobs** ("refilled, fountain cleaned"); to drop just one job, untick it in Change, as now.
 
 ## Checkpoint H2 plan: litter several times a day (2026-10-01)
 
@@ -786,6 +811,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 | G | ✅ Done — Turbo Streams broadcast (Today pages and viewer pages); care events on charts and in CSV | Two browser sessions: a tap in one appears in the other, including on a viewer page |
 | H | ✅ Done — `care_routines`, `care_reminders`; interval settings per spot and job; "due" on the Today page; hourly reminder job; LINE, else email; per-member on/off; overdue meds | A due routine is sent once at 9am local time, one follow-up 2 days later, none after it's recorded; viewers never get one; doing the job early moves the due date |
 | H2 | Per job, the owner picks **A. every …** (now also in hours: 3 times a day, twice a day, daily, custom) or **B. at set times** (up to 6); due times and reminders for both; "3× today" and set-time statuses on the Today row; the litter double-tap guard at 30 minutes | A: "Twice a day", scooped at 08:00, due and reminded at 20:00; scooped at 15:00 instead, due 03:00, reminded at 9am. B: 08:00 and 20:00, a scoop at 19:40 covers 20:00, an uncovered 20:00 is reminded once at 20:00 with one follow-up at 22:00. Existing day intervals unchanged |
+| H3 | **Delete** on timeline entries and the details page (owner any record, caregiver their own for 24 hours), with a confirmation; hidden like Undo with who deleted it; a linked tracker unlinked | An accidental "Fed" deleted by the caregiver who tapped it disappears from everyone's Today, the charts, the CSV and reminders; another caregiver's record and viewers refused |
 | I | Firebase in the Android app (FCM SDK, notification permission, token registration); `device_tokens`; sending through FCM HTTP v1; fallback to LINE or email | A reminder arrives as an Android notification and opens the Today page; an invalid token falls back to LINE or email |
 | J | Remove `pets.user_id` / `dry_foods.user_id`; docs (README, ARCHITECTURE, USAGE) | CI green; merged into `main` when you ask |
 
@@ -813,6 +839,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 
 ## Change log
 
+- **v8 (2026-10-02):** planned **H3**: a **Delete** button on today's records (and the details page) for the owner (any record) and caregivers (their own, for 24 hours), with a confirmation, for taps made by mistake; the record is hidden everywhere, and a feeding added to trackers leaves the tracker in place.
 - **v7 (2026-10-01):** planned **H2**: litter boxes scooped several times a day. Per job the owner picks **every …** (now also 3 times a day, twice a day, daily or custom hours, counted from the last time it was done) or **at set times** (up to 6, e.g. 08:00 and 20:00, like medications); every tap still records the actual time and person; "3× today" and set-time statuses on the Today row; the litter "Record it again?" question after 30 minutes instead of 2 hours.
 
 - **Checkpoint H (2026-10-01):** reminder intervals per litter box and water spot job, due dates on Today, each owner's and caregiver's reminders switch, and the hourly job sending due jobs at 9am local time (one follow-up after 2 days) and overdue doses, by LINE or email.
