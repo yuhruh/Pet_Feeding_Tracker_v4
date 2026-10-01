@@ -1,6 +1,7 @@
 <%# Shown right after a tap: Undo for 10 seconds, quick time changes, Add details, and a water spot's checkboxes. %>
 <% zone = event.household.time_zone %>
-<div id="care_notice" class="mb-3 p-3 rounded-lg border-2 border-emerald-200 bg-emerald-50 text-sm dark:text-gray-800 space-y-2">
+<%# keep-on-refresh: someone else's change refreshes the page; the notice stays open. %>
+<div id="care_notice" data-controller="keep-on-refresh" data-action="turbo:before-morph-element->keep-on-refresh#keep" class="mb-3 p-3 rounded-lg border-2 border-emerald-200 bg-emerald-50 text-sm dark:text-gray-800 space-y-2">
   <p class="font-medium">✔ <%= care_event_summary(event) %> · <%= care_time(event.occurred_at, zone) %></p>
 
   <% if event.water? %>

@@ -1,4 +1,7 @@
 class Tracker < ApplicationRecord
+  # The owner's feedings show on the household's Today timeline.
+  include RefreshesHouseholdPages
+
   belongs_to :pet
   belongs_to :dry_food, optional: true
   has_one :care_event, dependent: :nullify
@@ -45,6 +48,8 @@ class Tracker < ApplicationRecord
   end
 
   private
+
+  def household_to_refresh = pet&.household
 
   # A tracker may only draw from a food bag of the pet's household.
   # Another household's bag gets the same error as a missing one.

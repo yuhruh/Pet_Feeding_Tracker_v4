@@ -37,6 +37,9 @@ application.register("filter-form", FilterFormController)
 import HelloController from "controllers/hello_controller"
 application.register("hello", HelloController)
 
+import KeepOnRefreshController from "controllers/keep_on_refresh_controller"
+application.register("keep-on-refresh", KeepOnRefreshController)
+
 import LeftAmountController from "controllers/left_amount_controller"
 application.register("left-amount", LeftAmountController)
 

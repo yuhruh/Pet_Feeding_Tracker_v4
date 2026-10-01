@@ -1,9 +1,12 @@
 module ApplicationCable
+  # Live updates only send "refresh this page" to signed stream names a page was
+  # given by the server, so connections without a session are allowed: the viewer
+  # page (a personal link, no account) listens to its household too.
   class Connection < ActionCable::Connection::Base
     identified_by :current_user
 
     def connect
-      set_current_user || reject_unauthorized_connection
+      set_current_user
     end
 
     private

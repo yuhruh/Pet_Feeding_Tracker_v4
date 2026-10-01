@@ -24,6 +24,8 @@
     <% role = @roles[household.id] %>
     <% can_record = HouseholdPolicy.new(Current.user, household).can?(:record_care) %>
     <section id="<%= dom_id(household) %>" class="border-2 border-slate-200 rounded-xl shadow-lg p-4">
+      <%# Live updates: everyone's changes in this household refresh the page in place. %>
+      <%= turbo_stream_from household %>
       <h2 class="font-semibold text-xl mb-3">
         <%= role ? household_name(household) : t(".my_cats") %>
         <% if role %>

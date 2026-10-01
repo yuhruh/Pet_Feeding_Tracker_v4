@@ -2,6 +2,8 @@
 # scooped, a water spot refilled. The household always comes from the cat or spot,
 # never from the form, and every save checks that nothing crosses households.
 class CareEvent < ApplicationRecord
+  include RefreshesHouseholdPages
+
   UNDO_WINDOW = 10.seconds
   EDIT_WINDOW = 24.hours
   EARLIEST = 7.days
@@ -124,6 +126,7 @@ class CareEvent < ApplicationRecord
 
   def undo!
     update_columns(undone_at: Time.current, updated_at: Time.current)
+    refresh_household_pages
   end
 
   private

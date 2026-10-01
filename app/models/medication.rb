@@ -1,6 +1,8 @@
 # A medication the owner set up for a cat: a dose at set times of day, or as
 # needed. Stopping it keeps every dose already recorded.
 class Medication < ApplicationRecord
+  include RefreshesHouseholdPages
+
   MAX_TIMES = 4
   # A dose with nothing recorded this long after its time is overdue.
   OVERDUE_AFTER = 1.hour
@@ -50,6 +52,8 @@ class Medication < ApplicationRecord
   def label = [ name, dose ].compact_blank.join(" ")
 
   private
+
+  def household_to_refresh = pet&.household
 
   def times_are_times
     errors.add(:times, :too_many, count: MAX_TIMES) if times.size > MAX_TIMES
