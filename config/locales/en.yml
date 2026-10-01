@@ -67,6 +67,36 @@ en:
       manage: "Medications"
       as_needed: "as needed, none given yet"
       as_needed_last: "as needed, last given %{when} by %{person}"
+    observations:
+      title: "Litter observations"
+      optional: "(all optional)"
+      which_cat: "Which cat (if known)"
+      not_sure: "Not sure"
+      pee: "Pee clumps"
+      poop_count: "Poops"
+      stool: "Stool"
+      unusual: "Something unusual"
+      unusual_note: "For “other”, say what in the note."
+      pee_values:
+        none: "none"
+        few: "few"
+        normal: "normal"
+        many: "many"
+      stool_values:
+        normal: "normal"
+        soft: "soft"
+        diarrhea: "diarrhea"
+        hard: "hard"
+      unusual_values:
+        blood: "blood"
+        large_clumps: "very large clumps"
+        other: "something unusual"
+      pee_text: "pee %{value}"
+      poops_text:
+        zero: "no poop"
+        one: "1 poop"
+        other: "%{count} poops"
+      stool_text: "stool %{value}"
     edit:
       title: "Change or add details"
       recorded_by: "recorded by %{person}"
@@ -715,6 +745,9 @@ en:
       favorite_score: "favorite score & Last Fed Date"
       kibble_prices: "%{petname}'s kibble prices"
     index:
+      litter_observations:
+        title: "Litter observations, last 30 days"
+        empty: "None in the last 30 days."
       share_settings:
         title: "Share link settings"
         status_off: "Sharing is off. No one can open this pet's shared page."
@@ -1228,12 +1261,16 @@ en:
               in_the_future: "The time can't be in the future."
               too_long_ago: "The time can be at most 7 days ago."
             details:
+              pee: "Pick the pee clumps from the list."
+              stool: "Pick the stool from the list."
+              unusual: "Pick something unusual from the list."
+              poop_count: "The number of poops must be 0 to 10."
               medicine_name: "Enter the medicine's name."
               other_household_bag: "That food bag belongs to another household."
               food_type: "Pick a food type from the list."
               amount: "The amount must be between 0.1 and 2000 g."
               too_long: "Keep the brand and description to 100 characters."
-              present: "Details only go on feedings."
+              present: "These details don't fit this record."
             value:
               weight_range: "The weight must be between 0.1 and 30 kg."
               present: "Only a weight has a number."
@@ -1242,6 +1279,8 @@ en:
               inclusion: "That job doesn't fit this spot."
               present: "Only litter boxes and water spots have jobs."
             pet:
+              present: "Only a litter observation names a cat."
+              other_household: "That cat is in another household."
               blank: "Pick a cat."
             care_spot:
               blank: "Pick a litter box or water spot."

@@ -13,6 +13,8 @@ class Pet < ApplicationRecord
   # The owner of the pet's household: the one person who manages it.
   delegate :owner, to: :household, allow_nil: true
   delegate :timezone, to: :owner, allow_nil: true
+  # A litter box's records belong to the household: they stay, without the cat.
+  before_destroy -> { care_events.litter.update_all(pet_id: nil) }, prepend: true
   has_many :care_events, dependent: :delete_all
   has_many :medications, dependent: :delete_all
   has_many :trackers, dependent: :destroy

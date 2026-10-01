@@ -20,7 +20,13 @@ class CareEvent < ApplicationRecord
   FED_DETAILS = %w[food_type brand description amount_g dry_food_id].freeze
   # A one-off medicine that isn't one of the cat's medications.
   MEDS_DETAILS = %w[medicine_name medicine_dose].freeze
-  DETAILS = { "fed" => FED_DETAILS, "meds" => MEDS_DETAILS }.freeze
+  # Litter observations, all optional (checkpoint F); "which cat" is the pet.
+  LITTER_DETAILS = %w[pee poop_count stool unusual].freeze
+  DETAILS = { "fed" => FED_DETAILS, "meds" => MEDS_DETAILS, "litter" => LITTER_DETAILS }.freeze
+  PEE = %w[none few normal many].freeze
+  STOOL = %w[normal soft diarrhea hard].freeze
+  UNUSUAL = %w[blood large_clumps other].freeze
+  MAX_POOPS = 10
   DOSE_STATUSES = %w[given couldnt_give].freeze
   REASONS = %w[refused spat_out vomited other].freeze
   # An as-needed or one-off medicine given within this time asks before another dose.
@@ -44,7 +50,7 @@ class CareEvent < ApplicationRecord
 
   validates :occurred_at, presence: true
   validate :subject_fits_kind, :same_household, :actions_fit_spot, :occurred_in_allowed_range,
-           :fed_details_valid, :weight_valid, :meds_valid
+           :fed_details_valid, :litter_details_valid, :weight_valid, :meds_valid
 
   # A cat or active care spot in one of the user's households; anything else is
   # "not found" (ActiveRecord::RecordNotFound).
@@ -57,7 +63,8 @@ class CareEvent < ApplicationRecord
     end
   end
 
-  def subject = pet || care_spot
+  # The box or spot for litter and water (a litter record may also name a cat).
+  def subject = care_spot || pet
 
   def undone? = undone_at.present?
   def edited? = edited_at.present?
@@ -80,7 +87,7 @@ class CareEvent < ApplicationRecord
 
     window = REPEAT_WINDOWS[kind] or return
     scope = CareEvent.kept.where(kind: kind).where(occurred_at: (occurred_at - window)..(occurred_at + window))
-    scope = pet ? scope.where(pet: pet) : scope.where(care_spot: care_spot)
+    scope = care_spot ? scope.where(care_spot: care_spot) : scope.where(pet: pet)
     # Litter: only the same job counts (a full change soon after scooping is normal).
     scope.where.not(id: id).order(occurred_at: :desc).find { |event| !litter? || event.actions.intersect?(actions) }
   end
@@ -105,6 +112,11 @@ class CareEvent < ApplicationRecord
 
   def given? = dose_status == "given"
 
+  def observations? = litter? && (pet_id.present? || details.any?)
+
+  # Diarrhea or anything unusual stands out on the timeline and the cat's history.
+  def observation_warning? = litter? && (details["stool"] == "diarrhea" || details["unusual"].present?)
+
   # "Clavamox 1 tablet", or the one-off medicine's name and dose.
   def medicine_label
     medication ? medication.label : details.values_at("medicine_name", "medicine_dose").compact_blank.join(" ")
@@ -124,7 +136,11 @@ class CareEvent < ApplicationRecord
     self.actions = Array(actions).map(&:to_s).compact_blank.uniq
     # Always in the spot's order: "refilled, fountain cleaned".
     self.actions = actions.sort_by { |action| available_actions.index(action) || available_actions.size }
-    self.details = (details || {}).to_h.stringify_keys.slice(*FED_DETAILS, *MEDS_DETAILS).compact_blank
+    cleaned = (details || {}).to_h.stringify_keys.slice(*DETAILS.values.flatten)
+    cleaned["unusual"] = Array(cleaned["unusual"]).map(&:to_s).compact_blank.uniq.sort_by { |item| UNUSUAL.index(item) || UNUSUAL.size } if cleaned.key?("unusual")
+    cleaned = cleaned.compact_blank
+    cleaned["poop_count"] = cleaned["poop_count"].to_i if cleaned["poop_count"].to_s.match?(/\A\d+\z/)
+    self.details = cleaned
     self.reason = nil unless dose_status == "couldnt_give"
   end
 
@@ -132,7 +148,9 @@ class CareEvent < ApplicationRecord
     if fed? || weight? || meds?
       errors.add(:pet, :blank) unless pet && care_spot.nil?
     elsif litter? || water?
-      errors.add(:care_spot, :blank) unless care_spot && pet.nil?
+      errors.add(:care_spot, :blank) unless care_spot
+      # Only a litter observation names a cat.
+      errors.add(:pet, :present) if water? && pet
       errors.add(:care_spot, :invalid) if care_spot && care_spot.litter_box? != litter?
     end
   end
@@ -141,6 +159,7 @@ class CareEvent < ApplicationRecord
     return unless household_id && subject
 
     errors.add(:household, :invalid) unless subject.household_id == household_id
+    errors.add(:pet, :other_household) if pet && pet.household_id != household_id
     if details["dry_food_id"].present? && !household.dry_foods.exists?(id: details["dry_food_id"])
       errors.add(:details, :other_household_bag)
     end
@@ -173,6 +192,16 @@ class CareEvent < ApplicationRecord
     amount = details["amount_g"]
     errors.add(:details, :amount) if amount && !(amount.to_s.match?(/\A\d+(\.\d+)?\z/) && amount.to_f.between?(0.1, 2000))
     %w[brand description].each { |key| errors.add(:details, :too_long) if details[key].to_s.length > 100 }
+  end
+
+  def litter_details_valid
+    return unless litter?
+
+    errors.add(:details, :pee) if details["pee"] && !PEE.include?(details["pee"])
+    errors.add(:details, :stool) if details["stool"] && !STOOL.include?(details["stool"])
+    errors.add(:details, :unusual) if details["unusual"] && !(details["unusual"] - UNUSUAL).empty?
+    count = details["poop_count"]
+    errors.add(:details, :poop_count) if count && !(count.to_s.match?(/\A\d+\z/) && count.to_i <= MAX_POOPS)
   end
 
   def meds_valid

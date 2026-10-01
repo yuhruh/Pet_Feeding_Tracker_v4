@@ -67,6 +67,36 @@
       manage: "お薬の設定"
       as_needed: "必要なときに（まだあげていません）"
       as_needed_last: "必要なときに、最後は %{when}（%{person}）"
+    observations:
+      title: "トイレの観察"
+      optional: "（すべて任意）"
+      which_cat: "どの猫か（わかれば）"
+      not_sure: "わからない"
+      pee: "おしっこの塊"
+      poop_count: "うんちの数"
+      stool: "うんちの状態"
+      unusual: "気になること"
+      unusual_note: "「その他」はメモに書いてください。"
+      pee_values:
+        none: "なし"
+        few: "少ない"
+        normal: "普通"
+        many: "多い"
+      stool_values:
+        normal: "普通"
+        soft: "軟らかい"
+        diarrhea: "下痢"
+        hard: "硬い"
+      unusual_values:
+        blood: "血"
+        large_clumps: "とても大きな塊"
+        other: "その他の異常"
+      pee_text: "おしっこ：%{value}"
+      poops_text:
+        zero: "うんちなし"
+        one: "うんち1個"
+        other: "うんち%{count}個"
+      stool_text: "うんち：%{value}"
     edit:
       title: "変更・詳細を追加"
       recorded_by: "記録：%{person}"
@@ -715,6 +745,9 @@
       favorite_score: "お気に入りスコア & 最終給餌日"
       kibble_prices: "%{petname}のフード価格"
     index:
+      litter_observations:
+        title: "トイレの観察（過去30日）"
+        empty: "過去30日はありません。"
       share_settings:
         title: "共有リンクの設定"
         status_off: "共有はオフです。このペットの共有ページは誰も開けません。"
@@ -1213,12 +1246,16 @@
               in_the_future: "未来の時刻は指定できません。"
               too_long_ago: "7日より前の時刻は指定できません。"
             details:
+              pee: "おしっこの塊はリストから選んでください。"
+              stool: "うんちの状態はリストから選んでください。"
+              unusual: "気になることはリストから選んでください。"
+              poop_count: "うんちの数は0〜10です。"
               medicine_name: "薬の名前を入力してください。"
               other_household_bag: "そのフードの袋は別の家庭のものです。"
               food_type: "一覧からフードの種類を選んでください。"
               amount: "量は0.1〜2000 gで入力してください。"
               too_long: "ブランドと説明は100文字以内にしてください。"
-              present: "詳細はごはんの記録にだけ付けられます。"
+              present: "この記録にはその詳細を付けられません。"
             value:
               weight_range: "体重は0.1〜30 kgで入力してください。"
               present: "数値は体重の記録にだけ付けられます。"
@@ -1227,6 +1264,8 @@
               inclusion: "その作業はこの場所に合いません。"
               present: "作業はトイレと水の場所にだけあります。"
             pet:
+              present: "猫を選べるのはトイレの観察だけです。"
+              other_household: "その猫は別の家庭の猫です。"
               blank: "猫を選んでください。"
             care_spot:
               blank: "トイレか水の場所を選んでください。"

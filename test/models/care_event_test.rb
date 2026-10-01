@@ -109,4 +109,57 @@ class CareEventTest < ActiveSupport::TestCase
       @owner.destroy!
     end
   end
+
+  test "litter observations are optional, checked, and tidied" do
+    scooped = event(kind: :litter, care_spot: @box, actions: [ "scooped" ],
+                    details: { pee: "normal", poop_count: "2", stool: "soft", unusual: [ "", "other", "blood" ] })
+    assert scooped.save
+    assert_equal({ "pee" => "normal", "poop_count" => 2, "stool" => "soft", "unusual" => %w[blood other] }, scooped.details)
+    assert scooped.observations?
+    assert scooped.observation_warning?
+
+    assert_equal({ "poop_count" => 0 }, event(kind: :litter, care_spot: @box, actions: [ "scooped" ], details: { poop_count: "0" }).tap(&:valid?).details)
+    assert_equal({}, event(kind: :litter, care_spot: @box, actions: [ "scooped" ], details: { pee: "", stool: "", unusual: [ "" ] }).tap(&:valid?).details)
+    assert_not event(kind: :litter, care_spot: @box, actions: [ "scooped" ]).observations?, "an old record has none"
+    assert_not event(kind: :litter, care_spot: @box, actions: [ "scooped" ], details: { stool: "soft" }).observation_warning?
+    assert event(kind: :litter, care_spot: @box, actions: [ "scooped" ], details: { stool: "diarrhea" }).observation_warning?
+
+    assert_not event(kind: :litter, care_spot: @box, actions: [ "scooped" ], details: { pee: "lots" }).valid?
+    assert_not event(kind: :litter, care_spot: @box, actions: [ "scooped" ], details: { stool: "green" }).valid?
+    assert_not event(kind: :litter, care_spot: @box, actions: [ "scooped" ], details: { unusual: [ "worms" ] }).valid?
+    assert_not event(kind: :litter, care_spot: @box, actions: [ "scooped" ], details: { poop_count: "11" }).valid?
+    assert_not event(kind: :litter, care_spot: @box, actions: [ "scooped" ], details: { poop_count: "1.5" }).valid?
+    assert_not event(kind: :water, care_spot: @fountain, actions: [ "refilled" ], details: { stool: "soft" }).valid?, "only litter"
+    assert_not event(kind: :fed, pet: @pet, details: { pee: "few" }).valid?
+  end
+
+  test "a litter observation may name a cat of the box's household only" do
+    scooped = event(kind: :litter, care_spot: @box, actions: [ "scooped" ], pet: @pet)
+    assert scooped.save
+    assert_equal @household, scooped.household, "the household still comes from the box"
+    assert_equal @box, scooped.subject
+    assert scooped.observations?
+
+    assert_not event(kind: :litter, care_spot: @box, actions: [ "scooped" ], pet: pets(:two)).valid?, "another household's cat"
+    assert_not event(kind: :water, care_spot: @fountain, actions: [ "refilled" ], pet: @pet).valid?, "only litter names a cat"
+  end
+
+  test "naming a cat doesn't change the litter repeat question" do
+    first = event(kind: :litter, care_spot: @box, actions: [ "scooped" ], pet: @pet, occurred_at: 10.minutes.ago)
+    first.save!
+    assert_equal first, event(kind: :litter, care_spot: @box, actions: [ "scooped" ]).recent_repeat
+    assert_nil event(kind: :fed, pet: @pet).recent_repeat, "a litter record isn't a feeding"
+  end
+
+  test "deleting a cat keeps the litter records it was named on, without it" do
+    scooped = event(kind: :litter, care_spot: @box, actions: [ "scooped" ], pet: @pet, details: { stool: "soft" })
+    scooped.save!
+    fed = event(kind: :fed, pet: @pet)
+    fed.save!
+
+    @pet.destroy!
+    assert_nil scooped.reload.pet_id
+    assert_equal({ "stool" => "soft" }, scooped.details)
+    assert_not CareEvent.exists?(fed.id)
+  end
 end

@@ -67,6 +67,36 @@ zh-TW:
       manage: "用藥設定"
       as_needed: "需要時給，尚未給過"
       as_needed_last: "需要時給，上次 %{when}（%{person}）"
+    observations:
+      title: "貓砂盆觀察"
+      optional: "（皆可不填）"
+      which_cat: "哪隻貓（若知道）"
+      not_sure: "不確定"
+      pee: "尿塊"
+      poop_count: "便便數"
+      stool: "糞便狀態"
+      unusual: "異常狀況"
+      unusual_note: "選「其他」請在備註說明。"
+      pee_values:
+        none: "沒有"
+        few: "少"
+        normal: "正常"
+        many: "多"
+      stool_values:
+        normal: "正常"
+        soft: "軟便"
+        diarrhea: "腹瀉"
+        hard: "硬便"
+      unusual_values:
+        blood: "有血"
+        large_clumps: "尿塊特別大"
+        other: "其他異常"
+      pee_text: "尿塊：%{value}"
+      poops_text:
+        zero: "沒有便便"
+        one: "便便 1 次"
+        other: "便便 %{count} 次"
+      stool_text: "糞便：%{value}"
     edit:
       title: "修改或加入細節"
       recorded_by: "由 %{person} 記錄"
@@ -715,6 +745,9 @@ zh-TW:
       favorite_score: "喜好分數 & 上次餵食日期"
       kibble_prices: "%{petname} 的飼料價格"
     index:
+      litter_observations:
+        title: "近 30 天的貓砂盆觀察"
+        empty: "近 30 天沒有紀錄。"
       share_settings:
         title: "分享連結設定"
         status_off: "分享已關閉，沒有人能開啟這隻寵物的分享頁面。"
@@ -1213,12 +1246,16 @@ zh-TW:
               in_the_future: "時間不能在未來。"
               too_long_ago: "時間最多只能是 7 天前。"
             details:
+              pee: "請從清單選擇尿塊。"
+              stool: "請從清單選擇糞便狀態。"
+              unusual: "請從清單選擇異常狀況。"
+              poop_count: "便便數必須是 0 到 10。"
               medicine_name: "請輸入藥名。"
               other_household_bag: "那包飼料屬於另一個家庭。"
               food_type: "請從清單中選擇食物類型。"
               amount: "份量必須介於 0.1 到 2000 g。"
               too_long: "品牌和描述請在 100 字以內。"
-              present: "細節只能加在餵食紀錄上。"
+              present: "這筆紀錄不能加這些細節。"
             value:
               weight_range: "體重必須介於 0.1 到 30 kg。"
               present: "只有體重紀錄有數值。"
@@ -1227,6 +1264,8 @@ zh-TW:
               inclusion: "這項工作不適用於這個地點。"
               present: "只有貓砂盆和水的地點有工作項目。"
             pet:
+              present: "只有貓砂盆觀察可以選貓。"
+              other_household: "那隻貓屬於另一個家庭。"
               blank: "請選擇一隻貓。"
             care_spot:
               blank: "請選擇貓砂盆或水的地點。"
