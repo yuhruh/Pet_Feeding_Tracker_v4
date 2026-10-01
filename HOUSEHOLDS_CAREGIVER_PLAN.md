@@ -15,10 +15,35 @@
 | F — Litter observations | ✅ Done (2026-10-01). Committed on `feature/households` in three parts and pushed. See [Checkpoint F result](#checkpoint-f-result-2026-10-01) |
 | G — Live updates and care events on the charts | ✅ Done (2026-10-01). Committed on `feature/households` in three parts and pushed. See [Checkpoint G result](#checkpoint-g-result-2026-10-01) |
 | H — Reminders by LINE and email | ✅ Done (2026-10-01). Committed on `feature/households` in four parts and pushed. See [Checkpoint H result](#checkpoint-h-result-2026-10-01) |
+| H2 — Litter several times a day | Planned, waiting for your go-ahead. See [Checkpoint H2 plan](#checkpoint-h2-plan-litter-several-times-a-day-2026-10-01) |
 | I — Android app push notifications (Firebase) | Not started |
 | J — Clean-up, docs, CI, merge | Not started |
 
 **Commits:** each checkpoint is committed on `feature/households` once `bin/rails test` passes, then pushed. Merged into `main` only when you ask.
+
+## Checkpoint H2 plan: litter several times a day (2026-10-01)
+
+**The problem:** a litter box is often scooped more than once a day (twice a day is common, more with several cats), but what H built assumes at most once:
+- **Reminder intervals are whole days** (1 to 365), and "due" is a day: a box scooped at 08:00 with "daily" isn't due again until tomorrow at 9am, and "twice a day" or "every 8 hours" can't be set at all.
+- **The double-tap guard asks "Record it again?" for the same litter job within 2 hours**, which gets in the way when a second cat uses the box soon after.
+- **The Today row shows only the last scoop** ("scooped 15:20 by Mom"), not how many times it was done today.
+
+**The fix:**
+
+| Part | Build |
+|---|---|
+| 1. Intervals in hours | `care_routines` stores the interval in **hours** (`every_hours`, filled from `every_days` × 24, then `every_days` removed). New choices for every job, before the day ones: **3 times a day (8 hours)**, **Twice a day (12 hours)**, **Daily (24 hours)**; Custom becomes "every N hours" or "every N days" |
+| 2. Due by the hour for short intervals | **Under 24 hours:** due = the last time it was done + the interval, to the minute ("🚽 Scooped due at 20:00", "overdue since 20:00"). **24 hours or more:** stays a day, as now ("due today", "in 3 days"), so "Twice a week" doesn't start meaning "Thursday 07:31" |
+| 3. Reminders for short intervals | Sent when the due time has passed, between 9am and 9pm in the person's time zone (a due time overnight waits for 9am); one follow-up after one more interval if still not done, then nothing until someone records it. The "sent once" key includes the due time (`routine:12:2026-10-05T20:00`), so each due time is reminded about once. Day intervals keep today's rules (9am, follow-up after 2 days) |
+| 4. Today row | "🚽 Scooped 3× today · last 15:20 by Mom", plus the due line. Same on the viewer page |
+| 5. Double-tap guard | The same litter job within **30 minutes** (instead of 2 hours) asks "Record it again?"; water and feeding stay at 30 minutes |
+| 6. Checks | Tests: hours stored and the old day intervals moved over unchanged; due times under 24 hours (scooping early moves it, overnight waits for 9am, one follow-up after one more interval); day intervals unchanged; "3× today"; the 30-minute guard; a browser test setting "Twice a day" and seeing the due time move after a scoop |
+
+**Decisions for H2 (recommended; change any before building):**
+- **Intervals under a day are for any job**, not just scooping (e.g. "refill the bowl twice a day"), since it's the same setting.
+- **No reminders between 9pm and 9am**, even for an 8-hour interval: a box due at 23:00 is reminded about at 9am.
+- **The interval counts from the last time it was done**, not from fixed clock times ("08:00 and 20:00"). Fixed times would be a separate setting, like medications; not planned unless you want it.
+- **Existing intervals keep working**: "Weekly" stays 7 days, and nothing is re-sent for a due day already reminded about.
 
 ## Checkpoint H result (2026-10-01)
 
@@ -750,6 +775,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 | F | ✅ Done — Litter observations in "Add details" (optional fields; which cat) | Old records unchanged; observations show on the timeline and, with a cat, in that cat's history |
 | G | ✅ Done — Turbo Streams broadcast (Today pages and viewer pages); care events on charts and in CSV | Two browser sessions: a tap in one appears in the other, including on a viewer page |
 | H | ✅ Done — `care_routines`, `care_reminders`; interval settings per spot and job; "due" on the Today page; hourly reminder job; LINE, else email; per-member on/off; overdue meds | A due routine is sent once at 9am local time, one follow-up 2 days later, none after it's recorded; viewers never get one; doing the job early moves the due date |
+| H2 | Intervals in hours (3 times a day, twice a day, daily, custom hours); due times under 24 hours; reminders for them between 9am and 9pm with one follow-up; "3× today" on the Today row; the litter double-tap guard at 30 minutes | A box set to "Twice a day" and scooped at 08:00 is due at 20:00 and reminded about once then; scooping at 15:00 moves it to 03:00, reminded at 9am; existing day intervals unchanged |
 | I | Firebase in the Android app (FCM SDK, notification permission, token registration); `device_tokens`; sending through FCM HTTP v1; fallback to LINE or email | A reminder arrives as an Android notification and opens the Today page; an invalid token falls back to LINE or email |
 | J | Remove `pets.user_id` / `dry_foods.user_id`; docs (README, ARCHITECTURE, USAGE) | CI green; merged into `main` when you ask |
 
@@ -776,6 +802,8 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 | Kibble price check | Unchanged; it keeps using the owner's trackers and favorites. Brand names and the email come from the household's owner in B |
 
 ## Change log
+
+- **v7 (2026-10-01):** planned **H2**: litter boxes scooped several times a day. Intervals in hours (3 times a day, twice a day, daily), due times under 24 hours with reminders between 9am and 9pm, "3× today" on the Today row, and the litter "Record it again?" question after 30 minutes instead of 2 hours.
 
 - **Checkpoint H (2026-10-01):** reminder intervals per litter box and water spot job, due dates on Today, each owner's and caregiver's reminders switch, and the hourly job sending due jobs at 9am local time (one follow-up after 2 days) and overdue doses, by LINE or email.
 - **Checkpoint G (2026-10-01):** live updates on Today and viewer pages (Solid Cable, with its missing production table added), the saved notice kept open on others' refreshes, ⚖️ weights on the weight line, the "Care by day" chart, and the owner's care records CSV. Fixed the household page's forms overflowing on small screens.
