@@ -17,10 +17,53 @@
 | H — Reminders by LINE and email | ✅ Done (2026-10-01). Committed on `feature/households` in four parts and pushed. See [Checkpoint H result](#checkpoint-h-result-2026-10-01) |
 | H2 — Litter several times a day | ✅ Done (2026-10-02). Committed on `feature/households` and merged into `main`. See [Checkpoint H2 result](#checkpoint-h2-result-2026-10-02) |
 | H3 — Delete a mistaken record | ✅ Done (2026-10-02). Committed on `feature/households` and merged into `main`. See [Checkpoint H3 result](#checkpoint-h3-result-2026-10-02) |
-| I — Android app push notifications (Firebase) | Not started |
+| I — Android app push notifications (Firebase) | ✅ Built (2026-10-02) on `feature/households`; **works once the Firebase project is set up** (see [What you need to do](#checkpoint-i-build-plan-2026-10-02)). See [Checkpoint I result](#checkpoint-i-result-2026-10-02) |
 | J — Clean-up, docs, CI, merge | Not started |
 
 **Commits:** each checkpoint is committed on `feature/households` once `bin/rails test` passes, then pushed. Merged into `main` only when you ask.
+
+## Checkpoint I result (2026-10-02)
+
+**What people get, once Firebase is set up:**
+- **In the Android app**, turning **🔔 Reminders** on asks for permission to send notifications (Android 13+, once). The phone is then registered for that person, and the switch reads "🔔 Reminders by Android app: on".
+- **Reminders arrive as phone notifications**: "🔔 Reminders for Rita's cats" with the same lines as LINE and email; tapping one opens the Today page in the app (also when the app is open). They use a **"Reminders"** notification channel (お知らせ / 提醒 on Japanese and Chinese phones), which people can adjust in Android's settings.
+- **One channel per person and reminder:** the Android app; if every push fails, LINE, else email. A phone that's been uninstalled or replaced its token is forgotten. **Signing out** of the app stops that phone's notifications.
+- **Until Firebase is set up nothing changes:** the app builds and runs without `google-services.json`, and the server sends by LINE or email as in H.
+
+**Main files:** server: `DeviceToken`, `DeviceTokensController` (`POST`/`DELETE /device_tokens`), `FcmClient` (HTTP v1, a signed service-account token, cached 50 minutes), `CareReminderNotifier#pushed_to_android?`, `push_controller.js` (the bridge component), `layouts/application.html+native`, `today/show`; `db/migrate/20261002110000_create_device_tokens.rb` (checked on PostgreSQL: up, down, up). App: `Push.kt`, `PushComponent.kt`, `PushMessagingService.kt`, `MainActivity.kt` (permission, opening a notification's link), `MainApplication.kt`, `AndroidManifest.xml`, `strings.xml` (+ `values-ja`, `values-zh-rTW`), `build.gradle.kts` (Firebase BoM 33.7.0, Google Services 4.4.2 applied only with `google-services.json`), version **1.0.6 (7)**.
+
+**Decisions made while building:** as in the [build plan](#checkpoint-i-build-plan-2026-10-02), plus:
+- **The token is sent once per app session per token**, from any signed-in page in the app; the server only updates when it changes or moves to another person.
+- **A notification only opens pages of this site** (`pet-feeding-tracker-v4.up.railway.app`).
+- **An expired sign-in removes the phone's token too** (the database cascade), not only signing out.
+
+**Checks:**
+- Server: **13 new tests**. FCM: the signed request (verified with the key), the message (token, title, body, Today link, the "reminders" channel), gone tokens (UNREGISTERED, an invalid token) vs other failures, push off without the service account. Tokens: registered for the person and session once, handed over to whoever signs in next, signing out and session expiry removing them, only one's own removed, sign-in and a token required. Reminders: sent to each phone and not by LINE or email, a gone token forgotten with email instead, a failed push falling back to LINE, phones skipped without Firebase. Pages: "Reminders by Android app", the permission request in the app only once reminders are on, nothing in a web browser.
+- App: a debug build with and without `google-services.json` (a dummy file, removed), and the release shrinking (R8) pass. Sending a real notification needs your Firebase project.
+- `bin/rails test`: 469 runs, 0 failures. `bin/rails test:system`: 39 runs, 0 failures (after making the H2 reminders browser test accept "due tomorrow at" in the afternoon). RuboCop and Brakeman clean.
+
+## Checkpoint I build plan (2026-10-02)
+
+| Part | Build |
+|---|---|
+| 1. Server: device tokens | `device_tokens` (user, the sign-in session it was registered in, platform `android`, token unique, last used). `POST /device_tokens` registers or moves a token to the signed-in user (a phone signed in as someone else hands it over); `DELETE /device_tokens` removes it. **Signing out removes the session's tokens**, so a signed-out phone gets nothing |
+| 2. Server: sending | `FcmClient`: Firebase Cloud Messaging **HTTP v1**, with a short-lived access token signed from the **service account** in the `FIREBASE_SERVICE_ACCOUNT_JSON` environment variable (never in git). A token FCM says is gone (`UNREGISTERED`, `NOT_FOUND`, invalid) is deleted. Without the variable, push is simply off |
+| 3. Server: one channel per person | Reminders go to the **Android app** if the person has a device token and push is set up, **else LINE, else email**, as planned in H. If every push to their devices fails, LINE or email instead. The Today switch says "Reminders by Android app" when that's the channel |
+| 4. App: Firebase | FCM SDK; `google-services.json` from your Firebase project goes in `pet_tracker_android/app/` (not in git); **without it the app still builds and runs, just without push**. A `reminders` notification channel. Tapping a notification opens its link (the Today page) in the app |
+| 5. App: permission and token | A **`push` bridge component**: signed-in pages in the app send the device's FCM token to the server when notifications are allowed; **turning 🔔 Reminders on** in the app asks for the notification permission (Android 13+) first, then registers. A new token from Firebase is sent on the next page load |
+| 6. Checks | Server tests: registering, moving and removing tokens (own only), sign-out removes them, the FCM request (stubbed), a gone token deleted, the channel order and the fallback to LINE or email, the switch's wording. The app: a debug build compiles with and without `google-services.json` |
+
+**Decisions for I:**
+- **One channel per reminder**, as in H: the app when it can, so the same reminder doesn't also arrive by LINE or email.
+- **Tokens belong to a sign-in session**, so signing out (or the session expiring) stops notifications on that phone.
+- **The notification permission is asked when someone turns reminders on in the app**, not at the first launch.
+- **The notification shows the same text as LINE**, title "🔔 Reminders for Rita's cats", and opens the Today page.
+
+**What you need to do (Firebase, about 10 minutes):**
+1. In the [Firebase console](https://console.firebase.google.com/), create a project (the free Spark plan is enough) and add an **Android app** with the package name **`com.pettracker.v4`**.
+2. Download **`google-services.json`** into `pet_tracker_android/app/`.
+3. In Project settings → **Service accounts**, generate a **new private key** (a JSON file) and put its whole content into Railway as the **`FIREBASE_SERVICE_ACCOUNT_JSON`** variable on both the web service and the worker. Don't commit it.
+4. Build and release the new app version (versionCode 7) to Google Play.
 
 ## Checkpoint H3 result (2026-10-02)
 
@@ -851,7 +894,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 | H | ✅ Done — `care_routines`, `care_reminders`; interval settings per spot and job; "due" on the Today page; hourly reminder job; LINE, else email; per-member on/off; overdue meds | A due routine is sent once at 9am local time, one follow-up 2 days later, none after it's recorded; viewers never get one; doing the job early moves the due date |
 | H2 | ✅ Done — Per job, the owner picks **A. every …** (now also in hours: 3 times a day, twice a day, daily, custom) or **B. at set times** (up to 6); due times and reminders for both; "3× today" and set-time statuses on the Today row; the litter double-tap guard at 30 minutes | A: "Twice a day", scooped at 08:00, due and reminded at 20:00; scooped at 15:00 instead, due 03:00, reminded at 9am. B: 08:00 and 20:00, a scoop at 19:40 covers 20:00, an uncovered 20:00 is reminded once at 20:00 with one follow-up at 22:00. Existing day intervals unchanged |
 | H3 | ✅ Done — **Delete** on timeline entries and the details page (owner any record, caregiver their own for 24 hours), with a confirmation; hidden like Undo with who deleted it; a linked tracker unlinked | An accidental "Fed" deleted by the caregiver who tapped it disappears from everyone's Today, the charts, the CSV and reminders; another caregiver's record and viewers refused |
-| I | Firebase in the Android app (FCM SDK, notification permission, token registration); `device_tokens`; sending through FCM HTTP v1; fallback to LINE or email | A reminder arrives as an Android notification and opens the Today page; an invalid token falls back to LINE or email |
+| I | ✅ Built (needs your Firebase project) — Firebase in the Android app (FCM SDK, notification permission, token registration); `device_tokens`; sending through FCM HTTP v1; fallback to LINE or email | A reminder arrives as an Android notification and opens the Today page; an invalid token falls back to LINE or email |
 | J | Remove `pets.user_id` / `dry_foods.user_id`; docs (README, ARCHITECTURE, USAGE) | CI green; merged into `main` when you ask |
 
 ## Risks
@@ -878,6 +921,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 
 ## Change log
 
+- **Checkpoint I (2026-10-02):** Android app notifications through Firebase Cloud Messaging: device tokens per sign-in, the permission asked when turning reminders on, notifications opening Today, the app first then LINE or email; off until the Firebase project and its service account are set up.
 - **H3 messages (2026-10-02):** Delete's own wording when refused (the 24-hour rule for caregivers) and for a record already deleted, in English, Japanese and Traditional Chinese.
 - **Fix (2026-10-02):** message boxes show only real messages; a tap no longer shows a red box with the record's number (root cause: every flash entry was shown, including data carried for the next page).
 - **H3 follow-up (2026-10-02):** the Today and viewer timeline shows the **last 24 hours** instead of stopping at midnight, so a late-night tap can still be changed or deleted the next morning.
