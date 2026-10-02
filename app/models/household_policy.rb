@@ -1,8 +1,8 @@
 # What a person may do with a household's cats, from their role in it. The one
 # place that decides; controllers and views ask `can?`.
 class HouseholdPolicy
-  # The owner may do everything. A caregiver reads the trackers and charts (and,
-  # from later checkpoints, records care); a viewer sees the charts.
+  # The owner may do everything. A caregiver records care and reads the trackers
+  # and charts; a viewer sees the charts and today's timeline.
   PERMISSIONS = {
     caregiver: %i[record_care view_trackers view_charts].freeze,
     viewer: %i[view_charts].freeze

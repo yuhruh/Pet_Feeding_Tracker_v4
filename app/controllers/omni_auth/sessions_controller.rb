@@ -96,9 +96,8 @@ class OmniAuth::SessionsController < ApplicationController
     email = user_info.dig(:info, :email)
     username = user_info.dig(:info, :name) || user_info.dig(:info, :email).split("@").first
     random_password = SecureRandom.hex(10)
-    # user_timezone = session["omniauth.timezone"]
+    # The sign-in page adds the browser's time zone to the start's address.
     user_timezone = request.env.dig("omniauth.params", "timezone") || session[:timezone]
-    # binding.b
 
     User.create!(
       email_address: email,

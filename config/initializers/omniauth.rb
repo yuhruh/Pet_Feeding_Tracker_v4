@@ -8,11 +8,6 @@ GOOGLE_SECRET = ENV["GOOGLE_CLIENT_SECRET"] || Rails.application.credentials.dig
 GITHUB_ID = ENV["GITHUB_CLIENT_ID"] || Rails.application.credentials.dig(:github, :client_id)
 GITHUB_SECRET = ENV["GITHUB_CLIENT_SECRET"] || Rails.application.credentials.dig(:github, :client_secret)
 
-# Force printing to console for debugging
-STDOUT.puts "DEBUG: LINE_ID is #{LINE_ID.present? ? 'LOADED' : 'MISSING'}"
-STDOUT.puts "DEBUG: GOOGLE_ID is #{GOOGLE_ID.present? ? 'LOADED' : 'MISSING'}"
-STDOUT.puts "DEBUG: GITHUB_ID is #{GITHUB_ID.present? ? 'LOADED' : 'MISSING'}"
-
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :developer if Rails.env.development?
 
