@@ -26,5 +26,6 @@ class LegalLinksTest < ActionDispatch::IntegrationTest
       assert_response :success
       phrases.each { |phrase| assert_includes response.body, phrase, "#{locale}: #{phrase}" }
     end
+    assert_equal I18n.default_locale, I18n.locale, "a request's language doesn't stay on the thread for what runs next"
   end
 end
