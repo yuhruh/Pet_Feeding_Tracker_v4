@@ -34,7 +34,12 @@ class MainApplication : Application() {
         Hotwire.registerBridgeComponents(
             BridgeComponentFactory("toast") { name, delegate ->
                 ToastComponent(name, delegate)
+            },
+            // Reminder notifications (checkpoint I)
+            BridgeComponentFactory("push") { name, delegate ->
+                PushComponent(name, delegate)
             }
         )
+        Push.createChannel(this)
     }
 }

@@ -1,2 +1,5 @@
 \n# Android Signing Configuration\nkeystore.properties
 \n# Android Keystore\n*.jks\n*.keystore
+
+# Firebase project config (checkpoint I); download it from the Firebase console
+app/google-services.json

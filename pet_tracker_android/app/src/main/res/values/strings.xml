@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Cat Tracker App</string>
     <string name="home_url">https://pet-feeding-tracker-v4.up.railway.app/</string>
+    <!-- Only links on this site open from a notification (checkpoint I) -->
+    <string name="app_origin" translatable="false">https://pet-feeding-tracker-v4.up.railway.app/</string>
+    <string name="reminders_channel_name">Reminders</string>
+    <string name="reminders_channel_description">Litter box, water and medicine reminders from your household</string>
 </resources>

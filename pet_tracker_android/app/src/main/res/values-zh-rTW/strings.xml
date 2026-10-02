@@ -1,0 +1,4 @@
+<resources>
+    <string name="reminders_channel_name">提醒</string>
+    <string name="reminders_channel_description">貓砂盆、水和給藥的提醒</string>
+</resources>

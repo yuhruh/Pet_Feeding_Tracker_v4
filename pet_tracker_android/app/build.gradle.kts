@@ -6,6 +6,12 @@ plugins {
     id("com.android.application")
 }
 
+// Notifications (checkpoint I) need the Firebase project's google-services.json
+// in this folder (not in git). Without it the app builds and runs, without push.
+if (file("google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
+}
+
 val localPropertiesFile = rootProject.file("local.properties")
 val localProperties = Properties()
 if (localPropertiesFile.exists()) {
@@ -20,8 +26,8 @@ android {
         applicationId = "com.pettracker.v4"
         minSdk = 28
         targetSdk = 35
-        versionCode = 6
-        versionName = "1.0.5"
+        versionCode = 7
+        versionName = "1.0.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -83,6 +89,10 @@ dependencies {
 
     // PostHog Android SDK
     implementation("com.posthog:posthog-android:3.+")
+
+    // Firebase Cloud Messaging: reminder notifications (checkpoint I)
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation("com.google.firebase:firebase-messaging")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

@@ -1,0 +1,4 @@
+<resources>
+    <string name="reminders_channel_name">お知らせ</string>
+    <string name="reminders_channel_description">トイレ・水・お薬のお知らせ</string>
+</resources>
