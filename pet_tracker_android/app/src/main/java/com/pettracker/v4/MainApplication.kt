@@ -22,7 +22,8 @@ class MainApplication : Application() {
         ).apply {
             captureApplicationLifecycleEvents = true
             captureScreenViews = true
-            captureDeepLinks = true
+            // Off: an opened link carries its token or sign-in code (pettracker://sign-in?code=…).
+            captureDeepLinks = false
             errorTrackingConfig.autoCapture = true
         }
         PostHogAndroid.setup(this, config)

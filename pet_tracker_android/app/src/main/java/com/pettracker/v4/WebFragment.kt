@@ -59,7 +59,7 @@ open class WebFragment : HotwireWebFragment() {
         PostHog.capture(
             event = "web_visit_completed",
             properties = mapOf(
-                "location" to location,
+                "location" to AnalyticsUrl.sanitize(location),
                 "completed_offline" to completedOffline
             )
         )
@@ -69,7 +69,7 @@ open class WebFragment : HotwireWebFragment() {
         super.onFormSubmissionStarted(location)
         PostHog.capture(
             event = "web_form_submitted",
-            properties = mapOf("location" to location)
+            properties = mapOf("location" to AnalyticsUrl.sanitize(location))
         )
     }
 }
