@@ -7,6 +7,10 @@ import dev.hotwire.core.config.Hotwire
 import dev.hotwire.core.turbo.config.PathConfiguration
 import dev.hotwire.core.bridge.BridgeComponentFactory
 import dev.hotwire.navigation.config.registerBridgeComponents
+import dev.hotwire.navigation.config.registerRouteDecisionHandlers
+import dev.hotwire.navigation.routing.AppNavigationRouteDecisionHandler
+import dev.hotwire.navigation.routing.BrowserTabRouteDecisionHandler
+import dev.hotwire.navigation.routing.SystemNavigationRouteDecisionHandler
 
 class MainApplication : Application() {
     override fun onCreate() {
@@ -41,5 +45,14 @@ class MainApplication : Application() {
             }
         )
         Push.createChannel(this)
+
+        // Google, LINE and GitHub sign-in open in a Chrome Custom Tab (checkpoint I2),
+        // checked before Hotwire's own handlers, which stay as they were.
+        Hotwire.registerRouteDecisionHandlers(
+            NativeSignInRouteDecisionHandler(),
+            AppNavigationRouteDecisionHandler(),
+            BrowserTabRouteDecisionHandler(),
+            SystemNavigationRouteDecisionHandler()
+        )
     }
 }

@@ -30,6 +30,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:launchMode="singleTask"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,6 +44,14 @@
                 <data android:scheme="http" />
                 <data android:scheme="https" />
                 <data android:host="pet-feeding-tracker-v4.up.railway.app" />
+            </intent-filter>
+
+            <!-- Back from signing in with Google, LINE or GitHub in Chrome (checkpoint I2) -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="pettracker" android:host="sign-in" />
             </intent-filter>
 
             <!-- LINE Login Redirect -->
