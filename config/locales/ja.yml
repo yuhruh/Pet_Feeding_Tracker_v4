@@ -108,6 +108,21 @@
     update:
       "on": "%{household}のお知らせをオンにしました。"
       "off": "%{household}のお知らせをオフにしました。"
+  native_sign_ins:
+    start:
+      title: "ログイン"
+      continuing: "%{provider}に移動しています…"
+      continue: "続ける"
+      providers:
+        google_oauth2: "Google"
+        line: "LINE"
+        github: "GitHub"
+    return:
+      title: "アプリに戻る"
+      returning: "アプリに戻ります…"
+      open_app: "アプリに戻る"
+    finish:
+      expired: "このログインリンクは期限切れか、すでに使われています。もう一度ログインしてください。"
   care_events:
     dose:
       given: "あげた"

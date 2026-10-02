@@ -108,6 +108,21 @@ zh-TW:
     update:
       "on": "已開啟%{household}的提醒。"
       "off": "已關閉%{household}的提醒。"
+  native_sign_ins:
+    start:
+      title: "登入中"
+      continuing: "正在前往 %{provider}…"
+      continue: "繼續"
+      providers:
+        google_oauth2: "Google"
+        line: "LINE"
+        github: "GitHub"
+    return:
+      title: "回到 App"
+      returning: "正在帶你回到 App…"
+      open_app: "回到 App"
+    finish:
+      expired: "這個登入連結已過期或已使用過，請重新登入。"
   care_events:
     dose:
       given: "已給"

@@ -1,0 +1,17 @@
+<%# In Chrome, after the provider: back to the app with the one-time code (checkpoint I2). %>
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title><%= t(".title") %></title>
+  </head>
+  <body style="font-family: system-ui, sans-serif; text-align: center; padding: 3rem 1rem;">
+    <p><%= t(".returning") %></p>
+    <p><%= link_to t(".open_app"), @app_url, id: "open_app", style: "font-size: 1rem; padding: 0.6rem 1.2rem; border: 1px solid #888; border-radius: 6px; text-decoration: none;" %></p>
+    <%= javascript_tag nonce: true do %>
+      window.location.href = document.getElementById("open_app").href;
+    <% end %>
+  </body>
+</html>

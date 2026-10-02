@@ -94,25 +94,19 @@
         <div class="flex-grow border-t border-gray-400"></div>
     </div>
     <div class="mt-3 mb-4 flex justify-center items-center gap-6">
-      <%= form_with url: "/auth/google_oauth2", method: :post, data: { controller: "time-zone", action: "submit->time-zone#setAuthUrl" } do |form| %>
-        <button type="submit" class="btn flex items-center justify-center py-2 rounded-md text-sm cursor-pointer">
-          <%= image_tag "icons8-google-40.png", style: "width: 20px; height:. 20px;" %>
-          <span class="ml-2 text-softBlue font-semibold underline decoration-2 decoration-softBlue"><%= t(".google_button") %></span>
-        </button>
+      <%= provider_sign_in_button "google_oauth2", button_class: "btn flex items-center justify-center py-2 rounded-md text-sm cursor-pointer" do %>
+        <%= image_tag "icons8-google-40.png", style: "width: 20px; height:. 20px;" %>
+        <span class="ml-2 text-softBlue font-semibold underline decoration-2 decoration-softBlue"><%= t(".google_button") %></span>
       <% end %>
 
-      <%= form_with url: "/auth/line", method: "post", data: { controller: "time-zone", action: "submit->time-zone#setAuthUrl" } do |form| %>
-        <button type="submit" class="btn flex items-center justify-center py-2 rounded-md text-sm cursor-pointer">
-          <%= image_tag "icons8-line-48.png", style: "width: 25px; height: 25px;" %>
-          <span class="ml-2 text-softBlue font-semibold underline decoration-2 decoration-softBlue"><%= t(".line_button") %></span>
-        </button>
+      <%= provider_sign_in_button "line", button_class: "btn flex items-center justify-center py-2 rounded-md text-sm cursor-pointer" do %>
+        <%= image_tag "icons8-line-48.png", style: "width: 25px; height: 25px;" %>
+        <span class="ml-2 text-softBlue font-semibold underline decoration-2 decoration-softBlue"><%= t(".line_button") %></span>
       <% end %>
 
-      <%= form_with url: "/auth/github", method: "post", data: { controller: "time-zone", action: "submit->time-zone#setAuthUrl" } do |form| %>
-        <button type="submit" class="btn flex items-center justify-center py-2 rounded-md text-sm cursor-pointer">
-          <%= svg "github" %>
-          <span class="ml-2 text-softBlue font-semibold underline decoration-2 decoration-softBlue"><%= t(".github_button") %></span>
-        </button>
+      <%= provider_sign_in_button "github", button_class: "btn flex items-center justify-center py-2 rounded-md text-sm cursor-pointer" do %>
+        <%= svg "github" %>
+        <span class="ml-2 text-softBlue font-semibold underline decoration-2 decoration-softBlue"><%= t(".github_button") %></span>
       <% end %>
     </div>
     <span id="HelpBlock" class="text-center text-gray-500"><%= t(".help_text_html", google_icon: image_tag("icons8-google-40.png", style: "width: 20px; height: 20px;", class: "inline-block align-middle"), chrome_icon: svg("chrome"), edge_icon: content_tag(:span, svg("edge"), class: "w-6 h-6 inline-block align-middle"), firefox_icon: content_tag(:span, svg("firefox"), class: "w-6 h-6 inline-block align-middle")) %></span>

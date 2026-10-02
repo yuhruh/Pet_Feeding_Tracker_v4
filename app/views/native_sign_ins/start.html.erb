@@ -1,0 +1,24 @@
+<%# In Chrome (a Custom Tab over the app): starts the provider sign-in here, with this browser's time zone (checkpoint I2). %>
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title><%= t(".title") %></title>
+  </head>
+  <body style="font-family: system-ui, sans-serif; text-align: center; padding: 3rem 1rem;">
+    <%= form_with url: "/auth/#{@provider}", method: :post, id: "native_sign_in" do %>
+      <p><%= t(".continuing", provider: t(".providers.#{@provider}")) %></p>
+      <button type="submit" style="font-size: 1rem; padding: 0.6rem 1.2rem;"><%= t(".continue") %></button>
+    <% end %>
+    <%= javascript_tag nonce: true do %>
+      // OmniAuth keeps the start's query string, so the time zone goes there (as time_zone_controller.js does).
+      const form = document.getElementById("native_sign_in");
+      const action = new URL(form.action);
+      action.searchParams.set("timezone", Intl.DateTimeFormat().resolvedOptions().timeZone);
+      form.action = action.toString();
+      form.submit();
+    <% end %>
+  </body>
+</html>

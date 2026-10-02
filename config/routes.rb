@@ -76,6 +76,9 @@ Rails.application.routes.draw do
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
+  # Google, LINE and GitHub sign-in in the Android app (checkpoint I2).
+  get "auth/native/finish", to: "native_sign_ins#finish", as: :native_sign_in_finish
+  get "auth/native/:provider", to: "native_sign_ins#start", as: :native_sign_in
   get "auth/:provider/callback", to: "omni_auth/sessions#create"
   post "auth/:provider/callback", to: "omni_auth/sessions#create"
   get "auth/failure", to: "omni_auth/sessions#failure"

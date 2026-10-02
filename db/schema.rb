@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_02_110000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_02_120000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -282,6 +282,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_02_110000) do
     t.json "times", default: [], null: false
     t.datetime "updated_at", null: false
     t.index ["pet_id"], name: "index_medications_on_pet_id"
+  end
+
+  create_table "native_sign_ins", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.json "data", default: {}, null: false
+    t.datetime "expires_at", null: false
+    t.json "flash", default: {}, null: false
+    t.string "path", null: false
+    t.string "token_digest", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "used_at"
+    t.integer "user_id"
+    t.index ["token_digest"], name: "index_native_sign_ins_on_token_digest", unique: true
+    t.index ["user_id"], name: "index_native_sign_ins_on_user_id"
   end
 
   create_table "ownership_transfers", force: :cascade do |t|
@@ -581,6 +595,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_02_110000) do
   add_foreign_key "kibble_price_checks", "pets"
   add_foreign_key "kibble_prices", "kibble_price_checks"
   add_foreign_key "medications", "pets"
+  add_foreign_key "native_sign_ins", "users", on_delete: :cascade
   add_foreign_key "ownership_transfers", "households"
   add_foreign_key "ownership_transfers", "users", column: "from_user_id"
   add_foreign_key "ownership_transfers", "users", column: "to_user_id"

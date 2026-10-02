@@ -108,6 +108,21 @@ en:
     update:
       "on": "Reminders on for %{household}."
       "off": "Reminders off for %{household}."
+  native_sign_ins:
+    start:
+      title: "Signing in"
+      continuing: "Continuing to %{provider}…"
+      continue: "Continue"
+      providers:
+        google_oauth2: "Google"
+        line: "LINE"
+        github: "GitHub"
+    return:
+      title: "Back to the app"
+      returning: "Taking you back to the app…"
+      open_app: "Return to the app"
+    finish:
+      expired: "That sign-in link has expired or was already used. Please sign in again."
   care_events:
     dose:
       given: "given"
