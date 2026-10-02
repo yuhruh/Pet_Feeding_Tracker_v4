@@ -1,0 +1,6 @@
+<%# Privacy policy and terms, on pages the Android app shows too (its layout has no footer); Google Play requires the privacy link inside the app. %>
+<p id="legal_links" class="mt-6 text-center text-sm text-gray-500 dark:text-gray-300">
+  <%= link_to t("layouts.footer.privacy"), privacy_path, class: "underline hover:text-softRed" %>
+  ·
+  <%= link_to t("layouts.footer.terms"), terms_path, class: "underline hover:text-softRed" %>
+</p>

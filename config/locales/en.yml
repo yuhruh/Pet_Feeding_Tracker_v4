@@ -1621,41 +1621,46 @@ en:
     emails_not_found: "The following email(s) were not found in the system and could not be added as members: %{emails}"
   privacy_page:
     title: Privacy Policy
-    intro: Cat Feeding Tracker is a small personal app for recording what your pets
-      eat and how their health changes. This page explains what it stores, why, and
-      what it never does.
+    intro: Cat Tracker (the Cat Feeding Tracker website and the Android app) is a small personal app for recording what your cats eat, how their health changes, and the care your household gives them. This page explains what it stores, who can see it, which services it uses, and what it never does.
     sections:
     - heading: What the app stores
       body: |-
-        Your account: email address, username, time zone, and a scrambled (hashed) version of your password, which cannot be turned back into your password.
-        Your pets: name, birthday, breed, gender, weight and an optional photo.
-        Your records: feeding entries, weights, notes, health check results, and vet visit questions and answers.
-        If you sign in with Google, LINE or GitHub, only that account's identifier is stored, so the app can recognise you next time.
-    - heading: Why it stores it
-      body: Only to show you your own records, draw your charts, and send the emails
-        you ask for. Your data is never sold, never used for advertising, and never
-        shared with anyone else, apart from the two cases below that you choose yourself.
-    - heading: What you choose to share
+        Your account: email address, username, time zone, and a scrambled (hashed) version of your password, which cannot be turned back into your password. If you sign in with Google, LINE or GitHub, only that account's identifier is stored, so the app can recognise you next time. Each sign-in also stores the device's browser type and IP address, so you can see and sign out your other devices.
+        Your cats: name, birthday, breed, gender, weight and an optional photo.
+        Your records: feeding entries, weights, notes, food bags, health check results, and vet visit questions and answers.
+        Care records: what is recorded on the Today page (fed, weight, medicine, litter box and water jobs), when, and who recorded it; litter observations; medications and doses; reminder settings and which reminders were sent.
+        Your household: who is in it and their role (owner, caregiver or viewer), the email addresses of people you invite (kept with the invitation until you cancel it or the household is deleted), and the names you give viewer links.
+        Android app: if you turn reminders on, a notification token for your phone, so reminders can reach it. It is removed when you sign out.
+    - heading: Who can see it
       body: |-
-        Share links: if you create one for a pet, anyone with that link can see that pet's feeding records and charts without signing in. Share it only with people you trust, such as your vet or pet sitter. You can make a link expire, replace it, or turn it off at any time from the pet's feeding records page.
+        Caregivers you invite can see your cats' feeding records and charts, record care, and see who in the household recorded what.
+        Viewers, with an account or a viewer link, can see your cats' charts, today's status and the recent care timeline, but not notes or email addresses.
+        If you help in someone else's household, its owner and members can see the care you record, with your name.
+        Share links: if you create one for a cat, anyone with that link can see that cat's feeding records and charts without signing in. You can make a link expire, replace it, or turn it off at any time.
         Vet visit members: if you invite someone by email, they can see and answer the questions for that visit.
+    - heading: Why it stores it
+      body: Only to show you and your household your records, draw your charts, send the reminders and emails you ask for, and keep the app working. Your data is never sold, never used for advertising, and never shared with anyone except the people and services described on this page.
     - heading: Services the app uses
       body: |-
-        Gmail: the app sends its own emails (password resets, welcome messages and your data backups) through the Gmail account ajicaretracker@gmail.com. It uses permission to send mail only. It never reads, searches or deletes any mailbox, including yours.
+        Gmail: the app sends its emails (invitations, password resets, welcome messages, reminders and your data backups) through the Gmail account ajicaretracker@gmail.com. It uses permission to send mail only, and never reads any mailbox, including yours.
+        Google Firebase Cloud Messaging: if you turn reminders on in the Android app, your phone's notification token and the reminder text are sent to Google to deliver the notification.
+        LINE: if you signed in with LINE, reminders are sent to your LINE account through LINE's messaging service.
         Google Gemini: only if you add your own Gemini key, and only when you upload a health report image to be read automatically. Images are sent to Google for that purpose alone.
-        LINE: only if you connect a LINE account, and only to send reminders.
+        PostHog (Android app only): usage statistics that help find problems and improve the app, such as app starts, the addresses of pages visited, errors, and the device and app version. They are not used for advertising.
+        Kibble prices: the app searches the BigGo and PChome shopping sites for the brand and product names of your cats' favorite kibbles. Nothing about you is sent.
         Hosting: the app and its database run on Railway.
     - heading: How long it is kept, and how to delete it
-      body: Your records stay until you delete them. Deleting your account from your
-        profile page removes it together with all of your pets, feeding records, health
-        checks and vet visits. You can also export your feeding records as a CSV file
-        at any time.
+      body: |-
+        Your records stay until you delete them. A care record you delete disappears from the app; it is kept hidden, with who deleted it, until the household is deleted.
+        Deleting your account from your profile page removes it, together with your household, cats, feeding records, care records, health checks and vet visits. If your household has other members, you are asked to hand it over to one of them first. Care you recorded in someone else's household stays there, without your name.
+        You can export your feeding records and, as an owner, all care records as CSV files at any time.
     - heading: Cookies
-      body: The app uses one cookie to keep you signed in. There are no advertising
-        or tracking cookies.
+      body: The app uses one cookie to keep you signed in. There are no advertising or tracking cookies. The Android app's usage statistics are described under PostHog above.
+    - heading: Children
+      body: The app is meant for adults who look after cats and is not directed at children.
     contact_email: ajicaretracker@gmail.com
     contact: Questions about this policy, or want your data removed? Email %{email}.
-    updated: 'Last updated: 16 September 2026'
+    updated: 'Last updated: 2 October 2026'
   terms_page:
     title: Terms of Service
     intro: Cat Feeding Tracker is a free, personal project offered as-is. By using it,
