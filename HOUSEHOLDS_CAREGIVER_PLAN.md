@@ -19,7 +19,7 @@
 | H3 — Delete a mistaken record | ✅ Done (2026-10-02). Committed on `feature/households` and merged into `main`. See [Checkpoint H3 result](#checkpoint-h3-result-2026-10-02) |
 | I — Android app push notifications (Firebase) | ✅ Done (2026-10-02), merged into `main`; Firebase project `pet-feeder-tracker` set up and **a notification received on a Pixel 9**. See [Checkpoint I result](#checkpoint-i-result-2026-10-02) |
 | I2 — Google, LINE and GitHub sign-in in the Android app | ✅ Done (2026-10-02), merged into `main`; **Google sign-in works on a Pixel 9**. See [Checkpoint I2 result](#checkpoint-i2-result-2026-10-02) |
-| J — Clean-up, docs, CI, merge | ✅ Done (2026-10-02) on `feature/households`; **merged into `main` when you ask** (its migration drops two columns on production). See [Checkpoint J result](#checkpoint-j-result-2026-10-02) |
+| J — Clean-up, docs, CI, merge | ✅ Done (2026-10-02), merged into `main` and deployed: production migrated (no `user_id` on `pets` or `dry_foods`; 3 cats, 8 food bags and every tracker intact). See [Checkpoint J result](#checkpoint-j-result-2026-10-02) |
 
 **Commits:** each checkpoint is committed on `feature/households` once `bin/rails test` passes, then pushed. Merged into `main` only when you ask.
 
