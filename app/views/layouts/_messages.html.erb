@@ -1,5 +1,8 @@
+<%# Only messages for people: notice (green) and alert (red). Other flash keys
+    carry data between requests (the saved care record, the "Record it again?"
+    question, a new viewer link) and are shown by their own pages. %>
 <div class="container flex flex-col justify-center items-center gap-4 mx-auto px-4">
-  <% flash.each do |name, msg| %>
+  <% flash.to_hash.slice("notice", "alert").each do |name, msg| %>
     <div class="alert-message flex justify-between text-start items-center p-4 mb-4 text-base rounded-lg <%= name == 'notice' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' %> transition-opacity duration-300 ease-in opacity-100 w-full md:w-2/3" role="alert" data-controller="dismiss">
       <div>
         <%= msg %>
