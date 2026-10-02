@@ -11,7 +11,7 @@ class PetWeightReminderJobTest < ActiveJob::TestCase
     @pet = pets(:one)
 
     # Clear other pets to avoid interfere
-    @user.pets.where.not(id: @pet.id).destroy_all
+    @user.owned_pets.where.not(id: @pet.id).destroy_all
     @user.sessions.destroy_all
   end
 

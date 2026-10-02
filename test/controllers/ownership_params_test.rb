@@ -15,25 +15,25 @@ class OwnershipParamsTest < ActionDispatch::IntegrationTest
     assert_difference("Pet.count") do
       post pets_url, params: { pet: { petname: "Mochi", user_id: @other_user.id } }
     end
-    assert_equal users(:one), Pet.order(:id).last.user
-    assert_empty @other_user.pets.where(petname: "Mochi")
+    assert_equal households(:one), Pet.order(:id).last.household
+    assert_empty @other_user.owned_pets.where(petname: "Mochi")
   end
 
   test "updating a pet ignores a submitted user_id" do
     patch pet_url(@pet), params: { pet: { petname: "Mochi", user_id: @other_user.id } }
-    assert_equal users(:one), @pet.reload.user
+    assert_equal households(:one), @pet.reload.household
   end
 
   test "creating a dry food ignores a submitted user_id" do
     assert_difference("DryFood.count") do
       post dry_foods_url, params: { dry_food: { brand: "Orijen", food_type: "kibble", description: "Six Fish", amount: 1800, user_id: @other_user.id } }
     end
-    assert_equal users(:one), DryFood.order(:id).last.user
+    assert_equal households(:one), DryFood.order(:id).last.household
   end
 
   test "restocking a dry food ignores a submitted user_id" do
     patch restock_dry_food_url(dry_foods(:one)), params: { dry_food: { amount: 2000, user_id: @other_user.id } }
-    assert_equal users(:one), dry_foods(:one).reload.user
+    assert_equal households(:one), dry_foods(:one).reload.household
   end
 
   test "creating a tracker ignores a submitted pet_id" do

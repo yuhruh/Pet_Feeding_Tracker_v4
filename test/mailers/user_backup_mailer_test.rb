@@ -14,8 +14,8 @@ class UserBackupMailerTest < ActionMailer::TestCase
     user = users(:one)
 
     # Create pets with slash in name and same name to test sanitization and collision avoidance
-    pet_with_slash = Pet.create!(user: user, petname: "Mimi/Momo", birthday: 2.years.ago)
-    pet_with_duplicate = Pet.create!(user: user, petname: "Mimi/Momo", birthday: 2.years.ago)
+    pet_with_slash = Household.for_owner(user).pets.create!(petname: "Mimi/Momo", birthday: 2.years.ago)
+    pet_with_duplicate = Household.for_owner(user).pets.create!(petname: "Mimi/Momo", birthday: 2.years.ago)
 
     mail = UserBackupMailer.backup_email(user)
 

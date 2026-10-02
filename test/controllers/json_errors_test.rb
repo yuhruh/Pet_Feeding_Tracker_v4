@@ -13,7 +13,7 @@ class JsonErrorsTest < ActionDispatch::IntegrationTest
     post pets_url(format: :json), params: { pet: { petname: "" } }
     assert_response :unprocessable_entity
     body = response.parsed_body
-    assert_equal Pet.new(user: @user).tap(&:validate).errors.full_messages.to_sentence, body["error"]
+    assert_equal Household.for_owner(@user).pets.new.tap(&:validate).errors.full_messages.to_sentence, body["error"]
     assert body["details"]["petname"].present?
   end
 

@@ -10,7 +10,6 @@ one:
   total_ate_amount: 9.99
   left_amount: 9.99
   days_remaining: 2026-01-06
-  user: one
   household: one
 
 two:
@@ -23,5 +22,4 @@ two:
   total_ate_amount: 9.99
   left_amount: 9.99
   days_remaining: 2026-01-06
-  user: two
   household: two

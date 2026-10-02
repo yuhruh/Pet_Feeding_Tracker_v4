@@ -6,7 +6,6 @@ class PetsControllerTest < ActionDispatch::IntegrationTest
     # @user = User.create(email_address: "example@email.com", password: "password", password_confirmation: "password", username: "John Doe", timezone: "Asia/Taiper")
     # post session_url, params: { email_address: @user.email_address, password: "password" }
     @pet = pets(:one)
-    @pet.user = users(:one)
   end
 
   test "should get index" do
@@ -21,7 +20,7 @@ class PetsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create pet" do
     assert_difference("Pet.count") do
-      post pets_url, params: { pet: { birthday: @pet.birthday, breed: @pet.breed, gender: @pet.gender, petname: @pet.petname, user_id: @pet.user_id, weight: @pet.weight } }
+      post pets_url, params: { pet: { birthday: @pet.birthday, breed: @pet.breed, gender: @pet.gender, petname: @pet.petname, weight: @pet.weight } }
     end
 
     assert_redirected_to pet_url(Pet.last, locale: I18n.default_locale)
@@ -38,7 +37,7 @@ class PetsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update pet" do
-    patch pet_url(@pet), params: { pet: { birthday: @pet.birthday, breed: @pet.breed, gender: @pet.gender, petname: @pet.petname, user_id: @pet.user_id, weight: @pet.weight } }
+    patch pet_url(@pet), params: { pet: { birthday: @pet.birthday, breed: @pet.breed, gender: @pet.gender, petname: @pet.petname, weight: @pet.weight } }
     assert_redirected_to pet_url(@pet, locale: I18n.default_locale)
   end
 

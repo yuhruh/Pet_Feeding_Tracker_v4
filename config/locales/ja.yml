@@ -486,7 +486,6 @@
       total_ate_amount: "総食事量"
       left_amount: "残量"
       days_remaining: "残り日数"
-      user: "ユーザー"
     form:
       prompt: "ドライフードの種類を選択してください"
       brand: "ブランド"

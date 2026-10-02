@@ -13,36 +13,25 @@ class HouseholdTest < ActiveSupport::TestCase
     assert household.care_spots.all? { |spot| spot.name.nil? && spot.archived_at.nil? }
   end
 
-  test "a user's first pet creates their household, and later pets and food bags join it" do
+  test "a user's household is created once, with their first cat or food bag, and later ones join it" do
     mom = new_user("mom")
     assert_nil mom.owned_household
 
-    kuro = mom.pets.create!(petname: "Kuro")
+    kuro = Household.for_owner(mom).pets.create!(petname: "Kuro")
     household = mom.reload.owned_household
     assert_equal household, kuro.household
-    assert_equal household, mom.pets.create!(petname: "Shiro").household
-    assert_equal household, mom.dry_foods.create!(brand: "曙光", description: "鴨肉", food_type: "kibble", amount: 1000).household
+    assert_equal household, Household.for_owner(mom).pets.create!(petname: "Shiro").household
+    assert_equal household, Household.for_owner(mom).dry_foods.create!(brand: "曙光", description: "鴨肉", food_type: "kibble", amount: 1000).household
     assert_equal 1, Household.where(owner: mom).count
+    assert_equal [ kuro.id ], mom.owned_pets.where(petname: "Kuro").pluck(:id)
   end
 
-  test "a user's first food bag creates their household too" do
-    mom = new_user("mom")
-
-    bag = mom.dry_foods.create!(brand: "曙光", description: "鴨肉", food_type: "kibble", amount: 1000)
-
-    assert_equal mom.reload.owned_household, bag.household
-  end
-
-  test "a pet or food bag can't sit in another owner's household" do
-    pet = pets(:one)
-    pet.household = households(:two)
-
-    assert_not pet.valid?
-    assert_includes pet.errors.details[:household], { error: :invalid }
-
-    bag = dry_foods(:one)
-    bag.household = households(:two)
-    assert_not bag.valid?
+  test "a cat and a food bag need a household (checkpoint J: no more user_id)" do
+    assert_not Pet.new(petname: "Kuro").valid?
+    assert_includes Pet.new(petname: "Kuro").tap(&:valid?).errors.details[:household], { error: :blank }
+    assert_not DryFood.new(brand: "曙光", description: "鴨肉", food_type: "kibble", amount: 1000).valid?
+    assert_not Pet.column_names.include?("user_id")
+    assert_not DryFood.column_names.include?("user_id")
   end
 
   test "a user owns at most one household" do

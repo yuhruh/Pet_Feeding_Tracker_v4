@@ -4,7 +4,7 @@ require "test_helper"
 class TrackerTimezoneTest < ActiveSupport::TestCase
   setup do
     @user = User.create!(email_address: "tz@example.com", password: "password", password_confirmation: "password", username: "TZ User", timezone: "Asia/Taipei")
-    @pet = @user.pets.create!(petname: "Aji")
+    @pet = Household.for_owner(@user).pets.create!(petname: "Aji")
     # 12:59 UTC is 20:59 Asia/Taipei
     @tracker = @pet.trackers.create!(
       date: "2024-03-27",

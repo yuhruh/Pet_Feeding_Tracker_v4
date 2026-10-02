@@ -11,7 +11,7 @@ class LiveUpdatesAndCareChartsTest < ActionDispatch::IntegrationTest
     @zone = @household.time_zone
     @pet = pets(:one)
     @pet.update!(petname: "aji")
-    @umi = @household.pets.create!(user: @owner, petname: "umi", gender: "♀️ Female")
+    @umi = @household.pets.create!(petname: "umi", gender: "♀️ Female")
     @mom = User.create!(username: "mom", email_address: "mom@example.com", email_address_confirmation: "mom@example.com",
                         password: "password123", timezone: "Asia/Taipei")
     @household.memberships.create!(user: @mom, role: :caregiver)

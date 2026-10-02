@@ -9,7 +9,7 @@ class PetSharesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "new pets are not shared until the owner turns on a link" do
-    pet = @user.pets.create!(petname: "Mochi")
+    pet = Household.for_owner(@user).pets.create!(petname: "Mochi")
     assert_nil pet.share_token
     assert_not pet.sharing?
   end

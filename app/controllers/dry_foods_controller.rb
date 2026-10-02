@@ -20,12 +20,13 @@ class DryFoodsController < ApplicationController
 
   # GET /dry_foods/new
   def new
-    @dry_food = Current.user.dry_foods.build
+    @dry_food = DryFood.new
   end
 
   # POST /dry_foods or /dry_foods.json
   def create
-    @dry_food = Current.user.dry_foods.build(dry_food_params)
+    # Into the user's own household, created with their first bag.
+    @dry_food = Household.for_owner(Current.user).dry_foods.build(dry_food_params)
 
     respond_to do |format|
       if @dry_food.save

@@ -1,10 +1,7 @@
 class DryFood < ApplicationRecord
-  belongs_to :user
-  # Until dry_foods.user_id is removed, a bag's household is its owner's household.
+  # A food bag belongs to a household, shared by its cats.
   belongs_to :household
   has_many :trackers, dependent: :nullify
-  before_validation :join_owners_household, if: -> { household_id.nil? && user }
-  validate :household_owned_by_user
 
   enum :food_type, { kibble: "Kibble", freeze_dried: "Freeze-Dried" }
 
@@ -44,13 +41,6 @@ class DryFood < ApplicationRecord
 
   private
 
-  def join_owners_household
-    self.household = Household.for_owner(user)
-  end
-
-  def household_owned_by_user
-    errors.add(:household, :invalid) if household && user_id && household.owner_id != user_id
-  end
 
   def set_left_amount
     self.left_amount = amount

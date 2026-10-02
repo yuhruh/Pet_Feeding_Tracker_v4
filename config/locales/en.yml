@@ -486,7 +486,6 @@ en:
       total_ate_amount: "Total ate amount"
       left_amount: "Left amount"
       days_remaining: "Days remaining"
-      user: "User"
     form:
       prompt: "Please select type of dry food"
       brand: "Brand"

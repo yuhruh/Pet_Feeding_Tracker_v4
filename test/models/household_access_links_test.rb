@@ -80,9 +80,9 @@ class HouseholdAccessLinksTest < ActiveSupport::TestCase
     assert_equal mom, @household.owner
     assert_equal "caregiver", @household.memberships.find_by(user: @owner).role, "the former owner stays as a caregiver"
     assert_nil @household.memberships.find_by(user: mom), "the new owner isn't also a member"
-    assert_equal [ mom.id ], @household.pets.distinct.pluck(:user_id)
-    assert_equal [ mom.id ], @household.dry_foods.distinct.pluck(:user_id)
-    assert pets(:one).reload.valid?, "the pet still belongs to its household's owner"
+    assert_equal [ pets(:one).id ], mom.owned_pets.pluck(:id), "the cats come with the household"
+    assert_includes mom.owned_dry_foods, dry_foods(:one), "and the food bags"
+    assert_empty @owner.owned_pets
     assert_equal @household, mom.reload.owned_household
     assert_nil @owner.reload.owned_household
   end
@@ -96,7 +96,7 @@ class HouseholdAccessLinksTest < ActiveSupport::TestCase
     assert_not transfer.accept!(@owner)
     assert_equal [ { error: :wrong_person } ], transfer.errors.details[:base]
 
-    mom.pets.create!(petname: "Kuro") # Mom now owns a household of her own
+    Household.for_owner(mom).pets.create!(petname: "Kuro") # Mom now owns a household of her own
     assert_not transfer.accept!(mom)
     assert_equal [ { error: :already_owns } ], transfer.errors.details[:base]
     assert_equal @owner, @household.reload.owner

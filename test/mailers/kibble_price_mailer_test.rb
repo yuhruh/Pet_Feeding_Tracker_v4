@@ -3,7 +3,7 @@ require "test_helper"
 class KibblePriceMailerTest < ActionMailer::TestCase
   setup do
     @pet = pets(:one)
-    @user = @pet.user
+    @user = @pet.owner
     @check = @pet.kibble_price_checks.create!(checked_on: Date.new(2026, 10, 1), status: :done, kibbles: [
       { "brand" => "曙光", "description" => "無穀滋養鴨肉食譜", "favorite_score" => 45, "queries" => [], "found" => 1 },
       { "brand" => "天然密碼", "description" => "無穀鴨肉&火雞肉 全齡貓配方", "favorite_score" => 44, "queries" => [], "found" => 0 }

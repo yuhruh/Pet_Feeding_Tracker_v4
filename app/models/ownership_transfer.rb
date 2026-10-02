@@ -37,9 +37,6 @@ class OwnershipTransfer < ApplicationRecord
       household.memberships.where(user_id: to_user_id).destroy_all
       household.update!(owner_id: to_user_id)
       household.memberships.create!(user_id: from_user_id, role: :caregiver)
-      # pets.user_id and dry_foods.user_id still mirror the owner until they're removed.
-      household.pets.update_all(user_id: to_user_id, updated_at: Time.current)
-      household.dry_foods.update_all(user_id: to_user_id, updated_at: Time.current)
       household.ownership_transfers.pending.where.not(id: id).update_all(cancelled_at: Time.current)
       update!(accepted_at: Time.current)
     end

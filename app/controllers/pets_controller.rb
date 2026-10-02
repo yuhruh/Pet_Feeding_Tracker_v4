@@ -13,7 +13,7 @@ class PetsController < ApplicationController
 
   # GET /pets/new
   def new
-    @pet = Current.user.pets.build
+    @pet = Pet.new
   end
 
   # GET /pets/1/edit
@@ -22,7 +22,8 @@ class PetsController < ApplicationController
 
   # POST /pets or /pets.json
   def create
-    @pet = Current.user.pets.build(pet_params)
+    # Into the user's own household, created with their first cat.
+    @pet = Household.for_owner(Current.user).pets.build(pet_params)
 
     respond_to do |format|
       if @pet.save

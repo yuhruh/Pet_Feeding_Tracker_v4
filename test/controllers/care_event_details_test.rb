@@ -12,7 +12,7 @@ class CareEventDetailsTest < ActionDispatch::IntegrationTest
     @mom = User.create!(username: "mom", email_address: "mom@example.com", email_address_confirmation: "mom@example.com",
                         password: "password123", timezone: "Asia/Taipei")
     @household.memberships.create!(user: @mom, role: :caregiver)
-    @bag = @household.dry_foods.create!(user: @owner, food_type: "Kibble", brand: "曙光", description: "無穀滋養鴨肉", amount: 1500)
+    @bag = @household.dry_foods.create!(food_type: "Kibble", brand: "曙光", description: "無穀滋養鴨肉", amount: 1500)
     @fed = CareEvent.create!(kind: :fed, pet: @pet, actor: @mom, occurred_at: 20.minutes.ago)
   end
 
@@ -20,7 +20,7 @@ class CareEventDetailsTest < ActionDispatch::IntegrationTest
     @pet.trackers.create!(date: Date.current, feed_time: "08:00", food_type: "Wet", brand: "Ciao", description: "Tuna", amount: 40,
                           hungry: "💖 Yes, eat right away", love: "💕", favorite_score: 35)
     @pet.trackers.create!(date: Date.current, feed_time: "09:00", food_type: "Other", brand: "Chicken", description: "Boiled", amount: 10)
-    households(:two).dry_foods.create!(user: users(:two), food_type: "Kibble", brand: "Other house", description: "bag", amount: 100)
+    households(:two).dry_foods.create!(food_type: "Kibble", brand: "Other house", description: "bag", amount: 100)
 
     suggestions = FeedingSuggestions.new(@pet).by_food_type
     assert_includes suggestions["kibble"].map { |s| s[:brand] }, "曙光"

@@ -486,7 +486,6 @@ zh-TW:
       total_ate_amount: "總進食量"
       left_amount: "剩餘份量"
       days_remaining: "剩餘天數"
-      user: "使用者"
     form:
       prompt: "請選取乾糧類型"
       brand: "品牌"

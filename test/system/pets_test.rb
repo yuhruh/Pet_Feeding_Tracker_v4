@@ -4,7 +4,6 @@ class PetsTest < ApplicationSystemTestCase
   setup do
     @user = users(:one)
     @pet = pets(:one)
-    @pet.user = users(:one)
   end
 
   test "visiting the index" do

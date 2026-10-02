@@ -4,7 +4,6 @@ class DryFoodsTest < ApplicationSystemTestCase
   setup do
     @user = users(:one)
     @dry_food = dry_foods(:one)
-    @dry_food.user = users(:one)
   end
 
   test "visiting the index" do

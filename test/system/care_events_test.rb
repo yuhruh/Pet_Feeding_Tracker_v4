@@ -13,7 +13,7 @@ class CareEventsTest < ApplicationSystemTestCase
     @pet.update!(petname: "Aji")
     @box = @household.care_spots.create!(kind: :litter_box, name: "Upstairs box", position: 0)
     @fountain = @household.care_spots.create!(kind: :water_fountain, name: "Kitchen fountain", position: 1)
-    @bag = @household.dry_foods.create!(user: @owner, food_type: "Kibble", brand: "Aurora", description: "Duck", amount: 1500)
+    @bag = @household.dry_foods.create!(food_type: "Kibble", brand: "Aurora", description: "Duck", amount: 1500)
     @mom = User.create!(username: "mom", email_address: "mom@example.com", email_address_confirmation: "mom@example.com",
                         password: "password123", timezone: "Asia/Taipei")
     @household.memberships.create!(user: @mom, role: :caregiver)

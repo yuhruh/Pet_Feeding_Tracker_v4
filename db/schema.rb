@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_02_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_02_130000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -149,9 +149,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_02_120000) do
     t.decimal "total_ate_amount"
     t.datetime "updated_at", null: false
     t.decimal "used_amount"
-    t.integer "user_id", null: false
     t.index ["household_id"], name: "index_dry_foods_on_household_id"
-    t.index ["user_id"], name: "index_dry_foods_on_user_id"
   end
 
   create_table "health_checks", force: :cascade do |t|
@@ -324,11 +322,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_02_120000) do
     t.datetime "share_expires_at"
     t.string "share_token"
     t.datetime "updated_at", null: false
-    t.integer "user_id", null: false
     t.decimal "weight"
     t.index ["household_id"], name: "index_pets_on_household_id"
     t.index ["share_token"], name: "index_pets_on_share_token", unique: true
-    t.index ["user_id"], name: "index_pets_on_user_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -583,7 +579,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_02_120000) do
   add_foreign_key "connected_services", "users"
   add_foreign_key "device_tokens", "sessions", on_delete: :cascade
   add_foreign_key "device_tokens", "users", on_delete: :cascade
-  add_foreign_key "dry_foods", "Users", column: "user_id"
   add_foreign_key "dry_foods", "households"
   add_foreign_key "health_checks", "pets"
   add_foreign_key "household_invitations", "households"
@@ -600,7 +595,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_02_120000) do
   add_foreign_key "ownership_transfers", "users", column: "from_user_id"
   add_foreign_key "ownership_transfers", "users", column: "to_user_id"
   add_foreign_key "pets", "households"
-  add_foreign_key "pets", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade

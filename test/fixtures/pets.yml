@@ -6,7 +6,6 @@ one:
   weight: 9.99
   gender: "♂️ Male"
   breed: MyString
-  user: one
   household: one
   share_token: "token_one"
 
@@ -16,6 +15,5 @@ two:
   weight: 9.99
   gender: "♀️ Female"
   breed: MyString
-  user: two
   household: two
   share_token: "token_two"
