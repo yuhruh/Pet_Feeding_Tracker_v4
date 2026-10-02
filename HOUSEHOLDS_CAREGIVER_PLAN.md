@@ -18,9 +18,30 @@
 | H2 — Litter several times a day | ✅ Done (2026-10-02). Committed on `feature/households` and merged into `main`. See [Checkpoint H2 result](#checkpoint-h2-result-2026-10-02) |
 | H3 — Delete a mistaken record | ✅ Done (2026-10-02). Committed on `feature/households` and merged into `main`. See [Checkpoint H3 result](#checkpoint-h3-result-2026-10-02) |
 | I — Android app push notifications (Firebase) | ✅ Built (2026-10-02) on `feature/households`; **works once the Firebase project is set up** (see [What you need to do](#checkpoint-i-build-plan-2026-10-02)). See [Checkpoint I result](#checkpoint-i-result-2026-10-02) |
+| I2 — Google, LINE and GitHub sign-in in the Android app | In progress. See [Checkpoint I2 plan](#checkpoint-i2-plan-sign-in-with-google-line-or-github-in-the-android-app-2026-10-02) |
 | J — Clean-up, docs, CI, merge | Not started |
 
 **Commits:** each checkpoint is committed on `feature/households` once `bin/rails test` passes, then pushed. Merged into `main` only when you ask.
+
+## Checkpoint I2 plan: sign in with Google, LINE or GitHub in the Android app (2026-10-02)
+
+**The problem (found while testing I):** in the Android app, signing in with Google, LINE or GitHub always ends back on the start page, not signed in. **Root cause:** sign-in starts in the app's WebView, but Google doesn't allow its sign-in page in WebViews, so it opens in Chrome, and the provider's callback arrives in **Chrome**. The server checks the callback against the OAuth *state* it stored in a cookie when sign-in started (turned on on 2026-09-15 in `92f5759`, against login CSRF); Chrome doesn't have the WebView's cookie, so the check fails (`csrf_detected`), the sign-in is refused and the app reloads the start page. Before that fix the check was off, so the callback "succeeded", but it signed in **Chrome**, not the app. Email and password sign-in in the app works; the website isn't affected.
+
+**The fix (the usual way for Hotwire Native apps):** the whole provider sign-in happens in Chrome, and a one-time code brings it back into the app.
+
+| Part | Build |
+|---|---|
+| 1. Start in Chrome | In the app, the Google, LINE and GitHub buttons (sign-in, sign-up and join pages) are links to `/auth/native/:provider`, which the app opens in a **Chrome Custom Tab** over the app. That page starts the provider sign-in **in Chrome**, so the state cookie and the callback are in the same browser and the state check stays on. The link carries, signed and valid for 10 minutes, what the app's session was holding: an invitation being accepted or a viewer link being followed |
+| 2. One-time code | After the callback, the server doesn't sign Chrome in. It saves a **one-time sign-in code** (`native_sign_ins`: a digest of the code, the person, where to land and the message; valid **2 minutes**, usable **once**) and sends Chrome to `pettracker://sign-in?code=…`, which the app catches (a "Return to the app" button too, in case Chrome asks). A refusal (cancelled, an email already used by another sign-in method, LINE without an email) comes back the same way, with its message and page and nobody signed in |
+| 3. Back in the app | The app closes the tab and opens `/auth/native/finish?code=…` in its WebView: the server checks the code, **signs the app in**, accepts the invitation or follows the viewer link, and lands where it always does (Today for caregivers, the cat list, Add A Cat) |
+| 4. The website | Unchanged: the buttons still post to `/auth/:provider` in the same browser, with the state check |
+| 5. Checks | Tests: the native start page carries the session's invitation or viewer link and a time zone; the callback in native mode signs nobody in and hands over a code; the code signs the app in once, not twice, not after 2 minutes, not a made-up one; invitations and viewer links accepted after it; refusals handed back with their message; the website's flow and state check unchanged. The app: builds; signing in with Google on the Pixel |
+
+**Decisions for I2:**
+- **The state check stays on** for every sign-in; the app's flow passes it because it never leaves Chrome until it's done.
+- **The code is the only thing that crosses from Chrome to the app**: it's random, stored only as a digest, expires in 2 minutes and works once, so a leaked link is useless soon after and can't be reused.
+- **Connecting another sign-in method to an account already signed in** (Account page) stays on the website for now.
+- **The app gets a custom link scheme `pettracker://`** for the return, like the LINE scheme it already has, and the main screen is reused (not stacked) when it opens.
 
 ## Checkpoint I result (2026-10-02)
 
