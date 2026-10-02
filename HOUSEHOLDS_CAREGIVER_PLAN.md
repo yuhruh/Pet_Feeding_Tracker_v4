@@ -19,9 +19,36 @@
 | H3 — Delete a mistaken record | ✅ Done (2026-10-02). Committed on `feature/households` and merged into `main`. See [Checkpoint H3 result](#checkpoint-h3-result-2026-10-02) |
 | I — Android app push notifications (Firebase) | ✅ Done (2026-10-02), merged into `main`; Firebase project `pet-feeder-tracker` set up and **a notification received on a Pixel 9**. See [Checkpoint I result](#checkpoint-i-result-2026-10-02) |
 | I2 — Google, LINE and GitHub sign-in in the Android app | ✅ Done (2026-10-02), merged into `main`; **Google sign-in works on a Pixel 9**. See [Checkpoint I2 result](#checkpoint-i2-result-2026-10-02) |
-| J — Clean-up, docs, CI, merge | Not started |
+| J — Clean-up, docs, CI, merge | ✅ Done (2026-10-02) on `feature/households`; **merged into `main` when you ask** (its migration drops two columns on production). See [Checkpoint J result](#checkpoint-j-result-2026-10-02) |
 
 **Commits:** each checkpoint is committed on `feature/households` once `bin/rails test` passes, then pushed. Merged into `main` only when you ask.
+
+## Checkpoint J result (2026-10-02)
+
+**What changed (nothing visible to people using the app):**
+- **`pets.user_id` and `dry_foods.user_id` are gone.** Cats and food bags belong to their household only: a new one goes into the owner's household (`Household.for_owner`, created with the first cat or bag), taking over a household no longer copies `user_id`, and `User` no longer has `pets` / `dry_foods`. The JSON for cats and bags shows `household_id`. The food bag page no longer prints its owner's number.
+- **`schema.rb` now loads into a fresh PostgreSQL database** (checked: 41 tables): the odd `dry_foods` → `"Users"` foreign key (ARCHITECTURE D1) went with the column.
+- **Clean-ups:** the `DEBUG: GOOGLE_ID is LOADED` lines at every start and test run, two commented-out debug lines in the sign-in callback, an outdated comment in `HouseholdPolicy`.
+- **Docs:** **README** (households, Today, medications, reminders, notifications, the hourly job, Firebase setup), **ARCHITECTURE** 1.14 (a new §1.9 "Households, Caregivers and Care", the data model with the household tables, authorization by role, the app's sign-in through Chrome, the reminders job, directory map, glossary), **USAGE** (households, viewer links, spots, the Today page, fixing records, litter observations, medications, reminders, care records CSV, the Android app).
+
+**Main files:** `db/migrate/20261002130000_remove_user_id_from_pets_and_dry_foods.rb` (checked on PostgreSQL with data: up removes only `user_id` and its key, `dry_foods → households` stays; down fills `user_id` again from the household's owner), `Pet`, `DryFood`, `User`, `OwnershipTransfer`, `PetsController`, `DryFoodsController`, the JSON views.
+
+**Found while building:** Rails' SQLite adapter removed **both** foreign keys of `dry_foods` when asked to remove the `user_id` one by name (they're nameless in SQLite); `remove_column` alone drops exactly the column's own index and key on both SQLite and PostgreSQL, so the migration does only that. Production's keys were checked first: both point to `users`, and every cat's and bag's `user_id` already equals its household's owner, so nothing is lost.
+
+**Checks:** tests that set or read `user_id` moved to the household (the old "a pet in another owner's household is invalid" validation is gone with the column; the household is always set by the server, and a new test checks that a cat and a bag need a household and that the columns are gone). `bin/rails test`: 478 runs, 0 failures. `bin/rails test:system`: 39 runs, 0 failures. RuboCop and Brakeman clean.
+
+## Checkpoint J build plan (2026-10-02)
+
+| Part | Build |
+|---|---|
+| 1. Remove `pets.user_id` and `dry_foods.user_id` | Cats and food bags belong to their **household** only. A new cat or bag goes into the owner's household (created with the first one, as now). Taking over a household no longer copies `user_id`. The JSON for cats and bags shows `household_id` instead of `user_id`. The migration can be rolled back (the column is filled again from the household's owner) and is checked on PostgreSQL. This also removes the odd foreign key from `dry_foods.user_id` to a table named `"Users"` in `schema.rb` (production's own key points to `users`), which made building a fresh PostgreSQL database from `schema.rb` fail. On production every cat's and bag's `user_id` already equals its household's owner, so nothing is lost |
+| 2. Small clean-ups | The `DEBUG: GOOGLE_ID is LOADED` lines printed by `config/initializers/omniauth.rb` at every start (and in every test run) go; a food bag's page no longer prints its owner's number |
+| 3. Docs | **README** (what the app does now: households, roles, Today, care records, reminders, the Android app), **ARCHITECTURE** (households and roles, `HouseholdPolicy`, care events, live updates, reminders and their channels, Firebase, the app's sign-in), **USAGE** (for owners, caregivers and viewers) |
+| 4. CI and merge | `bin/rails test`, `bin/rails test:system`, RuboCop and Brakeman green locally and on GitHub; merged into `main` (already in step), with the plan marked done |
+
+**Decisions for J:**
+- **Nothing changes for people using the app**: who sees and manages which cat already comes from the household since B.
+- **The `feature/households` branch stays** after the merge until you say it can be deleted.
 
 ## Checkpoint I2 result (2026-10-02)
 
@@ -932,7 +959,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 | H2 | ✅ Done — Per job, the owner picks **A. every …** (now also in hours: 3 times a day, twice a day, daily, custom) or **B. at set times** (up to 6); due times and reminders for both; "3× today" and set-time statuses on the Today row; the litter double-tap guard at 30 minutes | A: "Twice a day", scooped at 08:00, due and reminded at 20:00; scooped at 15:00 instead, due 03:00, reminded at 9am. B: 08:00 and 20:00, a scoop at 19:40 covers 20:00, an uncovered 20:00 is reminded once at 20:00 with one follow-up at 22:00. Existing day intervals unchanged |
 | H3 | ✅ Done — **Delete** on timeline entries and the details page (owner any record, caregiver their own for 24 hours), with a confirmation; hidden like Undo with who deleted it; a linked tracker unlinked | An accidental "Fed" deleted by the caregiver who tapped it disappears from everyone's Today, the charts, the CSV and reminders; another caregiver's record and viewers refused |
 | I | ✅ Built (needs your Firebase project) — Firebase in the Android app (FCM SDK, notification permission, token registration); `device_tokens`; sending through FCM HTTP v1; fallback to LINE or email | A reminder arrives as an Android notification and opens the Today page; an invalid token falls back to LINE or email |
-| J | Remove `pets.user_id` / `dry_foods.user_id`; docs (README, ARCHITECTURE, USAGE) | CI green; merged into `main` when you ask |
+| J | ✅ Done — Remove `pets.user_id` / `dry_foods.user_id`; docs (README, ARCHITECTURE, USAGE) | CI green; merged into `main` when you ask |
 
 ## Risks
 
@@ -958,6 +985,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 
 ## Change log
 
+- **Checkpoint J (2026-10-02):** `pets.user_id` and `dry_foods.user_id` removed (cats and bags belong to the household only; `schema.rb` loads into PostgreSQL again), start-up debug output removed, README, ARCHITECTURE and USAGE updated for households, care, reminders and the Android app.
 - **Checkpoint I2 (2026-10-02):** Google, LINE and GitHub sign-in in the Android app, through a Chrome tab and a one-time code (broken since the OAuth state check of 2026-09-15); fixed on the phone: the app no longer claims sign-in addresses, and Chrome's own website sign-in doesn't get in the way. **Checkpoint I** confirmed on a Pixel 9.
 - **Checkpoint I (2026-10-02):** Android app notifications through Firebase Cloud Messaging: device tokens per sign-in, the permission asked when turning reminders on, notifications opening Today, the app first then LINE or email; off until the Firebase project and its service account are set up.
 - **H3 messages (2026-10-02):** Delete's own wording when refused (the 24-hour rule for caregivers) and for a record already deleted, in English, Japanese and Traditional Chinese.
