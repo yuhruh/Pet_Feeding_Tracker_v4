@@ -52,7 +52,8 @@ class RemindersTest < ApplicationSystemTestCase
       assert_text "20:00"
     end
     within("##{ActionView::RecordIdentifier.dom_id(@fountain)}") do
-      assert_text "🧽 Fountain cleaned due at"
+      # 12 hours from now: today or, after noon, tomorrow.
+      assert_text(/🧽 Fountain cleaned due (tomorrow )?at \d\d:\d\d/)
       assert_text "🔄 Filter changed due in 10 days"
       click_on "💧 Refilled"
     end
