@@ -2,9 +2,9 @@
 
 | Item | Value |
 |---|---|
-| Document version | 1.13 (adds the monthly kibble price check; 1.12: S1–S3 and S5–S14 fixed; S4 fixed in code, operator steps pending; feed-time ordering fixed) |
-| Date | 2026-09-28 |
-| Source baseline | `main` @ `52eef1e` |
+| Document version | 1.14 (households, caregivers and viewers; care records on the Today page; medications; reminders by Android app, LINE or email; live updates; the Android app's sign-in through Chrome; `pets.user_id` and `dry_foods.user_id` removed. 1.13: the monthly kibble price check) |
+| Date | 2026-10-02 |
+| Source baseline | `main` after checkpoint J of [HOUSEHOLDS_CAREGIVER_PLAN.md](HOUSEHOLDS_CAREGIVER_PLAN.md) |
 | Application | Pet Tracker v4 (Rails 8.1 monolith + Hotwire Native Android shell) |
 | Audience | Developers, reviewers, and operators of the application |
 
@@ -33,7 +33,10 @@ Pet Tracker v4 is a web application for pet owners to record and analyze:
 - **Food inventory** (dry foods): bag stock, average daily consumption, and predicted run-out date.
 - **Health checks**: blood-panel results, optionally extracted from photos with Google Gemini.
 - **Vet visits**: questions prepared in advance, answers recorded afterwards, and visit metadata such as purpose and waiting versus consultation time.
-- **Sharing**: a public read-only feeding dashboard (share token) and per-visit collaboration with other registered users.
+- **Households** (§1.9): each owner's cats, food bags, litter boxes and water spots, and the people who help: **caregivers** record care, **viewers** only look, through an account or a personal viewer link.
+- **Care records** (§1.9): one-tap feeding, litter, water, weight and medicine records on the **Today** page, with litter observations, live updates across everyone's pages, and the owner's care records CSV.
+- **Reminders** (§1.9): litter box and water spot jobs (every N hours or days, or at set times) and overdue doses, by the Android app, LINE or email.
+- **Sharing**: a public read-only feeding dashboard (share token), per-visit collaboration with other registered users, and household viewer links.
 - **Kibble prices**: once a month, current Taiwan prices for each pet's favorite kibbles, ranked by NT$ per kg, from the BigGo price-comparison site and PChome's search (§1.8).
 
 ### 1.2 Architectural Style
@@ -94,6 +97,9 @@ flowchart LR
   R -->|"OAuth 2.0 / OIDC"| O["Google · LINE · GitHub"]
   Q -->|"transactional & backup mail"| S["SendGrid"]
   Q -->|"push reminders"| L["LINE Messaging API"]
+  Q -->|"reminder notifications<br/>(HTTP v1, service account)"| F["Firebase Cloud Messaging"]
+  F -->|"push"| A
+  R -.->|"live page refreshes<br/>(Turbo Streams over Solid Cable)"| B
   Q -->|"monthly kibble price search<br/>(HTTPS GET, allow-listed)"| K["BigGo · PChome"]
 ```
 
@@ -109,6 +115,7 @@ flowchart LR
 | **Mailers** | `app/mailers/` | Welcome, password reset, weight reminder, CSV backup, monthly kibble prices (`KibblePriceMailer`), and `DiagnosticsMailer` (test email; alert when a price source's page layout changes). |
 | **Views** | `app/views/` | ERB + Tailwind HTML, Jbuilder JSON, `:native` variants, PWA manifest. |
 | **Stimulus** | `app/javascript/controllers/` | Form helpers (`tracker_form`, `left_amount`, `range_form`, `filter_form`), bulk edit and delete, OCR upload, share/download bridge, time-zone detection, toasts. |
+| **Households and care** | §1.9 | Households, roles and the policy; care events and the Today page; medications; reminders; live updates; Android notifications and the app's sign-in. |
 | **Rake tasks** | `lib/tasks/` | `db:backup`, `notifications:weigh_pets`, `i18n:export` (hooked into `assets:precompile`), and a custom `tailwindcss:build`. |
 
 ### 1.6 Request Lifecycle (authenticated page)
@@ -200,6 +207,22 @@ sequenceDiagram
 - **Nothing found:** a kibble neither source lists is saved in the check's summary with `found: 0`, and the page and email say "Can't find this kibble in shops right now." (A Gemini + Google Search fallback was built and then removed: search grounding needs its own quota, which a real key didn't have.)
 - **Layout changes:** an empty BigGo page without its "no results" notice, or a PChome answer without `Prods`, logs a warning and sends `DiagnosticsMailer#price_source_alert` to the app's address, at most once a day per source.
 - **Email:** `KibblePriceMailer#monthly_report`, in the language of the owner's time zone (Asia/Taipei → zh-TW, Asia/Tokyo → ja, else en), not CC'd to the admin. Sent only by the monthly run and only when prices were found.
+
+### 1.9 Households, Caregivers and Care
+
+Built in checkpoints A–J of [HOUSEHOLDS_CAREGIVER_PLAN.md](HOUSEHOLDS_CAREGIVER_PLAN.md) (2026-09-29 – 10-02), which records every decision and test.
+
+| Area | Where | How it works |
+|---|---|---|
+| **Households and roles** | `Household`, `HouseholdMembership`, `HouseholdPolicy`, `PetAccess` | Every cat, food bag, litter box and water spot belongs to one **household**, which has one **owner** (`households.owner_id`). Others join as **caregivers** (record care, read trackers and charts) or **viewers** (charts and today's timeline). `HouseholdPolicy#can?` is the one place that decides; pet pages load cats with `Pet.accessible_by(user)` and check a permission (`PetAccess#load_pet`). Cats outside the user's households are "not found". The household always comes from the cat, box or spot, never from a form. |
+| **Joining** | `HouseholdInvitationsController`, `HouseholdJoinsController`, `ViewerLinksController`, `ViewerPagesController`, `OwnershipTransfersController` | Caregivers join through an emailed invitation (single use, 7 days, bound to the invited email). Viewers use a personal link (`/view/:token`, revocable, optional expiry, no account needed). The owner can hand the household to a member (`OwnershipTransfer#accept!` swaps owner and caregiver in one transaction). |
+| **Care records** | `CareEvent`, `CareEventsController`, `HouseholdDay`, `TodayController` | One tap saves a care event (`fed`, `weight`, `litter`, `water`, `meds`) now, by the tapper. The saved notice offers Undo (10 s), quick time changes, details and, for water, checkboxes that add jobs to the same record. "Record it again?" guards repeats. Litter records can carry observations and a cat. Records are changed by the owner (any) or the caregiver who made them (24 h) and deleted the same way (hidden with `undone_at` and `deleted_by_id`). The Today and viewer timeline shows the last 24 hours. |
+| **Medications** | `Medication`, `MedicationsController`, `care_events/_meds_panel` | The owner sets a dose and up to 4 times a day (or as needed); 💊 confirms a dose (Given / Couldn't give with a reason); each dose shows due, given, couldn't give or overdue (1 h late). |
+| **Live updates** | `RefreshesHouseholdPages`, `turbo_stream_from household` | A change to a care event, tracker, medication, care spot or routine broadcasts a **page refresh** (no data) to the household's stream; the Today and viewer pages morph in place. Streams are signed per household; cable connections don't need a session, so viewer links work. |
+| **Charts and CSV** | `CareChart`, `CareRecordsCsv` | ⚖️ weights join the weight line; "Care by day" counts litter and water jobs (household) and the cat's tapped feedings, doses and observations. The owner downloads every care record as CSV. |
+| **Reminders** | `CareRoutine`, `CareReminder`, `HouseholdReminders`, `CareReminderNotifier`, `CareReminderJob` (hourly) | Per job, the owner picks **every N hours or days** (counted from the last record; whole days are due on a day, sent at 9am in the person's time zone, otherwise when due, 9am–9pm) or **set times** (up to 6; a record up to 2 h late counts for that time, otherwise for the next). One follow-up each. Overdue doses are reminded once. `care_reminders` (unique per person and key) makes each go out once. Only owners and caregivers who turned reminders on; never viewers. |
+| **Channels** | `CareReminderNotifier`, `FcmClient`, `DeviceToken`, `push_controller.js` | One channel per reminder: the **Android app** (Firebase Cloud Messaging HTTP v1, a token per sign-in session, registered by the `push` bridge component when reminders are on; gone tokens deleted), else **LINE** (if signed in with LINE), else **email**; a failed channel falls through. Off without `FIREBASE_SERVICE_ACCOUNT_JSON`. |
+| **The app's sign-in** | `NativeSignInsController`, `NativeSignIn`, `NativeSignInRouteDecisionHandler.kt` | Google refuses WebViews, so in the Android app Google, LINE and GitHub sign-in runs entirely in a **Chrome Custom Tab** (`/auth/native/:provider`), keeping the OAuth state check, and returns with a **one-time code** (2 minutes, once, stored as a digest) through `pettracker://sign-in`; `/auth/native/finish` signs the WebView in. The app claims only the site's pages as App Links, so sign-in addresses stay in Chrome. |
 
 ---
 
@@ -532,7 +555,8 @@ Decimals are serialized as strings. `days_remaining` holds the predicted run-out
 - **Production:** PostgreSQL through `DATABASE_URL`. The same database serves four Rails roles: `primary` (application data), `cache` (Solid Cache), `queue` (Solid Queue), and `cable` (Solid Cable).
 - **Development / test:** SQLite (`storage/development.sqlite3`).
 - **Framework tables** (not detailed here): `active_storage_*`, `solid_queue_*` (11 tables), `solid_cache_entries`.
-- Schema version: `2026_09_28_150000`.
+- Schema version: `2026_10_02_130000`.
+- **Households and care tables** (checkpoints A–J): `households`, `household_memberships`, `household_invitations`, `viewer_links`, `ownership_transfers`, `care_spots`, `care_events`, `medications`, `care_routines`, `care_reminders`, `device_tokens`, `native_sign_ins` (§3.3), and `solid_cable_messages` (Solid Cable).
 
 ### 3.2 Entity-Relationship Diagram
 
@@ -540,8 +564,15 @@ Decimals are serialized as strings. `days_remaining` holds the predicted run-out
 erDiagram
   USERS ||--o{ SESSIONS : "has"
   USERS ||--o{ CONNECTED_SERVICES : "links OAuth identity"
-  USERS ||--o{ PETS : "owns"
-  USERS ||--o{ DRY_FOODS : "stocks"
+  USERS ||--o| HOUSEHOLDS : "owns"
+  USERS ||--o{ HOUSEHOLD_MEMBERSHIPS : "helps or follows"
+  HOUSEHOLDS ||--o{ HOUSEHOLD_MEMBERSHIPS : "has"
+  HOUSEHOLDS ||--o{ PETS : "has"
+  HOUSEHOLDS ||--o{ DRY_FOODS : "stocks"
+  HOUSEHOLDS ||--o{ CARE_SPOTS : "has"
+  HOUSEHOLDS ||--o{ CARE_EVENTS : "records"
+  PETS ||--o{ MEDICATIONS : "takes"
+  CARE_SPOTS ||--o{ CARE_ROUTINES : "reminded"
   USERS ||--o{ VET_VISIT_MEMBERS : "is invited as"
   PETS ||--o{ TRACKERS : "logs"
   PETS ||--o{ HEALTH_CHECKS : "has"
@@ -572,9 +603,14 @@ erDiagram
     string provider
     string uid
   }
+  HOUSEHOLDS {
+    bigint id PK
+    bigint owner_id FK "unique"
+    string name
+  }
   PETS {
     bigint id PK
-    bigint user_id FK
+    bigint household_id FK
     string petname
     string share_token
   }
@@ -588,7 +624,7 @@ erDiagram
   }
   DRY_FOODS {
     bigint id PK
-    bigint user_id FK
+    bigint household_id FK
     decimal amount
     decimal left_amount
     date days_remaining
@@ -671,7 +707,7 @@ Indexes: `user_id`.
 
 | Column | Type | Null | Notes |
 |---|---|---|---|
-| `user_id` | integer | NO | FK → `users.id` (owner) |
+| `household_id` | integer | NO | FK → `households.id` (the owner is the household's owner; `user_id` removed in checkpoint J) |
 | `petname` | string | YES | Required, 2–25 chars |
 | `birthday` | datetime | YES | |
 | `gender` | string | YES | |
@@ -680,7 +716,7 @@ Indexes: `user_id`.
 | `share_token` | string | YES | Public link token (`SecureRandom.urlsafe_base64(24)`); `NULL` = sharing off. New pets start with sharing off. |
 | `share_expires_at` | datetime | YES | When the link stops working; `NULL` = until turned off or replaced |
 
-Indexes: `user_id`, `share_token` (unique). Attachment: `pet_avatar` (Active Storage).
+Indexes: `household_id`, `share_token` (unique). Attachment: `pet_avatar` (Active Storage).
 
 #### `trackers` (feeding log)
 
@@ -712,7 +748,7 @@ Indexes: `pet_id`, `dry_food_id`.
 
 | Column | Type | Null | Notes |
 |---|---|---|---|
-| `user_id` | integer | NO | FK → users (see observation D1) |
+| `household_id` | integer | NO | FK → `households.id` (shared by the household's cats; `user_id` removed in checkpoint J) |
 | `brand` | string | YES | |
 | `description` | string | YES | |
 | `food_type` | string | YES | Enum: `kibble`, `freeze_dried` |
@@ -723,7 +759,7 @@ Indexes: `pet_id`, `dry_food_id`.
 | `used_amount` | decimal | YES | Legacy; not maintained by current logic |
 | `days_remaining` | date | YES | *Derived*: **predicted run-out date** |
 
-Indexes: `user_id`.
+Indexes: `household_id`.
 
 #### `health_checks` (lab panel)
 
@@ -793,14 +829,34 @@ Indexes: `pet_id`, and **unique** `(pet_id, checked_on)`, so a pet is checked at
 
 Indexes: `kibble_price_check_id`. (`suspicious` and `suspicious_reason` existed for Gemini prices and were removed by `20260928150000_remove_gemini_from_kibble_prices`.)
 
+#### Households and care (checkpoints A–J)
+
+| Table | Key columns | Notes |
+|---|---|---|
+| `households` | `owner_id` (unique), `name`, `owner_reminders_enabled` | One per owner; time zone = the owner's |
+| `household_memberships` | `household_id`, `user_id`, `role` (`caregiver` · `viewer`), `reminders_enabled` | Unique per household and user; never the owner |
+| `household_invitations` | `household_id`, `email`, `token_digest`, `expires_at`, `accepted_at` | Caregivers only; single use, 7 days |
+| `viewer_links` | `household_id`, `name`, `token_digest`, `expires_at`, `revoked_at`, `last_used_at` | One per viewer |
+| `ownership_transfers` | `household_id`, `from_user_id`, `to_user_id`, `token_digest`, `accepted_at`, `cancelled_at` | Accepted by that member only |
+| `care_spots` | `household_id`, `kind` (`litter_box` · `water_bowl` · `water_fountain`), `name`, `position`, `archived_at` | Archived spots keep their records |
+| `care_events` | `household_id`, `actor_id`, `kind`, `occurred_at`, `pet_id`, `care_spot_id`, `actions` (json), `details` (json), `medication_id`, `dose_time`, `dose_status`, `reason`, `value`, `note`, `tracker_id`, `edited_by_id`, `edited_at`, `undone_at`, `deleted_by_id` | Undone or deleted rows are kept, hidden (`kept` scope) |
+| `medications` | `pet_id`, `name`, `dose`, `times` (json), `starts_on`, `ends_on`, `stopped_at` | A medication with doses is stopped, not deleted |
+| `care_routines` | `care_spot_id`, `action`, `mode` (`every` · `set_times`), `every_hours`, `times` (json), `started_on` | Unique per spot and job |
+| `care_reminders` | `household_id`, `user_id`, `care_routine_id`, `medication_id`, `key`, `due_on`, `channel` (`android` · `line` · `email`), `sent_at`, `follow_up_sent_at` | Unique `(user_id, key)`: each reminder once |
+| `device_tokens` | `user_id`, `session_id` (cascade), `platform`, `token` (unique), `last_used_at` | Android app notification tokens; signing out removes them |
+| `native_sign_ins` | `token_digest` (unique), `user_id`, `path`, `flash`, `data`, `expires_at`, `used_at` | The app's one-time sign-in codes (2 minutes, once) |
+
 ### 3.4 Relationships
 
 | Parent | Child | Cardinality | Foreign key | On parent delete (app level) |
 |---|---|---|---|---|
 | users | sessions | 1 : N | `sessions.user_id` | destroy |
 | users | connected_services | 1 : N | `connected_services.user_id` | destroy |
-| users | pets | 1 : N | `pets.user_id` | destroy (cascades below) |
-| users | dry_foods | 1 : N | `dry_foods.user_id` | destroy |
+| users | households | 1 : 0..1 | `households.owner_id` | destroy (cascades below; account deletion asks to transfer first) |
+| households | pets | 1 : N | `pets.household_id` | destroy (cascades below) |
+| households | dry_foods | 1 : N | `dry_foods.household_id` | destroy |
+| households | household_memberships, care_spots, care_events, care_reminders | 1 : N | `household_id` | destroy / delete |
+| pets | medications, care_events | 1 : N | `pet_id` | delete (a litter record keeps its spot and loses the cat) |
 | users | vet_visit_members | 1 : N | `vet_visit_members.user_id` | destroy |
 | pets | trackers | 1 : N | `trackers.pet_id` | destroy |
 | pets | health_checks | 1 : N | `health_checks.pet_id` | destroy |
@@ -828,7 +884,7 @@ Cascades are handled by Rails (`dependent:`). The database foreign keys have no 
 
 | # | Observation | Recommendation |
 |---|---|---|
-| D1 | `add_foreign_key "dry_foods", "Users"` (capital **U**, `db/schema.rb:338`). PostgreSQL treats quoted identifiers as case-sensitive, so `db:schema:load` on a fresh PostgreSQL database fails. **Confirmed 2026-09-28** on PostgreSQL 15: `relation "Users" does not exist`. Existing databases, updated by migrations, are unaffected. | Add a migration that re-creates the FK against `users`. |
+| D1 | ✅ **Resolved in checkpoint J** (2026-10-02): `dry_foods.user_id` was removed, and with it this foreign key. *Was:* `add_foreign_key "dry_foods", "Users"` (capital **U**, `db/schema.rb:338`). PostgreSQL treats quoted identifiers as case-sensitive, so `db:schema:load` on a fresh PostgreSQL database fails. **Confirmed 2026-09-28** on PostgreSQL 15: `relation "Users" does not exist`. Existing databases, updated by migrations, are unaffected. | Add a migration that re-creates the FK against `users`. |
 | D2 | `schema.rb` is dumped from SQLite, so FK columns appear as `integer`, and the dev/test adapter differs from production. The code contains adapter-specific SQL branches. | Use PostgreSQL in development and CI. Keep FK columns `bigint`. |
 | D3 | `connected_services` has no unique index on `(provider, uid)`. (`pets.share_token` is now unique, S12.) | Add a unique index. |
 | D4 | Common queries filter trackers by `pet_id` + `date` range, but only single-column indexes exist. | Add a composite index `trackers(pet_id, date)`. Consider `(dry_food_id, archived_dry_food)` as well. |
@@ -883,16 +939,21 @@ flowchart TD
   M -- "no (LINE)" --> REG["Store auth hash in session<br/>→ registration form to collect email"]
 ```
 
+**In the Android app** (checkpoint I2), Google refuses its sign-in page in WebViews, so the provider buttons link to `/auth/native/:provider`, which the app opens in a Chrome Custom Tab: the whole sign-in, including the state check, runs in Chrome. The callback doesn't sign Chrome in; it saves a one-time code (`native_sign_ins`: digest only, 2 minutes, once) and Chrome opens `pettracker://sign-in?code=…`; the app loads `/auth/native/finish?code=…` in its WebView, which starts the session. Refusals come back the same way with their message. Whoever Chrome is signed in to on the website is ignored for the app's sign-in. The website's flow is unchanged.
+
 Design strengths: an OAuth identity is **never automatically merged** into an existing account just because the emails match, which prevents account takeover through a provider with unverified email. `omniauth-rails_csrf_protection` requires the OAuth request phase to be a POST with a CSRF token, and the callback verifies the `state` value stored in the session when sign-in started (S5).
 
 ### 4.2 Authorization
 
+Since checkpoint B, access comes from the person's **role in the cat's household** (`HouseholdPolicy`, §1.9): the owner may do everything; a caregiver records care and reads trackers and charts; a viewer sees charts and today's timeline. Anyone outside the household gets "not found".
+
 | Resource | Rule | Enforcement today |
 |---|---|---|
 | Account (`/users`) | Only yourself | ✅ `@user = Current.user` |
-| Dry foods | Owner only | ✅ `Current.user.dry_foods.find` |
-| Pets | Owner only | ✅ Every action uses `Current.user.pets` (S1 fixed) |
-| Trackers, health checks | Owner of the pet | ✅ `set_pet` uses `Current.user.pets.find(params[:pet_id])` (S1 fixed) |
+| Dry foods | The household's owner | ✅ `Current.user.owned_dry_foods.find`; new bags go into the owner's household |
+| Pets | Read: owner, caregivers, viewers (charts); change: owner | ✅ `PetAccess#load_pet` (`Pet.accessible_by` + a permission) |
+| Trackers, health checks | Trackers read by caregivers; everything else the owner | ✅ `load_pet(params[:pet_id], permission)` |
+| Care events, medications, reminders | Record: owner and caregivers; change or delete: owner any, caregiver their own (24 h); medications and intervals: owner | ✅ `CareEvent#editable_by?` / `#deletable_by?`, `HouseholdPolicy#can?(:record_care)`, `OwnedHousehold` |
 | Vet visits | Owner: full control. Member: read, and answer only. | ✅ `verify_owner!`, `verify_access!`; members limited to `answer` in both `update` and `batch_update` (S14 fixed) |
 | Shared dashboard | Anyone with the token (read-only) | ✅ `Pet.find_shared!` with a random token (192-bit for new links); owner can set an expiry, replace or turn off the link (S12) |
 
@@ -938,9 +999,24 @@ Ranked by severity. S1–S3 and S5–S14 are fixed and S4 is partly fixed; finis
 | **S13** | ✅ Fixed (was ℹ️ Info) | `config.hosts` was not set (DNS-rebinding protection). JSON errors used inconsistent formats (a field hash, `{"error"}`, an empty 404, or a redirect), and photo-extraction failures returned HTTP 200. A missing tracker redirected to its own URL in a loop. `User.from_omniauth` was dead code that referenced a non-existent `name` attribute. | **Done:** production allows only `pet-feeding-tracker-v4.up.railway.app`, `RAILS_HOST`, `RAILWAY_PUBLIC_DOMAIN` and any hosts in `RAILS_ALLOWED_HOSTS` (comma-separated); `/up` is exempt. **Add any custom domain to `RAILS_ALLOWED_HOSTS` before deploying**, or requests to it get a 403. Every JSON error is `{"error": "…"}`, with `"details"` by field for validation errors (`ApplicationController#render_json_error`); not-found pets, trackers, health checks and dry foods return a JSON 404, and extraction failures return 422. A missing tracker now redirects to the tracker list. Removed `User.from_omniauth`. Covered by `test/controllers/json_errors_test.rb`. |
 | **S14** | ✅ Fixed (was 🟡 Low) | **Vet-visit members could edit visit details.** Single-visit `update` accepted every field from members, while `batch_update` allowed only `answer`. Because `vet_name`, `purpose`, `consultation_time` and `waiting_time` are copied to every visit of the pet on the same date (`VetVisit#sync_vet_metadata`), a member could overwrite details on the owner's visits that were never shared with them. | **Done:** members may change only `answer` in `update` (matching `batch_update`), and the edit form shows them the question read-only. Covered by `test/controllers/vet_visits_controller_test.rb`. |
 
-### 4.5 Authorization Pattern (implemented for S1)
+### 4.5 Authorization Pattern (implemented for S1, by household since checkpoint B)
 
-Each owner-only controller (`pets`, `trackers`, `health_checks`) scopes its pet lookup to the signed-in user:
+Since checkpoint B, pet-scoped controllers include `PetAccess`, which finds the cat among the user's households and checks the role:
+
+```ruby
+# TrackersController: what each action needs. A cat outside the user's households
+# is not found; one whose role doesn't allow the action sends them back with
+# "Only Aji's owner can do that."
+READ_PERMISSIONS = { index: :view_charts, show: :view_trackers, favorite_food: :view_trackers }.freeze
+
+def set_pet
+  permission = READ_PERMISSIONS.fetch(action_name.to_sym, :manage_trackers)
+  permission = :export_trackers if action_name == "index" && request.format.csv?
+  load_pet(params[:pet_id], permission)
+end
+```
+
+The earlier pattern, kept below for the record, scoped lookups to the signed-in user's own pets:
 
 ```ruby
 # Only the signed-in user's own pets; anyone else's pet is treated as not found.
@@ -1016,6 +1092,7 @@ flowchart TB
 | `user_backups` | daily 03:00 | `UserBackupJob`: emails a per-pet tracker CSV to each user who changed a tracker in the last 25 h. |
 | ~~`db_backup`~~ | **unscheduled** | Removed from the schedule: it failed every night (no `pg_dump` in the image; the worker has no persistent disk, so a dump would vanish on the next deploy). Full-database recovery comes from Railway's managed Postgres backups. `bin/rails db:backup` remains for manual runs and now reports why it can't run instead of exiting silently. |
 | `monthly_kibble_prices` | 1st of the month 06:00 | `MonthlyKibblePriceJob` → `PetKibblePriceJob` per pet fed kibble in the last 30 days (§1.8); emails owners whose check found prices. Schedule text `every month on the 1st at 6am` (cron `0 6 1 * *`); `test/jobs/recurring_schedule_test.rb` checks every schedule parses as repeating |
+| `care_reminders` | hourly at :05 | `CareReminderJob` → `HouseholdReminders` per household where someone has reminders on: due litter box and water spot jobs (9am in each person's time zone for whole days, 9am–9pm for shorter intervals, at the set time for set times) and overdue doses, by the Android app, LINE or email; each once, with one follow-up (§1.9) |
 | `pet_weight_reminder` | daily 09:00 | `notifications:weigh_pets` → `PetWeightReminderJob` per user. Sends a reminder when a pet has not been weighed for ≥ 14 days (then every 7 days) and the user signed in within the last 3 days. Uses LINE push if linked, otherwise email. |
 
 \*Times are in the server time zone (UTC by default), not the user's time zone.
@@ -1084,11 +1161,15 @@ flowchart TB
 app/
   controllers/        # Resource controllers + concerns/ (Authentication, TrackersCalculable) + omni_auth/
   models/             # User, Session, ConnectedService, Pet, Tracker, DryFood, HealthCheck, VetVisit, VetVisitMember,
-                      # KibblePriceCheck, KibblePrice, Current
+                      # KibblePriceCheck, KibblePrice, Current,
+                      # Household, HouseholdMembership, HouseholdInvitation, ViewerLink, OwnershipTransfer, HouseholdPolicy,
+                      # CareSpot, CareEvent, HouseholdDay, Medication, CareChart, CareRecordsCsv,
+                      # CareRoutine, CareReminder, HouseholdReminders, CareReminderNotifier, FcmClient, DeviceToken, NativeSignIn
   services/           # CsvImportTrackersService, GeminiOcrService, NotificationService,
                       # kibble_prices/ (BigGoSearch, PchomeSearch, Lookup, Matcher, BagSize, BrandNames, Query, PoliteHttp, SourceAlert)
-  jobs/               # PetWeightReminderJob, UserBackupJob, MonthlyKibblePriceJob, PetKibblePriceJob
-  mailers/            # UserMailer, PasswordsMailer, UserBackupMailer, KibblePriceMailer, DiagnosticsMailer
+  jobs/               # PetWeightReminderJob, UserBackupJob, MonthlyKibblePriceJob, PetKibblePriceJob, CareReminderJob
+  mailers/            # UserMailer, PasswordsMailer, UserBackupMailer, KibblePriceMailer, DiagnosticsMailer,
+                      # HouseholdMailer, CareReminderMailer
   views/              # ERB (+ :native variants), Jbuilder, PWA manifest
   javascript/         # Stimulus controllers, exported translations
 config/
@@ -1098,7 +1179,7 @@ config/
   initializers/       # omniauth, line_bot, CSP, parameter filtering, i18n
 db/schema.rb          # Current schema
 lib/tasks/            # db:backup, notifications:weigh_pets, i18n:export
-pet_tracker_android/  # Hotwire Native Android shell
+pet_tracker_android/  # Hotwire Native Android shell (Firebase notifications, Custom Tab sign-in)
 Dockerfile, Procfile  # Packaging and process definitions
 ```
 
@@ -1112,3 +1193,9 @@ Dockerfile, Procfile  # Packaging and process definitions
 | Hotel / boarding series | Chart series for trackers whose note contains boarding keywords |
 | Share token | Random URL-safe token granting read-only public access to a pet's feeding dashboard |
 | Member (vet visit) | Another registered user invited by email to view a visit and answer its questions |
+| Household | One owner's cats, food bags, litter boxes and water spots, and the people who help |
+| Owner / caregiver / viewer | The household's one manager / a member who records care / a member (or viewer-link holder) who only looks |
+| Care event | One recorded piece of care (fed, weight, litter, water, meds), shown on the Today timeline |
+| Care spot | A litter box or water spot (bowl or fountain) |
+| Routine | How often one job on a care spot is due: every N hours or days, or at set times |
+| Viewer link | A personal, revocable link to a household's read-only viewer page |

@@ -20,6 +20,19 @@ This guide provides detailed instructions on how to use the key features of Pet 
   - [Creating a Tracker](#creating-a-tracker)
   - [Favorite Food](#favorite-food)
   - [Importing Trackers from CSV](#importing-trackers-from-csv)
+- [Households: Caregivers and Viewers](#households-caregivers-and-viewers)
+  - [Inviting a Caregiver](#inviting-a-caregiver)
+  - [Viewer Links](#viewer-links)
+  - [Litter Boxes and Water Spots](#litter-boxes-and-water-spots)
+  - [Members, Leaving and Handing Over](#members-leaving-and-handing-over)
+- [The Today Page](#the-today-page)
+  - [Recording Care](#recording-care)
+  - [Fixing a Record: Undo, Change, Delete](#fixing-a-record-undo-change-delete)
+  - [Litter Observations](#litter-observations)
+  - [Medications](#medications)
+- [Reminders](#reminders)
+- [Care Records CSV](#care-records-csv)
+- [Android App](#android-app)
 - [Kibble Prices](#kibble-prices)
   - [Which Kibbles Are Checked](#which-kibbles-are-checked)
   - [Reading the Prices Page](#reading-the-prices-page)
@@ -44,7 +57,7 @@ Your user account is the central hub for managing your pets and tracking their a
 
 ### Third-Party Sign-In
 
-You can also sign in with **Google**, **LINE** or **GitHub**. If you sign in with LINE, weight reminders are sent to you on LINE instead of by email.
+You can also sign in with **Google**, **LINE** or **GitHub**. If you sign in with LINE, weight and care reminders are sent to you on LINE instead of by email (unless you get them in the Android app). In the Android app, these buttons open a Chrome tab over the app; after choosing your account you're back in the app, signed in.
 
 ### Timezone
 
@@ -121,6 +134,83 @@ The file must be **semicolon-separated** (`;`), in the same format as the CSV yo
 `date; feed_time; come_back_to_eat; food_type; brand; description; amount; left_amount; total_ate_amount; hungry; love; result; note; weight`
 
 Every row is checked before anything is saved: dates must be valid and not before your pet's birthday, and amounts and weight must be numbers. If any row has a problem, nothing is imported and you'll see which rows to fix.
+
+## Households: Caregivers and Viewers
+
+Your cats, food bags, litter boxes and water spots form your **household**. You're its **owner**: you manage everything. You can let others help:
+
+-   **Caregivers** (family, a pet sitter) record feeding, litter, water and medicine, and can read your trackers and charts. They need an account.
+-   **Viewers** (say, Grandma) see today's status, the timeline and the charts, read-only. They use a personal link and don't need an account.
+
+Open the household page from the menu (**🏠 My household**) or your account page.
+
+### Inviting a Caregiver
+
+1.  **Enter their email** under "Invite a caregiver" and send the invitation.
+2.  **They open the link** in the email, create an account (or sign in with Google or LINE using the same email) and join. The link works once, for 7 days, and only for that email.
+3.  **They land on Today**, with buttons for your cats.
+
+### Viewer Links
+
+1.  **Create a link** under "Viewer links", with a name (e.g. "Grandma") and, if you like, an expiry.
+2.  **Copy it** and send it by LINE or email. Each viewer gets their own link.
+3.  **Turn it off** at any time; it stops working at once. A viewer who signs up or signs in from the page gets your household in their account.
+
+### Litter Boxes and Water Spots
+
+Under "Litter boxes and water spots": add, rename, choose bowl or fountain, move up or down, and remove. Each one has a line per job for **reminders** (see [Reminders](#reminders)): Off, every few hours or days, or at set times. Save with the spot's **Save** button.
+
+### Members, Leaving and Handing Over
+
+-   **Remove** a caregiver or viewer from the household page; they can also **Leave** from their account page.
+-   **Hand the household over** to a member under "Hand the household to someone else": once they accept, they become the owner and you stay on as a caregiver.
+-   **Your own cats too:** someone who only helps can add their own cat from their account page ("Add my own cat"), which creates their own household.
+
+## The Today Page
+
+**Today** shows each household you're in: a row per litter box and water spot, a card per cat, and a **timeline of the last 24 hours**. Everyone's changes appear without reloading.
+
+### Recording Care
+
+-   **One tap** records what you did, now: 🍽 **Fed**, ⚖️ **Weight** (enter the kg), 💊 **Meds**, 🚽 **Scooped** / ♻️ **Full change**, 💧 **Refilled** / 🧽 **Cleaned** / 🔄 **Filter changed**.
+-   **A notice** appears with **Undo** (10 seconds), **5 · 10 · 15 min ago** to change the time, and **Add details**. For water, tick the other jobs you did in the same notice.
+-   **"Record it again?"** appears if the same care was just recorded (by anyone): feeding and water within 30 minutes, the same litter job within 30 minutes.
+-   **Feeding details** (food type, brand, amount) suggest your household's food bags and your cat's favorites. The owner can turn a feeding into a full tracker with **Add to trackers**.
+
+### Fixing a Record: Undo, Change, Delete
+
+-   **Undo** right after a tap (10 seconds).
+-   **Change** on the timeline: the time (up to 7 days back), the jobs, the details or a note.
+-   **Delete** on the timeline or the details page removes a mistaken record from Today, the charts, the CSV and reminders, after you confirm.
+-   **Who:** the owner can change and delete any record; a caregiver their own records, for 24 hours.
+
+### Litter Observations
+
+In a litter record's **Add details**: which cat (if you know), pee clumps, the number of poops, the stool, and anything unusual (blood, very large clumps, other). Diarrhea and anything unusual show in red. With a cat chosen, they also appear on that cat's trackers page for 30 days.
+
+### Medications
+
+1.  **The owner adds medications** per cat (cat profile → **Medications**): name, dose, up to 4 times a day (or none for "as needed"), and dates.
+2.  **💊 Meds** on Today offers today's doses not yet recorded: **Given**, or **Couldn't give** with a reason.
+3.  **Each dose shows** due, given (green), couldn't give (amber) or overdue (red, an hour after its time). Recording a dose already given asks first.
+
+## Reminders
+
+-   **Set them up (owner):** on the household page, for each litter box and water spot job, choose how often: **3 times a day, twice a day, daily, twice a week, weekly, every 2 weeks, twice a month, monthly, custom** (hours or days), counted from the last time it was done; or **at set times** (up to 6, e.g. 08:00 and 20:00).
+-   **See them on Today:** "🧽 Fountain cleaned due in 4 days", "🚽 Scooped due at 20:00", or for set times "08:00 ✓ 07:55 by Mom · 20:00 due".
+-   **Get them:** under your household's name on Today, tap **Turn on** next to 🔔 Reminders. Each owner and caregiver chooses for themselves; viewers don't get reminders.
+-   **When:** a job due on a day is sent at **9am** in your time zone; a shorter interval when it's due, between 9am and 9pm; a set time at that time. If it's still not done, there's one follow-up. Overdue doses are reminded once.
+-   **How:** in the **Android app** if you use it, else on **LINE** if you signed in with LINE, else by **email**.
+
+## Care Records CSV
+
+The owner can download every care record (feeding taps, weight, litter, water, medicine) from the household page: **Download care records (CSV)**, in your household's time zone.
+
+## Android App
+
+-   **Sign in** with email, or with Google, LINE or GitHub (a Chrome tab opens over the app and brings you back signed in).
+-   **Notifications:** turning on 🔔 Reminders on Today asks to allow notifications (Android 13+). Reminders then arrive as notifications; tapping one opens Today. You can adjust the "Reminders" channel in Android's settings.
+-   **Signing out** of the app stops notifications on that phone.
 
 ## Kibble Prices
 
