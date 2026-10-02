@@ -17,11 +17,26 @@
 | H — Reminders by LINE and email | ✅ Done (2026-10-01). Committed on `feature/households` in four parts and pushed. See [Checkpoint H result](#checkpoint-h-result-2026-10-01) |
 | H2 — Litter several times a day | ✅ Done (2026-10-02). Committed on `feature/households` and merged into `main`. See [Checkpoint H2 result](#checkpoint-h2-result-2026-10-02) |
 | H3 — Delete a mistaken record | ✅ Done (2026-10-02). Committed on `feature/households` and merged into `main`. See [Checkpoint H3 result](#checkpoint-h3-result-2026-10-02) |
-| I — Android app push notifications (Firebase) | ✅ Built (2026-10-02) on `feature/households`; **works once the Firebase project is set up** (see [What you need to do](#checkpoint-i-build-plan-2026-10-02)). See [Checkpoint I result](#checkpoint-i-result-2026-10-02) |
-| I2 — Google, LINE and GitHub sign-in in the Android app | In progress. See [Checkpoint I2 plan](#checkpoint-i2-plan-sign-in-with-google-line-or-github-in-the-android-app-2026-10-02) |
+| I — Android app push notifications (Firebase) | ✅ Done (2026-10-02), merged into `main`; Firebase project `pet-feeder-tracker` set up and **a notification received on a Pixel 9**. See [Checkpoint I result](#checkpoint-i-result-2026-10-02) |
+| I2 — Google, LINE and GitHub sign-in in the Android app | ✅ Done (2026-10-02), merged into `main`; **Google sign-in works on a Pixel 9**. See [Checkpoint I2 result](#checkpoint-i2-result-2026-10-02) |
 | J — Clean-up, docs, CI, merge | Not started |
 
 **Commits:** each checkpoint is committed on `feature/households` once `bin/rails test` passes, then pushed. Merged into `main` only when you ask.
+
+## Checkpoint I2 result (2026-10-02)
+
+**What people get:** in the Android app, **Google** (and LINE and GitHub) on the sign-in, sign-up and join pages opens a Chrome tab over the app; after choosing the account they're back in the app **signed in**, on their usual page, with an invitation or viewer link they'd opened accepted, in the app's language. Cancelling, or an email already used by another sign-in method, comes back to the app's sign-in page with its message. The website is unchanged.
+
+**Main files:** `NativeSignInsController` (`/auth/native/:provider` in Chrome, `/auth/native/finish` in the app), `NativeSignIn` (the one-time code, the signed context), `OmniAuth::SessionsController#finish_sign_in`, `NativeSignInHelper#provider_sign_in_button` (in `sessions/new`, `registrations/new`, `household_joins/show`), `native_sign_ins/start`, `native_sign_ins/return`; `db/migrate/20261002120000_create_native_sign_ins.rb` (checked on PostgreSQL: up, down, up). App: `NativeSignInRouteDecisionHandler.kt`, `MainActivity.kt` (`pettracker://sign-in`), `MainApplication.kt`, `AndroidManifest.xml`.
+
+**Found while testing on the phone, and fixed:**
+- **A dead Google button:** the app is the verified handler for its own site, so the Chrome tab for `/auth/native/google_oauth2` was handed straight back to the app, which ignored it; Google's callback would have been pulled back too. The app now claims **only the site's pages** (`/`, `/en`, `/zh-TW`, `/ja`); sign-in addresses (`/auth/…`) stay in Chrome, and the tab is opened in the browser explicitly.
+- **Back on the sign-in page after Google:** Custom Tabs share Chrome's cookies, and Chrome on the phone was **already signed in to the website**, so the callback took the "connect another sign-in method to this account" path and sent Chrome to the cat list. A sign-in started from the app now ignores Chrome's own sign-in: the person comes from the provider account, and Chrome's website sign-in is left as it was.
+- **The time zone** for a new account goes in the start's address, as on the website (OmniAuth keeps only the query string).
+
+**Decisions made while building:** as in the [plan](#checkpoint-i2-plan-sign-in-with-google-line-or-github-in-the-android-app-2026-10-02), plus: the "started from the app" marker in Chrome lasts 10 minutes, so an abandoned app sign-in doesn't turn a later website sign-in in the same Chrome into an app sign-in.
+
+**Checks:** **10 tests** with two separate browsers (the app's WebView and Chrome): the website's buttons unchanged and the app's links for Chrome; the whole Google sign-in (Chrome not signed in, the app signed in, the time zone kept); a code working once, for 2 minutes, a made-up one never; an invitation accepted; the app's language kept; Chrome already signed in to the website as someone else; an email already used elsewhere; cancelling; an unknown provider and a forged context; the website's sign-in after an abandoned app one. On the **Pixel 9**: Google sign-in works, and the notification test arrives and opens Today. `bin/rails test`: 479 runs, 0 failures. RuboCop and Brakeman clean.
 
 ## Checkpoint I2 plan: sign in with Google, LINE or GitHub in the Android app (2026-10-02)
 
@@ -60,7 +75,8 @@
 
 **Checks:**
 - Server: **13 new tests**. FCM: the signed request (verified with the key), the message (token, title, body, Today link, the "reminders" channel), gone tokens (UNREGISTERED, an invalid token) vs other failures, push off without the service account. Tokens: registered for the person and session once, handed over to whoever signs in next, signing out and session expiry removing them, only one's own removed, sign-in and a token required. Reminders: sent to each phone and not by LINE or email, a gone token forgotten with email instead, a failed push falling back to LINE, phones skipped without Firebase. Pages: "Reminders by Android app", the permission request in the app only once reminders are on, nothing in a web browser.
-- App: a debug build with and without `google-services.json` (a dummy file, removed), and the release shrinking (R8) pass. Sending a real notification needs your Firebase project.
+- App: a debug build with and without `google-services.json` (a dummy file, removed), and the release shrinking (R8) pass.
+- **On a real phone (2026-10-02):** Firebase project `pet-feeder-tracker` set up (the app's `google-services.json`, the service account on both Railway services); the Pixel 9 registered when reminders were turned on, and a test notification sent through FCM arrived and opened Today.
 - `bin/rails test`: 469 runs, 0 failures. `bin/rails test:system`: 39 runs, 0 failures (after making the H2 reminders browser test accept "due tomorrow at" in the afternoon). RuboCop and Brakeman clean.
 
 ## Checkpoint I build plan (2026-10-02)
@@ -942,6 +958,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 
 ## Change log
 
+- **Checkpoint I2 (2026-10-02):** Google, LINE and GitHub sign-in in the Android app, through a Chrome tab and a one-time code (broken since the OAuth state check of 2026-09-15); fixed on the phone: the app no longer claims sign-in addresses, and Chrome's own website sign-in doesn't get in the way. **Checkpoint I** confirmed on a Pixel 9.
 - **Checkpoint I (2026-10-02):** Android app notifications through Firebase Cloud Messaging: device tokens per sign-in, the permission asked when turning reminders on, notifications opening Today, the app first then LINE or email; off until the Firebase project and its service account are set up.
 - **H3 messages (2026-10-02):** Delete's own wording when refused (the 24-hour rule for caregivers) and for a record already deleted, in English, Japanese and Traditional Chinese.
 - **Fix (2026-10-02):** message boxes show only real messages; a tap no longer shows a red box with the record's number (root cause: every flash entry was shown, including data carried for the next page).
