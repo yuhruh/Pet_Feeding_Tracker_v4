@@ -53,7 +53,7 @@ class DeleteCareRecordsTest < ActionDispatch::IntegrationTest
     get today_url(**L)
     assert_select "#{row} input[name=_method][value=delete]", count: 0
     delete care_event_url(@fed, **L)
-    assert_equal I18n.t("care_events.not_allowed"), flash[:alert]
+    assert_equal "You can delete your own records for 24 hours; the owner can delete any record.", flash[:alert]
     assert_not @fed.reload.undone?
 
     delete session_url(**L)
@@ -61,6 +61,7 @@ class DeleteCareRecordsTest < ActionDispatch::IntegrationTest
     get today_url(**L)
     assert_select "#{row} input[name=_method][value=delete]", count: 0
     delete care_event_url(@fed, **L)
+    assert_equal I18n.t("care_events.not_allowed"), flash[:alert], "a viewer can't record care at all"
     assert_not @fed.reload.undone?
 
     delete session_url(**L)
@@ -75,6 +76,7 @@ class DeleteCareRecordsTest < ActionDispatch::IntegrationTest
     log_in_as(@mom)
     delete care_event_url(old, **L)
     assert_not old.reload.undone?, "a caregiver's own record only for 24 hours"
+    assert_equal I18n.t("care_events.destroy.not_allowed"), flash[:alert]
 
     delete session_url(**L)
     log_in_as(@owner)
@@ -132,12 +134,15 @@ class DeleteCareRecordsTest < ActionDispatch::IntegrationTest
     assert_turbo_stream_broadcasts(@household) { perform_enqueued_jobs { delete care_event_url(@fed, **L) } }
   end
 
-  test "an undone or deleted record can't be deleted again" do
+  test "an undone or deleted record can't be deleted again, and says so" do
     @fed.delete_by!(@mom)
     log_in_as(@owner)
     delete care_event_url(@fed, **L)
-    assert_equal I18n.t("care_events.not_found"), flash[:alert]
+    assert_equal "That record was already deleted.", flash[:alert]
     assert_equal @mom, @fed.reload.deleted_by
+
+    get edit_care_event_url(@fed, **L)
+    assert_equal I18n.t("care_events.not_found"), flash[:alert], "other pages keep their message"
   end
 
   test "the timeline covers the last 24 hours, so last night's tap can be deleted the next morning" do

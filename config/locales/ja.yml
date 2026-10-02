@@ -168,6 +168,8 @@
     destroy:
       notice: "削除しました：%{time}の%{what}"
       tracker_kept: "ここから追加したトラッカーは残ります。"
+      not_allowed: "自分の記録は24時間以内なら削除できます。オーナーはどの記録も削除できます。"
+      already_deleted: "その記録はすでに削除されています。"
     edit:
       title: "変更・詳細を追加"
       recorded_by: "記録：%{person}"

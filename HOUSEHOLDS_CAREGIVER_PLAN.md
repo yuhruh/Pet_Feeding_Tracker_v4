@@ -29,6 +29,7 @@
 - **A confirmation first:** "Delete “Aji: fed” at 08:12? It's removed from Today, the charts and reminders." For a feeding added to trackers it adds "Aji's tracker stays; delete it on the trackers page if it's wrong too."
 - **After deleting:** "Deleted. Aji: fed at 08:12". The record leaves the timeline, the status rows ("Not fed yet today"), dose statuses (a deleted "given" makes the dose due again), the "Care by day" bars, the weight line (a ⚖️ record), the CSV and reminder due dates. Everyone's open Today pages and viewer pages update at once; the charts change when they're next opened or reloaded.
 - **A feeding added to trackers:** the tracker stays and shows on the timeline as "(tracker)".
+- **When Delete is refused** (in all three languages): a caregiver deleting someone else's record, or their own after 24 hours, is told "You can delete your own records for 24 hours; the owner can delete any record." A viewer gets the general "Only the owner and caregivers can record care." A record already deleted (e.g. from another tab) says "That record was already deleted." instead of "not found".
 
 **Found and fixed (2026-10-02): a red box with just a number ("4").** After a tap (and so on Today around a Delete), a red message box showed only the saved record's number. **Root cause:** the layout's message partial (`layouts/_messages`) showed **every** flash entry as a message, red unless it was named `notice`. But since checkpoints C and D the flash also carries data for the next page, not text for people: `care_event_id` (the record a tap saved, so Today can show its notice; record #4 → "4"), `care_repeat` (the "Record it again?" question, shown as raw data) and `new_viewer_link_url` (a new viewer link, shown as a red "error"). **Fix:** the partial now shows only `notice` (green) and `alert` (red); the other keys are used by their own pages as before. A test covers a tap, the "Record it again?" question, a delete and a new viewer link (3 of its 4 cases fail on the old partial).
 
@@ -877,6 +878,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 
 ## Change log
 
+- **H3 messages (2026-10-02):** Delete's own wording when refused (the 24-hour rule for caregivers) and for a record already deleted, in English, Japanese and Traditional Chinese.
 - **Fix (2026-10-02):** message boxes show only real messages; a tap no longer shows a red box with the record's number (root cause: every flash entry was shown, including data carried for the next page).
 - **H3 follow-up (2026-10-02):** the Today and viewer timeline shows the **last 24 hours** instead of stopping at midnight, so a late-night tap can still be changed or deleted the next morning.
 - **Checkpoints H2 and H3 (2026-10-02):** reminders per job either **every …** (hours or days) or **at set times** (up to 6), with set-time statuses, due times and "N× today" on the Today row, and the litter "Record it again?" question after 30 minutes; **Delete** for a mistaken record (owner any, caregiver their own for 24 hours), hidden everywhere with who deleted it.

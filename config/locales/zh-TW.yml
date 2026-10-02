@@ -168,6 +168,8 @@ zh-TW:
     destroy:
       notice: "已刪除：%{time} 的%{what}"
       tracker_kept: "從這筆加入的追蹤紀錄會保留。"
+      not_allowed: "你可以在 24 小時內刪除自己的紀錄；主人可以刪除任何紀錄。"
+      already_deleted: "這筆紀錄已經被刪除了。"
     edit:
       title: "修改或加入細節"
       recorded_by: "由 %{person} 記錄"

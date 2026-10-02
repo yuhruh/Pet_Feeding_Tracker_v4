@@ -59,7 +59,11 @@ class CareEventsController < ApplicationController
 
   # Delete a mistaken record (checkpoint H3), after a confirmation.
   def destroy
-    return refuse unless @event.deletable_by?(Current.user)
+    unless @event.deletable_by?(Current.user)
+      # A caregiver learns the 24-hour rule; a viewer can't record care at all.
+      caregiver = HouseholdPolicy.new(Current.user, @event.household).can?(:record_care)
+      return redirect_to today_path, alert: caregiver ? t(".not_allowed") : t("care_events.not_allowed"), status: :see_other
+    end
 
     linked_tracker = @event.tracker_id.present?
     @event.delete_by!(Current.user)
@@ -71,8 +75,13 @@ class CareEventsController < ApplicationController
   private
 
   def set_care_event
-    @event = CareEvent.kept.where(household_id: Household.reachable_by(Current.user).select(:id)).find_by(id: params[:id])
-    redirect_to today_path, alert: t("care_events.not_found") unless @event
+    records = CareEvent.where(household_id: Household.reachable_by(Current.user).select(:id))
+    @event = records.kept.find_by(id: params[:id])
+    return if @event
+
+    # Deleted (or undone) already, e.g. from another tab: say so, rather than "not found".
+    gone = action_name == "destroy" && records.exists?(id: params[:id])
+    redirect_to today_path, alert: t(gone ? "care_events.destroy.already_deleted" : "care_events.not_found"), status: :see_other
   end
 
   def build_event(subject)

@@ -168,6 +168,8 @@ en:
     destroy:
       notice: "Deleted. %{what} at %{time}"
       tracker_kept: "The tracker added from it stays."
+      not_allowed: "You can delete your own records for 24 hours; the owner can delete any record."
+      already_deleted: "That record was already deleted."
     edit:
       title: "Change or add details"
       recorded_by: "recorded by %{person}"
