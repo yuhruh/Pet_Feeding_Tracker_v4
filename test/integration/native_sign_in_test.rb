@@ -125,6 +125,22 @@ class NativeSignInTest < ActionDispatch::IntegrationTest
     assert_equal I18n.t("omni_auth.sessions.create.first_time_sign_in", locale: :"zh-TW"), @webview.flash[:notice]
   end
 
+  test "Chrome already signed in to the website (as someone else) doesn't change the app's sign-in" do
+    owner = users(:one)
+    @chrome.post routes.session_path(**L), params: { email_address: owner.email_address, password: "password123" }, headers: CHROME
+    assert signed_in_session?(@chrome)
+    chrome_cookie = @chrome.cookies["session_id"]
+
+    code = sign_in_in_chrome(google_link_in_app)
+    mom = User.find_by!(email_address: "mom@example.com")
+    assert_empty owner.connected_services.where(provider: "google_oauth2"), "Google isn't linked to the account Chrome is signed in to"
+    assert_equal chrome_cookie, @chrome.cookies["session_id"], "Chrome's own sign-in is left as it was"
+
+    finish_in_app(code)
+    assert_redirected_to_landing @webview, url(routes.new_pet_path(**L))
+    assert_equal 1, mom.sessions.count, "the app is signed in as the Google account's person"
+  end
+
   test "a refusal comes back to the app with its message, signed in as nobody" do
     User.create!(username: "mom", email_address: "mom@example.com", email_address_confirmation: "mom@example.com",
                  password: "password123", timezone: "Asia/Taipei")

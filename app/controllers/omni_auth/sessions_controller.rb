@@ -69,7 +69,9 @@ class OmniAuth::SessionsController < ApplicationController
   end
 
   def set_user
-    user = resume_session.try(:user)
+    # The app's sign-in is about the person at the provider, not whoever this
+    # Chrome is signed in to on the website (Custom Tabs share Chrome's cookies).
+    user = resume_session.try(:user) unless native_sign_in?
     if user.present?
       @user = user
     elsif @service.present?
