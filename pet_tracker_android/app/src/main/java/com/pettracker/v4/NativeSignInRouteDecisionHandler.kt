@@ -1,6 +1,7 @@
 package com.pettracker.v4
 
 import android.net.Uri
+import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsIntent
 import dev.hotwire.navigation.activities.HotwireActivity
 import dev.hotwire.navigation.navigator.NavigatorConfiguration
@@ -21,7 +22,10 @@ class NativeSignInRouteDecisionHandler : Router.RouteDecisionHandler {
     }
 
     override fun handle(location: String, configuration: NavigatorConfiguration, activity: HotwireActivity): Router.Decision {
-        CustomTabsIntent.Builder().setShowTitle(true).build().launchUrl(activity, Uri.parse(location))
+        val tab = CustomTabsIntent.Builder().setShowTitle(true).build()
+        // In the browser, never back in this app: the app opens its own site's links.
+        CustomTabsClient.getPackageName(activity, null)?.let { tab.intent.setPackage(it) }
+        tab.launchUrl(activity, Uri.parse(location))
         return Router.Decision.CANCEL
     }
 }
