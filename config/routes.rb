@@ -51,6 +51,8 @@ Rails.application.routes.draw do
     post "view/:token", to: "viewer_pages#create"
     delete "households/:household_id/leave", to: "household_memberships#destroy", as: :leave_household
     patch "households/:household_id/reminders", to: "reminder_settings#update", as: :household_reminders
+    # The Android app's notification token (checkpoint I).
+    resource :device_token, only: %i[create destroy], path: "device_tokens"
     get "today", to: "today#show", as: :today
     resources :care_events, only: %i[create edit update destroy] do
       post :undo, on: :member

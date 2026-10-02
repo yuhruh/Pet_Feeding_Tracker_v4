@@ -1,8 +1,14 @@
-# Sends one person their reminders for one household (checkpoint H), by one
-# channel: LINE if they signed in with LINE (email if the push fails), else
-# email. In their language, with a link to the Today page.
+# Sends one person their reminders for one household (checkpoints H, I), by one
+# channel: the Android app if they have it signed in and push is set up, else
+# LINE if they signed in with LINE, else email; a channel that fails falls
+# through to the next. In their language, with a link to the Today page.
 class CareReminderNotifier
   LOCALE_BY_TIME_ZONE = KibblePriceMailer::LOCALE_BY_TIME_ZONE
+
+  # :sent, :gone or :failed for one phone.
+  def self.push_android(token, title:, body:, url:)
+    FcmClient.new.deliver(token: token, title: title, body: body, url: url)
+  end
 
   def self.push_line(uid, text)
     response = line_bot_client.push_message(uid, { type: "text", text: text })
@@ -15,9 +21,10 @@ class CareReminderNotifier
     @items = items
   end
 
-  # Returns the channel used: "line" or "email".
+  # Returns the channel used: "android", "line" or "email".
   def deliver
     I18n.with_locale(locale) do
+      return "android" if pushed_to_android?
       return "line" if line_uid && pushed_by_line?
 
       CareReminderMailer.with(user: @user, subject: subject, lines: lines, today_url: today_url, locale: locale.to_s).reminders.deliver_later
@@ -36,6 +43,20 @@ class CareReminderNotifier
   def locale = LOCALE_BY_TIME_ZONE.fetch(@user.timezone.to_s, I18n.default_locale)
 
   def line_uid = @user.connected_services.find { |service| service.provider == "line" }&.uid
+
+  # Sent to at least one of the person's phones; phones whose token is gone are forgotten.
+  def pushed_to_android?
+    return false unless FcmClient.configured?
+
+    results = @user.device_tokens.map do |device|
+      result = self.class.push_android(device.token, title: subject, body: lines.join("\n"), url: today_url)
+      result == :gone ? device.delete && :gone : result
+    rescue StandardError => error
+      Rails.error.report(error, handled: true, context: { user_id: @user.id })
+      :failed
+    end
+    results.include?(:sent)
+  end
 
   def pushed_by_line?
     self.class.push_line(line_uid, [ subject, "", *lines, "", "#{I18n.t('care_reminders.open_today')} #{today_url}" ].join("\n"))

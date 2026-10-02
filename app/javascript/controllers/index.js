@@ -49,6 +49,9 @@ application.register("ocr-upload", OcrUploadController)
 import PasswordFieldController from "controllers/password_field_controller"
 application.register("password-field", PasswordFieldController)
 
+import PushController from "controllers/push_controller"
+application.register("push", PushController)
+
 import RangeFormController from "controllers/range_form_controller"
 application.register("range-form", RangeFormController)
 

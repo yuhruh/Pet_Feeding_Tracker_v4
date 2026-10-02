@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_one :owned_household, class_name: "Household", foreign_key: :owner_id, inverse_of: :owner, dependent: :destroy
   has_many :household_memberships, dependent: :destroy
   has_many :care_reminders, dependent: :delete_all
+  has_many :device_tokens, dependent: :delete_all
   # Links to other people's records, so deleting an account never blocks on them.
   has_many :sent_household_invitations, class_name: "HouseholdInvitation", foreign_key: :invited_by_id, dependent: :nullify
   has_many :accepted_household_invitations, class_name: "HouseholdInvitation", foreign_key: :accepted_by_id, dependent: :nullify

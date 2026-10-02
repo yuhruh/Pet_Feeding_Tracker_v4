@@ -330,6 +330,7 @@ en:
         turn_on: "Turn on"
         turn_off: "Turn off"
         channels:
+          android: "Android app"
           line: "LINE"
           email: "email"
       title: "Today"

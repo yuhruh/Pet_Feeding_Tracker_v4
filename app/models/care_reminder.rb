@@ -2,7 +2,7 @@
 # scheduled dose. The key is unique per person, so nothing is sent twice; a
 # routine reminder can have one follow-up.
 class CareReminder < ApplicationRecord
-  CHANNELS = %w[line email].freeze
+  CHANNELS = %w[android line email].freeze
 
   belongs_to :household
   belongs_to :user

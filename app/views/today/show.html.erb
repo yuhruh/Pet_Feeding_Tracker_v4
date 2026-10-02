@@ -39,6 +39,10 @@
           <span><%= t(reminders_on ? ".reminders.on" : ".reminders.off", channel: t(".reminders.channels.#{@reminder_channel}")) %></span>
           <%= button_to t(reminders_on ? ".reminders.turn_off" : ".reminders.turn_on"), household_reminders_path(household), method: :patch,
                 params: { enabled: !reminders_on }, class: "text-sky-700 underline cursor-pointer" %>
+          <% if reminders_on && hotwire_native_app? %>
+            <%# In the Android app, reminders on: ask for the notification permission (once) and register this phone. %>
+            <span data-controller="push" data-push-url-value="<%= device_token_path %>" data-push-ask-value="true" hidden></span>
+          <% end %>
         </div>
       <% end %>
 

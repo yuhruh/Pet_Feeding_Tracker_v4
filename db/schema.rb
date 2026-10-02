@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_02_100000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_02_110000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -121,6 +121,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_02_100000) do
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.index ["user_id"], name: "index_connected_services_on_user_id"
+  end
+
+  create_table "device_tokens", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "last_used_at"
+    t.string "platform", default: "android", null: false
+    t.integer "session_id"
+    t.string "token", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["session_id"], name: "index_device_tokens_on_session_id"
+    t.index ["token"], name: "index_device_tokens_on_token", unique: true
+    t.index ["user_id"], name: "index_device_tokens_on_user_id"
   end
 
   create_table "dry_foods", force: :cascade do |t|
@@ -554,6 +567,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_02_100000) do
   add_foreign_key "care_routines", "care_spots"
   add_foreign_key "care_spots", "households"
   add_foreign_key "connected_services", "users"
+  add_foreign_key "device_tokens", "sessions", on_delete: :cascade
+  add_foreign_key "device_tokens", "users", on_delete: :cascade
   add_foreign_key "dry_foods", "Users", column: "user_id"
   add_foreign_key "dry_foods", "households"
   add_foreign_key "health_checks", "pets"

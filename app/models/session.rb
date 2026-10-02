@@ -6,6 +6,8 @@ class Session < ApplicationRecord
   ACTIVITY_UPDATE_INTERVAL = 1.hour
 
   belongs_to :user
+  # Signing out stops this phone's notifications (checkpoint I).
+  has_many :device_tokens, dependent: :delete_all
 
   before_create { self.last_active_at ||= Time.current }
 

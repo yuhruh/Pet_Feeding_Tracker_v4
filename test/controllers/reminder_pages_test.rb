@@ -1,4 +1,5 @@
 require "test_helper"
+require "minitest/mock"
 
 # Checkpoint H pages: the owner's reminder intervals on the household page, the
 # due lines on Today, and each person's reminders switch.
@@ -163,5 +164,30 @@ class ReminderPagesTest < ActionDispatch::IntegrationTest
       end
       assert_nil flash[:care_repeat]
     end
+  end
+
+  test "the switch says Android app when the reminders go there" do
+    @household.update!(owner_reminders_enabled: true)
+    log_in_as(@owner)
+    DeviceToken.register(user: @owner, session: @owner.sessions.last, token: "phone-1")
+    FcmClient.stub(:configured?, true) { get today_url(**L) }
+    assert_select "##{dom_id(@household, :reminders)}", text: /Reminders by Android app: on/
+    FcmClient.stub(:configured?, false) { get today_url(**L) }
+    assert_select "##{dom_id(@household, :reminders)}", text: /Reminders by email: on/
+  end
+
+  test "in the Android app, Today asks for the notification permission once reminders are on" do
+    native = { "HTTP_USER_AGENT" => "Mozilla/5.0 (Linux; Android 14) Chrome/120 Hotwire Native Android" }
+    log_in_as(@owner)
+    get today_url(**L), headers: native
+    assert_select "[data-controller=push][data-push-url-value]", count: 1, message: "the layout's token keeper only"
+    assert_select "[data-controller=push][data-push-ask-value=true]", count: 0
+
+    @household.update!(owner_reminders_enabled: true)
+    get today_url(**L), headers: native
+    assert_select "##{dom_id(@household, :reminders)} [data-controller=push][data-push-ask-value=true]"
+
+    get today_url(**L)
+    assert_select "[data-controller=push]", count: 0, message: "nothing in a web browser"
   end
 end

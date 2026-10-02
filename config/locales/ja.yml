@@ -330,6 +330,7 @@
         turn_on: "オンにする"
         turn_off: "オフにする"
         channels:
+          android: "Androidアプリ"
           line: "LINE"
           email: "メール"
       title: "今日"

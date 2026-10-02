@@ -192,4 +192,53 @@ class HouseholdRemindersTest < ActiveSupport::TestCase
     assert_empty run_at(at(@monday, 23, 0))
     assert_equal 1, CareReminder.count
   end
+
+  # Checkpoint I: the Android app first, then LINE, then email.
+  def with_push(result = :sent, &block)
+    pushed = []
+    push = ->(token, title:, body:, url:) { pushed << { token: token, title: title, body: body, url: url }; result.respond_to?(:call) ? result.call(token) : result }
+    FcmClient.stub(:configured?, true) { CareReminderNotifier.stub(:push_android, push, &block) }
+    pushed
+  end
+
+  test "someone with the Android app gets it there, on each phone, and not by LINE or email" do
+    @owner.connected_services.create!(provider: "line", uid: "U123")
+    DeviceToken.register(user: @owner, session: nil, token: "phone-1")
+    DeviceToken.register(user: @owner, session: nil, token: "tablet-1")
+    sent = nil
+    pushed = with_push { CareReminderNotifier.stub(:push_line, ->(*) { flunk "not by LINE" }) { sent = run_at(at(@monday, 9, 5)) } }
+    assert_equal({ @owner => "android" }, sent)
+    assert_equal %w[phone-1 tablet-1], pushed.map { |push| push[:token] }.sort
+    assert_includes pushed.first[:title], "🔔"
+    assert_includes pushed.first[:body], "Kitchen fountain"
+    assert_includes pushed.first[:url], "/zh-TW/today"
+    assert_equal "android", CareReminder.sole.channel
+    assert_equal 0, emails_to(@owner)
+  end
+
+  test "a phone whose token is gone is forgotten, and the reminder goes by LINE or email instead" do
+    DeviceToken.register(user: @owner, session: nil, token: "uninstalled")
+    sent = nil
+    with_push(:gone) { sent = run_at(at(@monday, 9, 5)) }
+    assert_equal({ @owner => "email" }, sent)
+    assert_empty DeviceToken.all
+    assert_equal 1, emails_to(@owner)
+
+    @owner.connected_services.create!(provider: "line", uid: "U123")
+    DeviceToken.register(user: @owner, session: nil, token: "phone-1")
+    CareReminderNotifier.stub(:push_line, true) do
+      with_push(:failed) { sent = run_at(at(@monday + 2, 9, 5)) }
+    end
+    assert_equal({ @owner => "line" }, sent, "push failed: the follow-up goes by LINE")
+    assert DeviceToken.exists?(token: "phone-1"), "a failure isn't a gone token"
+  end
+
+  test "without the Firebase service account, phones are skipped" do
+    DeviceToken.register(user: @owner, session: nil, token: "phone-1")
+    FcmClient.stub(:configured?, false) do
+      CareReminderNotifier.stub(:push_android, ->(*) { flunk "push is off" }) do
+        assert_equal({ @owner => "email" }, run_at(at(@monday, 9, 5)))
+      end
+    end
+  end
 end

@@ -330,6 +330,7 @@ zh-TW:
         turn_on: "開啟"
         turn_off: "關閉"
         channels:
+          android: "Android App"
           line: "LINE"
           email: "Email"
       title: "今天"
