@@ -19,19 +19,20 @@ Pet Tracker v4 helps pet owners keep an accurate record of what their pets eat, 
 ## Features
 
 *   **Pet Management:** Add and manage profiles for multiple pets.
+*   **In-App Usage Guide:** A step-by-step guide at `/doc` (in English, 繁體中文 and 日本語) covering every feature below, with a table of contents.
 *   **Households, Caregivers and Viewers:** Invite caregivers by email to record care, give viewers a personal read-only link (no account needed), hand the household to someone else, and keep every household's cats apart.
-*   **Today Page:** One tap for 🍽 Fed, ⚖️ Weight, 💊 Meds, 🚽 Scooped / ♻️ Full change and 💧 Refilled / 🧽 Cleaned / 🔄 Filter changed, with Undo, quick time changes, details (food, litter observations), Delete for mistakes, and a timeline of the last 24 hours. Changes appear on everyone's page without reloading.
+*   **Today Page:** One tap for 🍽 Fed, ⚖️ Weight, 💊 Meds, 🚽 Scooped / ♻️ Full change and 💧 Refilled / 🧽 Cleaned / 🔄 Filter changed, with Undo, quick time changes, details (food, litter observations), Delete for mistakes, and a timeline of the last 24 hours. Litter records can note pee clumps, poops, stool and anything unusual, shown in red and on the cat's trackers page for 30 days. Changes appear on everyone's page without reloading.
 *   **Medications:** Doses at set times or as needed; each dose shows due, given, couldn't give or overdue, with a double-dose check.
 *   **Care Reminders:** For each litter box and water spot job, every few hours or days, or at set times; overdue doses too. Sent by the Android app, LINE or email, once, with one follow-up.
 *   **Dietary Tracking & Preference Analysis:** Log daily feeding records and identify your pet's favorite foods using a scoring algorithm based on their hunger, how much they loved the food, how much they left and how often they came back to it.
 *   **Kibble Price Check:** On the 1st of every month, the app finds current Taiwan prices for the kibbles your pet has loved over the last 4 months, ranks them by **price per kg**, and emails you the list. See [Kibble Price Check](#kibble-price-check) below.
-*   **Smart Inventory Management:** Track dry food bags with automatic calculation of the food left and a predicted run-out date based on how fast your pet eats.
-*   **Comprehensive Data Visualization:** Interactive charts of food consumption (dry and wet) and weight over time, including separate tracking for boarding stays.
+*   **Smart Inventory Management:** Track dry food bags with automatic calculation of the food left and a predicted run-out date based on how fast your pet eats; restock a bag when you open a new one.
+*   **Comprehensive Data Visualization:** Interactive charts of food consumption (dry and wet) and weight over time, including separate tracking for boarding stays (meals whose note says hotel, boarding or 旅館). Download or share a chart as an image.
 *   **Health Record Management:** Track your pet's checkups and blood test results.
 *   **AI Data Extraction:** Upload photos of health checkup reports and let Google Gemini fill in the results, using your own Gemini API key.
 *   **Vet Visit Preparation & Q&A:** Prepare questions before a vet visit and record the vet's answers afterward, with the vet's name, the purpose of the visit (vaccination, checkup, dental cleaning, surgery, and more), and how long you waited versus how long you spent with the vet.
-*   **Sharing:** Create a read-only link to a pet's records for others such as sitters or vets, or invite specific members to view and answer vet questions.
-*   **User Authentication:** Email and password, or sign in with Google, LINE or GitHub.
+*   **Sharing:** Create a read-only link to a pet's records for others such as sitters or vets (lasting 1, 7 or 30 days, or with no expiry, and turned off at any time), or invite specific members to view and answer vet questions.
+*   **User Authentication:** Email and password, or sign in with Google, LINE or GitHub; sign out of your other devices from your account page.
 *   **Data Portability & Bulk Operations:** Import and export trackers as CSV, download every care record as CSV, and delete many records at once.
 *   **Automated Backups:** A CSV backup of your trackers by email every day you've changed them.
 *   **Smart Notifications:** Care reminders as Android app notifications (Firebase), else LINE, else email; weight reminders by LINE or email.
@@ -125,7 +126,17 @@ Sign-in with Google, LINE or GitHub needs their client IDs and secrets in the en
 10. **Look after them on Today:** tap what you did; everyone sees it at once. Turn on 🔔 Reminders there to be told when something's due.
 11. **Share records:** create a link so others, like vets, can see your pet's feeding history.
 
-For step-by-step instructions, see [USAGE.md](USAGE.md).
+For step-by-step instructions, open **Docs** in the app's menu (`/doc`) or see [USAGE.md](USAGE.md).
+
+## Documentation
+
+| Where | What's in it |
+|---|---|
+| `/doc` in the app (`app/views/pages/doc.html.erb`) | The usage guide for users, in all three languages. The account, pet, dry food, tracker and CSV import sections are written in the view; every other feature is a section under `doc_page.feature_sections` in `config/locales/*.yml`, so adding a feature to the guide means adding a section there in each language. |
+| [USAGE.md](USAGE.md) | The same usage guide as Markdown |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | How the app is built |
+| [HOUSEHOLDS_CAREGIVER_PLAN.md](HOUSEHOLDS_CAREGIVER_PLAN.md) | Design and checkpoints for households, caregivers, the Today page and reminders |
+| [KIBBLE_PRICE_PLAN.md](KIBBLE_PRICE_PLAN.md) | Design, decisions and test results for the kibble price check |
 
 ## Contributing
 

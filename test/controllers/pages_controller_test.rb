@@ -15,6 +15,17 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "the usage guide has a section for every feature, each linked from its contents, in every language" do
+    I18n.available_locales.each do |locale|
+      get doc_url(locale: locale)
+      I18n.with_locale(locale) { I18n.t("doc_page.feature_sections") }.each do |section|
+        assert_select "h2##{section[:id]}", text: section[:title]
+        assert_select "nav a[href=?]", "##{section[:id]}"
+        assert_select "##{section[:id]} ~ ol li, ##{section[:id]} ~ ul li", minimum: 1
+      end
+    end
+  end
+
   test "the privacy page names the data the app holds and how Gmail access is used" do
     get privacy_url(locale: I18n.default_locale)
     body = response.parsed_body.text

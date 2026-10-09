@@ -467,6 +467,196 @@ en:
     hungry_option_3: "🔺 No, not really. Ate A Little"
     csv_example_title: "💡 CSV Example Row"
     csv_example_description: "You can use this format for your file to import:"
+    import_format_note: "The file must be semicolon-separated (;), in the same format as the CSV you download from the Trackers page, so the easiest start is to export first and edit that file. Every row is checked before anything is saved: dates must be valid and not before your pet's birthday, and amounts and weight must be numbers. If any row has a problem, nothing is imported and you'll see which rows to fix."
+    viewing_editing_pets_step_2: "Delete: From the pet's profile page, click the delete button and confirm. The pet's records are removed with it."
+    managing_inventory_step_3: "Restock: When you open a new bag, click 'Restock' and enter its amount. The food left starts again from the new bag."
+    managing_inventory_step_4: "Run-out date: Each kibble tracker draws the bag down, so the app shows how much is left and predicts when it will run out."
+    contents_title: "Contents"
+    feature_sections:
+      - id: "favorite_food"
+        title: "Favorite Food and Charts"
+        description: "Your trackers turn into a ranking of the foods your pet loves most and charts of what it eats and weighs."
+        groups:
+          - title: "Favorite Food"
+            ordered: true
+            items:
+              - "Open the list: In the menu, open 'Trackers' → 'Petname's Favorite List'."
+              - "Read the score: Each meal gets a favorite score from how hungry your pet was, how much it loved the food, how much it left and how often it came back to eat. Each food shows its five best days."
+              - "Filter by food type if you only want to see, for example, kibble."
+              - "See prices: Use the 'Kibble prices' link at the top to see where your pet's favorite kibbles are cheapest."
+          - title: "Charts"
+            ordered: false
+            items:
+              - "The trackers page charts dry and wet food eaten each day, and weight, for the date range you choose."
+              - "Weights from trackers and from ⚖️ Weight on the Today page are shown together."
+              - "Write hotel, boarding or 旅館 in a tracker's note and those meals are charted separately, so a boarding stay doesn't blur the trend at home."
+              - "Download the chart as an image, or share it."
+      - id: "households"
+        title: "Households: Caregivers and Viewers"
+        description: "Your cats, food bags, litter boxes and water spots form your household. You're its owner and manage everything; family and pet sitters can help. Open it from the menu (🏠 My household) or your account page."
+        groups:
+          - title: "Who can do what"
+            ordered: false
+            items:
+              - "Caregivers (family, a pet sitter) record feeding, litter, water and medicine, and can read your trackers and charts. They need an account."
+              - "Viewers (say, Grandma) see today's status, the timeline and the charts, read-only. They use a personal link and don't need an account."
+          - title: "Inviting a Caregiver"
+            ordered: true
+            items:
+              - "Enter their email under 'Invite a caregiver' and send the invitation."
+              - "They open the link in the email, create an account (or sign in with Google or LINE using the same email) and join. The link works once, for 7 days, and only for that email."
+              - "They land on the Today page, with buttons for your cats."
+          - title: "Viewer Links"
+            ordered: true
+            items:
+              - "Create a link under 'Viewer links', with a name (e.g. Grandma) and, if you like, an expiry."
+              - "Copy it and send it by LINE or email. Each viewer gets their own link."
+              - "Turn it off at any time; it stops working at once."
+          - title: "Litter Boxes and Water Spots"
+            ordered: false
+            items:
+              - "Add, rename, choose bowl or fountain, move up or down, and remove each litter box and water spot."
+              - "Each one has a line per job for reminders: Off, every few hours or days, or at set times. Save with the spot's 'Save' button."
+          - title: "Members, Leaving and Handing Over"
+            ordered: false
+            items:
+              - "Remove a caregiver or viewer from the household page; they can also 'Leave' from their account page."
+              - "Hand the household over to a member: once they accept, they become the owner and you stay on as a caregiver."
+              - "Someone who only helps can still add their own cat from their account page ('Add my own cat'), which creates their own household."
+      - id: "today"
+        title: "The Today Page"
+        description: "Today shows each household you're in: a row per litter box and water spot, a card per cat, and a timeline of the last 24 hours. Everyone's changes appear without reloading."
+        groups:
+          - title: "Recording Care"
+            ordered: false
+            items:
+              - "One tap records what you did, now: 🍽 Fed, ⚖️ Weight (enter the kg), 💊 Meds, 🚽 Scooped / ♻️ Full change, 💧 Refilled / 🧽 Cleaned / 🔄 Filter changed."
+              - "A notice appears with Undo (10 seconds), '5 · 10 · 15 min ago' to change the time, and 'Add details'."
+              - "'Record it again?' appears if the same care was just recorded by anyone in the last 30 minutes."
+              - "Feeding details suggest your household's food bags and your cat's favorites. The owner can turn a feeding into a full tracker with 'Add to trackers'."
+          - title: "Fixing a Record"
+            ordered: false
+            items:
+              - "Undo right after a tap (10 seconds)."
+              - "Change a record on the timeline: the time (up to 7 days back), the jobs, the details or a note."
+              - "Delete a mistaken record after you confirm; it is removed from Today, the charts, the CSV and reminders."
+              - "The owner can change and delete any record; a caregiver their own records, for 24 hours."
+          - title: "Litter Observations"
+            ordered: false
+            items:
+              - "In a litter record's 'Add details': which cat (if you know), pee clumps, the number of poops, the stool, and anything unusual (blood, very large clumps, other)."
+              - "Diarrhea and anything unusual show in red. With a cat chosen, they also appear on that cat's trackers page for 30 days."
+      - id: "medications"
+        title: "Medications"
+        description: "Keep track of every dose, whoever gives it."
+        groups:
+          - title: "Giving Medicine"
+            ordered: true
+            items:
+              - "Add medications: The owner adds them per cat (cat profile → Medications): name, dose, up to 4 times a day (or none for 'as needed'), and dates."
+              - "Record a dose: 💊 Meds on Today offers today's doses not yet recorded: 'Given', or 'Couldn't give' with a reason."
+              - "Check the status: Each dose shows due, given (green), couldn't give (amber) or overdue (red, an hour after its time). Recording a dose already given asks first."
+      - id: "reminders"
+        title: "Reminders"
+        description: "Be told when the litter box, water fountain or a dose is due."
+        groups:
+          - title: "Setting Up Reminders"
+            ordered: true
+            items:
+              - "Choose how often (owner): On the household page, for each litter box and water spot job, choose 3 times a day, twice a day, daily, twice a week, weekly, every 2 weeks, twice a month, monthly or custom (hours or days), counted from the last time it was done; or at set times (up to 6, e.g. 08:00 and 20:00)."
+              - "Turn them on: Under your household's name on Today, tap 'Turn on' next to 🔔 Reminders. Each owner and caregiver chooses for themselves; viewers don't get reminders."
+              - "See them on Today: e.g. '🧽 Fountain cleaned due in 4 days' or '🚽 Scooped due at 20:00'."
+          - title: "When and How They Arrive"
+            ordered: false
+            items:
+              - "A job due on a day is sent at 9am in your time zone; a shorter interval when it's due, between 9am and 9pm; a set time at that time. If it's still not done, there's one follow-up. Overdue doses are reminded once."
+              - "Reminders arrive in the Android app if you use it, else on LINE if you signed in with LINE, else by email."
+              - "Weight reminders are sent by LINE or email."
+      - id: "kibble_prices"
+        title: "Kibble Prices"
+        description: "Pet Tracker checks what your pet's favorite kibbles cost in Taiwan's online shops, so you can buy the one your pet loves at the best price."
+        groups:
+          - title: "Which Kibbles Are Checked"
+            ordered: false
+            items:
+              - "Kibbles on the Favorite Food list with a favorite score of 30 or more, fed in the last 4 months (up to 5)."
+              - "Prices come from BigGo, a price-comparison site covering shops such as Shopee, momo, Yahoo, Coupang and Rakuten, and from PChome 24h."
+              - "Name the food the way it's sold: brand plus product name, including the flavor (鴨肉, 雞肉…) and any product code (IN27…). The app uses these to tell the right product from similar ones."
+          - title: "Reading the Prices Page"
+            ordered: true
+            items:
+              - "Open it: Go to your pet's profile and click 'Kibble Prices', or use the link on the Favorite List."
+              - "Compare: One card per kibble, in favorite order. Prices are ranked by price per kg, cheapest first, so bags of different sizes compare fairly."
+              - "Buy: Click a product to open the shop's page. Each price shows where it was found and when."
+              - "'Can't find this kibble in shops right now.' means neither BigGo nor PChome lists it at the moment. Check the brand and description spelling in your trackers."
+          - title: "Refreshing and the Monthly Email"
+            ordered: false
+            items:
+              - "Prices are checked on the 1st of every month and emailed to you, in 繁體中文, 日本語 or English depending on your time zone."
+              - "Click 'Refresh now' to check today, once a day per pet. Results appear after a minute or so; reload the page."
+              - "Prices are approximate and shops change them often, so check the shop before buying."
+      - id: "health_checks"
+        title: "Health Checks"
+        description: "Keep your pet's checkups and blood test results in one place and see how they change over time."
+        groups:
+          - title: "Adding a Health Check"
+            ordered: true
+            items:
+              - "Open it: From your pet's profile, go to 'Health Checks' and add a new one."
+              - "Enter the results: The exam date and the values from the report: blood count, kidney, liver, pancreas, heart and other results such as FIV and FeLV."
+              - "Save: The results are listed by date, and you can delete several at once."
+          - title: "Reading Reports with AI"
+            ordered: true
+            items:
+              - "Add your Gemini API key: In your account settings, paste your own Google Gemini API key (the page explains how to get one)."
+              - "Upload photos: On the health check form, upload photos of the report (up to 5 images, 10 MB each)."
+              - "Check the results: Gemini fills in the values it finds. Check them against the report before saving."
+      - id: "vet_visits"
+        title: "Vet Visits"
+        description: "Prepare questions before a vet visit and record the vet's answers afterwards."
+        groups:
+          - title: "Before and After the Visit"
+            ordered: true
+            items:
+              - "Write questions: From your pet's profile, go to 'Vet Visits' and add your questions with the visit date."
+              - "Invite helpers: Add other members by email so they can see the questions and help answer them."
+              - "Record the answers: After the visit, write the vet's answers, several at once if you like."
+              - "Add the details: The vet's name, the purpose (vaccination, checkup, dental cleaning, surgery, grooming, emergency, follow-up or other), and how long you waited versus how long you spent with the vet."
+      - id: "sharing"
+        title: "Sharing, Export and Backups"
+        description: "Your records are yours: share them, download them, or bring them in from elsewhere."
+        groups:
+          - title: "Sharing a Pet's Records"
+            ordered: false
+            items:
+              - "On the trackers page, the owner can create a read-only link to the pet's feeding records and charts, for a vet or a sitter."
+              - "Choose how long it works: 1 day, 7 days, 30 days or no expiry. Stop sharing at any time; the link stops working at once."
+          - title: "Download and Backups"
+            ordered: false
+            items:
+              - "Export trackers as CSV from the trackers page, and select several records to delete at once."
+              - "The owner can download every care record (feeding taps, weight, litter, water, medicine) from the household page, in the household's time zone."
+              - "A CSV backup of your trackers is emailed to you every day you've changed them."
+          - title: "Your Account"
+            ordered: false
+            items:
+              - "Sign out of your other devices from your account page if you've lost a phone or used a shared computer."
+      - id: "mobile"
+        title: "Android App and PWA"
+        description: "Use Pet Tracker on your phone, as an Android app or installed from the browser."
+        groups:
+          - title: "Android App"
+            ordered: false
+            items:
+              - "Sign in with email, or with Google, LINE or GitHub: a Chrome tab opens over the app and brings you back signed in."
+              - "Turning on 🔔 Reminders on Today asks to allow notifications. Reminders then arrive as notifications; tapping one opens Today."
+              - "Signing out of the app stops notifications on that phone."
+          - title: "Progressive Web App (PWA)"
+            ordered: true
+            items:
+              - "Open the app in a supported browser on your phone."
+              - "Choose 'Add to Home Screen' or 'Install' in the browser's menu."
+              - "Launch it from your home screen like a native app."
   about_page:
     title: "The Story Behind Aji Tracker"
     paragraph_1: "This app was inspired by my first cat, Aji, a ginger and white furball with a surprisingly particular taste. Unlike most ginger cats, Aji has his own unique preferences, and it took a lot of trial and error to discover that he loves chicken far more than tuna or salmon."

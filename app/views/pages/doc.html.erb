@@ -3,6 +3,19 @@
 
   <p class="text-base mb-6"><%= t("doc_page.description") %></p>
 
+  <nav class="mb-8 border-2 border-grayishBlue rounded-lg shadow-lg p-6">
+    <h2 class="text-xl font-semibold mb-2"><%= t("doc_page.contents_title") %></h2>
+    <ul class="grid grid-cols-1 gap-1 list-disc list-inside sm:grid-cols-2 lg:grid-cols-3">
+      <% { "user_account" => "user_account_title", "pet_manage" => "pet_management_title", "dry_food" => "dry_food_storage_title",
+           "trackers" => "trackers_title", "import" => "importing_trackers_title" }.each do |id, title_key| %>
+        <li><%= link_to t("doc_page.#{title_key}"), "##{id}", class: "hover:text-softRed" %></li>
+      <% end %>
+      <% t("doc_page.feature_sections").each do |section| %>
+        <li><%= link_to section[:title], "##{section[:id]}", class: "hover:text-softRed" %></li>
+      <% end %>
+    </ul>
+  </nav>
+
   <div class="space-y-8">
     <div class="container mx-auto border-2 border-grayishBlue rounded-lg shadow-lg p-6">
       <h2 id="user_account" class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2"><%= t("doc_page.user_account_title") %></h2>
@@ -59,8 +72,10 @@
           </ol>
 
           <h3 class="text-xl font-semibold mb-2"><%= t("doc_page.viewing_editing_pets_title") %></h3>
-          <ul class="list-disc list-inside mb-4"><%= t("doc_page.viewing_editing_pets_description") %></li>
+          <p class="mb-2"><%= t("doc_page.viewing_editing_pets_description") %></p>
+          <ul class="list-disc list-inside mb-4">
             <li><strong><%= t("doc_page.viewing_editing_pets_step_1") %></strong></li>
+            <li><strong><%= t("doc_page.viewing_editing_pets_step_2") %></strong></li>
           </ul>
         </div>
         <%=image_tag("pet_management.png", class: "border-2 border-slate-200 rounded-lg shadow-md w-full md:w-1/2 p-2") %>
@@ -85,6 +100,8 @@
           <ul class="list-disc list-inside mb-4">
             <li><strong><%= t("doc_page.managing_inventory_step_1") %></strong></li>
             <li><strong><%= t("doc_page.managing_inventory_step_2") %></strong></li>
+            <li><strong><%= t("doc_page.managing_inventory_step_3") %></strong></li>
+            <li><strong><%= t("doc_page.managing_inventory_step_4") %></strong></li>
           </ul>
         </div>
         <%=image_tag('dry_food.png', class: "border-2 border-slate-200 rounded-lg shadow-md w-full md:w-1/2 p-2") %>
@@ -120,6 +137,7 @@
 
       <h3 id="import" class="text-xl font-semibold mb-2"><%= t("doc_page.import_guide_title") %></h3>
       <p class="mb-4"><%= t("doc_page.import_guide_description") %></p>
+      <p class="mb-4"><%= t("doc_page.import_format_note") %></p>
       <div class="overflow-x-auto">
         <table class="min-w-full bg-white border border-gray-200 dark:bg-slate-700">
           <thead>
@@ -243,5 +261,20 @@
         <%=image_tag("import_csv_1.png", class: "border-2 border-slate-200 rounded-lg shadow-md  w-full h-auto p-2") %>
       </div>
     </div>
+
+    <% t("doc_page.feature_sections").each do |section| %>
+      <section class="container border-2 border-grayishBlue rounded-lg shadow-lg p-6">
+        <h2 id="<%= section[:id] %>" class="text-2xl font-bold mb-2 underline underline-offset-4 decoration-2"><%= section[:title] %></h2>
+        <p class="mb-4"><%= section[:description] %></p>
+        <% section[:groups].each do |group| %>
+          <h3 class="text-xl font-semibold mb-2"><%= group[:title] %></h3>
+          <%= content_tag(group[:ordered] ? :ol : :ul, class: "#{group[:ordered] ? 'list-decimal' : 'list-disc'} list-inside mb-4 space-y-1") do %>
+            <% group[:items].each do |item| %>
+              <li><%= item %></li>
+            <% end %>
+          <% end %>
+        <% end %>
+      </section>
+    <% end %>
   </div>
 </div>
