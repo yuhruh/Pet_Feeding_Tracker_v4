@@ -21,6 +21,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
       I18n.with_locale(locale) { I18n.t("doc_page.feature_sections") }.each do |section|
         assert_select "h2##{section[:id]}", text: section[:title]
         assert_select "nav a[href=?]", "##{section[:id]}"
+        assert_select "#btn-doc a[href=?]", doc_path(locale: locale, anchor: section[:id]), text: section[:title]
         assert_select "##{section[:id]} ~ ol li, ##{section[:id]} ~ ul li", minimum: 1
       end
     end

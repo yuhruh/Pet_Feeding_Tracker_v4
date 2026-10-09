@@ -20,13 +20,21 @@
             <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
           </svg>
         </div>
-        <div id="btn-doc" class="absolute hidden w-max top-full mt-2 py-2 bg-white text-grayishBlue border border-gray-200 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out menu" data-target="menu-doc">
+        <div id="btn-doc" class="absolute hidden w-max max-h-[70vh] overflow-y-auto top-full mt-2 py-2 bg-white text-grayishBlue border border-gray-200 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out menu" data-target="menu-doc">
           <div class="py-1">
             <%= link_to t('layouts.navigation.user_account'), "/doc#user_account", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-blue-100 focus:text-softRed focus:outline-hidden" %>
             <%= link_to t('layouts.navigation.pet_management'), "/doc#pet_manage", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-sky-100 hover:text-sky-600 focus:bg-sky-100 focus:text-softRed focus:outline-hidden" %>
             <%= link_to t('layouts.navigation.dry_food_storage'), "/doc#dry_food", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-indigo-100 hover:text-indigo-600 focus:bg-indigo-100 focus:text-softRed focus:outline-hidden" %>
             <%= link_to t('layouts.navigation.trackers'), "/doc#trackers", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-lime-100 hover:text-lime-600 focus:bg-lime-100 focus:text-softRed focus:outline-hidden" %>
             <%= link_to t('layouts.navigation.import_csv'), "/doc#import", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-orange-100 focus:text-softRed focus:outline-hidden" %>
+            <% hover_colors = %w[hover:bg-pink-100 hover:text-pink-600 focus:bg-pink-100
+                                 hover:bg-teal-100 hover:text-teal-600 focus:bg-teal-100
+                                 hover:bg-violet-100 hover:text-violet-600 focus:bg-violet-100
+                                 hover:bg-amber-100 hover:text-amber-600 focus:bg-amber-100
+                                 hover:bg-emerald-100 hover:text-emerald-600 focus:bg-emerald-100].each_slice(3).to_a %>
+            <% t("doc_page.feature_sections").each_with_index do |section, i| %>
+              <%= link_to section[:title], doc_path(anchor: section[:id]), class: "block px-4 py-2 text-sm text-grayishBlue #{hover_colors[i % hover_colors.size].join(" ")} focus:text-softRed focus:outline-hidden" %>
+            <% end %>
           </div>
         </div>
       </div>
