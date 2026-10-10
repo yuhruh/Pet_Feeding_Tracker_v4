@@ -4,16 +4,16 @@
     <% helper_only = Current.user.helper_only? %>
     <% other_memberships = Current.user.household_memberships.includes(household: [ :owner, :pets ]).order(:id) %>
   <% end %>
-  <div class="flex items-center justify-between lg:space-x-1 xl:space-x-8 my-6">
+  <div class="flex items-center justify-between nav:space-x-1 xl:space-x-4 my-6">
     <div class="z-30 shrink-0">
       <%= image_tag('aji_icon_512.png', class: "w-12 xl:w-20") %>
     </div>
 
-    <div class="hidden lg:flex items-center uppercase text-grayishBlue lg:text-xs xl:text-base lg:space-x-3 xl:space-x-4 lg:justify-center flex-1 px-1">
-      <%= link_to t('layouts.navigation.features'), home_path(anchor: "features"), class: "tracking-wide hover:text-softRed lg:mr-2 xl:mr-6" %>
-      <%= link_to t('layouts.navigation.about'), about_path, class: "tracking-wide hover:text-softRed lg:mr-2 xl:mr-6" %>
+    <div class="hidden nav:flex items-center uppercase text-grayishBlue nav:text-xs xl:text-sm nav:space-x-3 xl:space-x-4 nav:justify-center flex-1 px-1">
+      <%= link_to t('layouts.navigation.features'), home_path(anchor: "features"), class: "tracking-wide hover:text-softRed nav:mr-2 xl:mr-2" %>
+      <%= link_to t('layouts.navigation.about'), about_path, class: "tracking-wide hover:text-softRed nav:mr-2 xl:mr-2" %>
       <div class="relative">
-        <div class="flex items-center w-max bg-white lg:px-1 xl:px-3 py-2 
+        <div class="flex items-center w-max bg-white nav:px-1 xl:px-2 py-2 
             text-grayishBlue tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed dark:bg-darkBlue cursor-pointer" data-target="btn-doc">
           <%= link_to t('layouts.navigation.docs'), doc_path, class: "tracking-wide hover:text-softRed" %>
           <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400 btn" data-target="btn-doc">
@@ -39,9 +39,9 @@
         </div>
       </div>
       <% if authenticated? %>
-        <%= link_to t('layouts.navigation.today'), today_path, class: "w-max lg:px-1 xl:px-3 py-2 tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed" %>
+        <%= link_to t('layouts.navigation.today'), today_path, class: "w-max nav:px-1 xl:px-2 py-2 tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed" %>
         <div class="relative">
-          <div class="flex items-center  w-max bg-white lg:px-1 xl:px-3 py-2 
+          <div class="flex items-center  w-max bg-white nav:px-1 xl:px-2 py-2 
           text-grayishBlue tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed dark:bg-darkBlue cursor-pointer btn" data-target="btn-1">
             <%= t('layouts.navigation.my_account_and_pets') %>
             <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400">
@@ -91,7 +91,7 @@
           </div>
 
         <div class="relative">
-          <div class="flex items-center w-max bg-white lg:px-1 xl:px-3 py-2 
+          <div class="flex items-center w-max bg-white nav:px-1 xl:px-2 py-2 
           text-grayishBlue tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed dark:bg-darkBlue cursor-pointer btn" data-target="btn-2">
             <%= t('layouts.navigation.trackers') %> 
             <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400">
@@ -129,7 +129,7 @@
         </div>
         <% unless helper_only %>
         <div class="relative">
-          <div class="flex items-center  w-max bg-white lg:px-1 xl:px-3 py-2 
+          <div class="flex items-center  w-max bg-white nav:px-1 xl:px-2 py-2 
             text-grayishBlue tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed dark:bg-darkBlue cursor-pointer btn" data-target="btn-3">
               <%= t('layouts.navigation.dry_food_storage') %> 
             <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-4 size-5 text-gray-400">
@@ -144,7 +144,7 @@
           </div>
         </div>
         <div class="relative">
-          <div class="flex items-center  w-max bg-white lg:px-1 xl:px-3 py-2 
+          <div class="flex items-center  w-max bg-white nav:px-1 xl:px-2 py-2 
             text-grayishBlue tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed dark:bg-darkBlue cursor-pointer btn" data-target="btn-4">
               <%= t('layouts.navigation.health_checkup') %>
             <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-4 size-5 text-gray-400">
@@ -166,12 +166,12 @@
           </div>
         </div>
         <% end %>
-        <%= button_to t('layouts.navigation.sign_out'), session_path, class: "lg:px-2 xl:px-8 py-2 text-white uppercase bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white", method: :delete %>
+        <%= button_to t('layouts.navigation.sign_out'), session_path, class: "nav:px-2 xl:px-4 whitespace-nowrap py-2 text-white uppercase bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white", method: :delete %>
       <% else %>
-        <%= link_to t('layouts.navigation.get_started'), new_registrations_path, class: "lg:px-2 xl:px-8 py-2 text-white bg-grayishBlue border-2 border-grayishBlue rounded-lg shadow-md tracking-wide hover:text-grayishBlue hover:bg-white" %>
-        <%= link_to t('layouts.navigation.sign_in'), new_session_path, class: "lg:px-2 xl:px-8 py-2 text-white bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white" %>
+        <%= link_to t('layouts.navigation.get_started'), new_registrations_path, class: "nav:px-2 xl:px-4 whitespace-nowrap py-2 text-white bg-grayishBlue border-2 border-grayishBlue rounded-lg shadow-md tracking-wide hover:text-grayishBlue hover:bg-white" %>
+        <%= link_to t('layouts.navigation.sign_in'), new_session_path, class: "nav:px-2 xl:px-4 whitespace-nowrap py-2 text-white bg-softRed border-2 border-softRed rounded-lg shadow-md hover:text-softRed hover:bg-white" %>
       <% end %>
-      <div class="hidden lg:flex items-center lg:space-x-1 xl:space-x-2 my-6 uppercase text-grayishBlue lg:ml-1 xl:ml-8">
+      <div class="hidden nav:flex items-center nav:space-x-1 xl:space-x-2 my-6 uppercase text-grayishBlue nav:ml-1 xl:ml-4">
         <%= image_tag('languages.png', width: '25px') %>
         <div class="relative">
           <div class="flex items-center w-max bg-white py-2 text-grayishBlue tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed dark:bg-darkBlue cursor-pointer btn" data-target="btn-5">
@@ -218,7 +218,7 @@
       </svg>
     </button>
 
-    <button id="menu-btn" type="button" class="z-[70] block item-end lg:hidden focus:outline-none hamburger">
+    <button id="menu-btn" type="button" class="z-[70] block item-end nav:hidden focus:outline-none hamburger">
       <span class="hamburger-top"></span>
       <span class="hamburger-middle"></span>
       <span class="hamburger-bottom"></span>

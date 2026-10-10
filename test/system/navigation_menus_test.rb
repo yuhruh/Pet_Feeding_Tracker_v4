@@ -82,6 +82,40 @@ class NavigationMenusTest < ApplicationSystemTestCase
     page.driver.browser.manage.window.resize_to(1400, 1400)
   end
 
+  # The full bar from 1150px (the nav breakpoint in config/tailwind.config.js), the ☰ menu below it.
+  test "the navigation bar shows every item from 1150px wide and the menu button below that" do
+    sign_in(@owner)
+    { 1149 => false, 1150 => true }.each do |width, full_bar|
+      page.driver.browser.manage.window.resize_to(width, 900)
+      inner = page.evaluate_script("window.innerWidth")
+      page.driver.browser.manage.window.resize_to(width + (width - inner), 900) if inner != width
+      visit today_url(locale: LOCALE)
+      assert_equal width, page.evaluate_script("window.innerWidth")
+      assert_selector ".btn[data-target='btn-2']", visible: full_bar ? true : :hidden
+      assert_selector "#menu-btn", visible: full_bar ? :hidden : true
+    end
+  ensure
+    page.driver.browser.manage.window.resize_to(1400, 1400)
+  end
+
+  test "an open phone menu closes when the window grows wide enough for the full bar" do
+    sign_in(@owner)
+    page.driver.browser.manage.window.resize_to(800, 900)
+    visit today_url(locale: LOCALE)
+    find("#menu-btn").click
+    assert_selector "#menu", visible: true
+
+    page.driver.browser.manage.window.resize_to(1400, 900)
+    assert_selector "#menu", visible: :hidden
+    assert_no_selector "#menu-btn.open", visible: :all
+
+    page.driver.browser.manage.window.resize_to(800, 900)
+    assert_selector "#menu-btn", visible: true
+    assert_selector "#menu", visible: :hidden # it stays closed
+  ensure
+    page.driver.browser.manage.window.resize_to(1400, 1400)
+  end
+
   test "the home page tabs switch panels" do
     visit home_url(locale: LOCALE)
     assert_selector ".panel-2", visible: :hidden

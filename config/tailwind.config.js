@@ -9,6 +9,8 @@ module.exports = {
       sm: '480px',
       md: '760px',
       lg: '960px',
+      // The navigation bar shows every item from here; below it, the ☰ menu.
+      nav: '1150px',
       xl: '1440px'
     },
     extend: {

@@ -2,9 +2,12 @@
 const handleResize = () => {
   const hamburgerBtn = document.getElementById('menu-btn');
   const hamburgerMenu = document.getElementById('menu');
-  if (window.innerWidth >= 1024) { // Tailwind's lg breakpoint
+  // The ☰ button is hidden (nav:hidden) once the full bar shows, which leaves
+  // an open menu with nothing to close it. Asking the page rather than
+  // comparing widths keeps the breakpoint in config/tailwind.config.js only.
+  if (hamburgerBtn && getComputedStyle(hamburgerBtn).display === 'none') {
     if (hamburgerMenu && !hamburgerMenu.classList.contains('hidden')) {
-      if (hamburgerBtn) hamburgerBtn.classList.remove('open');
+      hamburgerBtn.classList.remove('open');
       hamburgerMenu.classList.add('hidden');
       hamburgerMenu.classList.remove('flex');
     }
