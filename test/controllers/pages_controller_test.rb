@@ -18,6 +18,9 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
   test "the usage guide has a section for every feature, each linked from its contents, in every language" do
     I18n.available_locales.each do |locale|
       get doc_url(locale: locale)
+      %w[user_account pet_manage dry_food trackers import].each do |id|
+        assert_select "#btn-doc a[href=?]", doc_path(locale: locale, anchor: id)
+      end
       I18n.with_locale(locale) { I18n.t("doc_page.feature_sections") }.each do |section|
         assert_select "h2##{section[:id]}", text: section[:title]
         assert_select "nav a[href=?]", "##{section[:id]}"

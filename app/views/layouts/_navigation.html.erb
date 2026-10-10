@@ -22,11 +22,11 @@
         </div>
         <div id="btn-doc" class="absolute hidden w-max max-h-[70vh] overflow-y-auto top-full mt-2 py-2 bg-white text-grayishBlue border border-gray-200 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out menu" data-target="menu-doc">
           <div class="py-1">
-            <%= link_to t('layouts.navigation.user_account'), "/doc#user_account", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-blue-100 focus:text-softRed focus:outline-hidden" %>
-            <%= link_to t('layouts.navigation.pet_management'), "/doc#pet_manage", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-sky-100 hover:text-sky-600 focus:bg-sky-100 focus:text-softRed focus:outline-hidden" %>
-            <%= link_to t('layouts.navigation.dry_food_storage'), "/doc#dry_food", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-indigo-100 hover:text-indigo-600 focus:bg-indigo-100 focus:text-softRed focus:outline-hidden" %>
-            <%= link_to t('layouts.navigation.trackers'), "/doc#trackers", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-lime-100 hover:text-lime-600 focus:bg-lime-100 focus:text-softRed focus:outline-hidden" %>
-            <%= link_to t('layouts.navigation.import_csv'), "/doc#import", class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-orange-100 focus:text-softRed focus:outline-hidden" %>
+            <%= link_to t('layouts.navigation.user_account'), doc_path(anchor: "user_account"), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-blue-100 focus:text-softRed focus:outline-hidden" %>
+            <%= link_to t('layouts.navigation.pet_management'), doc_path(anchor: "pet_manage"), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-sky-100 hover:text-sky-600 focus:bg-sky-100 focus:text-softRed focus:outline-hidden" %>
+            <%= link_to t('layouts.navigation.dry_food_storage'), doc_path(anchor: "dry_food"), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-indigo-100 hover:text-indigo-600 focus:bg-indigo-100 focus:text-softRed focus:outline-hidden" %>
+            <%= link_to t('layouts.navigation.trackers'), doc_path(anchor: "trackers"), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-lime-100 hover:text-lime-600 focus:bg-lime-100 focus:text-softRed focus:outline-hidden" %>
+            <%= link_to t('layouts.navigation.import_csv'), doc_path(anchor: "import"), class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-orange-100 focus:text-softRed focus:outline-hidden" %>
             <% hover_colors = %w[hover:bg-pink-100 hover:text-pink-600 focus:bg-pink-100
                                  hover:bg-teal-100 hover:text-teal-600 focus:bg-teal-100
                                  hover:bg-violet-100 hover:text-violet-600 focus:bg-violet-100
@@ -218,14 +218,14 @@
       </svg>
     </button>
 
-    <button id="menu-btn" type="button" class="z-30 block item-end lg:hidden focus:outline-none hamburger">
+    <button id="menu-btn" type="button" class="z-[70] block item-end lg:hidden focus:outline-none hamburger">
       <span class="hamburger-top"></span>
       <span class="hamburger-middle"></span>
       <span class="hamburger-bottom"></span>
     </button>
   </div>
 
-  <div id="menu" class="fixed inset-0 z-20 hidden flex-col items-center self-end w-full h-full min-h-screen px-6 py-1 pt-24 pb-4 tracking-wide text-white uppercase divide-y divide-gray-500 opacity-90 bg-veryDarkBlue overflow-y-scroll">
+  <div id="menu" class="fixed inset-0 z-[60] hidden flex-col items-center self-end w-full h-full min-h-screen px-6 py-1 pt-24 pb-4 tracking-wide text-white uppercase divide-y divide-gray-500 opacity-90 bg-veryDarkBlue overflow-y-scroll">
     <div class="w-full py-3 text-center">
       <div class="flex flex-row justify-center gap-3">
         <%= image_tag('icons8-features-64.png', width: "25px", height: "25px") %>
@@ -258,6 +258,7 @@
         <%= link_to t('layouts.navigation.mobile.docs'), doc_path, class: "block hover:text-softRed"%>
       </div>
     </div>
+    <% unless authenticated? %>
     <div class="w-full py-3 text-center">
       <div class="flex flex-row justify-center gap-3">
         <svg width="20px" height="20px" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -271,6 +272,7 @@
         <%= link_to t('layouts.navigation.mobile.get_started'), new_registrations_path, class: "block hover:text-softRed"%>
       </div>
     </div>
+    <% end %>
     <% if authenticated? %>
       <div class="w-full py-3 text-center">
         <%= link_to t('layouts.navigation.today'), today_path, class: "block font-bold hover:text-softRed" %>
