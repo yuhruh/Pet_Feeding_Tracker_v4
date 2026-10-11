@@ -1089,6 +1089,7 @@ en:
       description: "Description"
       note: "Note"
       clear: "Clear"
+      search: "Search"
       no_trackers_found: "No %{petname}'s trackers found."
     import:
       alert_rate_limit: "Too many imports. Please wait a few minutes and try again."

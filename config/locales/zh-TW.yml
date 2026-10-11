@@ -1089,6 +1089,7 @@ zh-TW:
       description: "描述"
       note: "備註"
       clear: "清除"
+      search: "搜尋"
       no_trackers_found: "找不到%{petname}的紀錄。"
     import:
       alert_rate_limit: "匯入次數過多。請稍候幾分鐘再試。"

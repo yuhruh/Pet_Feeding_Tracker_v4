@@ -1089,6 +1089,7 @@
       description: "説明"
       note: "メモ"
       clear: "クリア"
+      search: "検索"
       no_trackers_found: "%{petname}のトラッカーが見つかりません。"
     import:
       alert_rate_limit: "インポートが多すぎます。数分待ってからもう一度お試しください。"
