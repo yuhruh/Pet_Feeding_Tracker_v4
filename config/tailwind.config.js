@@ -13,6 +13,16 @@ module.exports = {
       nav: '1150px',
       xl: '1440px'
     },
+    // .container grows at each breakpoint; keep it off the nav breakpoint so
+    // pages stay 960px wide until 1440px.
+    container: {
+      screens: {
+        sm: '480px',
+        md: '760px',
+        lg: '960px',
+        xl: '1440px'
+      }
+    },
     extend: {
       colors: {
         darkBlue: 'hsl(217, 28%, 15%)',

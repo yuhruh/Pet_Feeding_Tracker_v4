@@ -116,6 +116,41 @@ class NavigationMenusTest < ApplicationSystemTestCase
     page.driver.browser.manage.window.resize_to(1400, 1400)
   end
 
+  def resize_viewport(width)
+    page.driver.browser.manage.window.resize_to(width, 900)
+    inner = page.evaluate_script("window.innerWidth")
+    page.driver.browser.manage.window.resize_to(width + (width - inner), 900) if inner != width
+  end
+
+  # Below 1440px the footer's links sit on one centered row above the icons; from 1440px, beside them.
+  test "the footer's links stay on one row from 960px, beside the icons from 1440px" do
+    sign_in(@owner)
+    { 960 => false, 1149 => false, 1300 => false, 1440 => true }.each do |width, side_by_side|
+      resize_viewport(width)
+      visit today_url(locale: LOCALE)
+      links, icons = page.evaluate_script(<<~JS)
+        [...document.querySelectorAll('footer > div > div')].map(group => {
+          const r = group.getBoundingClientRect();
+          return { top: r.top, bottom: r.bottom, rows: new Set([...group.children].map(c => { const k = c.getBoundingClientRect(); return Math.round((k.top + k.height / 2) / 30) })).size };
+        })
+      JS
+      assert_equal 1, links["rows"], "footer links wrapped at #{width}px"
+      assert_equal side_by_side, icons["top"] < links["bottom"], "footer layout at #{width}px"
+    end
+  ensure
+    page.driver.browser.manage.window.resize_to(1400, 1400)
+  end
+
+  # The nav breakpoint (1150px) is only for the menu: pages stay 960px wide until 1440px.
+  test "page content keeps its width between the nav and xl breakpoints" do
+    sign_in(@owner)
+    resize_viewport(1300)
+    visit today_url(locale: LOCALE)
+    assert_equal "960px", page.evaluate_script("getComputedStyle(document.querySelector('footer .container')).maxWidth")
+  ensure
+    page.driver.browser.manage.window.resize_to(1400, 1400)
+  end
+
   test "the home page tabs switch panels" do
     visit home_url(locale: LOCALE)
     assert_selector ".panel-2", visible: :hidden
