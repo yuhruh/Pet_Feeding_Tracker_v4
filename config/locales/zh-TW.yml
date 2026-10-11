@@ -219,7 +219,7 @@ zh-TW:
     actions:
       litter_box:
         scooped: "🚽 清貓砂"
-        full_change: "♻️ 全換"
+        full_change: "♻️ 全部更換"
         cleaned: "🧽 洗貓砂盆"
       water_bowl:
         refilled: "💧 加水"
@@ -231,7 +231,7 @@ zh-TW:
     done:
       litter_box:
         scooped: "清貓砂"
-        full_change: "全換"
+        full_change: "全部更換"
         cleaned: "洗貓砂盆"
       water_bowl:
         refilled: "加水"
