@@ -27,12 +27,22 @@ class NavigationMenusTest < ApplicationSystemTestCase
     assert_selector "#btn-2", visible: :hidden
   end
 
+  # Waits for a change the page doesn't show.
+  def eventually(seconds: 5)
+    deadline = Time.now + seconds
+    until (result = yield) || Time.now > deadline
+      sleep 0.1
+    end
+    result
+  end
+
   # Each tap redirects back to Today, which morphs and fires turbo:load again.
   def tap(button, on:)
     count = CareEvent.count
     find("#" + ActionView::RecordIdentifier.dom_id(*Array(on))).click_on button
+    # The notice from an earlier tap may still be showing, so wait for the record itself.
+    assert eventually { CareEvent.count == count + 1 }, "#{button} recorded"
     assert_selector "#care_notice"
-    assert_equal count + 1, CareEvent.count
   end
 
   test "the Trackers menu opens and closes after taps on Today" do

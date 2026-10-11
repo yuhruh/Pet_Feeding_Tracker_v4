@@ -19,6 +19,15 @@ class RemindersTest < ApplicationSystemTestCase
     assert_selector "h1", text: lands_on, wait: 10 # the first page after sign-in can be slow when the whole suite runs
   end
 
+  # Waits for a change the page doesn't show.
+  def eventually(seconds: 5)
+    deadline = Time.now + seconds
+    until (result = yield) || Time.now > deadline
+      sleep 0.1
+    end
+    result
+  end
+
   test "the owner sets reminders per job (every … or at set times), sees them on Today and turns reminders on" do
     box = @household.care_spots.create!(kind: :litter_box, name: "Upstairs box", position: -1)
     sign_in(@owner, lands_on: /cat list/i)
@@ -43,8 +52,9 @@ class RemindersTest < ApplicationSystemTestCase
       find("select[aria-label='Hours or days for filter changed']").select("days")
       click_on "Save"
     end
-    assert_text "Saved."
-    assert_equal({ "cleaned" => 12, "filter_changed" => 240 }, @fountain.care_routines.pluck(:action, :every_hours).to_h)
+    # "Saved." is still showing from the litter box, so wait for the records themselves.
+    routines = { "cleaned" => 12, "filter_changed" => 240 }
+    assert eventually { @fountain.care_routines.pluck(:action, :every_hours).to_h == routines }, "fountain reminders saved"
 
     visit today_url(locale: LOCALE)
     within("##{ActionView::RecordIdentifier.dom_id(box)}") do
