@@ -220,6 +220,7 @@ en:
       litter_box:
         scooped: "🚽 Scooped"
         full_change: "♻️ Full change"
+        cleaned: "🧽 Box cleaned"
       water_bowl:
         refilled: "💧 Refilled"
         cleaned: "🧽 Bowl cleaned"
@@ -231,6 +232,7 @@ en:
       litter_box:
         scooped: "scooped"
         full_change: "full change"
+        cleaned: "box cleaned"
       water_bowl:
         refilled: "refilled"
         cleaned: "bowl cleaned"
@@ -530,7 +532,7 @@ en:
           - title: "Recording Care"
             ordered: false
             items:
-              - "One tap records what you did, now: 🍽 Fed, ⚖️ Weight (enter the kg), 💊 Meds, 🚽 Scooped / ♻️ Full change, 💧 Refilled / 🧽 Cleaned / 🔄 Filter changed."
+              - "One tap records what you did, now: 🍽 Fed, ⚖️ Weight (enter the kg), 💊 Meds, 🚽 Scooped / ♻️ Full change / 🧽 Box cleaned, 💧 Refilled / 🧽 Cleaned / 🔄 Filter changed."
               - "A notice appears with Undo (10 seconds), '5 · 10 · 15 min ago' to change the time, and 'Add details'."
               - "'Record it again?' appears if the same care was just recorded by anyone in the last 30 minutes."
               - "Feeding details suggest your household's food bags and your cat's favorites. The owner can turn a feeding into a full tracker with 'Add to trackers'."

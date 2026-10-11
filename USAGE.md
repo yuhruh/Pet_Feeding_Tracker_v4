@@ -172,7 +172,7 @@ Under "Litter boxes and water spots": add, rename, choose bowl or fountain, move
 
 ### Recording Care
 
--   **One tap** records what you did, now: 🍽 **Fed**, ⚖️ **Weight** (enter the kg), 💊 **Meds**, 🚽 **Scooped** / ♻️ **Full change**, 💧 **Refilled** / 🧽 **Cleaned** / 🔄 **Filter changed**.
+-   **One tap** records what you did, now: 🍽 **Fed**, ⚖️ **Weight** (enter the kg), 💊 **Meds**, 🚽 **Scooped** / ♻️ **Full change** / 🧽 **Box cleaned**, 💧 **Refilled** / 🧽 **Cleaned** / 🔄 **Filter changed**.
 -   **A notice** appears with **Undo** (10 seconds), **5 · 10 · 15 min ago** to change the time, and **Add details**. For water, tick the other jobs you did in the same notice.
 -   **"Record it again?"** appears if the same care was just recorded (by anyone): feeding and water within 30 minutes, the same litter job within 30 minutes.
 -   **Feeding details** (food type, brand, amount) suggest your household's food bags and your cat's favorites. The owner can turn a feeding into a full tracker with **Add to trackers**.

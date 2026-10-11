@@ -80,7 +80,14 @@ class CareEventsControllerTest < ActionDispatch::IntegrationTest
   test "litter: each job is its own record" do
     tap_spot(@box, "scooped")
     tap_spot(@box, "full_change")
-    assert_equal [ [ "scooped" ], [ "full_change" ] ], CareEvent.order(:id).map(&:actions)
+    tap_spot(@box, "cleaned")
+    assert_equal [ [ "scooped" ], [ "full_change" ], [ "cleaned" ] ], CareEvent.order(:id).map(&:actions)
+  end
+
+  test "a litter box has three jobs: scooped, full change (new litter) and box cleaned" do
+    get today_url(**L)
+    assert_select "##{ActionView::RecordIdentifier.dom_id(@box)} button", text: "♻️ Full change"
+    assert_select "##{ActionView::RecordIdentifier.dom_id(@box)} button", text: "🧽 Box cleaned"
   end
 
   test "change time with a quick pick, and undo within 10 seconds" do

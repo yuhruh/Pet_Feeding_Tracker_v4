@@ -15,7 +15,7 @@ class CareEvent < ApplicationRecord
   REPEAT_WINDOWS = { "fed" => 30.minutes, "water" => 30.minutes, "litter" => 30.minutes }.freeze
 
   SPOT_ACTIONS = {
-    "litter_box" => %w[scooped full_change],
+    "litter_box" => %w[scooped full_change cleaned],
     "water_bowl" => %w[refilled cleaned],
     "water_fountain" => %w[refilled cleaned filter_changed]
   }.freeze

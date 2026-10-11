@@ -121,6 +121,21 @@ class CareRoutineTest < ActiveSupport::TestCase
     assert_equal 12, @fountain.care_routines.find_by(action: "refilled").reload.every_hours, "a bad change leaves it as it was"
   end
 
+  test "a litter box has its own reminders for scooping, a full change and cleaning the box" do
+    failed = CareRoutine.apply(@box, { "scooped" => { "every" => "set_times", "times" => [ "08:00", "20:00" ] },
+                                       "full_change" => { "every" => "every_2_weeks" }, "cleaned" => { "every" => "monthly" } }, today: @today)
+    assert_empty failed
+    assert_equal({ "scooped" => nil, "full_change" => 336, "cleaned" => 720 }, @box.care_routines.pluck(:action, :every_hours).to_h)
+
+    cleaned = @box.care_routines.find_by!(action: "cleaned")
+    cleaned.update!(started_on: @today - 10)
+    record("full_change", at: local(@today, 9), spot: @box) # new litter doesn't count as the box washed
+    assert_equal @today + 20, cleaned.due_on
+    record("cleaned", at: local(@today, 10), spot: @box)
+    assert_equal @today + 30, cleaned.reload.due_on
+    assert_equal "cleaned", cleaned.last_done.actions.sole
+  end
+
   test "a fountain turned into a bowl loses its filter reminder" do
     CareRoutine.apply(@fountain, { "filter_changed" => { "every" => "monthly" }, "cleaned" => { "every" => "weekly" } }, today: @today)
     @fountain.update!(kind: :water_bowl)
