@@ -39,7 +39,6 @@
         </div>
       </div>
       <% if authenticated? %>
-        <%= link_to t('layouts.navigation.today'), today_path, class: "w-max nav:px-1 xl:px-2 py-2 tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed" %>
         <div class="relative">
           <div class="flex items-center  w-max bg-white nav:px-1 xl:px-2 py-2 
           text-grayishBlue tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed dark:bg-darkBlue cursor-pointer btn" data-target="btn-1">
@@ -89,6 +88,8 @@
               <% end %>
             </div>
           </div>
+
+        <%= link_to t('layouts.navigation.today'), today_path, class: "w-max nav:px-1 xl:px-2 py-2 tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed" %>
 
         <div class="relative">
           <div class="flex items-center w-max bg-white nav:px-1 xl:px-2 py-2 
