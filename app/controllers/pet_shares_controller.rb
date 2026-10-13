@@ -9,6 +9,7 @@ class PetSharesController < ApplicationController
     end
 
     @pet.share!(expires_in: Pet::SHARE_DURATIONS[params[:expires_in].to_s])
+    flash[:share_settings_open] = true # so the new link shows, ready to copy
     redirect_to pet_trackers_path(@pet), notice: t(".notice"), status: :see_other
   end
 

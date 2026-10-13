@@ -1048,6 +1048,9 @@ zh-TW:
         status_no_expiry: "分享已開啟。連結會持續有效，直到您關閉分享或建立新連結。"
         status_expires: "分享已開啟。連結將於 %{time} 失效。"
         warning: "任何取得連結的人都可以不必登入就查看這隻寵物的餵食紀錄與圖表。"
+        link_label: "分享連結"
+        copy: "複製"
+        copied: "已複製 ✅"
         expires_in: "連結有效期間"
         durations:
           never: "直到我關閉為止"

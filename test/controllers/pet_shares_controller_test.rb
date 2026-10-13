@@ -41,6 +41,28 @@ class PetSharesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "after creating a link, the settings stay open with the link and a Copy button" do
+    log_in_as @user
+    post pet_share_url(@pet), params: { expires_in: "7_days" }
+    follow_redirect!
+    url = shared_pet_trackers_url(share_token: @pet.reload.share_token)
+    assert_select "details#share_settings[open]" do
+      assert_select "input#share_link_url[readonly][value=?]", url
+      assert_select "button[data-controller=copy][data-copy-text-value=?]", url, text: "Copy"
+    end
+
+    get pet_trackers_url(@pet) # later visits: closed, the link still there inside
+    assert_select "details#share_settings:not([open]) input#share_link_url[value=?]", url
+  end
+
+  test "with sharing off there is no link to copy" do
+    log_in_as @user
+    delete pet_share_url(@pet)
+    follow_redirect!
+    assert_select "details#share_settings"
+    assert_select "#share_link_url", count: 0
+  end
+
   test "a link with an expiry stops working once it expires" do
     log_in_as @user
     post pet_share_url(@pet), params: { expires_in: "7_days" }

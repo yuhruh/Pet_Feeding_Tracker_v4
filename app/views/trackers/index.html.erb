@@ -50,7 +50,7 @@
 
     <% if household_policy.can?(:manage_share) %>
     <%# Share link settings: anyone with the link can see this pet's feeding records without signing in. %>
-    <details id="share_settings" class="mt-3 w-full max-w-md px-4 text-sm">
+    <details id="share_settings" class="mt-3 w-full max-w-md px-4 text-sm" <%= "open" if flash[:share_settings_open] %>>
       <summary class="text-center cursor-pointer font-semibold text-amber-800 dark:text-amber-400"><%= t('trackers.index.share_settings.title') %></summary>
       <div class="flex flex-col items-center gap-3 mt-3 p-3 border border-amber-200 rounded-lg bg-amber-50 dark:bg-gray-700 dark:border-gray-600">
         <p class="text-center">
@@ -62,6 +62,15 @@
             <%= t('trackers.index.share_settings.status_off') %>
           <% end %>
         </p>
+        <% if @pet.sharing? %>
+          <% share_url = shared_pet_trackers_url(share_token: @pet.share_token) %>
+          <div class="flex w-full flex-col gap-2 sm:flex-row">
+            <label for="share_link_url" class="sr-only"><%= t('trackers.index.share_settings.link_label') %></label>
+            <input type="text" readonly id="share_link_url" value="<%= share_url %>" class="flex-1 min-w-0 rounded-md border border-gray-400 px-2 py-1 text-sm text-gray-700">
+            <button type="button" data-controller="copy" data-copy-text-value="<%= share_url %>" data-copy-done-value="<%= t('trackers.index.share_settings.copied') %>"
+                    data-action="copy#copy" class="px-3 py-1 rounded-full border border-amber-300 bg-amber-100 text-amber-800 font-bold hover:bg-amber-200 cursor-pointer"><%= t('trackers.index.share_settings.copy') %></button>
+          </div>
+        <% end %>
         <p class="text-center italic text-gray-600 dark:text-gray-300"><%= t('trackers.index.share_settings.warning') %></p>
 
         <%= form_with url: pet_share_path(@pet), method: :post, class: "flex flex-col items-center gap-2 sm:flex-row",

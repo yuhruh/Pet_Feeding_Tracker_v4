@@ -1048,6 +1048,9 @@ en:
         status_no_expiry: "Sharing is on. The link works until you turn it off or create a new one."
         status_expires: "Sharing is on. The link stops working on %{time}."
         warning: "Anyone with the link can see this pet's feeding records and charts without signing in."
+        link_label: "Share link"
+        copy: "Copy"
+        copied: "Copied ✅"
         expires_in: "Link works for"
         durations:
           never: "Until I turn it off"
