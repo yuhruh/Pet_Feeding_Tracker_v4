@@ -1019,6 +1019,7 @@
       come_back_to_eat_hint_html: "区切り文字として「,」を使用してください。例：07:45, 10:33,...<br>もし%{petname}が食べに戻ってこなかった場合は、「-」を使用してください"
       left_amount: "残量(g)"
       feeding_amount: "給餌量："
+      leftover_discarded: "残りは捨てた（継ぎ足していない）"
       love_prompt: "%{petname}はこれを気に入りましたか？"
       select_love_prompt: "%{petname}が気に入ったかどうか選択してください..."
       love_option_1: "💕 とても気に入った"

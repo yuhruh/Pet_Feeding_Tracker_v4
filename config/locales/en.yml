@@ -1019,6 +1019,7 @@ en:
       come_back_to_eat_hint_html: "Please use ',' as a separations. Ex: 07:45, 10:33,...<br>If %{petname} did not come back to eat, please use '-'"
       left_amount: "Left Amount(g)"
       feeding_amount: "Feeding Amount:"
+      leftover_discarded: "Leftover thrown away (not topped up)"
       love_prompt: "Does %{petname} love it?"
       select_love_prompt: "Please Select if %{petname} love it..."
       love_option_1: "💕 Love it So Much"

@@ -24,7 +24,7 @@ class Tracker < ApplicationRecord
   validate :dry_food_belongs_to_pet_owner, if: :will_save_change_to_dry_food_id?
 
 
-  after_commit :sync_dry_food_inventory, on: [ :create, :destroy ]
+  after_commit :sync_dry_food_inventory, on: [ :create, :update, :destroy ]
 
   # UTC offset, in seconds, that the app uses to display feed_time in this zone.
   # Rails stores time columns on 2000-01-01 and converts them with that date's

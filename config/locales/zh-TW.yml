@@ -1019,6 +1019,7 @@ zh-TW:
       come_back_to_eat_hint_html: "請使用「,」作為分隔符號。例如：07:45, 10:33,...<br>如果%{petname}沒有回來吃，請使用「-」"
       left_amount: "剩餘份量(克)"
       feeding_amount: "餵食量："
+      leftover_discarded: "剩餘的已倒掉（沒有補添）"
       love_prompt: "%{petname}喜歡嗎？"
       select_love_prompt: "請選擇%{petname}是否喜歡..."
       love_option_1: "💕 非常喜歡"
