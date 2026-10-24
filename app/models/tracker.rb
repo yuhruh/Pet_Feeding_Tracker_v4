@@ -7,6 +7,9 @@ class Tracker < ApplicationRecord
   has_one :care_event, dependent: :nullify
   before_save { self.brand = brand.downcase }
   before_save { self.description = description.downcase }
+  # Only kibble and freeze-dried come out of a food bag; any other feeding
+  # keeps no bag, even if the form sent one.
+  before_validation { self.dry_food_id = nil unless kibble? || freeze_dried? }
 
   enum :food_type, { kibble: "Kibble", freeze_dried: "Freeze-Dried", wet: "Wet", other: "Other" }
   HUNGRY_MAP = {

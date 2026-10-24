@@ -50,7 +50,7 @@ export default class extends Controller {
       }
     } else if (type === "wet") {
       if (this.hasWetFoodOptionsTarget) this.wetFoodOptionsTarget.classList.remove("hidden");
-      if (this.hasDryFoodOptionsTarget) this.dryFoodOptionsTarget.classList.add("hidden");
+      this.hideDryFoodOptions();
 
       if (pathParts.length > 3) {
         const petId = pathParts[3];
@@ -67,9 +67,17 @@ export default class extends Controller {
         this.updateWetFoodOptions(data);
       }
     } else {
-      if (this.hasDryFoodOptionsTarget) this.dryFoodOptionsTarget.classList.add("hidden");
+      this.hideDryFoodOptions();
       if (this.hasWetFoodOptionsTarget) this.wetFoodOptionsTarget.classList.add("hidden");
     }
+  }
+
+  // A hidden bag picker still submits its value, so clear it too: otherwise a
+  // wet or other feeding would draw from the bag picked before the switch.
+  hideDryFoodOptions() {
+    if (this.hasDryFoodOptionsTarget) this.dryFoodOptionsTarget.classList.add("hidden");
+    if (this.hasDryFoodSelectTarget) this.dryFoodSelectTarget.value = "";
+    this.selectedFoodLeftAmount = null;
   }
 
   updateDryFoodOptions(foods) {

@@ -131,10 +131,12 @@
       <div class="flex flex-col items-center md:items-start md:w-5/6">
         <%= form.number_field :left_amount, step: :any, placeholder: t('trackers.form.amount_placeholder'), class: "input-field mt-2", min: 0, max: @tracker.amount, data: { left_amount_target: "leftAmount", action: "input->left-amount#validateLeftAmount" } %>
         <span class="mt-2 text-sm italic"><%= t('trackers.edit.feeding_amount') %> <%= @tracker.amount %>(g)</span>
-        <label class="flex items-center gap-1 mt-2 text-sm">
-          <%= form.check_box :leftover_discarded %>
-          <%= t('trackers.edit.leftover_discarded') %>
-        </label>
+        <% if @tracker.dry_food_id.present? %>
+          <label class="flex items-center gap-1 mt-2 text-sm">
+            <%= form.check_box :leftover_discarded %>
+            <%= t('trackers.edit.leftover_discarded') %>
+          </label>
+        <% end %>
         <div class="flex items-center mt-1">
           <div id="left-amount-alert" data-left-amount-target="leftAmountAlert" class="text-red-500 italic hidden"></div>
           <span data-left-amount-target="separator" class="mx-1 text-green-500 hidden">/</span>
