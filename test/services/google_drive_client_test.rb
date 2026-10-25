@@ -87,6 +87,16 @@ class GoogleDriveClientTest < ActiveSupport::TestCase
     assert with_http(ok(trashed: false)) { client.folder?("folder-1") }.first
   end
 
+  test "trash_file moves the file to the Drive trash, and a file already gone counts as done" do
+    trashed, requests = with_http(token, ok(id: "file-1")) { GoogleDriveClient.new("refresh-1").trash_file("file-1") }
+
+    assert trashed
+    assert_equal "PATCH", requests.last.method
+    assert_equal "/drive/v3/files/file-1", URI(requests.last.path).path
+    assert_equal({ "trashed" => true }, JSON.parse(requests.last.body))
+    assert with_http(token, FakeResponse.new("404", "{}")) { GoogleDriveClient.new("refresh-1").trash_file("gone") }.first
+  end
+
   test "a revoked refresh token raises Unauthorized" do
     assert_raises(GoogleDriveClient::Unauthorized) do
       with_http(FakeResponse.new("400", { error: "invalid_grant" }.to_json)) { GoogleDriveClient.new("old").email }

@@ -95,6 +95,17 @@ class GoogleDriveClient
     multipart(:post, "#{UPLOAD_URL}?uploadType=multipart&fields=id", { name: name, parents: [ folder_id ], mimeType: "text/csv" }, csv)
   end
 
+  # To the Drive trash, so the user can still get it back for a while. True once it's
+  # gone, including when the user already deleted it.
+  def trash_file(id)
+    authorized(:patch, "#{FILES_URL}/#{id}?fields=id", step: "trash", json: { trashed: true })
+    true
+  rescue Error => error
+    raise unless error.status == 404
+
+    true
+  end
+
   private
 
   def multipart(method, url, metadata, csv)

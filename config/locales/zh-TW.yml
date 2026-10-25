@@ -1170,7 +1170,7 @@ zh-TW:
       back_up_now: "立即備份"
       disconnect: "取消連結"
       disconnect_confirm: "要停止備份到 Google 雲端硬碟嗎？已在雲端硬碟中的檔案會保留。"
-      versions_note: "每隻貓在「Pet Tracker Backups」資料夾中有一個檔案，每天更新。之前的內容可在檔案的版本記錄中找到（雲端硬碟保留約 30 天）。"
+      versions_note: "每天會在「Pet Tracker Backups」資料夾中為每隻貓新增一個以日期命名的檔案。超過 30 天的檔案會移到雲端硬碟的垃圾桶。你可以在雲端硬碟中移動或重新命名這個資料夾，備份會繼續存到那裡。"
     edit:
       current_password: "目前的密碼"
       current_password_placeholder: "輸入您目前的密碼"

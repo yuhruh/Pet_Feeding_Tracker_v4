@@ -1170,7 +1170,7 @@
       back_up_now: "今すぐバックアップ"
       disconnect: "接続を解除"
       disconnect_confirm: "Google ドライブへのバックアップを停止しますか？ドライブにあるファイルはそのまま残ります。"
-      versions_note: "「Pet Tracker Backups」フォルダに猫ごとに 1 つのファイルがあり、毎日更新されます。以前の日の内容はファイルの版の履歴にあります（ドライブで約 30 日間保持）。"
+      versions_note: "毎日、「Pet Tracker Backups」フォルダに猫ごとに日付入りのファイルが 1 つ追加されます。30 日より古いファイルはドライブのゴミ箱に移動します。フォルダはドライブ内で移動や名前の変更ができ、バックアップはそのまま続きます。"
     edit:
       current_password: "現在のパスワード"
       current_password_placeholder: "現在のパスワードを入力してください"

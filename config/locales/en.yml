@@ -1170,7 +1170,7 @@ en:
       back_up_now: "Back up now"
       disconnect: "Disconnect"
       disconnect_confirm: "Stop backing up to Google Drive? Files already in your Drive stay there."
-      versions_note: "Each cat has one file in the \"Pet Tracker Backups\" folder, updated every day. Earlier days are in the file's version history (Drive keeps about 30 days)."
+      versions_note: "Each day adds one file per cat to the \"Pet Tracker Backups\" folder, named with the date. Files older than 30 days go to your Drive trash. You can move or rename the folder in Drive; backups keep going there."
     edit:
       current_password: "Current password"
       current_password_placeholder: "Enter your current password"
