@@ -27,6 +27,10 @@ production:
   user_backups:
     class: UserBackupJob
     schedule: every day at 3am
+  # Google Drive backups at each user's chosen hour, so it runs every hour.
+  drive_backups:
+    class: DriveBackupJob
+    schedule: every hour at minute 20
   monthly_kibble_prices:
     class: MonthlyKibblePriceJob
     schedule: every month on the 1st at 6am

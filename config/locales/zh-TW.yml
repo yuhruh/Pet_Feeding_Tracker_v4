@@ -1136,7 +1136,41 @@ zh-TW:
       back_button: "返回飲食紀錄列表"
       destroy_button: "刪除此飲食紀錄"
       confirm: "您確定嗎？"
+  drive_backups:
+    owner_only: "只有飼主可以把貓咪的紀錄備份到 Google 雲端硬碟。"
+    not_connected: "尚未連結 Google 雲端硬碟。"
+    callback:
+      connected: "已連結 Google 雲端硬碟（%{email}），第一次備份已開始。"
+      cancelled: "你在 Google 畫面上取消了，因此沒有連結。"
+      permission_missing: "沒有連結成功：請勾選允許 Pet Tracker 存取它所建立檔案的選項，然後再試一次。"
+      failed: "無法連結 Google 雲端硬碟，請再試一次。"
+    update:
+      notice: "每天 %{time} 備份。"
+      alert: "無法儲存備份時間。"
+    run:
+      notice: "正在備份，約一分鐘後重新整理此頁面即可看到時間。"
+      alert_rate_limit: "短時間內備份太多次，請稍候幾分鐘再試。"
+    destroy:
+      notice: "已取消連結 Google 雲端硬碟，備份檔案會保留在你的雲端硬碟中。"
   users:
+    drive_backup:
+      title: "☁️ Google 雲端硬碟備份"
+      description: "每天在你選擇的時間，把每隻貓的餵食紀錄（CSV）存到你的 Google 雲端硬碟。"
+      connect: "連結 Google 雲端硬碟"
+      reconnect: "重新連結 Google 雲端硬碟"
+      access_removed: "%{email} 的 Google 雲端硬碟存取權已被移除，備份已停止。重新連結即可恢復。"
+      connect_on_website: "Google 不允許在 App 內連結。請用手機或電腦的瀏覽器開啟 Pet Tracker 並登入，再到個人資料頁連結 Google 雲端硬碟。"
+      permission_note: "Pet Tracker 只能看到它在你的雲端硬碟中建立的檔案，看不到其他內容。"
+      connected_as: "備份到 %{email}"
+      backup_time: "每天備份時間"
+      last_backup: "上次備份：%{time}"
+      no_backup_yet: "尚未備份"
+      open_folder: "開啟資料夾"
+      last_try_failed: "上次備份失敗："
+      back_up_now: "立即備份"
+      disconnect: "取消連結"
+      disconnect_confirm: "要停止備份到 Google 雲端硬碟嗎？已在雲端硬碟中的檔案會保留。"
+      versions_note: "每隻貓在「Pet Tracker Backups」資料夾中有一個檔案，每天更新。之前的內容可在檔案的版本記錄中找到（雲端硬碟保留約 30 天）。"
     edit:
       current_password: "目前的密碼"
       current_password_placeholder: "輸入您目前的密碼"

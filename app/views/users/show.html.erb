@@ -53,6 +53,8 @@
       <p class="text-sm italic text-gray-500 dark:text-gray-300"><%= t(".session_timeout_note", idle_days: Session::IDLE_TIMEOUT.in_days.to_i, absolute_days: Session::ABSOLUTE_TIMEOUT.in_days.to_i) %></p>
     </div>
 
+    <%= render "users/drive_backup" if Current.user.owned_household %>
+
     <% memberships = Current.user.household_memberships.includes(household: :owner).order(:id) %>
     <% if memberships.any? %>
       <div id="households" class="flex flex-col items-center text-center gap-2 py-4">

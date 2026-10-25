@@ -1136,7 +1136,41 @@ en:
       back_button: "Back to trackers"
       destroy_button: "Destroy this tracker"
       confirm: "Are you sure?"
+  drive_backups:
+    owner_only: "Only owners can back up their cats' records to Google Drive."
+    not_connected: "Google Drive isn't connected."
+    callback:
+      connected: "Google Drive connected (%{email}). The first backup is on its way."
+      cancelled: "Google Drive wasn't connected: you cancelled on Google's screen."
+      permission_missing: "Google Drive wasn't connected: tick the box that lets Pet Tracker see the files it creates, then try again."
+      failed: "Google Drive couldn't be connected. Please try again."
+    update:
+      notice: "Backups will run every day at %{time}."
+      alert: "That backup time couldn't be saved."
+    run:
+      notice: "Backing up now. Refresh this page in a minute to see the time."
+      alert_rate_limit: "Too many backups in a row. Please wait a few minutes and try again."
+    destroy:
+      notice: "Google Drive disconnected. Your backup files stay in your Drive."
   users:
+    drive_backup:
+      title: "☁️ Google Drive backup"
+      description: "Save a copy of each cat's feeding records (CSV) to your Google Drive every day, at a time you choose."
+      connect: "Connect Google Drive"
+      reconnect: "Reconnect Google Drive"
+      access_removed: "Google Drive access for %{email} was removed, so backups have stopped. Reconnect to start them again."
+      connect_on_website: "Google doesn't allow connecting inside the app. Open Pet Tracker in your phone's or computer's browser, sign in, and connect Google Drive on your profile page there."
+      permission_note: "Pet Tracker can only see the files it creates in your Drive, nothing else."
+      connected_as: "Backing up to %{email}"
+      backup_time: "Back up every day at"
+      last_backup: "Last backup: %{time}"
+      no_backup_yet: "No backup yet"
+      open_folder: "Open folder"
+      last_try_failed: "The last backup failed:"
+      back_up_now: "Back up now"
+      disconnect: "Disconnect"
+      disconnect_confirm: "Stop backing up to Google Drive? Files already in your Drive stay there."
+      versions_note: "Each cat has one file in the \"Pet Tracker Backups\" folder, updated every day. Earlier days are in the file's version history (Drive keeps about 30 days)."
     edit:
       current_password: "Current password"
       current_password_placeholder: "Enter your current password"

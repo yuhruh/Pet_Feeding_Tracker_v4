@@ -64,6 +64,10 @@ Rails.application.routes.draw do
     resource :registrations, only: [ :new, :create ]
     resource :timezone, only: [ :create ]
     resource :users, except: [ :new ]
+    resource :drive_backup, only: %i[update destroy] do
+      post :connect
+      post :run
+    end
     # get '/signup', to: "registrations#new", as: :new_registrations
     # post 'registration/create', to: "registrations#create", as: :registrations
     get "/login", to: "sessions#new", as: :new_session
@@ -77,6 +81,8 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Google, LINE and GitHub sign-in in the Android app (checkpoint I2).
+  # Google Drive backup: Google sends the user back to this exact address (no language).
+  get "drive_backup/callback", to: "drive_backups#callback", as: :drive_backup_callback
   get "auth/native/finish", to: "native_sign_ins#finish", as: :native_sign_in_finish
   get "auth/native/:provider", to: "native_sign_ins#start", as: :native_sign_in
   get "auth/:provider/callback", to: "omni_auth/sessions#create"

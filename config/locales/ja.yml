@@ -1136,7 +1136,41 @@
       back_button: "トラッカーに戻る"
       destroy_button: "このトラッカーを破棄"
       confirm: "よろしいですか？"
+  drive_backups:
+    owner_only: "Google ドライブへのバックアップは飼い主のみ利用できます。"
+    not_connected: "Google ドライブに接続されていません。"
+    callback:
+      connected: "Google ドライブに接続しました（%{email}）。最初のバックアップを開始しました。"
+      cancelled: "Google の画面でキャンセルされたため、接続されませんでした。"
+      permission_missing: "接続されませんでした。Pet Tracker が作成したファイルへのアクセスを許可するチェックを入れて、もう一度お試しください。"
+      failed: "Google ドライブに接続できませんでした。もう一度お試しください。"
+    update:
+      notice: "毎日 %{time} にバックアップします。"
+      alert: "バックアップ時刻を保存できませんでした。"
+    run:
+      notice: "バックアップ中です。1 分ほどしてからこのページを更新すると時刻が表示されます。"
+      alert_rate_limit: "短時間にバックアップが多すぎます。数分待ってからもう一度お試しください。"
+    destroy:
+      notice: "Google ドライブとの接続を解除しました。バックアップファイルはドライブに残ります。"
   users:
+    drive_backup:
+      title: "☁️ Google ドライブにバックアップ"
+      description: "毎日、選んだ時刻に、各猫の給餌記録（CSV）を Google ドライブに保存します。"
+      connect: "Google ドライブに接続"
+      reconnect: "Google ドライブに再接続"
+      access_removed: "%{email} の Google ドライブへのアクセスが取り消されたため、バックアップは止まっています。再接続すると再開します。"
+      connect_on_website: "Google はアプリ内での接続を許可していません。スマートフォンやパソコンのブラウザで Pet Tracker を開いてログインし、プロフィールページから Google ドライブに接続してください。"
+      permission_note: "Pet Tracker が見られるのは、ドライブ内で自ら作成したファイルだけです。"
+      connected_as: "バックアップ先：%{email}"
+      backup_time: "毎日のバックアップ時刻"
+      last_backup: "最終バックアップ：%{time}"
+      no_backup_yet: "まだバックアップはありません"
+      open_folder: "フォルダを開く"
+      last_try_failed: "前回のバックアップに失敗しました："
+      back_up_now: "今すぐバックアップ"
+      disconnect: "接続を解除"
+      disconnect_confirm: "Google ドライブへのバックアップを停止しますか？ドライブにあるファイルはそのまま残ります。"
+      versions_note: "「Pet Tracker Backups」フォルダに猫ごとに 1 つのファイルがあり、毎日更新されます。以前の日の内容はファイルの版の履歴にあります（ドライブで約 30 日間保持）。"
     edit:
       current_password: "現在のパスワード"
       current_password_placeholder: "現在のパスワードを入力してください"

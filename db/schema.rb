@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_22_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_25_120000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -134,6 +134,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_22_120000) do
     t.index ["session_id"], name: "index_device_tokens_on_session_id"
     t.index ["token"], name: "index_device_tokens_on_token", unique: true
     t.index ["user_id"], name: "index_device_tokens_on_user_id"
+  end
+
+  create_table "drive_backups", force: :cascade do |t|
+    t.integer "backup_hour", default: 23, null: false
+    t.datetime "created_at", null: false
+    t.json "file_ids", default: {}, null: false
+    t.string "folder_id"
+    t.string "google_email"
+    t.datetime "last_attempted_at"
+    t.datetime "last_backed_up_at"
+    t.string "last_error"
+    t.text "refresh_token"
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_drive_backups_on_user_id", unique: true
   end
 
   create_table "dry_foods", force: :cascade do |t|
@@ -580,6 +595,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_22_120000) do
   add_foreign_key "connected_services", "users"
   add_foreign_key "device_tokens", "sessions", on_delete: :cascade
   add_foreign_key "device_tokens", "users", on_delete: :cascade
+  add_foreign_key "drive_backups", "users"
   add_foreign_key "dry_foods", "households"
   add_foreign_key "health_checks", "pets"
   add_foreign_key "household_invitations", "households"

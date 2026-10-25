@@ -21,6 +21,20 @@ class Pet < ApplicationRecord
   validates :petname, presence: true,
                       length: { minimum: 2, maximum: 25 }
 
+  # The cat's feeding records as CSV, oldest first on the given clock. Sorted in Ruby
+  # because feed_time is stored in UTC and wraps past midnight.
+  def trackers_csv(timezone)
+    sorted = trackers.to_a.sort_by { |t| [ t.date, t.feed_time&.in_time_zone(timezone)&.strftime("%H:%M") || "00:00" ] }
+    Tracker.to_csv(sorted, timezone)
+  end
+
+  # A backup file name that is safe on any system and unique per cat, even when two
+  # cats share a name; dated when given a date.
+  def backup_filename(date = nil)
+    safe_petname = petname.gsub(/[\/\\?%*:|"<>]/, "_")
+    "#{safe_petname}_trackers_petid_#{id}#{"_#{date.strftime('%Y%m%d')}" if date}.csv"
+  end
+
   # Pets in households the user owns or is a member of (caregiver or viewer).
   scope :accessible_by, ->(user) {
     where(household_id: Household.where(owner_id: user.id).select(:id))

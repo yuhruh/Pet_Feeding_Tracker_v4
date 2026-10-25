@@ -1,0 +1,40 @@
+<% backup = Current.user.drive_backup %>
+<div id="drive-backup" class="flex flex-col items-center text-center gap-2 py-4">
+  <h2 class="text-lg font-semibold md:text-xl"><%= t(".title") %></h2>
+  <% if backup&.connected? %>
+    <p class="text-base md:text-lg"><%= t(".connected_as", email: backup.google_email) %></p>
+    <%= form_with model: backup, url: drive_backup_path, method: :patch, class: "flex flex-wrap justify-center items-center gap-2" do |form| %>
+      <%= form.label :backup_hour, t(".backup_time"), class: "text-sm md:text-base" %>
+      <%= form.select :backup_hour, (0..23).map { |hour| [ format("%02d:00", hour), hour ] }, {}, class: "input-field mt-0 w-auto", data: { controller: "auto-submit", action: "change->auto-submit#submit" } %>
+      <span class="text-sm text-gray-500 dark:text-gray-300">(<%= Current.user.timezone %>)</span>
+    <% end %>
+    <p class="text-sm">
+      <%= backup.last_backed_up_at ? t(".last_backup", time: backup.last_backed_up_at.in_time_zone.strftime("%Y-%m-%d %H:%M")) : t(".no_backup_yet") %>
+      <% if backup.folder_url %>
+        · <%= link_to t(".open_folder"), backup.folder_url, target: "_blank", rel: "noopener", class: "text-grayishBlue underline" %>
+      <% end %>
+    </p>
+    <% if backup.last_error.present? %>
+      <p class="text-sm text-red-600"><%= t(".last_try_failed") %> <span class="italic"><%= backup.last_error %></span></p>
+    <% end %>
+    <div class="flex flex-wrap justify-center items-center gap-3">
+      <%= button_to t(".back_up_now"), run_drive_backup_path,
+            class: "px-4 py-2 text-sm font-semibold text-sky-700 bg-sky-200 rounded shadow-md border-2 border-sky-200 hover:bg-white md:text-base" %>
+      <%= button_to t(".disconnect"), drive_backup_path, method: :delete,
+            form: { data: { turbo_confirm: t(".disconnect_confirm") } }, class: "text-sm text-red-600 underline cursor-pointer" %>
+    </div>
+    <p class="text-sm italic text-gray-500 dark:text-gray-300"><%= t(".versions_note") %></p>
+  <% else %>
+    <p class="text-base md:text-lg <%= 'text-red-600' if backup %>"><%= backup ? t(".access_removed", email: backup.google_email) : t(".description") %></p>
+    <% if hotwire_native_app? %>
+      <p class="text-sm italic text-gray-500 dark:text-gray-300"><%= t(".connect_on_website") %></p>
+    <% else %>
+      <%= button_to backup ? t(".reconnect") : t(".connect"), connect_drive_backup_path, form: { data: { turbo: false } },
+            class: "px-4 py-2 text-sm font-semibold text-sky-700 bg-sky-200 rounded shadow-md border-2 border-sky-200 hover:bg-white md:text-base" %>
+    <% end %>
+    <% if backup %>
+      <%= button_to t(".disconnect"), drive_backup_path, method: :delete, class: "text-sm text-red-600 underline cursor-pointer" %>
+    <% end %>
+    <p class="text-sm italic text-gray-500 dark:text-gray-300"><%= t(".permission_note") %></p>
+  <% end %>
+</div>
