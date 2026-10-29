@@ -1071,6 +1071,8 @@ en:
       title: "%{petname}'s Trackers"
       new_tracker_link: "New tracker for %{petname}"
       export_csv: "Export to CSV"
+      export_all_csv: "Export all records"
+      export_filtered_csv: "Export filtered records (%{count})"
       items_per_page: "Items per page:"
       chart_range: "Chart Range:"
       all_time: "All time"

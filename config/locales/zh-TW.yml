@@ -1071,6 +1071,8 @@ zh-TW:
       title: "%{petname}的紀錄"
       new_tracker_link: "為%{petname}新增飲食紀錄"
       export_csv: "下載為CSV"
+      export_all_csv: "下載全部紀錄"
+      export_filtered_csv: "下載篩選後的紀錄（%{count}筆）"
       items_per_page: "每頁顯示項目數："
       chart_range: "圖表範圍："
       all_time: "所有時間"

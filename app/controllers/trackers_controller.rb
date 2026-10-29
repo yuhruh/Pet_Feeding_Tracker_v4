@@ -58,7 +58,7 @@ class TrackersController < ApplicationController
         # Use safe navigation or default value for strftime to prevent nil error
         timezone = Current.user.timezone
         sorted_trackers = @all_trackers.to_a.sort_by { |t| [ t.date, t.feed_time&.in_time_zone(timezone)&.strftime("%H:%M") || "00:00" ] }
-        send_data Tracker.to_csv(sorted_trackers, timezone), filename: "#{@pet.petname.capitalize}-trackers-#{Date.today}.csv", type: "text/csv"
+        send_data Tracker.to_csv(sorted_trackers, timezone), filename: "#{@pet.petname.capitalize}-trackers#{"-filtered" if helpers.tracker_filter_params.any?}-#{Date.today}.csv", type: "text/csv"
       end
     end
   end

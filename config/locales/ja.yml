@@ -1071,6 +1071,8 @@
       title: "%{petname}のトラッカー"
       new_tracker_link: "%{petname}の新しいトラッカー"
       export_csv: "CSVにエクスポート"
+      export_all_csv: "すべての記録をエクスポート"
+      export_filtered_csv: "絞り込んだ記録をエクスポート（%{count}件）"
       items_per_page: "ページあたりのアイテム数："
       chart_range: "チャート範囲："
       all_time: "全期間"

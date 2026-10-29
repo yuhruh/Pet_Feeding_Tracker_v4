@@ -13,6 +13,16 @@ module TrackersHelper
   def current_per_page
     (params[:per_page].presence || session[:per_page] || 10).to_i
   end
+
+  # The search keywords and chart range now applied to the list, for exporting
+  # only those records. "All time" isn't a filter.
+  def tracker_filter_params
+    filters = params.slice(:food_type, :brand, :description, :note, :range, :start_date, :end_date).permit(:food_type, :brand, :description, :note, :range, :start_date, :end_date).to_h.compact_blank
+    filters.delete("range") if filters["range"] == "all"
+    filters.except!("start_date", "end_date") unless filters["range"] == "custom"
+    filters.symbolize_keys
+  end
+
   def set_current_time
     Time.zone = Current.user.timezone
     Time.current.strftime("%H:%M")

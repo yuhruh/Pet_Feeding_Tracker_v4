@@ -100,9 +100,14 @@
   <% end %>
 
   <% if household_policy.can?(:export_trackers) %>
-  <fieldset class="flex flex-row gap-3 justify-center mb-3">
+  <fieldset class="flex flex-row flex-wrap gap-3 justify-center mb-3">
     <%= image_tag('download.png', width: '25px', height: '25px') %>
-    <%= link_to t('trackers.index.export_csv'), pet_trackers_path(@pet, format: :csv), class: "text-base font-bold text-sky-500 transition duration-300 ease-in-out hover:scale-110 capitalize md:text-lg dark:text-white" %>
+    <% if (filters = tracker_filter_params).any? %>
+      <%= link_to t('trackers.index.export_all_csv'), pet_trackers_path(@pet, format: :csv), class: "text-base font-bold text-sky-500 transition duration-300 ease-in-out hover:scale-110 capitalize md:text-lg dark:text-white" %>
+      <%= link_to t('trackers.index.export_filtered_csv', count: @all_trackers.count), pet_trackers_path(@pet, format: :csv, **filters), class: "text-base font-bold text-sky-500 transition duration-300 ease-in-out hover:scale-110 capitalize md:text-lg dark:text-white" %>
+    <% else %>
+      <%= link_to t('trackers.index.export_csv'), pet_trackers_path(@pet, format: :csv), class: "text-base font-bold text-sky-500 transition duration-300 ease-in-out hover:scale-110 capitalize md:text-lg dark:text-white" %>
+    <% end %>
   </fieldset>
   <% end %>
 

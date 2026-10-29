@@ -26,6 +26,27 @@ class TrackersControllerTest < ActionDispatch::IntegrationTest
     assert_select "form:has(select[name=range]) input[type=hidden][name=brand][value='Ciao']"
   end
 
+  test "export offers the filtered records beside all of them only while a filter is on" do
+    @pet.trackers.create!(date: "2026-01-02", feed_time: "09:00", food_type: "Kibble", brand: "Orijen", description: "Six fish", amount: 30, total_ate_amount: 30)
+
+    get pet_trackers_url(@pet, range: "all", per_page: 50)
+    assert_select "a[href=?]", pet_trackers_path(@pet, format: :csv), count: 1
+    assert_select "a[href*='.csv?']", count: 0
+
+    get pet_trackers_url(@pet, brand: "Ciao", per_page: 50)
+    assert_select "a[href=?]", pet_trackers_path(@pet, format: :csv), count: 1
+    assert_select "a[href=?]", pet_trackers_path(@pet, format: :csv, brand: "Ciao"), text: /\(1\)/
+
+    get pet_trackers_url(@pet, format: :csv, brand: "Ciao")
+    assert_match(/ciao/i, response.body)
+    assert_no_match(/orijen/i, response.body)
+    assert_match(/-trackers-filtered-/, response.headers["Content-Disposition"])
+
+    get pet_trackers_url(@pet, format: :csv)
+    assert_match(/orijen/i, response.body)
+    assert_no_match(/filtered/, response.headers["Content-Disposition"])
+  end
+
   test "should get new" do
     get new_pet_tracker_url(@pet)
     assert_response :success
