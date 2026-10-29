@@ -16,6 +16,16 @@ class TrackersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "searching keeps the chosen per page, and choosing per page keeps the search" do
+    get pet_trackers_url(@pet, per_page: 50)
+    get pet_trackers_url(@pet, brand: "Ciao", range: "30")
+    assert_select "form:has(input[name=brand]) input[type=hidden][name=per_page][value='50']"
+    assert_select "form:has(input[name=brand]) input[type=hidden][name=range][value='30']"
+    assert_select "select[name=per_page] option[selected][value='50']"
+    assert_select "form:has(select[name=per_page]) input[type=hidden][name=brand][value='Ciao']"
+    assert_select "form:has(select[name=range]) input[type=hidden][name=brand][value='Ciao']"
+  end
+
   test "should get new" do
     get new_pet_tracker_url(@pet)
     assert_response :success

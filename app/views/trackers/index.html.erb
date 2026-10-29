@@ -117,8 +117,9 @@
     </div>
     <div class="flex justify-end items-start mx-8">
       <%= form_with url: pet_trackers_path(@pet), method: :get, class: "flex items-center" do |form| %>
+        <%= hidden_list_params(form, :food_type, :brand, :description, :note, :range, :start_date, :end_date) %>
         <span class="mr-2"><%= t('trackers.index.items_per_page') %></span>
-        <%= form.select :per_page, options_for_select([5, 10, 20, 50], (params[:per_page] || 10).to_i), {}, { data: { controller: "auto-submit", action: "change->auto-submit#submit" }, class: "p-1 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700" } %>
+        <%= form.select :per_page, options_for_select([5, 10, 20, 50], current_per_page), {}, { data: { controller: "auto-submit", action: "change->auto-submit#submit" }, class: "p-1 rounded-md shadow-lg font-semibold border-2 border-blue-300 text-gray-700 bg-sky-200 hover:bg-gray-200 hover:border-gray-400 hover:text-sky-700" } %>
       <% end %>
     </div>
   </div>
@@ -129,6 +130,7 @@
       <div class="relative">
         <div class="inline-flex w-full justify-center px-3 py-2 inset-ring-1 inset-ring-gray-300 cursor-pointer">
           <%= form_with url: pet_trackers_path(@pet), method: :get, class: "flex items-center" do |form| %>
+            <%= hidden_list_params(form, :food_type, :brand, :description, :note, :per_page) %>
             <span class="mr-2"><%= t('trackers.index.chart_range') %></span>
             <%= form.select :range, options_for_select([[t('trackers.index.all_time'), "all"], [t('trackers.index.last_7_days'), "7"], 
             [t('trackers.index.last_30_days'), "30"], [t('trackers.index.last_120_days'), "120"], [t('trackers.index.last_180_days'), "180"], [t('trackers.index.year_to_date'), "YTD"], [t('trackers.index.custom'), "custom"]], params[:range] || "all"), {}, 
@@ -140,6 +142,7 @@
           <%= form_with url: pet_trackers_path(@pet), method: :get, class: "flex items-center ml-4" do |form| %>
             <div class= "inline-flex w-full justify-center bg-white px-3 py-2 text-grayishBlue rounded-md shadow-lg tracking-wide inset-ring-1 inset-ring-gray-300 dark:bg-darkBlue cursor-pointer">
               <%= form.hidden_field :range, value: "custom" %>
+              <%= hidden_list_params(form, :food_type, :brand, :description, :note, :per_page) %>
                 <div class="flex flex-col items-center gap-4">
                   <div class="flex items-center">
                     <span class="mr-2"><%= t('trackers.index.start_date') %></span>
@@ -263,6 +266,7 @@
         above the fields, one field to a row on a phone, two from 480px and four from 960px,
         so what's typed has room to show. %>
     <%= form_with url: pet_trackers_path(@pet), method: :get, data: { controller: "filter-form", turbo_action: "replace", action: "submit->filter-form#cancel turbo:before-morph-element->filter-form#keepTypedField" } do |form| %>
+      <%= hidden_list_params(form, :range, :start_date, :end_date, :per_page) %>
       <div class="grid grid-cols-1 gap-x-4 gap-y-3 px-4 pt-4 sm:grid-cols-2 lg:grid-cols-4">
         <div class="flex flex-col">
           <%= form.label :food_type, t('trackers.index.food_type'), class: "text-sm font-medium text-gray-700 pb-1 dark:text-gray-100 capitalize md:text-base" %>

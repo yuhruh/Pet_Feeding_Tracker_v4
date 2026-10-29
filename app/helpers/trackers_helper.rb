@@ -1,4 +1,18 @@
 module TrackersHelper
+  # The search, chart range and per-page controls are separate GET forms, so each
+  # sends only its own fields. Hidden copies of the others' current values keep
+  # one form from wiping out what the others set.
+  def hidden_list_params(form, *keys)
+    safe_join(keys.filter_map do |key|
+      value = key == :per_page ? current_per_page : params[key]
+      form.hidden_field(key, value: value, id: nil) if value.present?
+    end)
+  end
+
+  # The controller remembers the chosen per page in the session.
+  def current_per_page
+    (params[:per_page].presence || session[:per_page] || 10).to_i
+  end
   def set_current_time
     Time.zone = Current.user.timezone
     Time.current.strftime("%H:%M")
