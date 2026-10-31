@@ -23,7 +23,8 @@ module ChartsHelper
   def care_chart_options(care)
     {
       color: CareChart::COLORS,
-      xAxis: { type: "category", data: care.dates.map { |date| date.strftime("%y/%m/%d") } },
+      # Every other day shaded, so each day's group of bars reads as one.
+      xAxis: { type: "category", data: care.dates.map { |date| date.strftime("%y/%m/%d") }, splitArea: { show: true, interval: 0 } },
       yAxis: { type: "value", minInterval: 1 },
       series: care.series.map { |series| { name: series[:name], type: "bar", barGap: "10%", data: series[:data].values } }
     }
