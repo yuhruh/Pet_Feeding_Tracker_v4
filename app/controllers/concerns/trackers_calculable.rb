@@ -61,11 +61,11 @@ module TrackersCalculable
 
     weight_data = weight_by_date.transform_keys { |key| key.strftime("%y/%m/%d") }
     weight_values = weight_data.values
+    # Half a kilo of room above and below, on a round half kilo, so a few
+    # hundred grams of change shows without day-to-day wobble looking big.
     if weight_values.present?
-      min_val = weight_values.min
-      max_val = weight_values.max
-      min_weight = [ 0, (min_val - 2) ].max.floor
-      max_weight = (max_val + 2).ceil
+      min_weight = [ 0, ((weight_values.min - 0.5) * 2).floor / 2.0 ].max
+      max_weight = ((weight_values.max + 0.5) * 2).ceil / 2.0
     else
       min_weight = 0
       max_weight = 15

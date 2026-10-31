@@ -90,9 +90,11 @@ class LiveUpdatesAndCareChartsTest < ActionDispatch::IntegrationTest
     assert_in_delta 4.2, weights[3.days.ago.in_time_zone(@zone).strftime("%y/%m/%d")]
     assert_in_delta 4.6, weights[1.day.ago.in_time_zone(@zone).strftime("%y/%m/%d")]
     assert_equal weights.keys.sort, with_care[:chart_data].first[:data].keys, "a weight-only day keeps its place in date order"
+    assert_equal [ 3.5, 5.5 ], with_care.values_at(:min_weight, :max_weight), "half a kilo of room, on a round half kilo"
 
     without = calculator.calculate_tracker_data(@pet, { range: "30" }, nil)
     assert_equal({ 3.days.ago.in_time_zone(@zone).strftime("%y/%m/%d") => 4.0 }, without[:chart_data].last[:data])
+    assert_equal [ 3.5, 4.5 ], without.values_at(:min_weight, :max_weight)
     assert_nil without[:care]
   end
 
