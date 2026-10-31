@@ -73,7 +73,7 @@ export default class extends Controller {
     const days = [options.xAxis].flat()[0]?.data?.length || 0
     const fit = Math.max(5, Math.floor(this.element.clientWidth / this.dayWidthValue))
     const visible = Math.min(this.visibleDaysValue || days, fit)
-    const zoom = days > visible
+    const zoom = this.zoom = days > visible
     const axisNames = [options.yAxis].flat().some(axis => axis.name) // drawn above the chart
 
     options.series.forEach(series => {
@@ -107,7 +107,8 @@ export default class extends Controller {
       legend: { textStyle: { color: text } },
       xAxis: axes("xAxis").map(a => ({ ...a, axisLabel: { color: muted, rotate: 45, fontSize: 10 }, splitArea: { areaStyle: { color: ["transparent", shade] } } })),
       yAxis: axes("yAxis"),
-      dataZoom: [{}, { textStyle: { color: muted }, borderColor: line }]
+      // Only restyles the slider: a dataZoom entry here would create one when there is none.
+      ...(this.zoom ? { dataZoom: [{}, { textStyle: { color: muted }, borderColor: line }] } : {})
     }
   }
 }
