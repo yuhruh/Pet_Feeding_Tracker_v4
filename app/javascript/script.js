@@ -129,20 +129,6 @@ document.addEventListener('turbo:before-morph-attribute', (event) => {
   }
 });
 
-// Chartkick clears every chart before Turbo renders, and a morph doesn't run
-// the page's scripts again, so a morphed page (a tracker search, a viewer's page
-// refreshing) would show empty charts. Running each chart's script again draws
-// it with the new page's data.
-document.addEventListener('turbo:morph', () => {
-  document.querySelectorAll('script').forEach(oldScript => {
-    if (!oldScript.textContent.includes('Chartkick[')) return;
-    const script = document.createElement('script');
-    script.textContent = oldScript.textContent;
-    if (oldScript.nonce) script.nonce = oldScript.nonce;
-    oldScript.replaceWith(script);
-  });
-});
-
 // Close the menus before Turbo caches the page, so Back doesn't show one open.
 document.addEventListener('turbo:before-cache', () => {
   document.querySelectorAll('.menu').forEach(menu => menu.classList.add('hidden'));
@@ -171,12 +157,6 @@ const initializeNavigation = () => {
     document.documentElement.classList.remove('dark');
     if (themeToggleDarkIcon) themeToggleDarkIcon.classList.remove('hidden');
     if (themeToggleLightIcon) themeToggleLightIcon.classList.add('hidden');
-  }
-
-  // make the scrolls the chart of the right side
-  const container = document.getElementById('chart-container');
-  if (container) {
-    container.scrollLeft = container.scrollWidth;
   }
 };
 

@@ -49,8 +49,6 @@ gem "thruster", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing"
-gem "groupdate" # optional
-gem "chartkick"
 
 gem "omniauth"
 gem "omniauth-rails_csrf_protection"

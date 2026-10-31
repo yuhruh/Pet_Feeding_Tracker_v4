@@ -111,7 +111,7 @@ class ContentSecurityPolicyTest < ApplicationSystemTestCase
 
     # Google Charts loads its code after the page, so give it time to run (or be blocked).
     def wait_for_charts
-      page.has_css?("#pet-chart-fixed svg", wait: 10)
+      page.has_css?("#pet-chart canvas", wait: 10)
     end
 
     def assert_no_csp_violations(where)

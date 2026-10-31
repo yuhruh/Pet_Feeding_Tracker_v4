@@ -21,7 +21,5 @@ document.addEventListener("turbo:load", () => {
 })
 
 import "controllers"
-import "chartkick"
-import "Chart.bundle"
 import "script"
 import "@hotwired/hotwire-native-bridge"

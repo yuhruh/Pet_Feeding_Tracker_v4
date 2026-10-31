@@ -31,7 +31,7 @@ class CareChart
 
   def dates = counts.values.flat_map(&:keys).uniq.sort
 
-  # Chartkick series over every day with care, so the days line up.
+  # The series over every day with care, so the days line up (ChartsHelper#care_chart_options).
   def series
     SERIES.map do |key|
       { name: I18n.t("care_chart.series.#{key}"), data: dates.to_h { |date| [ date.strftime("%y/%m/%d"), counts[key].fetch(date, 0) ] } }

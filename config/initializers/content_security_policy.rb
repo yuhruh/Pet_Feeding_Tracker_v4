@@ -10,11 +10,11 @@
 Rails.application.configure do
   config.content_security_policy do |policy|
     policy.default_src :self
-    # importmap pins: big.js (ga.jspm.io) and i18n-js (esm.sh); Google Charts loader (www.gstatic.com).
-    policy.script_src  :self, "https://ga.jspm.io", "https://esm.sh", "https://www.gstatic.com"
+    # importmap pins: big.js (ga.jspm.io) and i18n-js (esm.sh).
+    policy.script_src  :self, "https://ga.jspm.io", "https://esm.sh"
     # Inline style attributes are used throughout the views, so inline styles stay allowed.
     # Scripts are the main injection risk and get no such exception.
-    policy.style_src   :self, :unsafe_inline, "https://fonts.googleapis.com", "https://www.gstatic.com"
+    policy.style_src   :self, :unsafe_inline, "https://fonts.googleapis.com"
     policy.font_src    :self, :data, "https://fonts.gstatic.com"
     policy.img_src     :self, :data, :blob, :https
     policy.connect_src :self

@@ -23,7 +23,7 @@ class ViewerPagesController < ApplicationController
 
     Time.zone = @pet.timezone if @pet.timezone
     result = calculate_tracker_data(@pet, { range: @range }, nil, care: true)
-    @data, @chart_interval = result[:chart_data], result[:chart_interval]
+    @data = result[:chart_data]
     @min_weight, @max_weight = result[:min_weight], result[:max_weight]
     @dry_properties, @wet_properties = result[:dry_properties], result[:wet_properties]
     @care = result[:care]

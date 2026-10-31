@@ -25,6 +25,9 @@ application.register("dismiss", DismissController)
 import DynamicEmailsController from "controllers/dynamic_emails_controller"
 application.register("dynamic-emails", DynamicEmailsController)
 
+import EchartController from "controllers/echart_controller"
+application.register("echart", EchartController)
+
 import EmailSuggestionController from "controllers/email_suggestion_controller"
 application.register("email-suggestion", EmailSuggestionController)
 

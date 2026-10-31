@@ -19,7 +19,6 @@ class SharedTrackersController < ApplicationController
 
     @all_trackers = result[:all_trackers]
     @data = result[:chart_data]
-    @chart_interval = result[:chart_interval]
     @min_weight = result[:min_weight]
     @max_weight = result[:max_weight]
     @min_date = result[:min_date]

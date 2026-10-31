@@ -54,14 +54,6 @@ module TrackersCalculable
 
     # A day with only a weight still gets its place in date order.
     all_dates = (dry_raw.keys + dry_hotel_raw.keys + wet_raw.keys + wet_hotel_raw.keys + weight_by_date.keys).uniq.sort
-    data_points_count = all_dates.size
-
-    chart_interval = case data_points_count
-    when 0..30 then 1
-    when 31..60 then 2
-    when 61..120 then 3
-    else 6
-    end
 
     format_chart_data = ->(hash, dates) {
       dates.map { |date| [ date.strftime("%y/%m/%d"), hash[date].to_f ] }.to_h
@@ -90,7 +82,6 @@ module TrackersCalculable
     {
       all_trackers: all_trackers,
       chart_data: chart_data,
-      chart_interval: chart_interval,
       min_weight: min_weight,
       max_weight: max_weight,
       min_date: min_date,

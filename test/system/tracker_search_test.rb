@@ -29,14 +29,14 @@ class TrackerSearchTest < ApplicationSystemTestCase
   teardown { page.driver.browser.execute_cdp("Emulation.clearDeviceMetricsOverride") }
 
   def chart_dates(id)
-    page.evaluate_script("(c => c && c.rawData[0].data.map(point => point[0]))(Chartkick.charts['#{id}'])")
+    page.evaluate_script("document.getElementById('#{id}')?.chart?.getOption().xAxis[0].data")
   end
 
   test "typing a search keeps the field and its keyboard, the place on the page and the chart" do
     sign_in(@owner)
     phone_width
     visit pet_trackers_url(@pet, locale: LOCALE)
-    assert_equal 2, chart_dates("pet-chart-fixed").size
+    assert_equal 2, chart_dates("pet-chart").size
 
     field = find_field("brand")
     page.execute_script("arguments[0].dataset.typedIn = 'yes'", field)
@@ -49,7 +49,7 @@ class TrackerSearchTest < ApplicationSystemTestCase
     # The same field, still focused: a replaced field would have closed a phone's keyboard.
     assert_equal "yes", page.evaluate_script("document.activeElement.dataset.typedIn")
     assert_in_delta scrolled, page.evaluate_script("window.scrollY"), 50
-    assert_equal [ "26/09/01" ], chart_dates("pet-chart-fixed")
+    assert_equal [ "26/09/01" ], chart_dates("pet-chart")
 
     field.send_keys "ora"
     assert_current_path(/brand=Aurora/, wait: 5)

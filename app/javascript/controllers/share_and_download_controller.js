@@ -26,24 +26,20 @@ export default class extends Controller {
   download(event) {
     event.preventDefault()
     
-    // Chartkick with Google Charts adapter
-    const chart = Chartkick.charts[this.chartIdValue]
+    // echart_controller.js keeps the chart on its element.
+    const chart = document.getElementById(this.chartIdValue)?.chart
     if (!chart) {
-      console.error("Chart not found")
+      alert("Chart is still loading or not ready for download. Please try again in a moment.")
       return
     }
 
-    const googleChart = chart.getChartObject()
-    if (googleChart && typeof googleChart.getImageURI === 'function') {
-      const uri = googleChart.getImageURI()
-      const link = document.createElement('a')
-      link.download = `${this.filenameValue || 'chart'}.png`
-      link.href = uri
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-    } else {
-      alert("Chart is still loading or not ready for download. Please try again in a moment.")
-    }
+    // The page's own background, so the axis text stays readable in dark mode.
+    const dark = document.documentElement.classList.contains("dark")
+    const link = document.createElement('a')
+    link.download = `${this.filenameValue || 'chart'}.png`
+    link.href = chart.getDataURL({ type: "png", pixelRatio: 2, backgroundColor: dark ? getComputedStyle(document.body).backgroundColor : "#ffffff" })
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
   }
 }
