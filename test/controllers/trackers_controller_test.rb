@@ -63,6 +63,35 @@ class TrackersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to pet_trackers_url(@pet, page: expected_page > 1 ? expected_page : nil, locale: I18n.default_locale)
   end
 
+  test "a feeding that throws away the bowl's leftover marks the last feeding and takes its full amount" do
+    bag = dry_foods(:one)
+    bag.update_columns(amount: 1000)
+    Tracker.where(dry_food: bag).delete_all
+    morning = @pet.trackers.create!(dry_food: bag, food_type: "kibble", brand: "brand", description: "kibble",
+                                    date: "2026-10-21", feed_time: "08:00", amount: 25, left_amount: 14.5)
+    evening = { dry_food_id: bag.id, food_type: "kibble", brand: "brand", description: "kibble", hungry: "eat_right_away",
+                date: "2026-10-21", feed_time: "20:00", amount: 25 }
+
+    post pet_trackers_url(@pet), params: { tracker: evening, discard_bowl_leftover: "1" }
+
+    assert morning.reload.leftover_discarded?
+    assert_equal 950, bag.reload.left_amount
+  end
+
+  test "a feeding that tops up the bowl leaves the last feeding's leftover counted" do
+    bag = dry_foods(:one)
+    bag.update_columns(amount: 1000)
+    Tracker.where(dry_food: bag).delete_all
+    morning = @pet.trackers.create!(dry_food: bag, food_type: "kibble", brand: "brand", description: "kibble",
+                                    date: "2026-10-21", feed_time: "08:00", amount: 25, left_amount: 14.5)
+
+    post pet_trackers_url(@pet), params: { tracker: { dry_food_id: bag.id, food_type: "kibble", brand: "brand", description: "kibble",
+                                                      hungry: "eat_right_away", date: "2026-10-21", feed_time: "20:00", amount: 25 } }
+
+    assert_not morning.reload.leftover_discarded?
+    assert_equal 964.5, bag.reload.left_amount
+  end
+
   # test "should show tracker" do
   #   get pet_tracker_url(@pet, @tracker)
   #   assert_response :success

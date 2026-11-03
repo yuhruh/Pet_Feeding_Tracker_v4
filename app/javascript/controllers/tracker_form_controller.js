@@ -1,16 +1,19 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["foodType", "dryFoodOptions", "dryFoodSelect", "wetFoodOptions", "wetFoodSelect", "brand", "description", "amount", "amountAlert", "submitButton"]
+  static targets = ["foodType", "dryFoodOptions", "dryFoodSelect", "wetFoodOptions", "wetFoodSelect", "brand", "description", "amount", "amountAlert", "submitButton", "discardLeftoverOption", "discardLeftover"]
   static values = {
     dryFoods: Array,
     trackerUrl: String,
-    newDryFoodUrl: String
+    newDryFoodUrl: String,
+    // Bag id => grams still in this cat's bowl, which a new feeding only tops up.
+    bowlLeftovers: Object
   }
 
   connect() {
     this.csrfToken = document.querySelector("meta[name='csrf-token']").content;
     this.selectedFoodLeftAmount = null; // Initialize storage state
+    this.selectedBowlLeftover = 0;
     if (this.hasFoodTypeTarget) {
       this.toggleDryFoodOptions()
     }
@@ -78,6 +81,16 @@ export default class extends Controller {
     if (this.hasDryFoodOptionsTarget) this.dryFoodOptionsTarget.classList.add("hidden");
     if (this.hasDryFoodSelectTarget) this.dryFoodSelectTarget.value = "";
     this.selectedFoodLeftAmount = null;
+    this.selectedBowlLeftover = 0;
+    this.toggleDiscardLeftoverOption();
+  }
+
+  // Offer "threw it away" only when the bowl still holds a leftover to top up.
+  toggleDiscardLeftoverOption() {
+    if (!this.hasDiscardLeftoverOptionTarget) return;
+    const show = this.selectedBowlLeftover > 0;
+    this.discardLeftoverOptionTarget.classList.toggle("hidden", !show);
+    if (!show && this.hasDiscardLeftoverTarget) this.discardLeftoverTarget.checked = false;
   }
 
   updateDryFoodOptions(foods) {
@@ -166,11 +179,17 @@ export default class extends Controller {
         const data = await response.json();
         if (this.hasBrandTarget) this.brandTarget.value = data.brand;
         if (this.hasDescriptionTarget) this.descriptionTarget.value = data.description;
-        this.selectedFoodLeftAmount = data.left_amount;
+        this.selectedFoodLeftAmount = parseFloat(data.left_amount);
+        this.selectedBowlLeftover = parseFloat(this.bowlLeftoversValue[foodId]) || 0;
+        this.toggleDiscardLeftoverOption();
         this.validateAmount()
       } catch (error) {
         console.error("Error fetching dry food data:", error);
       }
+    } else {
+      this.selectedFoodLeftAmount = null;
+      this.selectedBowlLeftover = 0;
+      this.toggleDiscardLeftoverOption();
     }
     this.validateAmount();
   }
@@ -210,7 +229,13 @@ export default class extends Controller {
     const inputAmount = parseFloat(this.amountTarget.value);
 
     if (this.selectedFoodLeftAmount != null && !isNaN(inputAmount)) {
-      if (inputAmount > this.selectedFoodLeftAmount) {
+      // The bowl still holds the last feeding's leftover, so this feeding only
+      // takes the top-up from the bag, the same as the server counts it.
+      // Thrown away instead, the feeding takes its full amount.
+      const discarded = this.hasDiscardLeftoverTarget && this.discardLeftoverTarget.checked;
+      const bowl = discarded ? 0 : (this.selectedBowlLeftover || 0);
+      const drawn = Math.max(Math.round((inputAmount - bowl) * 100) / 100, 0);
+      if (drawn > this.selectedFoodLeftAmount) {
         if (this.hasAmountAlertTarget) {
           this.amountAlertTarget.textContent = I18n.t('javascript.tracker_form_controller.only_left_in_storage', { amount: this.selectedFoodLeftAmount });
           this.amountAlertTarget.classList.remove('hidden');
@@ -223,7 +248,9 @@ export default class extends Controller {
         }
       } else {
         if (this.hasAmountAlertTarget) {
-          this.amountAlertTarget.textContent = I18n.t('javascript.tracker_form_controller.is_valid_amount', { amount: inputAmount });
+          this.amountAlertTarget.textContent = bowl > 0
+            ? I18n.t('javascript.tracker_form_controller.topped_up_amount', { bowl: bowl, drawn: drawn })
+            : I18n.t('javascript.tracker_form_controller.is_valid_amount', { amount: inputAmount });
           this.amountAlertTarget.classList.remove('hidden');
           this.amountAlertTarget.classList.replace("text-red-500", "text-green-500");
         }

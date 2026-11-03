@@ -45,6 +45,23 @@ class DryFood < ApplicationRecord
     end
   end
 
+  # Grams still in this cat's bowl from its newest feeding out of this bag, which
+  # the next feeding only tops up: that feeding takes its amount less these
+  # grams from the bag. Nothing is left when the leftover was never recorded or
+  # was thrown away, as update_used_amount! counts those feedings in full.
+  def bowl_leftover_for(pet)
+    newest = newest_feeding_for(pet)
+    return 0 if newest.nil? || newest.left_amount.nil? || newest.leftover_discarded?
+
+    newest.left_amount
+  end
+
+  # This cat's latest feeding out of this bag, whose food may still be in the bowl.
+  def newest_feeding_for(pet)
+    offset = Tracker.feed_time_offset(household.owner&.timezone)
+    Tracker.where(dry_food_id: id, archived_dry_food: false, pet_id: pet.id).max_by { |t| feeding_order(t, offset) }
+  end
+
   private
 
   # Date, then time of day on the owner's clock (feed_time is stored in UTC), then id.

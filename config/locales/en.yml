@@ -991,6 +991,7 @@ en:
       amount: "Amount(g)"
       amount_placeholder: "Please just enter number"
       amount_hint: "Only input number/float number without unit"
+      discard_bowl_leftover: "Threw away what was left in the bowl (not topping up)"
       no_storage_message: "There is no \"%{type}\" storage in dry food. Please add it first."
     tracker:
       number: "#"
@@ -1425,6 +1426,7 @@ en:
       should_restock: "should restock"
       only_left_in_storage: "⚠️ Only %{amount}g left in storage."
       is_valid_amount: "%{amount}g is valid."
+      topped_up_amount: "Tops up the %{bowl}g still in the bowl, so %{drawn}g comes from the bag."
       select_wet_food: "Select a favorite or enter manually"
       favorite_score: "Favorite Score:"
       last_feed_date: "Last Feed Date:"

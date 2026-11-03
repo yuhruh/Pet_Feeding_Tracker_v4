@@ -2,7 +2,8 @@
   data: {
     tracker_form_favorite_food_url_value: favorite_food_pet_trackers_url(@pet, locale: I18n.locale, format: :json),
     tracker_form_tracker_url_value: pet_tracker_url(@pet, ":id", locale: I18n.locale, format: :json),
-    tracker_form_new_dry_food_url_value: new_dry_food_url(locale: I18n.locale)
+    tracker_form_new_dry_food_url_value: new_dry_food_url(locale: I18n.locale),
+    tracker_form_bowl_leftovers_value: @pet.household.dry_foods.to_h { |bag| [ bag.id, bag.bowl_leftover_for(@pet).to_f ] }.to_json
   }) do |form| %>
   <%= form.hidden_field :page, value: params[:page] %>
   <% if @care_event %>
@@ -92,6 +93,10 @@
     <div class="flex flex-col items-center md:items-start md:w-5/6">
       <%= form.number_field :amount, step: :any, placeholder: t('trackers.form.amount_placeholder'), class: "input-field mt-2", required: true, min: 0, data: { tracker_form_target: "amount", action: "input->tracker-form#validateAmount" } %>
       <span class="italic text-sm mt-2"><%= t('trackers.form.amount_hint') %><span>
+      <label data-tracker-form-target="discardLeftoverOption" class="hidden flex items-center gap-1 mt-2 text-sm">
+        <%= check_box_tag :discard_bowl_leftover, "1", params[:discard_bowl_leftover] == "1", data: { tracker_form_target: "discardLeftover", action: "change->tracker-form#validateAmount" } %>
+        <%= t('trackers.form.discard_bowl_leftover') %>
+      </label>
       <div id="amount-alert" data-tracker-form-target="amountAlert" class="text-red-500 italic mt-1 hidden"></div>
     </div>
   </div>

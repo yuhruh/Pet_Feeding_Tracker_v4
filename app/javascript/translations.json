@@ -16,7 +16,8 @@
         "left_in_storage": "Left %{amount} g",
         "only_left_in_storage": "⚠️ Only %{amount}g left in storage.",
         "select_wet_food": "Select a favorite or enter manually",
-        "should_restock": "should restock"
+        "should_restock": "should restock",
+        "topped_up_amount": "Tops up the %{bowl}g still in the bowl, so %{drawn}g comes from the bag."
       }
     },
     "trackers": {
@@ -41,6 +42,7 @@
         "feeding_amount": "Feeding Amount:",
         "header": "Edit %{petname}'s tracker",
         "left_amount": "Left Amount(g)",
+        "leftover_discarded": "Leftover thrown away (not topped up)",
         "love_option_1": "💕 Love it So Much",
         "love_option_2": "🔺 So So",
         "love_option_3": "❌ No!!!",
@@ -58,6 +60,7 @@
         "description": "description",
         "favorite_score": "favorite score & Last Fed Date",
         "food_type": "food type",
+        "kibble_prices": "%{petname}'s kibble prices",
         "no_record": "%{petname} does not have any eating record yet 😿"
       },
       "food_types": {
@@ -73,6 +76,7 @@
         "brand": "Brand",
         "date": "Date",
         "description": "Description",
+        "discard_bowl_leftover": "Threw away what was left in the bowl (not topping up)",
         "dry_food_list": "Dry Food List",
         "feed_time": "Feed time",
         "food_type": "Food type",
@@ -95,6 +99,7 @@
       },
       "import": {
         "alert": "Only CSV please",
+        "alert_rate_limit": "Too many imports. Please wait a few minutes and try again.",
         "notice": "%{petname}'s trackers imported!"
       },
       "index": {
@@ -112,7 +117,9 @@
         "delete_selected": "Delete Selected",
         "description": "Description",
         "download_chart": "Download Chart",
+        "export_all_csv": "Export all records",
         "export_csv": "Export to CSV",
+        "export_filtered_csv": "Export filtered records (%{count})",
         "food_type": "Food Type",
         "import_button": "Import",
         "import_csv": "Import CSV File",
@@ -123,12 +130,40 @@
         "last_180_days": "Last 180 days",
         "last_30_days": "Last 30 days",
         "last_7_days": "Last 7 days",
+        "litter_observations": {
+          "empty": "None in the last 30 days.",
+          "title": "Litter observations, last 30 days"
+        },
         "new_tracker_link": "New tracker for %{petname}",
         "no_data_for_chart": "No tracking data available to display the chart.",
         "no_data_in_range": "No data available in the selected date range.",
         "no_trackers_found": "No %{petname}'s trackers found.",
         "note": "Note",
+        "search": "Search",
         "share_link": "Share Page",
+        "share_settings": {
+          "copied": "Copied ✅",
+          "copy": "Copy",
+          "durations": {
+            "1_day": "1 day",
+            "30_days": "30 days",
+            "7_days": "7 days",
+            "never": "Until I turn it off"
+          },
+          "expires_in": "Link works for",
+          "link_label": "Share link",
+          "new_link_button": "Create a new link",
+          "new_link_confirm": "Create a new link? The current link will stop working.",
+          "status_expired": "The share link has expired. Turn on a new link to share again.",
+          "status_expires": "Sharing is on. The link stops working on %{time}.",
+          "status_no_expiry": "Sharing is on. The link works until you turn it off or create a new one.",
+          "status_off": "Sharing is off. No one can open this pet's shared page.",
+          "title": "Share link settings",
+          "turn_off_button": "Turn off sharing",
+          "turn_off_confirm": "Turn off sharing? The current link will stop working.",
+          "turn_on_button": "Turn on share link",
+          "warning": "Anyone with the link can see this pet's feeding records and charts without signing in."
+        },
         "title": "%{petname}'s Trackers",
         "year_to_date": "Year To Date"
       },
@@ -176,6 +211,26 @@
     }
   },
   "ja": {
+    "javascript": {
+      "hello_controller": {
+        "hello_world": "こんにちは、世界！"
+      },
+      "left_amount_controller": {
+        "greater_than_alert": "%{amount}g を超えることはできません。",
+        "total_ate": "完食：%{amount}(g)",
+        "valid_amount": "%{amount}g は有効です。"
+      },
+      "tracker_form_controller": {
+        "favorite_score": "お気に入りスコア:",
+        "is_valid_amount": "%{amount}g は有効な量です。",
+        "last_feed_date": "最終給餌日:",
+        "left_in_storage": "残り %{amount} g",
+        "only_left_in_storage": "⚠️ 在庫は残り %{amount}g です。",
+        "select_wet_food": "お気に入りを選択するか、手動で入力してください",
+        "should_restock": "補充が必要です",
+        "topped_up_amount": "器に残っている %{bowl}g に継ぎ足すので、袋から使うのは %{drawn}g です。"
+      }
+    },
     "trackers": {
       "bulk_delete": {
         "notice": "選択したトラッカーは正常に削除されました。"
@@ -198,6 +253,7 @@
         "feeding_amount": "給餌量：",
         "header": "%{petname}のトラッカーを編集",
         "left_amount": "残量(g)",
+        "leftover_discarded": "残りは捨てた（継ぎ足していない）",
         "love_option_1": "💕 とても気に入った",
         "love_option_2": "🔺 まあまあ",
         "love_option_3": "❌ 全然!!!",
@@ -215,6 +271,7 @@
         "description": "説明",
         "favorite_score": "お気に入りスコア & 最終給餌日",
         "food_type": "食事の種類",
+        "kibble_prices": "%{petname}のフード価格",
         "no_record": "%{petname}にはまだ食事の記録がありません 😿"
       },
       "food_types": {
@@ -230,6 +287,7 @@
         "brand": "ブランド",
         "date": "日付",
         "description": "説明",
+        "discard_bowl_leftover": "器の残りは捨てた（継ぎ足さない）",
         "dry_food_list": "ドライフードリスト",
         "feed_time": "給餌時間",
         "food_type": "食事の種類",
@@ -252,6 +310,7 @@
       },
       "import": {
         "alert": "CSVファイルのみお願いします",
+        "alert_rate_limit": "インポートが多すぎます。数分待ってからもう一度お試しください。",
         "notice": "%{petname}のトラッカーがインポートされました！"
       },
       "index": {
@@ -269,7 +328,9 @@
         "delete_selected": "選択した項目を削除",
         "description": "説明",
         "download_chart": "チャートをダウンロード",
+        "export_all_csv": "すべての記録をエクスポート",
         "export_csv": "CSVにエクスポート",
+        "export_filtered_csv": "絞り込んだ記録をエクスポート（%{count}件）",
         "food_type": "食事の種類",
         "import_button": "インポート",
         "import_csv": "CSVファイルをインポート",
@@ -280,12 +341,40 @@
         "last_180_days": "過去180日間",
         "last_30_days": "過去30日間",
         "last_7_days": "過去7日間",
+        "litter_observations": {
+          "empty": "過去30日はありません。",
+          "title": "トイレの観察（過去30日）"
+        },
         "new_tracker_link": "%{petname}の新しいトラッカー",
         "no_data_for_chart": "チャートを表示するための追跡データがありません。",
         "no_data_in_range": "選択した日付範囲に利用できるデータがありません。",
         "no_trackers_found": "%{petname}のトラッカーが見つかりません。",
         "note": "メモ",
+        "search": "検索",
         "share_link": "ページを共有",
+        "share_settings": {
+          "copied": "コピーしました ✅",
+          "copy": "コピー",
+          "durations": {
+            "1_day": "1日",
+            "30_days": "30日",
+            "7_days": "7日",
+            "never": "オフにするまで"
+          },
+          "expires_in": "リンクの有効期間",
+          "link_label": "共有リンク",
+          "new_link_button": "新しいリンクを作成",
+          "new_link_confirm": "新しいリンクを作成しますか？現在のリンクは無効になります。",
+          "status_expired": "共有リンクの有効期限が切れました。再度共有するには新しいリンクをオンにしてください。",
+          "status_expires": "共有はオンです。リンクは%{time}に無効になります。",
+          "status_no_expiry": "共有はオンです。オフにするか新しいリンクを作成するまで、リンクは有効です。",
+          "status_off": "共有はオフです。このペットの共有ページは誰も開けません。",
+          "title": "共有リンクの設定",
+          "turn_off_button": "共有をオフにする",
+          "turn_off_confirm": "共有をオフにしますか？現在のリンクは無効になります。",
+          "turn_on_button": "共有リンクをオンにする",
+          "warning": "リンクを知っている人は誰でも、サインインせずにこのペットの給餌記録とグラフを閲覧できます。"
+        },
         "title": "%{petname}のトラッカー",
         "year_to_date": "今年"
       },
@@ -349,7 +438,8 @@
         "left_in_storage": "剩下 %{amount} 克",
         "only_left_in_storage": "⚠️ 庫存僅剩 %{amount} 克。",
         "select_wet_food": "選擇一個最愛或手動輸入",
-        "should_restock": "應該補貨了"
+        "should_restock": "應該補貨了",
+        "topped_up_amount": "碗裡還有 %{bowl} 克，補添後只從袋中取用 %{drawn} 克。"
       }
     },
     "trackers": {
@@ -374,6 +464,7 @@
         "feeding_amount": "餵食量：",
         "header": "編輯%{petname}的紀錄",
         "left_amount": "剩餘份量(克)",
+        "leftover_discarded": "剩餘的已倒掉（沒有補添）",
         "love_option_1": "💕 非常喜歡",
         "love_option_2": "🔺 普通",
         "love_option_3": "❌ 不!!!",
@@ -391,6 +482,7 @@
         "description": "描述",
         "favorite_score": "喜好分數 & 上次餵食日期",
         "food_type": "食物類型",
+        "kibble_prices": "%{petname} 的飼料價格",
         "no_record": "%{petname}還沒有任何飲食記錄 😿"
       },
       "food_types": {
@@ -406,6 +498,7 @@
         "brand": "品牌",
         "date": "日期",
         "description": "描述",
+        "discard_bowl_leftover": "碗裡剩下的已倒掉（不是補添）",
         "dry_food_list": "乾糧清單",
         "feed_time": "餵食時間",
         "food_type": "食物類型",
@@ -428,6 +521,7 @@
       },
       "import": {
         "alert": "只能使用CSV檔案",
+        "alert_rate_limit": "匯入次數過多。請稍候幾分鐘再試。",
         "notice": "%{petname}的飲食紀錄已匯入！"
       },
       "index": {
@@ -445,7 +539,9 @@
         "delete_selected": "刪除所選項目",
         "description": "描述",
         "download_chart": "下載圖表",
+        "export_all_csv": "下載全部紀錄",
         "export_csv": "下載為CSV",
+        "export_filtered_csv": "下載篩選後的紀錄（%{count}筆）",
         "food_type": "食物類型",
         "import_button": "上傳",
         "import_csv": "上傳 CSV 檔案",
@@ -456,12 +552,40 @@
         "last_180_days": "最近180天",
         "last_30_days": "最近30天",
         "last_7_days": "最近7天",
+        "litter_observations": {
+          "empty": "近 30 天沒有紀錄。",
+          "title": "近 30 天的貓砂盆觀察"
+        },
         "new_tracker_link": "為%{petname}新增飲食紀錄",
         "no_data_for_chart": "沒有可用的數據來顯示圖表。",
         "no_data_in_range": "所選日期範圍內沒有可用資料。",
         "no_trackers_found": "找不到%{petname}的紀錄。",
         "note": "備註",
+        "search": "搜尋",
         "share_link": "分享頁面",
+        "share_settings": {
+          "copied": "已複製 ✅",
+          "copy": "複製",
+          "durations": {
+            "1_day": "1 天",
+            "30_days": "30 天",
+            "7_days": "7 天",
+            "never": "直到我關閉為止"
+          },
+          "expires_in": "連結有效期間",
+          "link_label": "分享連結",
+          "new_link_button": "建立新連結",
+          "new_link_confirm": "要建立新連結嗎？目前的連結將會失效。",
+          "status_expired": "分享連結已過期。請開啟新的連結以再次分享。",
+          "status_expires": "分享已開啟。連結將於 %{time} 失效。",
+          "status_no_expiry": "分享已開啟。連結會持續有效，直到您關閉分享或建立新連結。",
+          "status_off": "分享已關閉，沒有人能開啟這隻寵物的分享頁面。",
+          "title": "分享連結設定",
+          "turn_off_button": "關閉分享",
+          "turn_off_confirm": "要關閉分享嗎？目前的連結將會失效。",
+          "turn_on_button": "開啟分享連結",
+          "warning": "任何取得連結的人都可以不必登入就查看這隻寵物的餵食紀錄與圖表。"
+        },
         "title": "%{petname}的紀錄",
         "year_to_date": "今年迄今"
       },
