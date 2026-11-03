@@ -23,6 +23,17 @@ module TrackersHelper
     filters.symbolize_keys
   end
 
+  # Each bag's last feeding of this cat, for the new-feeding form: the bowl may
+  # still hold its leftover, which the new feeding tops up.
+  def last_bag_feedings(pet)
+    timezone = Current.user.timezone
+    pet.household.dry_foods.filter_map do |bag|
+      last = bag.newest_feeding_for(pet) or next
+      when_fed = [ last.date&.strftime("%m/%d"), last.feed_time&.in_time_zone(timezone)&.strftime("%H:%M") ].compact.join(" ")
+      [ bag.id, { amount: last.amount.to_f, left_amount: last.left_amount&.to_f, discarded: last.leftover_discarded, when: when_fed } ]
+    end.to_h
+  end
+
   def set_current_time
     Time.zone = Current.user.timezone
     Time.current.strftime("%H:%M")

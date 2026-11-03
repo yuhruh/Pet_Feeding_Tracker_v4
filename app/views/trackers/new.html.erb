@@ -1,6 +1,7 @@
 <% content_for :title, t('trackers.new.title') %>
 
-<div class="container mx-auto md:w-2/3 w-full" data-controller="tracker-form">
+<%# Stimulus reads values from the controller's own element, not the form inside it. %>
+<div class="container mx-auto md:w-2/3 w-full" data-controller="tracker-form" data-tracker-form-last-feedings-value="<%= last_bag_feedings(@pet).to_json %>">
 
   <div class="flex flex-row justify-center gap-4 mb-4 p-4 sm:p-6">
     <%= image_tag('tracker_removebg.png', width: '48px', height: '40px') %>

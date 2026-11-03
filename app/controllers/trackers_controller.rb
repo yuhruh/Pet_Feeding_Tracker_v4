@@ -87,12 +87,12 @@ class TrackersController < ApplicationController
     @tracker = @pet.trackers.build(tracker_params)
     @tracker.dry_food_id = nil if params[:tracker][:dry_food_id].blank?
     @care_event = unlinked_care_event
-    # The leftover the new feeding replaces, when the user threw it away
-    # rather than topping it up. Found before the new feeding becomes the newest.
-    thrown_away = discarded_bowl_feeding
+    # The bag's last feeding, whose leftover the new one tops up or replaces.
+    # Found before the new feeding becomes the newest.
+    @last_feeding = last_bag_feeding
 
     respond_to do |format|
-      if save_tracker(thrown_away)
+      if save_tracker
         @care_event&.update_columns(tracker_id: @tracker.id, updated_at: Time.current)
         format.html { redirect_to pet_trackers_path(@pet, page: params[:tracker][:page], per_page: session[:per_page]), notice: t(".create.notice") }
         format.json { render :show, status: :created, location: pet_trackers_path }
@@ -216,22 +216,45 @@ class TrackersController < ApplicationController
                                  dry_food_id: @pet.household.dry_foods.find_by(id: details["dry_food_id"])&.id)
     end
 
-    def discarded_bowl_feeding
-      return unless params[:discard_bowl_leftover] == "1" && (@tracker.kibble? || @tracker.freeze_dried?)
+    def last_bag_feeding
+      return unless @tracker.kibble? || @tracker.freeze_dried?
 
       @pet.household.dry_foods.find_by(id: @tracker.dry_food_id)&.newest_feeding_for(@pet)
     end
 
-    # Saves the new feeding and marks the feeding it replaced as thrown away,
-    # together, so the bag counts that feeding in full and not just what was eaten.
-    # The new feeding's after_commit then recounts the bag with the flag set.
-    def save_tracker(thrown_away)
+    # Saves the new feeding together with what the form says about the last one:
+    # the leftover still in the bowl, if it was never recorded, and whether it was
+    # thrown away rather than topped up, so the bag counts it in full. The
+    # feedings' after_commit then recounts the bag.
+    def save_tracker
+      return false unless record_last_leftover
+
       Tracker.transaction do
         raise ActiveRecord::Rollback unless @tracker.save
 
-        thrown_away&.update_column(:leftover_discarded, true)
+        @last_feeding.save! if @last_feeding&.changed?
+        @last_feeding&.update_column(:leftover_discarded, true) if params[:discard_bowl_leftover] == "1"
       end
       @tracker.persisted?
+    end
+
+    # The last feeding's leftover entered on the new-feeding form, as the edit
+    # form would record it. A leftover already recorded is kept.
+    def record_last_leftover
+      left = params[:last_feeding_left_amount]
+      return true if left.blank? || @last_feeding.nil? || @last_feeding.left_amount.present?
+
+      @last_feeding.left_amount = left
+      @last_feeding.total_ate_amount = @last_feeding.amount.to_f - @last_feeding.left_amount.to_f
+      if @last_feeding.hungry.present? && @last_feeding.love.present?
+        result_parts = [ Tracker.hungries[@last_feeding.hungry.to_sym][0], @last_feeding.love[0] ]
+        @last_feeding.favorite_score = calculate_favorite(result_parts, @last_feeding)
+      end
+      return true if @last_feeding.valid? && @last_feeding.left_amount >= 0
+
+      @tracker.valid?
+      @tracker.errors.add(:base, t("trackers.create.invalid_last_leftover", amount: @last_feeding.amount))
+      false
     end
 
     # Once the tracker is saved, the feeding is shown once, as this tracker's.
@@ -258,15 +281,15 @@ class TrackersController < ApplicationController
       time_string == "-" ? 0 : time_string.split(", ").count
     end
 
-    def calculate_favorite(arr)
+    def calculate_favorite(arr, tracker = @tracker)
       hungry = { "💖": 10, "🔺": 5, "❌": 0 }
       love = { "💕": 15,  "🔺": 5, "❌": 0 }
 
       hungry_score = hungry[arr[0].to_sym]
       love_score = arr[1] ? love[arr[1].to_sym] : 0
-      left_amount = @tracker.left_amount || 0
-      left_amount_score = left_amount < (@tracker.amount) / 4 ? 15 : 8
-      frequent_score = @tracker.frequency * 2
+      left_amount = tracker.left_amount || 0
+      left_amount_score = left_amount < (tracker.amount) / 4 ? 15 : 8
+      frequent_score = tracker.frequency.to_i * 2
 
       hungry_score.to_i + love_score.to_i + left_amount_score + frequent_score
     end

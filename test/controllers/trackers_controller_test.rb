@@ -92,6 +92,52 @@ class TrackersControllerTest < ActionDispatch::IntegrationTest
     assert_equal 964.5, bag.reload.left_amount
   end
 
+  test "a leftover entered for the last feeding is recorded on it and the new feeding tops it up" do
+    bag = dry_foods(:one)
+    bag.update_columns(amount: 1000)
+    Tracker.where(dry_food: bag).delete_all
+    morning = @pet.trackers.create!(dry_food: bag, food_type: "kibble", brand: "brand", description: "kibble",
+                                    date: "2026-10-21", feed_time: "08:00", amount: 25)
+
+    post pet_trackers_url(@pet), params: { last_feeding_left_amount: "14.5",
+                                           tracker: { dry_food_id: bag.id, food_type: "kibble", brand: "brand", description: "kibble",
+                                                      hungry: "eat_right_away", date: "2026-10-21", feed_time: "20:00", amount: 25 } }
+
+    morning.reload
+    assert_equal 14.5, morning.left_amount
+    assert_equal 10.5, morning.total_ate_amount
+    assert_equal 964.5, bag.reload.left_amount
+  end
+
+  test "a leftover above the last feeding's amount saves neither feeding" do
+    bag = dry_foods(:one)
+    Tracker.where(dry_food: bag).delete_all
+    morning = @pet.trackers.create!(dry_food: bag, food_type: "kibble", brand: "brand", description: "kibble",
+                                    date: "2026-10-21", feed_time: "08:00", amount: 25)
+
+    assert_no_difference("Tracker.count") do
+      post pet_trackers_url(@pet), params: { last_feeding_left_amount: "30",
+                                             tracker: { dry_food_id: bag.id, food_type: "kibble", brand: "brand", description: "kibble",
+                                                        hungry: "eat_right_away", date: "2026-10-21", feed_time: "20:00", amount: 25 } }
+    end
+
+    assert_response :unprocessable_entity
+    assert_nil morning.reload.left_amount
+  end
+
+  test "a leftover already recorded on the last feeding is kept" do
+    bag = dry_foods(:one)
+    Tracker.where(dry_food: bag).delete_all
+    morning = @pet.trackers.create!(dry_food: bag, food_type: "kibble", brand: "brand", description: "kibble",
+                                    date: "2026-10-21", feed_time: "08:00", amount: 25, left_amount: 14.5)
+
+    post pet_trackers_url(@pet), params: { last_feeding_left_amount: "3",
+                                           tracker: { dry_food_id: bag.id, food_type: "kibble", brand: "brand", description: "kibble",
+                                                      hungry: "eat_right_away", date: "2026-10-21", feed_time: "20:00", amount: 25 } }
+
+    assert_equal 14.5, morning.reload.left_amount
+  end
+
   # test "should show tracker" do
   #   get pet_tracker_url(@pet, @tracker)
   #   assert_response :success

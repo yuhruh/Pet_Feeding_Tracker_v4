@@ -1105,6 +1105,7 @@
       alert: "CSVファイルのみお願いします"
       notice: "%{petname}のトラッカーがインポートされました！"
     create:
+      invalid_last_leftover: "前回の残量は 0〜%{amount}g の間で入力してください。"
       notice: "トラッカーは正常に作成されました。"
     update:
       notice: "トラッカーは正常に更新されました。"
@@ -1427,6 +1428,8 @@
       only_left_in_storage: "⚠️ 在庫は残り %{amount}g です。"
       is_valid_amount: "%{amount}g は有効な量です。"
       topped_up_amount: "器に残っている %{bowl}g に継ぎ足すので、袋から使うのは %{drawn}g です。"
+      last_feeding_leftover: "前回（%{when}、%{amount}g）の器の残量"
+      last_leftover_too_much: "⚠️ 前回は %{amount}g なので、それ以上は残りません。"
       select_wet_food: "お気に入りを選択するか、手動で入力してください"
       favorite_score: "お気に入りスコア:"
       last_feed_date: "最終給餌日:"

@@ -39,26 +39,16 @@ class DryFoodTest < ActiveSupport::TestCase
     assert_equal 40, @bag.reload.total_ate_amount
   end
 
-  test "the bowl leftover is the newest feeding's leftover, which the next feeding tops up" do
-    assert_equal 0, @bag.bowl_leftover_for(pets(:one))
+  test "a top-up takes only the newest feeding's leftover subtracted from its amount" do
+    assert_nil @bag.newest_feeding_for(pets(:one))
 
-    feed("2026-10-21", "08:00", 25)
-    assert_equal 0, @bag.bowl_leftover_for(pets(:one)), "no leftover recorded yet"
-
-    morning = Tracker.last
-    morning.update!(left_amount: 14.5)
-    assert_equal 14.5, @bag.bowl_leftover_for(pets(:one))
+    morning = feed("2026-10-21", "08:00", 25, 14.5)
+    assert_equal morning, @bag.newest_feeding_for(pets(:one))
 
     left_before = @bag.reload.left_amount
-    feed("2026-10-21", "20:00", 25)
-    assert_equal 10.5, left_before - @bag.reload.left_amount, "the top-up is all the evening feeding takes"
-    assert_equal 0, @bag.bowl_leftover_for(pets(:one))
-  end
-
-  test "a thrown-away leftover leaves nothing in the bowl to top up" do
-    feed("2026-10-21", "08:00", 25, 14.5).update!(leftover_discarded: true)
-
-    assert_equal 0, @bag.bowl_leftover_for(pets(:one))
+    evening = feed("2026-10-21", "20:00", 25)
+    assert_equal 10.5, left_before - @bag.reload.left_amount
+    assert_equal evening, @bag.newest_feeding_for(pets(:one))
   end
 
   test "a wet feeding sent with a bag keeps no bag and draws nothing" do

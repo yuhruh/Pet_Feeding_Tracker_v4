@@ -1105,6 +1105,7 @@ zh-TW:
       alert: "只能使用CSV檔案"
       notice: "%{petname}的飲食紀錄已匯入！"
     create:
+      invalid_last_leftover: "上一餐的剩餘份量必須介於 0 到 %{amount} 克之間。"
       notice: "飲食紀錄已成功建立。"
     update:
       notice: "飲食紀錄已成功更新。"
@@ -1427,6 +1428,8 @@ zh-TW:
       only_left_in_storage: "⚠️ 庫存僅剩 %{amount} 克。"
       is_valid_amount: "%{amount} 克是有效數量。"
       topped_up_amount: "碗裡還有 %{bowl} 克，補添後只從袋中取用 %{drawn} 克。"
+      last_feeding_leftover: "上一餐（%{when}，倒了 %{amount} 克）碗裡剩下的份量"
+      last_leftover_too_much: "⚠️ 上一餐只倒了 %{amount} 克，剩下的不會超過這個份量。"
       select_wet_food: "選擇一個最愛或手動輸入"
       favorite_score: "喜愛程度分數:"
       last_feed_date: "上次餵食日期:"

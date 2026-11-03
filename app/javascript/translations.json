@@ -13,6 +13,8 @@
         "favorite_score": "Favorite Score:",
         "is_valid_amount": "%{amount}g is valid.",
         "last_feed_date": "Last Feed Date:",
+        "last_feeding_leftover": "Left in the bowl from the last feeding (%{when}, %{amount}g poured)",
+        "last_leftover_too_much": "⚠️ The last feeding was %{amount}g, so no more than that can be left.",
         "left_in_storage": "Left %{amount} g",
         "only_left_in_storage": "⚠️ Only %{amount}g left in storage.",
         "select_wet_food": "Select a favorite or enter manually",
@@ -30,6 +32,7 @@
         "wet_food": "Wet Food (g)"
       },
       "create": {
+        "invalid_last_leftover": "The leftover from the last feeding must be between 0 and %{amount}g.",
         "notice": "Tracker was successfully created."
       },
       "destroy": {
@@ -224,6 +227,8 @@
         "favorite_score": "お気に入りスコア:",
         "is_valid_amount": "%{amount}g は有効な量です。",
         "last_feed_date": "最終給餌日:",
+        "last_feeding_leftover": "前回（%{when}、%{amount}g）の器の残量",
+        "last_leftover_too_much": "⚠️ 前回は %{amount}g なので、それ以上は残りません。",
         "left_in_storage": "残り %{amount} g",
         "only_left_in_storage": "⚠️ 在庫は残り %{amount}g です。",
         "select_wet_food": "お気に入りを選択するか、手動で入力してください",
@@ -241,6 +246,7 @@
         "wet_food": "ウェットフード (g)"
       },
       "create": {
+        "invalid_last_leftover": "前回の残量は 0〜%{amount}g の間で入力してください。",
         "notice": "トラッカーは正常に作成されました。"
       },
       "destroy": {
@@ -435,6 +441,8 @@
         "favorite_score": "喜愛程度分數:",
         "is_valid_amount": "%{amount} 克是有效數量。",
         "last_feed_date": "上次餵食日期:",
+        "last_feeding_leftover": "上一餐（%{when}，倒了 %{amount} 克）碗裡剩下的份量",
+        "last_leftover_too_much": "⚠️ 上一餐只倒了 %{amount} 克，剩下的不會超過這個份量。",
         "left_in_storage": "剩下 %{amount} 克",
         "only_left_in_storage": "⚠️ 庫存僅剩 %{amount} 克。",
         "select_wet_food": "選擇一個最愛或手動輸入",
@@ -452,6 +460,7 @@
         "wet_food": "濕食 (克)"
       },
       "create": {
+        "invalid_last_leftover": "上一餐的剩餘份量必須介於 0 到 %{amount} 克之間。",
         "notice": "飲食紀錄已成功建立。"
       },
       "destroy": {

@@ -1,19 +1,20 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["foodType", "dryFoodOptions", "dryFoodSelect", "wetFoodOptions", "wetFoodSelect", "brand", "description", "amount", "amountAlert", "submitButton", "discardLeftoverOption", "discardLeftover"]
+  static targets = ["foodType", "dryFoodOptions", "dryFoodSelect", "wetFoodOptions", "wetFoodSelect", "brand", "description", "amount", "amountAlert", "submitButton", "discardLeftoverOption", "discardLeftover", "lastLeftoverOption", "lastLeftoverLabel", "lastLeftover"]
   static values = {
     dryFoods: Array,
     trackerUrl: String,
     newDryFoodUrl: String,
-    // Bag id => grams still in this cat's bowl, which a new feeding only tops up.
-    bowlLeftovers: Object
+    // Bag id => this cat's last feeding from it, whose leftover may still be in
+    // the bowl: { amount, left_amount (null if not recorded), discarded, when }.
+    lastFeedings: Object
   }
 
   connect() {
-    this.csrfToken = document.querySelector("meta[name='csrf-token']").content;
+    this.csrfToken = document.querySelector("meta[name='csrf-token']")?.content;
     this.selectedFoodLeftAmount = null; // Initialize storage state
-    this.selectedBowlLeftover = 0;
+    this.lastFeeding = null;
     if (this.hasFoodTypeTarget) {
       this.toggleDryFoodOptions()
     }
@@ -81,14 +82,44 @@ export default class extends Controller {
     if (this.hasDryFoodOptionsTarget) this.dryFoodOptionsTarget.classList.add("hidden");
     if (this.hasDryFoodSelectTarget) this.dryFoodSelectTarget.value = "";
     this.selectedFoodLeftAmount = null;
-    this.selectedBowlLeftover = 0;
-    this.toggleDiscardLeftoverOption();
+    this.selectLastFeeding(null);
+  }
+
+  // The cat's last feeding from the picked bag. When its leftover was never
+  // recorded, the form asks for it here, since the new feeding tops it up.
+  selectLastFeeding(foodId) {
+    this.lastFeeding = (foodId && this.lastFeedingsValue[foodId]) || null;
+    const last = this.lastFeeding;
+    const askLeftover = last != null && last.left_amount == null && !last.discarded;
+
+    if (this.hasLastLeftoverOptionTarget) {
+      this.lastLeftoverOptionTarget.classList.toggle("hidden", !askLeftover);
+    }
+    if (this.hasLastLeftoverTarget) {
+      if (askLeftover) {
+        this.lastLeftoverTarget.max = last.amount;
+      } else {
+        this.lastLeftoverTarget.value = "";
+      }
+    }
+    if (askLeftover && this.hasLastLeftoverLabelTarget) {
+      this.lastLeftoverLabelTarget.textContent = I18n.t('javascript.tracker_form_controller.last_feeding_leftover', { when: last.when, amount: last.amount });
+    }
+  }
+
+  // Grams still in the bowl from the last feeding: recorded, or entered here.
+  enteredBowlLeftover() {
+    const last = this.lastFeeding;
+    if (!last || last.discarded) return 0;
+    if (last.left_amount != null) return last.left_amount;
+    const entered = this.hasLastLeftoverTarget ? parseFloat(this.lastLeftoverTarget.value) : NaN;
+    return isNaN(entered) ? 0 : entered;
   }
 
   // Offer "threw it away" only when the bowl still holds a leftover to top up.
   toggleDiscardLeftoverOption() {
     if (!this.hasDiscardLeftoverOptionTarget) return;
-    const show = this.selectedBowlLeftover > 0;
+    const show = this.enteredBowlLeftover() > 0;
     this.discardLeftoverOptionTarget.classList.toggle("hidden", !show);
     if (!show && this.hasDiscardLeftoverTarget) this.discardLeftoverTarget.checked = false;
   }
@@ -180,16 +211,14 @@ export default class extends Controller {
         if (this.hasBrandTarget) this.brandTarget.value = data.brand;
         if (this.hasDescriptionTarget) this.descriptionTarget.value = data.description;
         this.selectedFoodLeftAmount = parseFloat(data.left_amount);
-        this.selectedBowlLeftover = parseFloat(this.bowlLeftoversValue[foodId]) || 0;
-        this.toggleDiscardLeftoverOption();
+        this.selectLastFeeding(foodId);
         this.validateAmount()
       } catch (error) {
         console.error("Error fetching dry food data:", error);
       }
     } else {
       this.selectedFoodLeftAmount = null;
-      this.selectedBowlLeftover = 0;
-      this.toggleDiscardLeftoverOption();
+      this.selectLastFeeding(null);
     }
     this.validateAmount();
   }
@@ -225,44 +254,58 @@ export default class extends Controller {
   }
 
   validateAmount() {
+    this.toggleDiscardLeftoverOption();
     if (!this.hasAmountTarget) return;
     const inputAmount = parseFloat(this.amountTarget.value);
+    const last = this.lastFeeding;
+    const bowlLeftover = this.enteredBowlLeftover();
 
-    if (this.selectedFoodLeftAmount != null && !isNaN(inputAmount)) {
-      // The bowl still holds the last feeding's leftover, so this feeding only
-      // takes the top-up from the bag, the same as the server counts it.
-      // Thrown away instead, the feeding takes its full amount.
-      const discarded = this.hasDiscardLeftoverTarget && this.discardLeftoverTarget.checked;
-      const bowl = discarded ? 0 : (this.selectedBowlLeftover || 0);
-      const drawn = Math.max(Math.round((inputAmount - bowl) * 100) / 100, 0);
-      if (drawn > this.selectedFoodLeftAmount) {
-        if (this.hasAmountAlertTarget) {
-          this.amountAlertTarget.textContent = I18n.t('javascript.tracker_form_controller.only_left_in_storage', { amount: this.selectedFoodLeftAmount });
-          this.amountAlertTarget.classList.remove('hidden');
-          this.amountAlertTarget.classList.replace("text-green-500", "text-red-500");
-        }
-        if (this.hasSubmitButtonTarget) {
-          this.submitButtonTarget.disabled = true;
-          this.submitButtonTarget.classList.remove("bg-softBlue", "hover:bg-white", "hover:text-softBlue", "hover:border-softBlue", "cursor-pointer");
-          this.submitButtonTarget.classList.add("bg-gray-400", "cursor-not-allowed");
-        }
-      } else {
-        if (this.hasAmountAlertTarget) {
-          this.amountAlertTarget.textContent = bowl > 0
-            ? I18n.t('javascript.tracker_form_controller.topped_up_amount', { bowl: bowl, drawn: drawn })
-            : I18n.t('javascript.tracker_form_controller.is_valid_amount', { amount: inputAmount });
-          this.amountAlertTarget.classList.remove('hidden');
-          this.amountAlertTarget.classList.replace("text-red-500", "text-green-500");
-        }
-        if (this.hasSubmitButtonTarget) {
-          this.submitButtonTarget.disabled = false;
-          this.submitButtonTarget.classList.add("bg-softBlue", "hover:bg-white", "hover:text-softBlue", "hover:border-softBlue", "cursor-pointer");
-          this.submitButtonTarget.classList.remove("bg-gray-400", "cursor-not-allowed");
-        }
-      }
-    } else {
-      this.hideAlert();
+    if (last && bowlLeftover > last.amount) {
+      this.showAmountAlert(I18n.t('javascript.tracker_form_controller.last_leftover_too_much', { amount: last.amount }), false);
+      return;
     }
+    if (this.selectedFoodLeftAmount == null || isNaN(inputAmount)) {
+      this.hideAlert();
+      this.setSubmitEnabled(true);
+      return;
+    }
+
+    // The bowl still holds the last feeding's leftover, so this feeding only
+    // takes the top-up from the bag, the same as the server counts it.
+    // Thrown away instead, the feeding takes its full amount.
+    const discarded = this.hasDiscardLeftoverTarget && this.discardLeftoverTarget.checked;
+    const bowl = discarded ? 0 : bowlLeftover;
+    const drawn = Math.max(Math.round((inputAmount - bowl) * 100) / 100, 0);
+
+    if (drawn > this.selectedFoodLeftAmount) {
+      this.showAmountAlert(I18n.t('javascript.tracker_form_controller.only_left_in_storage', { amount: this.selectedFoodLeftAmount }), false);
+    } else if (bowl > 0) {
+      this.showAmountAlert(I18n.t('javascript.tracker_form_controller.topped_up_amount', { bowl: bowl, drawn: drawn }), true);
+    } else {
+      this.showAmountAlert(I18n.t('javascript.tracker_form_controller.is_valid_amount', { amount: inputAmount }), true);
+    }
+  }
+
+  showAmountAlert(text, ok) {
+    if (this.hasAmountAlertTarget) {
+      this.amountAlertTarget.textContent = text;
+      this.amountAlertTarget.classList.remove("hidden");
+      if (ok) {
+        this.amountAlertTarget.classList.replace("text-red-500", "text-green-500");
+      } else {
+        this.amountAlertTarget.classList.replace("text-green-500", "text-red-500");
+      }
+    }
+    this.setSubmitEnabled(ok);
+  }
+
+  setSubmitEnabled(enabled) {
+    if (!this.hasSubmitButtonTarget) return;
+    const on = ["bg-softBlue", "hover:bg-white", "hover:text-softBlue", "hover:border-softBlue", "cursor-pointer"];
+    const off = ["bg-gray-400", "cursor-not-allowed"];
+    this.submitButtonTarget.disabled = !enabled;
+    this.submitButtonTarget.classList.remove(...(enabled ? off : on));
+    this.submitButtonTarget.classList.add(...(enabled ? on : off));
   }
 
   hideAlert() {

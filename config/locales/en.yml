@@ -1105,6 +1105,7 @@ en:
       alert: "Only CSV please"
       notice: "%{petname}'s trackers imported!"
     create:
+      invalid_last_leftover: "The leftover from the last feeding must be between 0 and %{amount}g."
       notice: "Tracker was successfully created."
     update:
       notice: "Tracker was successfully updated."
@@ -1427,6 +1428,8 @@ en:
       only_left_in_storage: "⚠️ Only %{amount}g left in storage."
       is_valid_amount: "%{amount}g is valid."
       topped_up_amount: "Tops up the %{bowl}g still in the bowl, so %{drawn}g comes from the bag."
+      last_feeding_leftover: "Left in the bowl from the last feeding (%{when}, %{amount}g poured)"
+      last_leftover_too_much: "⚠️ The last feeding was %{amount}g, so no more than that can be left."
       select_wet_food: "Select a favorite or enter manually"
       favorite_score: "Favorite Score:"
       last_feed_date: "Last Feed Date:"
