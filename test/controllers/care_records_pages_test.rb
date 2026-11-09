@@ -114,6 +114,35 @@ class CareRecordsPagesTest < ActionDispatch::IntegrationTest
     assert_select "#previous-day[href*='kind=fed']"
   end
 
+  test "the chosen type and cat or spot stay chosen after Delete, Change and Back" do
+    log_in_as(@owner)
+    get page(date: @day.iso8601, kind: "litter", subject: "spot-#{@box.id}")
+    back = { return_date: @day.iso8601, return_kind: "litter", return_subject: "spot-#{@box.id}" }
+    filtered = household_care_records_url(**L, date: @day.iso8601, kind: "litter", subject: "spot-#{@box.id}")
+    assert_select "##{dom_id(@scooped)} form input[name=return_kind][value=litter]"
+    assert_select "##{dom_id(@scooped)} form input[name=return_subject][value='spot-#{@box.id}']"
+
+    get edit_care_event_url(@scooped, **L, **back)
+    assert_select "input[type=hidden][name=return_kind][value=litter]"
+    assert_select "a[href='#{household_care_records_path(**L, date: @day.iso8601, kind: 'litter', subject: "spot-#{@box.id}")}']",
+                  text: "Back to care records"
+
+    patch care_event_url(@scooped, **L), params: back.merge(note: "clumpy")
+    assert_redirected_to filtered
+
+    delete care_event_url(@scooped, **L), params: back
+    assert_redirected_to filtered
+    follow_redirect!
+    assert_select "select[name=kind] option[selected][value=litter]"
+    assert_select "select[name=subject] option[selected][value='spot-#{@box.id}']"
+  end
+
+  test "made-up filter values are dropped on the way back" do
+    log_in_as(@owner)
+    delete care_event_url(@fed, **L), params: { return_date: @day.iso8601, return_kind: "naps", return_subject: "x-1; drop" }
+    assert_redirected_to household_care_records_url(**L, date: @day.iso8601)
+  end
+
   test "a future or broken date shows today" do
     log_in_as(@owner)
     get page(date: (@today + 3).iso8601)

@@ -58,6 +58,12 @@ time to any past day. Three limits were in the way:
 | The details page's time field | `min` 7 days ago, so **in a browser the owner couldn't save a change to an older record**: the form wouldn't submit (the first G2 test sent the request directly and missed this) | No `min` for the owner; caregivers keep it |
 | A record's time (`occurred_in_allowed_range`) | At most 7 days before it was recorded | Skipped when the owner changes it (`CareEvent#owner_edit?`: `edited_by` is the household's owner, set by `CareEventsController#update`); still applies to new taps and caregivers |
 
+**Fix (2026-11-09): filters reset after Delete or Change.** With **Type: Litter** chosen, deleting a record came back with the type
+set to **All**. **Root cause:** the links carried only the day (`return_date`), so `CareEventsController#back_path` returned to the day
+without `kind` or `subject`. Now the page passes its day and both filters (`return_date`, `return_kind`, `return_subject`) to Change,
+Delete, the details page's form and its **Back to care records** link; `back_path` keeps only a known type and a `pet-N` / `spot-N`
+value.
+
 Times in the future are still refused for everyone. The page's explanation and the help text say the owner can change or delete any record, in en / zh-TW / ja.
 
 **Checks:** 7 tests in `test/controllers/care_records_pages_test.rb`:

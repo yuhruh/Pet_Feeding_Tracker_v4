@@ -75,10 +75,13 @@ class CareEventsController < ApplicationController
 
   private
 
-  # Back to the day on the owner's care records page the change started from, else Today.
+  # Back to the owner's care records page as the change started from (the day,
+  # and the type and cat or spot filters), else Today.
   def back_path
     date = Date.iso8601(params[:return_date].to_s)
-    household_care_records_path(date: date.iso8601)
+    filters = { kind: params[:return_kind].presence_in(CareEvent.kinds.keys),
+                subject: params[:return_subject].to_s[/\A(pet|spot)-\d+\z/] }.compact
+    household_care_records_path(date: date.iso8601, **filters)
   rescue Date::Error
     today_path
   end

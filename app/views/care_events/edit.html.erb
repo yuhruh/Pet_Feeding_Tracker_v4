@@ -12,7 +12,9 @@
   </p>
 
   <%= form_with url: care_event_path(@event), method: :patch, class: "flex flex-col gap-4 border-2 border-slate-200 rounded-xl shadow-lg p-4" do |form| %>
-    <%= hidden_field_tag :return_date, params[:return_date], id: nil if params[:return_date].present? %>
+    <% %i[return_date return_kind return_subject].each do |key| %>
+      <%= hidden_field_tag key, params[key], id: nil if params[key].present? %>
+    <% end %>
     <div class="flex flex-col gap-1">
       <%= label_tag :occurred_at, t(".time"), class: "font-medium" %>
       <%= datetime_local_field_tag :occurred_at, @event.occurred_at.in_time_zone(zone).strftime("%Y-%m-%dT%H:%M"), required: true,

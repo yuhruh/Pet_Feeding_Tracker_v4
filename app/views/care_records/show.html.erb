@@ -40,7 +40,8 @@
   </nav>
 
   <div id="care-records-day">
-    <%= render "care_events/timeline", day: @day, reader: Current.user, entries: @entries, return_date: @date.iso8601,
+    <%= render "care_events/timeline", day: @day, reader: Current.user, entries: @entries,
+          back: { return_date: @date.iso8601, return_kind: @kind, return_subject: @subject }.compact,
           title: l(@date, format: :long), empty: t(".empty") %>
   </div>
 
