@@ -54,6 +54,20 @@ en:
       not_given: "💊 Couldn't give"
       observations: "🔍 Litter observations"
   care_records:
+    show:
+      title: "Care records"
+      back: "Back to household"
+      explanation: "Every record for one day, in your household's time zone. You can change any record, and delete records up to 7 days old."
+      date: "Day"
+      subject: "Cat or spot"
+      kind: "Type"
+      all: "All"
+      show: "Show"
+      days: "Days"
+      previous_day: "Previous day"
+      next_day: "Next day"
+      today: "Today"
+      empty: "No records on this day."
     columns:
       date: "Date"
       time: "Time"
@@ -219,6 +233,7 @@ en:
       amount: "Amount (g)"
       note: "Note"
       back: "Back to Today"
+      back_to_records: "Back to care records"
     suggestions:
       bag: "%{food} (%{left} g left)"
       favorite: "%{food} (a favorite, last %{date})"
@@ -363,6 +378,7 @@ en:
         "off": "🔕 Reminders: off"
         turn_on: "Turn on"
         turn_off: "Turn off"
+        change_channel: "How reminders come"
         channels:
           android: "Android app"
           line: "LINE"
@@ -1290,6 +1306,7 @@ en:
         set_times: "At set times"
       care_records: "Care records"
       care_records_explanation: "Every feeding, litter, water, medicine and weight record, in your household's time zone."
+      view_care_records: "View and change care records"
       download_care_records: "Download care records (CSV)"
       intro: "The people who help look after your cats."
       members: "Caregivers and viewers"

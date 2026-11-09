@@ -54,6 +54,20 @@
       not_given: "💊 飲ませられなかった"
       observations: "🔍 トイレの観察"
   care_records:
+    show:
+      title: "お世話の記録"
+      back: "家庭に戻る"
+      explanation: "1日分のすべての記録を、家庭のタイムゾーンで表示します。どの記録も変更でき、7日以内の記録は削除できます。"
+      date: "日付"
+      subject: "猫または場所"
+      kind: "種類"
+      all: "すべて"
+      show: "表示"
+      days: "日付の切り替え"
+      previous_day: "前の日"
+      next_day: "次の日"
+      today: "今日"
+      empty: "この日の記録はありません。"
     columns:
       date: "日付"
       time: "時刻"
@@ -219,6 +233,7 @@
       amount: "量（g）"
       note: "メモ"
       back: "今日のページに戻る"
+      back_to_records: "お世話の記録に戻る"
     suggestions:
       bag: "%{food}（残り %{left} g）"
       favorite: "%{food}（お気に入り、最終 %{date}）"
@@ -363,6 +378,7 @@
         "off": "🔕 お知らせ：オフ"
         turn_on: "オンにする"
         turn_off: "オフにする"
+        change_channel: "受け取り方"
         channels:
           android: "Androidアプリ"
           line: "LINE"
@@ -1290,6 +1306,7 @@
         set_times: "決まった時刻"
       care_records: "お世話の記録"
       care_records_explanation: "ごはん・トイレ・水・お薬・体重の記録をすべて、家庭のタイムゾーンで。"
+      view_care_records: "お世話の記録を見る・変更する"
       download_care_records: "お世話の記録をダウンロード（CSV）"
       intro: "猫のお世話を手伝ってくれる人たち。"
       members: "ケアする人・見るだけの人"

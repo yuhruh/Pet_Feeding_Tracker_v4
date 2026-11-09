@@ -3,6 +3,7 @@
 # the saved notice (Undo, Change time, Add details, the water checkboxes).
 class CareEventsController < ApplicationController
   before_action :set_care_event, only: %i[edit update undo destroy]
+  helper_method :back_path
 
   def create
     subject = CareEvent.subject_for(Current.user, pet_id: params[:pet_id], care_spot_id: params[:care_spot_id])
@@ -44,9 +45,9 @@ class CareEventsController < ApplicationController
     @event.assign_attributes(edited_by: Current.user, edited_at: Time.current) if @event.changed?
     if @event.save
       flash[:care_event_id] = @event.id if params[:from_notice]
-      redirect_to today_path, notice: (t(".notice") unless params[:from_notice])
+      redirect_to back_path, notice: (t(".notice") unless params[:from_notice])
     else
-      redirect_to today_path, alert: @event.errors.map(&:message).to_sentence
+      redirect_to back_path, alert: @event.errors.map(&:message).to_sentence
     end
   end
 
@@ -62,17 +63,25 @@ class CareEventsController < ApplicationController
     unless @event.deletable_by?(Current.user)
       # A caregiver learns the 24-hour rule; a viewer can't record care at all.
       caregiver = HouseholdPolicy.new(Current.user, @event.household).can?(:record_care)
-      return redirect_to today_path, alert: caregiver ? t(".not_allowed") : t("care_events.not_allowed"), status: :see_other
+      return redirect_to back_path, alert: caregiver ? t(".not_allowed") : t("care_events.not_allowed"), status: :see_other
     end
 
     linked_tracker = @event.tracker_id.present?
     @event.delete_by!(Current.user)
     notice = t(".notice", what: helpers.care_event_summary(@event), time: helpers.care_time(@event.occurred_at, @event.household.time_zone))
     notice = "#{notice} #{t('.tracker_kept')}" if linked_tracker
-    redirect_to today_path, notice: notice, status: :see_other
+    redirect_to back_path, notice: notice, status: :see_other
   end
 
   private
+
+  # Back to the day on the owner's care records page the change started from, else Today.
+  def back_path
+    date = Date.iso8601(params[:return_date].to_s)
+    household_care_records_path(date: date.iso8601)
+  rescue Date::Error
+    today_path
+  end
 
   def set_care_event
     records = CareEvent.where(household_id: Household.reachable_by(Current.user).select(:id))

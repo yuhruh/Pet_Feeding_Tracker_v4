@@ -54,6 +54,20 @@ zh-TW:
       not_given: "💊 無法給藥"
       observations: "🔍 貓砂盆觀察"
   care_records:
+    show:
+      title: "照顧紀錄"
+      back: "回到家庭"
+      explanation: "一天內的所有紀錄，以家庭的時區顯示。你可以修改任何紀錄，也可以刪除 7 天內的紀錄。"
+      date: "日期"
+      subject: "貓咪或地點"
+      kind: "類型"
+      all: "全部"
+      show: "顯示"
+      days: "日期切換"
+      previous_day: "前一天"
+      next_day: "後一天"
+      today: "今天"
+      empty: "這天沒有紀錄。"
     columns:
       date: "日期"
       time: "時間"
@@ -219,6 +233,7 @@ zh-TW:
       amount: "份量（g）"
       note: "備註"
       back: "回到今天頁面"
+      back_to_records: "回到照顧紀錄"
     suggestions:
       bag: "%{food}（剩 %{left} g）"
       favorite: "%{food}（最愛，上次 %{date}）"
@@ -363,6 +378,7 @@ zh-TW:
         "off": "🔕 提醒：關閉"
         turn_on: "開啟"
         turn_off: "關閉"
+        change_channel: "通知方式"
         channels:
           android: "Android App"
           line: "LINE"
@@ -1290,6 +1306,7 @@ zh-TW:
         set_times: "固定時間"
       care_records: "照顧紀錄"
       care_records_explanation: "所有餵食、貓砂盆、水、給藥與體重紀錄，以家庭的時區顯示。"
+      view_care_records: "查看與修改照顧紀錄"
       download_care_records: "下載照顧紀錄（CSV）"
       intro: "幫忙照顧你的貓咪的人。"
       members: "照顧者與觀看者"

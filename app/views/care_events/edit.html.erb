@@ -12,6 +12,7 @@
   </p>
 
   <%= form_with url: care_event_path(@event), method: :patch, class: "flex flex-col gap-4 border-2 border-slate-200 rounded-xl shadow-lg p-4" do |form| %>
+    <%= hidden_field_tag :return_date, params[:return_date], id: nil if params[:return_date].present? %>
     <div class="flex flex-col gap-1">
       <%= label_tag :occurred_at, t(".time"), class: "font-medium" %>
       <%= datetime_local_field_tag :occurred_at, @event.occurred_at.in_time_zone(zone).strftime("%Y-%m-%dT%H:%M"), required: true,
@@ -138,7 +139,7 @@
 
     <div class="flex flex-wrap items-center gap-4">
       <%= form.submit t("care_events.save"), class: "rounded-md px-4 py-2 text-white bg-softBlue font-medium cursor-pointer" %>
-      <%= link_to t(".back"), today_path, class: "underline" %>
+      <%= link_to params[:return_date].present? ? t(".back_to_records") : t(".back"), back_path, class: "underline" %>
       <% if @event.fed? && @event.tracker_id.nil? && HouseholdPolicy.new(Current.user, household).owner? %>
         <%= link_to t("care_events.timeline.add_to_trackers"), new_pet_tracker_path(@event.pet, care_event_id: @event.id), class: "ml-auto text-emerald-700 underline" %>
       <% end %>

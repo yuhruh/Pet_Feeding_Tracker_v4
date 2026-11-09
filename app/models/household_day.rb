@@ -1,6 +1,6 @@
 # One household's day, in the household's time zone: what was recorded and when
 # each cat, litter box and water spot was last looked after. Used by the Today
-# page and the viewer page.
+# page, the viewer page and the owner's care records page.
 class HouseholdDay
   # One line on the timeline: a care event, or a tracker the owner logged directly.
   Entry = Struct.new(:at, :event, :tracker, keyword_init: true) do
@@ -29,6 +29,13 @@ class HouseholdDay
     @trackers ||= Tracker.where(pet_id: pets.map(&:id), date: date)
                          .where.not(id: household.care_events.kept.where.not(tracker_id: nil).select(:tracker_id))
                          .includes(:pet).to_a
+  end
+
+  # The whole day's records and directly logged trackers, newest first, for the
+  # owner's care records page (any past day, unlike the 24-hour timeline).
+  def entries
+    (events.map { |event| Entry.new(at: event.occurred_at, event: event) } +
+     trackers.map { |tracker| Entry.new(at: tracker_time(tracker), tracker: tracker) }).sort_by(&:at).reverse
   end
 
   # The timeline covers the last 24 hours, not just today, so a late-night tap

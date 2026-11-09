@@ -37,6 +37,7 @@
         <% reminders_on = household.reminders_on_for?(Current.user) %>
         <div id="<%= dom_id(household, :reminders) %>" class="-mt-2 mb-3 flex flex-wrap items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
           <span><%= t(reminders_on ? ".reminders.on" : ".reminders.off", channel: t(".reminders.channels.#{@reminder_channel}")) %></span>
+          <%= link_to t(".reminders.change_channel"), users_path(anchor: "reminder-channel"), class: "text-sky-700 underline" %>
           <%= button_to t(reminders_on ? ".reminders.turn_off" : ".reminders.turn_on"), household_reminders_path(household), method: :patch,
                 params: { enabled: !reminders_on }, class: "text-sky-700 underline cursor-pointer" %>
           <% if reminders_on && hotwire_native_app? %>

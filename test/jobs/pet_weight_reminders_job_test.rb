@@ -50,7 +50,9 @@ class PetWeightRemindersJobTest < ActiveJob::TestCase
       raise "boom" if calls.one?
     end
 
-    PetWeightReminderJob.stub(:perform_now, fails_first) do
+    reminders = Object.new
+    reminders.define_singleton_method(:deliver) { nil }
+    PetWeightReminders.stub(:new, ->(user) { fails_first.call(user); reminders }) do
       assert_nothing_raised { PetWeightRemindersJob.perform_now }
     end
     assert_equal User.where(id: Household.joins(:pets).select(:owner_id)).count, calls.size

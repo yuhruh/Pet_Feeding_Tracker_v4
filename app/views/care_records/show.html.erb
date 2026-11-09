@@ -1,0 +1,50 @@
+<% content_for :title, t(".title") %>
+<div class="container mx-auto my-4 px-4 max-w-3xl flex flex-col gap-4">
+  <div class="flex flex-wrap items-baseline justify-between gap-2">
+    <h1 class="text-2xl font-bold md:text-3xl"><%= t(".title") %></h1>
+    <%= link_to t(".back"), household_path(anchor: "care_records"), class: "text-sky-700 underline" %>
+  </div>
+  <p class="text-sm text-gray-600 dark:text-gray-300"><%= t(".explanation") %></p>
+
+  <%= form_with url: household_care_records_path, method: :get, id: "care-records-filters",
+        class: "flex flex-wrap items-end gap-3 border-2 border-slate-200 rounded-xl p-3" do |form| %>
+    <label class="flex flex-col text-sm gap-1">
+      <%= t(".date") %>
+      <%= form.date_field :date, value: @date.iso8601, max: @today.iso8601, class: "rounded-md border px-2 py-1 dark:text-black",
+            data: { controller: "auto-submit", action: "change->auto-submit#submit" } %>
+    </label>
+    <label class="flex flex-col text-sm gap-1">
+      <%= t(".subject") %>
+      <% subjects = [ [ t(".all"), "" ] ] +
+                    @day.pets.map { |pet| [ pet_display_name(pet), "pet-#{pet.id}" ] } +
+                    @spots.map { |spot| [ care_spot_name(spot), "spot-#{spot.id}" ] } %>
+      <%= form.select :subject, subjects, { selected: @subject.to_s }, class: "rounded-md border px-2 py-1 dark:text-black",
+            data: { controller: "auto-submit", action: "change->auto-submit#submit" } %>
+    </label>
+    <label class="flex flex-col text-sm gap-1">
+      <%= t(".kind") %>
+      <% kinds = [ [ t(".all"), "" ] ] + CareEvent.kinds.keys.map { |kind| [ "#{CareEventsHelper::KIND_ICONS[kind]} #{t("care_records.kinds.#{kind}")}", kind ] } %>
+      <%= form.select :kind, kinds, { selected: @kind.to_s }, class: "rounded-md border px-2 py-1 dark:text-black",
+            data: { controller: "auto-submit", action: "change->auto-submit#submit" } %>
+    </label>
+    <noscript><%= form.submit t(".show"), name: nil, class: "rounded-md px-3 py-1 bg-slate-200" %></noscript>
+  <% end %>
+
+  <% filters = { subject: @subject, kind: @kind }.compact %>
+  <nav class="flex flex-wrap items-center justify-between gap-2" aria-label="<%= t(".days") %>">
+    <%= link_to "← #{t('.previous_day')}", household_care_records_path(date: (@date - 1).iso8601, **filters), class: "text-sky-700 underline", id: "previous-day" %>
+    <% if @date < @today %>
+      <%= link_to t(".today"), household_care_records_path(**filters), class: "text-sky-700 underline" %>
+      <%= link_to "#{t('.next_day')} →", household_care_records_path(date: (@date + 1).iso8601, **filters), class: "text-sky-700 underline", id: "next-day" %>
+    <% end %>
+  </nav>
+
+  <div id="care-records-day">
+    <%= render "care_events/timeline", day: @day, reader: Current.user, entries: @entries, return_date: @date.iso8601,
+          title: l(@date, format: :long), empty: t(".empty") %>
+  </div>
+
+  <p class="text-sm">
+    <%= link_to t("households.show.download_care_records"), household_care_records_path(format: :csv), data: { turbo: false }, class: "text-sky-700 underline" %>
+  </p>
+</div>

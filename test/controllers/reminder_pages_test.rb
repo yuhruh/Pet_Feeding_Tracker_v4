@@ -176,6 +176,17 @@ class ReminderPagesTest < ActionDispatch::IntegrationTest
     assert_select "##{dom_id(@household, :reminders)}", text: /Reminders by email: on/
   end
 
+  test "the switch follows the channel chosen on the profile page, with a link to change it" do
+    @household.update!(owner_reminders_enabled: true)
+    log_in_as(@owner)
+    DeviceToken.register(user: @owner, session: @owner.sessions.last, token: "phone-1")
+    @owner.update!(reminder_channel: "email")
+
+    FcmClient.stub(:configured?, true) { get today_url(**L) }
+    assert_select "##{dom_id(@household, :reminders)}", text: /Reminders by email: on/
+    assert_select "##{dom_id(@household, :reminders)} a[href$='/users#reminder-channel']"
+  end
+
   test "in the Android app, Today asks for the notification permission once reminders are on" do
     native = { "HTTP_USER_AGENT" => "Mozilla/5.0 (Linux; Android 14) Chrome/120 Hotwire Native Android" }
     log_in_as(@owner)

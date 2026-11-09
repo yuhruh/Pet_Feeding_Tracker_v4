@@ -21,7 +21,44 @@
 | I2 — Google, LINE and GitHub sign-in in the Android app | ✅ Done (2026-10-02), merged into `main`; **Google sign-in works on a Pixel 9**. See [Checkpoint I2 result](#checkpoint-i2-result-2026-10-02) |
 | J — Clean-up, docs, CI, merge | ✅ Done (2026-10-02), merged into `main` and deployed: production migrated (no `user_id` on `pets` or `dry_foods`; 3 cats, 8 food bags and every tracker intact). See [Checkpoint J result](#checkpoint-j-result-2026-10-02) |
 
+| G2 — Care records page: see and change any day's records | ✅ Done (2026-11-09) on `main`. See [Checkpoint G2 result](#checkpoint-g2-result-2026-11-09) |
+
 **Commits:** each checkpoint is committed on `feature/households` once `bin/rails test` passes, then pushed. Merged into `main` only when you ask.
+
+## Checkpoint G2 result (2026-11-09)
+
+**Why:** the owner may change any record, of any age (`CareEvent#editable_by?`), and delete one up to 7 days old.
+But **Change** and **Delete** were only on the Today timeline, which shows the last 24 hours, so an older mistake
+couldn't be reached. `CareRecordsController` only served the CSV.
+
+**What the owner sees now:**
+- **A "Care records" page** (household page → **View and change care records**, next to the CSV download): one day at a time,
+  in the household's time zone, opening on today. It has ← previous day, today, next day → and a date picker, and can't go past today.
+- **Filters:** by cat or by litter box or water spot (removed spots are listed too, for their old records), and by type
+  (fed, weight, litter, water, medicine). A tracker logged directly counts as a feeding of its cat.
+- **Each record** is shown as on the timeline, with **Change** always and **Delete** up to 7 days back, by the existing rules.
+  Saving or deleting comes back to the same day ("Back to care records" on the details page); from Today it still goes back to Today.
+
+**Who:** owner only (`OwnedHousehold`). Caregivers and viewers are sent away. Caregivers keep their 24-hour Change and Delete on Today.
+
+**Main files:** `CareRecordsController#show` (HTML and CSV), `care_records/show`, `HouseholdDay#entries` (one whole day's records
+and trackers), `care_events/_timeline` (optional `entries`, `title`, `empty`, `return_date`), `CareEventsController#back_path`
+(`return_date` → that day, anything else → Today), `care_events/edit` (keeps `return_date`), `households/show` (the link);
+translations under `care_records.show` in en / zh-TW / ja. No migration.
+
+**Found while building:** a record's time may be at most 7 days before **it was created** (`occurred_in_allowed_range`), not before now,
+so saving a change to an older record works; a test covers saving a 10-day-old weight.
+
+**Checks:** 7 tests in `test/controllers/care_records_pages_test.rb`:
+- the link and opening on today
+- a past day's records, and Change and Delete coming back to that day
+- an older record: Change works, no Delete
+- both filters, kept on the day links
+- a future or broken date shows today
+- without a return day, changes still go to Today
+- caregivers can't open it
+
+`bin/rails test`: 559 runs, 0 failures. Not yet looked at in a browser.
 
 ## Checkpoint J result (2026-10-02)
 
@@ -985,6 +1022,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 
 ## Change log
 
+- **Checkpoint G2 (2026-11-09):** the owner's **Care records** page: any day, filtered by cat or spot and type, with Change on every record and Delete up to 7 days back, returning to the same day.
 - **Checkpoint J (2026-10-02):** `pets.user_id` and `dry_foods.user_id` removed (cats and bags belong to the household only; `schema.rb` loads into PostgreSQL again), start-up debug output removed, README, ARCHITECTURE and USAGE updated for households, care, reminders and the Android app.
 - **Checkpoint I2 (2026-10-02):** Google, LINE and GitHub sign-in in the Android app, through a Chrome tab and a one-time code (broken since the OAuth state check of 2026-09-15); fixed on the phone: the app no longer claims sign-in addresses, and Chrome's own website sign-in doesn't get in the way. **Checkpoint I** confirmed on a Pixel 9.
 - **Checkpoint I (2026-10-02):** Android app notifications through Firebase Cloud Messaging: device tokens per sign-in, the permission asked when turning reminders on, notifications opening Today, the app first then LINE or email; off until the Firebase project and its service account are set up.

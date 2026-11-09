@@ -6,6 +6,7 @@ Nov 9, 2026 · @Rita · follows PET_WEIGHT_REMINDER_FIX_PLAN.md (done in ee5903d
 
 - A–D in `b85ca65`, with D = owners only. `NotificationService` and the `services.notifications` translations were removed.
 - E (each person chooses the channel; email with why when the app or LINE fails) in `c844fec`. E replaces C's app → LINE → email order.
+- F (Today shows the chosen channel; one weight job instead of two), Nov 9, 2026.
 
 ## Root causes
 
@@ -144,6 +145,26 @@ Household reminders worked the same way.
   `reminder_channels.update` and `reminder_delivery` in en / zh-TW / ja.
 
 **Behavior change:** a failed app send now goes to email (with the note) instead of falling through to LINE.
+
+### F. Follow-up: Today's reminder text, and one weight job
+
+**Today showed the wrong channel.** `TodayController` still worked out "Reminders by …" the old way (app, else LINE, else email),
+ignoring the choice on the profile page. It now uses `User#reminder_channel_choice`, and the line has a **How reminders come** link
+to `users#reminder-channel`.
+
+`reminder_channel_choice`'s default now picks the app only when `FcmClient.configured?`. Without that check, if push isn't set up on
+the server, everyone with a phone would get "couldn't send to the app" emails, and Today would say "Android app" while email is used.
+
+**Two weight jobs → one.** `PetWeightReminderJob` was never queued after A; `PetWeightRemindersJob` called it with `perform_now`.
+Now the pattern is the same as household reminders (`CareReminderJob` + `HouseholdReminders`):
+
+| Before | After |
+| --- | --- |
+| `app/jobs/pet_weight_reminders_job.rb` (scheduled) | Same file, calls `PetWeightReminders.new(user).deliver` |
+| `app/jobs/pet_weight_reminder_job.rb` (per owner) | `app/models/pet_weight_reminders.rb`, a plain class; `deliver` returns the channel or nil |
+| `test/jobs/pet_weight_reminder_job_test.rb` | `test/models/pet_weight_reminders_test.rb`, same cases |
+
+Nothing changes for users. `recurring.yml` is unchanged.
 
 ## Tests
 

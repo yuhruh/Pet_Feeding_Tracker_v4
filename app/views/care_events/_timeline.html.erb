@@ -1,9 +1,11 @@
-<%# The last 24 hours of records in one household, newest first. Links to change or delete a record only where the reader may. %>
-<% entries = day.timeline %>
+<%# The last 24 hours of records in one household, newest first, or the entries given (the care records page, which passes
+    return_date so changing or deleting goes back to that day). Links to change or delete a record only where the reader may. %>
+<% entries = local_assigns.fetch(:entries) { day.timeline } %>
+<% back = { return_date: local_assigns[:return_date] }.compact %>
 <div class="mt-4">
-  <h3 class="font-semibold text-lg mb-2"><%= t("care_events.timeline.title") %></h3>
+  <h3 class="font-semibold text-lg mb-2"><%= local_assigns[:title] || t("care_events.timeline.title") %></h3>
   <% if entries.empty? %>
-    <p class="text-sm text-gray-600 dark:text-gray-300"><%= t("care_events.timeline.empty") %></p>
+    <p class="text-sm text-gray-600 dark:text-gray-300"><%= local_assigns[:empty] || t("care_events.timeline.empty") %></p>
   <% else %>
     <ol class="space-y-1 text-sm">
       <% entries.each do |entry| %>
@@ -17,10 +19,10 @@
               <% if event.edited? %><span class="text-gray-500"><%= t("care_events.timeline.changed") %></span><% end %>
             </span>
             <% if reader && event.editable_by?(reader) %>
-              <%= link_to t("care_events.timeline.change"), edit_care_event_path(event), class: "text-sky-700 underline" %>
+              <%= link_to t("care_events.timeline.change"), edit_care_event_path(event, **back), class: "text-sky-700 underline" %>
             <% end %>
             <% if reader && event.deletable_by?(reader) %>
-              <%= button_to t("care_events.timeline.delete"), care_event_path(event), method: :delete,
+              <%= button_to t("care_events.timeline.delete"), care_event_path(event), method: :delete, params: back,
                     form: { class: "inline", data: { turbo_confirm: care_delete_confirm(event, day.zone) } }, class: "text-red-600 underline cursor-pointer" %>
             <% end %>
             <% if reader && event.fed? && event.tracker_id.nil? && HouseholdPolicy.new(reader, day.household).owner? %>

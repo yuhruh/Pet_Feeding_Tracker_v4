@@ -4,7 +4,7 @@
 class PetWeightReminderNotifier
   include ReminderChannels
 
-  # dues: PetWeightReminderJob::Due, one per pet.
+  # dues: PetWeightReminders::Due, one per pet.
   def initialize(user, dues)
     @user = user
     @dues = dues

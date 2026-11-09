@@ -5,7 +5,8 @@ require "minitest/mock"
 # and every 14 days after that, once each, made up by a later run if one is
 # missed; between 9am and 9pm in the owner's time zone; only for active owners;
 # by the channel the owner chose, emailed with why when the app or LINE fails.
-class PetWeightReminderJobTest < ActiveJob::TestCase
+class PetWeightRemindersTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
   include ActionMailer::TestHelper
 
   TAIPEI = ActiveSupport::TimeZone["Asia/Taipei"]
@@ -29,7 +30,7 @@ class PetWeightReminderJobTest < ActiveJob::TestCase
     before = CareReminder.maximum(:id).to_i
     travel_to(time) do
       @user.sessions.create!(last_active_at: 1.hour.ago) if @visiting
-      PetWeightReminderJob.perform_now(@user.reload)
+      PetWeightReminders.new(@user.reload).deliver
     end
     CareReminder.where("id > ?", before).pick(:channel)
   end
@@ -276,7 +277,7 @@ class PetWeightReminderJobTest < ActiveJob::TestCase
     @visiting = true
   end
 
-  def never_weighed = PetWeightReminderJob::Due.new(pet: @pet, last_weighed_on: nil, days_since: 14, due_on: @weighed_on + 14, key: "k")
+  def never_weighed = PetWeightReminders::Due.new(pet: @pet, last_weighed_on: nil, days_since: 14, due_on: @weighed_on + 14, key: "k")
 
   def weighed(date, pet = @pet)
     Tracker.create!(pet: pet, date: date, food_type: "kibble", brand: "Acana", description: "Chicken & wild prairie",
