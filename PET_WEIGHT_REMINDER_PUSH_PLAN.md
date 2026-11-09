@@ -1,0 +1,144 @@
+# Pet weight reminder: missing emails + push notifications
+
+Nov 9, 2026 · @Rita · follows PET_WEIGHT_REMINDER_FIX_PLAN.md (done in ee5903d)
+
+**Status:** implemented Nov 9, 2026 with D = owners only. `NotificationService` and the `services.notifications` translations were removed.
+
+## Root causes
+
+### 1. The 9am scan only runs on the first day after a deploy (main cause)
+
+`config/recurring.yml`:
+
+```yaml
+pet_weight_reminder:
+  command: "Rails.application.load_tasks; Rake::Task['notifications:weigh_pets'].invoke"
+  schedule: every day at 9am
+```
+
+A Solid Queue `command` is evaluated inside the long-running `bin/jobs` worker. `Rake::Task#invoke`
+runs a task **once per process**: it sets `@already_invoked = true` (rake 13.4.2, `lib/rake/task.rb:205-216`), and
+calling `load_tasks` again returns the same Task object, so the flag stays set. From the second day on,
+the recurring job "succeeds" but does nothing. Repro, same calls in one process:
+
+```
+day 1:
+  ran weigh_pets
+day 2:
+day 3:
+```
+
+So `PetWeightReminderJob` is only queued on the first 9am after each deploy or worker restart.
+(Each run also reloads every rake file into the worker.)
+
+### 2. A reminder goes out only on the exact day, with no catch-up
+
+`days_since >= 14 && days_since % 14 == 0`: a pet is due on day 14, 28, 42, and so on, and **only on that
+day**. Because of cause 1, the scan rarely runs. An email goes out only when a deploy day happens to land
+on a pet's exact day 14 or 28 and the owner is still active. That almost never happens.
+
+### 3. Days are counted in UTC
+
+`config.time_zone` is not set, so `Date.current` is the UTC date and 9am is 9am UTC (5pm in Taiwan, 6pm in Japan).
+Tracker dates are local dates, so `days_since` can be off by one. Not a blocker, but it moves the exact day.
+
+### Other gaps (not why email is missing, but worth fixing)
+
+- **LINE users never get email**, by design. If the person who reported this signs in with LINE, they get a LINE message instead.
+  The `push_message` response is ignored, so a failed LINE push (bot blocked, not a friend) is silent and doesn't fall back to email.
+- **Only owners** are checked (`owned_pets`, and the rake task picks household owners). Caregivers never get one.
+- **The email is English only** (no locale), doesn't name the pet, and has no link.
+
+### How to confirm in production (read-only console)
+
+```ruby
+# Should be one per day:
+SolidQueue::RecurringExecution.where(task_key: "pet_weight_reminder").order(run_at: :desc).limit(10).pluck(:run_at)
+# Only on deploy days:
+SolidQueue::Job.where(class_name: "PetWeightReminderJob").group("DATE(created_at)").count
+```
+
+Also: every reminder email CCs `ajicaretracker@gmail.com`. Few or no CCs in that inbox points to cause 1.
+(Finished jobs are cleared every hour, so the job table may be empty. Use the CC inbox if it is.)
+
+## Fix
+
+### A. Schedule a job class, not a rake command
+
+```yaml
+pet_weight_reminders:
+  class: PetWeightRemindersJob
+  schedule: every hour at minute 10
+```
+
+- New `PetWeightRemindersJob#perform`: goes over owners of households that have pets (the query the rake task uses now)
+  and calls `PetWeightReminderJob.perform_now(user)`, or `perform_later` to spread the work, the way care reminders are scanned.
+- Keep `notifications:weigh_pets` for manual runs, as a thin `PetWeightRemindersJob.perform_now`.
+- Runs hourly so each person gets it in their own morning, like `CareReminderJob` (next point).
+
+### B. "Due and not yet sent" instead of "exactly day 14"
+
+In `PetWeightReminderJob`, for each owned pet:
+
+- `local = Time.current.in_time_zone(user.timezone || household.time_zone)`; send only when `HouseholdReminders::SEND_HOURS.cover?(local.hour)` (9:00–20:59).
+- `days_since = (local.to_date - last_weighed_date).to_i`; `cycle = days_since / 14`; due when `cycle >= 1`.
+- Key: `"weight:#{pet.id}:#{last_weighed_date.iso8601}:#{cycle}"`. Skip if a `CareReminder` with that key exists for the user.
+- After sending, create a `CareReminder` row (`household: pet.household`, `due_on: last_weighed_date + 14 * cycle`, `channel:`, `sent_at:`),
+  with `care_routine` and `medication` nil. The existing unique `key` per user means it is sent at most once per cycle.
+- **No migration**: `care_reminders` already has every column needed, and both foreign keys are optional.
+
+Result: a missed hour or day is caught up on the next run. Days 14, 28, 42… each send once. Weighing again changes
+`last_weighed_date`, which starts a new key and restarts the count. Keep `inactive?` (15 days) as it is.
+
+### C. Push notifications, using the household reminder channels
+
+New `PetWeightReminderNotifier(user, pets)`, shaped like `CareReminderNotifier`. It sends **one message per user per run**, listing every pet that is due:
+
+1. **Android app**: `FcmClient` to each `device_token` when `FcmClient.configured?`. Drops tokens that come back `:gone`.
+2. **LINE**: if the user has a LINE connected service, the push response must be `Net::HTTPSuccess`.
+3. **Email**: otherwise, or when 1 and 2 fail.
+
+- Move the shared channel code (`pushed_to_android?`, `pushed_by_line?`, locale from time zone) out of `CareReminderNotifier`
+  into a `ReminderChannels` module that both notifiers include, so the two can't drift apart.
+- Text: new i18n keys (en / zh-TW / ja), for example `weight_reminders.subject` ("Time to weigh %{pets}") and a body naming each pet
+  with "last weighed %{date}" (or "never weighed"), linking to `pet_trackers_url(pet)`.
+- `UserMailer#send_pet_weight_reminder`: send in the user's locale, take the pets and the link, and use i18n in the template.
+- `NotificationService#send_pet_weight_reminder` then forwards to the notifier, or goes away if nothing else calls it.
+  Its private `send_line_notification` path ends up unused.
+
+### D. Who gets it (decide)
+
+| Option | Behavior |
+| --- | --- |
+| **Owners only, always (recommended, as now)** | No new settings; the household reminder switch doesn't affect it |
+| Follow the reminder switches | Owner if `owner_reminders_enabled`, plus caregivers with `reminders_enabled` (`household.reminder_recipients`). Fewer people get it, because the switches are off by default |
+
+## Tests
+
+`test/jobs/pet_weight_reminders_job_test.rb` (new) and `test/jobs/pet_weight_reminder_job_test.rb` (rewritten):
+
+| Test | Expected |
+| --- | --- |
+| Scheduler run twice in one process | Both runs queue reminders (regression for cause 1) |
+| `config/recurring.yml` | Has `class: PetWeightRemindersJob` and no `Rake::Task` |
+| Weighed 15 days ago, nothing sent yet | 1 reminder (catch-up; fails on today's code) |
+| Same, second run the same day | 0 (CareReminder key) |
+| Day 28 after one sent on day 14 | 1 |
+| Weighed 13 days ago | 0 |
+| Weighed again after a reminder | New count; nothing until 14 days after the new weighing |
+| 08:00 / 21:00 in user's zone | 0; at 09:00 → 1 |
+| Taipei user, UTC date different from local date | Uses the local date |
+| Inactive 16 days | 0 |
+| FCM configured, token sends | Channel `android`, no email |
+| FCM `:gone` → token deleted, LINE user | Channel `line` |
+| LINE push not success | Falls back to email |
+| Two pets due | One message naming both |
+
+Run `bin/rails test test/jobs test/models/household_reminders_test.rb`, then the full suite.
+
+## Rollout notes
+
+- On the first runs after deploy, every active owner with a pet unweighed for 14 or more days gets **one** reminder for the current cycle.
+  This is expected; the 15-day inactive rule limits it.
+- After deploy, check the next day that `CareReminder.where("key LIKE 'weight:%'")` keeps growing and that the CC inbox gets mail.
+- No schema change and no new credentials; FCM already uses `FIREBASE_SERVICE_ACCOUNT_JSON` on the worker.

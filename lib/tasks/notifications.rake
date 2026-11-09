@@ -1,8 +1,8 @@
 namespace :notifications do
-  desc "Sends a notification to users to weigh their pets"
+  # For running by hand. The schedule runs PetWeightRemindersJob directly
+  # (config/recurring.yml); see that job for why it isn't this task.
+  desc "Sends weight reminders that are due now"
   task weigh_pets: :environment do
-    User.where(id: Household.joins(:pets).select(:owner_id)).find_each do |user|
-      PetWeightReminderJob.perform_later(user)
-    end
+    PetWeightRemindersJob.perform_now
   end
 end

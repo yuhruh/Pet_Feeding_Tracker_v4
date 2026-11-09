@@ -10,10 +10,14 @@ class UserMailerTest < ActionMailer::TestCase
   end
 
   test "send_pet_weight_reminder" do
-    mail = UserMailer.send_pet_weight_reminder(users(:one))
-    assert_equal "Time to weigh your pet! 📝", mail.subject
+    mail = UserMailer.with(user: users(:one), subject: "⚖️ 該幫Aji量體重囉", lines: [ "Aji：上次量體重是 10/1，已經 14 天了。" ],
+                           url: "http://example.com/zh-TW/pets/1/trackers", locale: "zh-TW").send_pet_weight_reminder
+    assert_equal "⚖️ 該幫Aji量體重囉", mail.subject
     assert_equal [ users(:one).email_address ], mail.to
+    assert_equal [ "ajicaretracker@gmail.com" ], mail.cc
     assert_equal [ "ajicaretracker@gmail.com" ], mail.from
-    assert_match /Time to weigh your pet! 📝/, mail.body.decoded
+    assert_includes mail.html_part.body.decoded, "上次量體重是 10/1"
+    assert_includes mail.html_part.body.decoded, "http://example.com/zh-TW/pets/1/trackers"
+    assert_includes mail.text_part.body.decoded, "userone 您好"
   end
 end

@@ -1,0 +1,9 @@
+<%= t(".greeting", name: @user.username) %>
+
+<% @lines.each do |line| %>
+<%= line %>
+<% end %>
+
+<%= t(".open") %> <%= @url %>
+
+<%= t(".fine_print") %>

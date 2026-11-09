@@ -13,9 +13,12 @@ production:
   clear_solid_queue_finished_jobs:
     command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
     schedule: every hour at minute 12
-  pet_weight_reminder:
-    command: "Rails.application.load_tasks; Rake::Task['notifications:weigh_pets'].invoke"
-    schedule: every day at 9am
+  # Weight reminders at each owner's 9am or later, so it runs every hour; CareReminder
+  # rows make each one go out once. Not a rake command: Rake::Task#invoke runs once
+  # per worker process, so the old daily rake command only ran after a deploy.
+  pet_weight_reminders:
+    class: PetWeightRemindersJob
+    schedule: every hour at minute 10
   # Litter box, water spot and dose reminders (checkpoint H): each person's 9am,
   # so it runs every hour; CareReminder rows make each reminder go out once.
   care_reminders:

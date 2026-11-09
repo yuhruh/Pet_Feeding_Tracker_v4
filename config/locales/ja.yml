@@ -87,6 +87,11 @@
     reminders:
       open_today: "「今日」ページを開く"
       fine_print: "お知らせをオンにしているため届いています。「今日」ページでオフにできます。"
+  weight_reminders:
+    subject: "⚖️ %{pets}の体重を測る時期です"
+    last: "%{pet}：前回の体重測定は%{date}（%{days}日前）です。"
+    never: "%{pet}：体重の記録がまだありません。"
+    open: "体重を記録："
   care_routines:
     due:
       at: "%{job}：%{time}が目安"
@@ -1384,7 +1389,9 @@
     welcome_email:
       subject: "猫トラッカーアプリへようこそ！"
     send_pet_weight_reminder:
-      subject: "ペットの体重を測る時間です！ 📝"
+      greeting: "%{name}さん、こんにちは。"
+      open: "体重を記録する"
+      fine_print: "ペットの体重が14日間記録されていないときにお送りしています。記録されるまで14日ごとにお送りします。"
   services:
     csv_import:
       failed_to_parse: "CSVファイルの解析に失敗しました: %{message}"
@@ -1396,8 +1403,6 @@
       invalid_amount_number: "「量」列の数値が正しくありません。"
       invalid_left_amount_number: "「残量」列の数値が正しくありません。"
       invalid_weight_number: "「体重」列の数値が正しくありません。"
-    notifications:
-      pet_weight_reminder: "ペットの体重を量る時間です！"
     gemini_ocr:
       user_quota_reached: "個人のGemini APIクォータに達しました。しばらく待つか、Googleアカウントをアップグレードしてください。"
       global_quota_reached: "本日のグローバルAIクォータに達しました。すぐにこの機能を使用するには、プロフィール設定で独自の無料Gemini APIキーを追加してください。"

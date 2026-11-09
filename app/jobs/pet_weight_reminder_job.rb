@@ -1,20 +1,49 @@
+# Reminds one owner to weigh pets that haven't been weighed for 14 days (or
+# since they were added), and again every 14 days after that until they are.
+# Run every hour by PetWeightRemindersJob; it sends between 9am and 9pm in the
+# owner's time zone. A CareReminder row per pet and 14-day period makes each
+# reminder go out once, so a missed run is made up by the next one. Owners not
+# active for INACTIVE_AFTER get nothing (at most one reminder after they leave).
 class PetWeightReminderJob < ApplicationJob
   queue_as :default
 
+  EVERY = 14 # days
   INACTIVE_AFTER = 15.days
+  SEND_HOURS = HouseholdReminders::SEND_HOURS
+  KEY_PREFIX = "weight:"
+
+  Due = Struct.new(:pet, :last_weighed_on, :days_since, :due_on, :key, keyword_init: true)
 
   def perform(user)
+    local = Time.current.in_time_zone(ActiveSupport::TimeZone[user.timezone.to_s] || ActiveSupport::TimeZone["UTC"])
+    return unless SEND_HOURS.cover?(local.hour)
     return if inactive?(user)
 
-    needs_reminder = user.owned_pets.any? do |pet|
-      last_tracker = pet.trackers.where.not(weight: nil).order(date: :desc).first
-      last_weighed_date = last_tracker&.date || pet.created_at.to_date
+    dues = dues_for(user, local)
+    return if dues.empty?
 
-      days_since = (Date.current - last_weighed_date).to_i
-      days_since >= 14 && days_since % 14 == 0
+    channel = PetWeightReminderNotifier.new(user, dues).deliver
+    record(user, dues, channel)
+  end
+
+  # Pets due a reminder that hasn't been sent: the key is the pet, the date it
+  # was last weighed (or added) and which 14-day period this is, so weighing
+  # again starts a new count.
+  def dues_for(user, local)
+    today = local.to_date
+    sent = CareReminder.where(user: user).where("key LIKE ?", "#{KEY_PREFIX}%").pluck(:key).to_set
+    user.owned_pets.includes(:household).order(:id).filter_map do |pet|
+      weighed_on = pet.trackers.where.not(weight: nil).maximum(:date)
+      since = weighed_on || pet.created_at.in_time_zone(local.time_zone).to_date
+      days_since = (today - since).to_i
+      period = days_since / EVERY
+      next if period < 1
+
+      key = "#{KEY_PREFIX}#{pet.id}:#{since.iso8601}:#{period}"
+      next if sent.include?(key)
+
+      Due.new(pet: pet, last_weighed_on: weighed_on, days_since: days_since, due_on: since + (period * EVERY), key: key)
     end
-
-    NotificationService.new(user).send_pet_weight_reminder if needs_reminder
   end
 
   private
@@ -27,5 +56,14 @@ class PetWeightReminderJob < ApplicationJob
     ].compact.max
 
     last_active < INACTIVE_AFTER.ago
+  end
+
+  def record(user, dues, channel)
+    now = Time.current
+    CareReminder.transaction do
+      dues.each do |due|
+        CareReminder.create!(household: due.pet.household, user: user, key: due.key, due_on: due.due_on, channel: channel, sent_at: now)
+      end
+    end
   end
 end

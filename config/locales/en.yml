@@ -87,6 +87,11 @@ en:
     reminders:
       open_today: "Open the Today page"
       fine_print: "You get these because you turned reminders on. Turn them off on the Today page."
+  weight_reminders:
+    subject: "⚖️ Time to weigh %{pets}"
+    last: "%{pet}: last weighed %{date}, %{days} days ago."
+    never: "%{pet}: no weight recorded yet."
+    open: "Record a weight:"
   care_routines:
     due:
       at: "%{job} due at %{time}"
@@ -1384,7 +1389,9 @@ en:
     welcome_email:
       subject: "Welcome to Cat Trackers App!"
     send_pet_weight_reminder:
-      subject: "Time to weigh your pet! 📝"
+      greeting: "Hi %{name},"
+      open: "Record a weight"
+      fine_print: "We send this when a pet hasn't been weighed for 14 days, and every 14 days after that until it is."
   services:
     csv_import:
       failed_to_parse: "Failed to parse CSV file: %{message}"
@@ -1396,8 +1403,6 @@ en:
       invalid_amount_number: "Invalid number for 'amount' column."
       invalid_left_amount_number: "Invalid number for 'left_amount' column."
       invalid_weight_number: "Invalid number for 'weight' column."
-    notifications:
-      pet_weight_reminder: "It's time to weigh your pet's weight!"
     gemini_ocr:
       user_quota_reached: "Your personal Gemini API quota has been reached. Please wait or upgrade your Google account."
       global_quota_reached: "Our global AI quota has been reached for today. To use this feature immediately, please add your own free Gemini API key in your Profile settings."

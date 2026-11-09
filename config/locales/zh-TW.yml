@@ -87,6 +87,11 @@ zh-TW:
     reminders:
       open_today: "打開「今天」頁面"
       fine_print: "因為你開啟了提醒才會收到。可以在「今天」頁面關閉。"
+  weight_reminders:
+    subject: "⚖️ 該幫%{pets}量體重囉"
+    last: "%{pet}：上次量體重是 %{date}，已經 %{days} 天了。"
+    never: "%{pet}：還沒有體重紀錄。"
+    open: "記錄體重："
   care_routines:
     due:
       at: "%{job}：%{time} 該做"
@@ -1384,7 +1389,9 @@ zh-TW:
     welcome_email:
       subject: "歡迎使用寵物飲食紀錄 App！"
     send_pet_weight_reminder:
-      subject: "該幫您的寵物量體重囉！ 📝"
+      greeting: "%{name} 您好，"
+      open: "記錄體重"
+      fine_print: "寵物超過 14 天沒量體重時會寄這封信，之後每 14 天提醒一次，直到量了為止。"
   services:
     csv_import:
       failed_to_parse: "CSV 檔案解析失敗: %{message}"
@@ -1396,8 +1403,6 @@ zh-TW:
       invalid_amount_number: "「量」欄位數值無效。"
       invalid_left_amount_number: "「剩餘量」欄位數值無效。"
       invalid_weight_number: "「體重」欄位數值無效。"
-    notifications:
-      pet_weight_reminder: "該幫您的寵物量體重囉！"
     gemini_ocr:
       user_quota_reached: "您的個人 Gemini API 配額已用完。請稍候或升級您的 Google 帳戶。"
       global_quota_reached: "我們今天的全域 AI 配額已用完。如需立即使用此功能，請在個人資料設定中添加您自己的免費 Gemini API 金鑰。"
