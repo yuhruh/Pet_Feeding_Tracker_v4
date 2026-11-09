@@ -1,2 +1,13 @@
-#!/usr/bin/env ruby
-exec "./bin/rails", "server", *ARGV
+#!/usr/bin/env sh
+# Starts every process in Procfile.dev: web server, Tailwind watcher,
+# translation export and the Solid Queue worker.
+
+if ! gem list foreman -i --silent; then
+  echo "Installing foreman..."
+  gem install foreman
+fi
+
+# Default to port 3000 if not specified
+export PORT="${PORT:-3000}"
+
+exec foreman start -f Procfile.dev --env /dev/null "$@"
