@@ -64,6 +64,18 @@ without `kind` or `subject`. Now the page passes its day and both filters (`retu
 Delete, the details page's form and its **Back to care records** link; `back_path` keeps only a known type and a `pet-N` / `spot-N`
 value.
 
+**Follow-up (2026-11-09): "My household" in the nav bar.** For owners, the nav bar's plain **Today** link became a
+**My household ▾** dropdown (no 🏠 on the button) with **📅 Today**, **🏠 Household settings** (the household page) and
+**📋 Care records**; the mobile menu groups the same three links under a **My household** heading. The household link left the
+**My account & pets** menu. Caregivers and viewers (no household of their own) keep the plain **Today** link. The household page's
+**View and change care records** button is amber. Translations: `layouts.navigation.household_menu`, `household_today`,
+`household_settings`, `household_care_records` (the old `my_household` key is gone). Tests: `test/controllers/household_nav_test.rb`,
+and a browser test in `test/system/navigation_menus_test.rb` that opens the menu and goes to Care records.
+
+**Deploying (2026-11-09):** Railway skipped `d10762e` though CI passed; the live site kept `0253e4e` until it was deployed with
+`railway up` for both services. The next pushes (`cc8a47d`, `3e9262c`) deployed from GitHub on their own. After a push, check
+`railway deployment list --service Pet_Feeding_Tracker_v4 --json` shows the new commit.
+
 Times in the future are still refused for everyone. The page's explanation and the help text say the owner can change or delete any record, in en / zh-TW / ja.
 
 **Checks:** 7 tests in `test/controllers/care_records_pages_test.rb`:
@@ -1040,6 +1052,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 
 ## Change log
 
+- **Nav (2026-11-09):** owners' **My household ▾** menu (Today, Household settings, Care records) replaces the Today link; caregivers and viewers keep Today. Care records button amber. Filters kept after Delete or Change on the care records page.
 - **Checkpoint G2 (2026-11-09):** the owner's **Care records** page: any day, filtered by cat or spot and type, with Change and Delete on every record, returning to the same day. The owner has no date limits (delete any age, move a time to any past day); caregivers keep theirs.
 - **Checkpoint J (2026-10-02):** `pets.user_id` and `dry_foods.user_id` removed (cats and bags belong to the household only; `schema.rb` loads into PostgreSQL again), start-up debug output removed, README, ARCHITECTURE and USAGE updated for households, care, reminders and the Android app.
 - **Checkpoint I2 (2026-10-02):** Google, LINE and GitHub sign-in in the Android app, through a Chrome tab and a one-time code (broken since the OAuth state check of 2026-09-15); fixed on the phone: the app no longer claims sign-in addresses, and Chrome's own website sign-in doesn't get in the way. **Checkpoint I** confirmed on a Pixel 9.

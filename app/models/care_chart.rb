@@ -3,7 +3,8 @@
 # observations, plus its ⚖️ weights for the weight line. Days are the household's.
 class CareChart
   SERIES = %w[fed litter water given not_given observations].freeze
-  COLORS = %w[#F59E0B #A16207 #0EA5E9 #16A34A #DC2626 #7C3AED].freeze
+  # Soft shades, like the eating chart's light bars.
+  COLORS = %w[#FBC98E #D2B48C #9CC9EA #9ED7AE #F0A3A3 #BDA8E6].freeze
 
   attr_reader :pet, :zone
 
