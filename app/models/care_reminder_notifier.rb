@@ -1,6 +1,6 @@
-# Sends one person their reminders for one household (checkpoints H, I), by one
-# channel (see ReminderChannels): the Android app, else LINE, else email. In
-# their language, with a link to the Today page.
+# Sends one person their reminders for one household (checkpoints H, I), by the
+# channel they chose (see ReminderChannels). In their language, with a link to
+# the Today page.
 class CareReminderNotifier
   include ReminderChannels
 
@@ -13,11 +13,11 @@ class CareReminderNotifier
   # Returns the channel used: "android", "line" or "email".
   def deliver
     I18n.with_locale(locale) do
-      return "android" if pushed_to_android?(title: subject, body: lines.join("\n"), url: today_url)
-      return "line" if line_uid && pushed_by_line?([ subject, "", *lines, "", "#{I18n.t('care_reminders.open_today')} #{today_url}" ].join("\n"))
-
-      CareReminderMailer.with(user: @user, subject: subject, lines: lines, today_url: today_url, locale: locale.to_s).reminders.deliver_later
-      "email"
+      line_text = [ subject, "", *lines, "", "#{I18n.t('care_reminders.open_today')} #{today_url}" ].join("\n")
+      deliver_by_choice(title: subject, body: lines.join("\n"), url: today_url, line_text: line_text) do |problem|
+        CareReminderMailer.with(user: @user, subject: subject, lines: lines, today_url: today_url, locale: locale.to_s, problem: problem)
+                          .reminders.deliver_later
+      end
     end
   end
 

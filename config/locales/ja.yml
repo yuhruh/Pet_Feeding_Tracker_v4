@@ -87,6 +87,18 @@
     reminders:
       open_today: "「今日」ページを開く"
       fine_print: "お知らせをオンにしているため届いています。「今日」ページでオフにできます。"
+  reminder_channels:
+    update:
+      notice: "お知らせは%{channel}で届きます。"
+      invalid: "その方法ではお知らせを送れません。"
+  reminder_delivery:
+    problems:
+      android_no_phone: "Pet Tracker の Android アプリにログインしているスマホがないため、このお知らせをアプリに送れませんでした。"
+      android_failed: "このお知らせをスマホの Pet Tracker アプリに送れませんでした。アプリを開き、通知が許可されているか確認してください。"
+      line_not_connected: "アカウントが LINE と連携されていないため、このお知らせを LINE で送れませんでした。"
+      line_failed: "このお知らせを LINE で送れませんでした。Pet Tracker の LINE アカウントをブロックしていないか確認してください。"
+    emailed_instead: "そのためメールでお送りしました。"
+    change: "お知らせの受け取り方を変更する"
   weight_reminders:
     subject: "⚖️ %{pets}の体重を測る時期です"
     last: "%{pet}：前回の体重測定は%{date}（%{days}日前）です。"
@@ -1162,6 +1174,16 @@
     destroy:
       notice: "Google ドライブとの接続を解除しました。バックアップファイルはドライブに残ります。"
   users:
+    reminder_channel:
+      title: "🔔 お知らせの受け取り方"
+      description: "体重のお知らせと家庭のお知らせ（トイレ、水、投薬）はこの方法で届きます。"
+      problem: "前回のお知らせ（%{time}）はメールで送りました："
+      android: "アプリ通知"
+      line: "LINE"
+      email: "メール"
+      no_phone: "Android アプリにログインしているスマホがまだありません。"
+      save: "保存"
+      fallback_note: "アプリ通知や LINE メッセージが送れないときは、メールでお送りします。"
     drive_backup:
       title: "☁️ Google ドライブにバックアップ"
       description: "毎日、選んだ時刻に、各猫の給餌記録（CSV）を Google ドライブに保存します。"

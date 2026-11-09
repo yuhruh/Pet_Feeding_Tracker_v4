@@ -1,0 +1,33 @@
+<% user = Current.user %>
+<% choice = user.reminder_channel_choice %>
+<div id="reminder-channel" class="flex flex-col items-center text-center gap-2 py-4">
+  <h2 class="text-lg font-semibold md:text-xl"><%= t(".title") %></h2>
+  <p class="text-sm italic text-gray-500 dark:text-gray-300"><%= t(".description") %></p>
+
+  <% if user.reminder_problem.present? %>
+    <p class="text-sm text-red-600" role="alert">
+      <%= t(".problem", time: user.reminder_problem_at.in_time_zone.strftime("%Y-%m-%d %H:%M")) %>
+      <%= t("reminder_delivery.problems.#{user.reminder_problem}") %>
+    </p>
+  <% end %>
+
+  <%= form_with url: reminder_channel_path, method: :patch, class: "flex flex-col items-start gap-2" do |form| %>
+    <% options = %w[android] + (user.line_connected? ? %w[line] : []) + %w[email] %>
+    <% options.each do |channel| %>
+      <label class="flex items-start gap-2 text-base cursor-pointer">
+        <%= form.radio_button :reminder_channel, channel, checked: choice == channel, class: "mt-1",
+              data: { controller: "auto-submit", action: "change->auto-submit#submit" } %>
+        <span>
+          <%= t(".#{channel}") %>
+          <% if channel == "email" %>
+            <span class="text-sm text-gray-500 dark:text-gray-300">(<%= user.email_address %>)</span>
+          <% elsif channel == "android" && user.device_tokens.none? %>
+            <span class="block text-sm text-gray-500 dark:text-gray-300"><%= t(".no_phone") %></span>
+          <% end %>
+        </span>
+      </label>
+    <% end %>
+    <noscript><%= form.submit t(".save"), class: "px-3 py-1 text-sm rounded bg-slate-200" %></noscript>
+  <% end %>
+  <p class="text-sm italic text-gray-500 dark:text-gray-300"><%= t(".fallback_note") %></p>
+</div>

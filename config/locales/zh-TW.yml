@@ -87,6 +87,18 @@ zh-TW:
     reminders:
       open_today: "打開「今天」頁面"
       fine_print: "因為你開啟了提醒才會收到。可以在「今天」頁面關閉。"
+  reminder_channels:
+    update:
+      notice: "之後會用%{channel}通知提醒。"
+      invalid: "無法用這個方式寄送提醒給你。"
+  reminder_delivery:
+    problems:
+      android_no_phone: "沒有手機登入 Pet Tracker Android App，所以這則提醒無法送到 App。"
+      android_failed: "這則提醒無法送到你手機上的 Pet Tracker App。請打開 App，並確認已允許通知。"
+      line_not_connected: "你的帳號已經沒有連結 LINE，所以這則提醒無法用 LINE 送出。"
+      line_failed: "這則提醒無法用 LINE 送出。請確認你沒有封鎖 Pet Tracker 的 LINE 帳號。"
+    emailed_instead: "所以改用 Email 寄給你。"
+    change: "變更提醒的通知方式"
   weight_reminders:
     subject: "⚖️ 該幫%{pets}量體重囉"
     last: "%{pet}：上次量體重是 %{date}，已經 %{days} 天了。"
@@ -1162,6 +1174,16 @@ zh-TW:
     destroy:
       notice: "已取消連結 Google 雲端硬碟，備份檔案會保留在你的雲端硬碟中。"
   users:
+    reminder_channel:
+      title: "🔔 提醒的通知方式"
+      description: "體重提醒和家庭提醒（貓砂盆、飲水、用藥）都會用這個方式通知。"
+      problem: "上一則提醒（%{time}）改用 Email 寄出："
+      android: "App 通知"
+      line: "LINE"
+      email: "Email"
+      no_phone: "還沒有手機登入 Android App。"
+      save: "儲存"
+      fallback_note: "如果 App 通知或 LINE 訊息送不出去，會改用 Email 寄出提醒。"
     drive_backup:
       title: "☁️ Google 雲端硬碟備份"
       description: "每天在你選擇的時間，把每隻貓的餵食紀錄（CSV）存到你的 Google 雲端硬碟。"

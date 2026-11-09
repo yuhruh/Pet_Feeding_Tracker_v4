@@ -1,0 +1,6 @@
+<% if problem.present? %>
+  <p style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 6px; padding: 8px 12px;">
+    <%= t("reminder_delivery.problems.#{problem}") %> <%= t("reminder_delivery.emailed_instead") %>
+    <%= link_to t("reminder_delivery.change"), users_url(locale: I18n.locale, anchor: "reminder-channel") %>
+  </p>
+<% end %>

@@ -87,6 +87,18 @@ en:
     reminders:
       open_today: "Open the Today page"
       fine_print: "You get these because you turned reminders on. Turn them off on the Today page."
+  reminder_channels:
+    update:
+      notice: "Reminders will come by %{channel}."
+      invalid: "That isn't a way reminders can be sent to you."
+  reminder_delivery:
+    problems:
+      android_no_phone: "No phone is signed in to the Pet Tracker Android app, so this reminder couldn't go to the app."
+      android_failed: "We couldn't send this reminder to the Pet Tracker app on your phone. Open the app and check that notifications are allowed."
+      line_not_connected: "Your account isn't connected to LINE anymore, so this reminder couldn't go by LINE."
+      line_failed: "We couldn't send this reminder by LINE. Check that you haven't blocked the Pet Tracker LINE account."
+    emailed_instead: "So we emailed it instead."
+    change: "Change how you get reminders"
   weight_reminders:
     subject: "⚖️ Time to weigh %{pets}"
     last: "%{pet}: last weighed %{date}, %{days} days ago."
@@ -1162,6 +1174,16 @@ en:
     destroy:
       notice: "Google Drive disconnected. Your backup files stay in your Drive."
   users:
+    reminder_channel:
+      title: "🔔 How you get reminders"
+      description: "Weight reminders and household reminders (litter box, water, doses) come this way."
+      problem: "The last reminder (%{time}) was emailed instead:"
+      android: "App notification"
+      line: "LINE"
+      email: "Email"
+      no_phone: "No phone is signed in to the Android app yet."
+      save: "Save"
+      fallback_note: "If an app notification or LINE message can't be sent, the reminder is emailed instead."
     drive_backup:
       title: "☁️ Google Drive backup"
       description: "Save a copy of each cat's feeding records (CSV) to your Google Drive every day, at a time you choose."

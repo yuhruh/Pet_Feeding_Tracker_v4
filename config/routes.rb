@@ -64,6 +64,7 @@ Rails.application.routes.draw do
     resource :registrations, only: [ :new, :create ]
     resource :timezone, only: [ :create ]
     resource :users, except: [ :new ]
+    resource :reminder_channel, only: :update
     resource :drive_backup, only: %i[update destroy] do
       post :connect
       post :run

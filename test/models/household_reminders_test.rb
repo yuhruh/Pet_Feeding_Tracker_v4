@@ -216,21 +216,32 @@ class HouseholdRemindersTest < ActiveSupport::TestCase
     assert_equal 0, emails_to(@owner)
   end
 
-  test "a phone whose token is gone is forgotten, and the reminder goes by LINE or email instead" do
+  test "when the app fails, the reminder is emailed with why, not sent by LINE; a gone phone is forgotten" do
+    @owner.connected_services.create!(provider: "line", uid: "U123")
     DeviceToken.register(user: @owner, session: nil, token: "uninstalled")
     sent = nil
-    with_push(:gone) { sent = run_at(at(@monday, 9, 5)) }
+    CareReminderNotifier.stub(:push_line, ->(*) { flunk "one channel: not LINE" }) do
+      with_push(:gone) { sent = run_at(at(@monday, 9, 5)) }
+    end
     assert_equal({ @owner => "email" }, sent)
     assert_empty DeviceToken.all
     assert_equal 1, emails_to(@owner)
+    assert_includes enqueued_jobs.last["arguments"].to_s, "android_failed"
+    assert_equal "android_failed", @owner.reload.reminder_problem
 
-    @owner.connected_services.create!(provider: "line", uid: "U123")
+    CareReminderNotifier.stub(:push_line, true) { sent = run_at(at(@monday + 2, 9, 5)) }
+    assert_equal({ @owner => "line" }, sent, "no phone left: the follow-up goes by LINE, the default now")
+    assert_nil @owner.reload.reminder_problem
+  end
+
+  test "someone who chose email gets email even with the app" do
+    @owner.update!(reminder_channel: "email")
     DeviceToken.register(user: @owner, session: nil, token: "phone-1")
-    CareReminderNotifier.stub(:push_line, true) do
-      with_push(:failed) { sent = run_at(at(@monday + 2, 9, 5)) }
-    end
-    assert_equal({ @owner => "line" }, sent, "push failed: the follow-up goes by LINE")
-    assert DeviceToken.exists?(token: "phone-1"), "a failure isn't a gone token"
+    sent = nil
+    pushed = with_push { sent = run_at(at(@monday, 9, 5)) }
+    assert_equal({ @owner => "email" }, sent)
+    assert_empty pushed
+    assert_nil @owner.reload.reminder_problem
   end
 
   test "without the Firebase service account, phones are skipped" do

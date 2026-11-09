@@ -1,0 +1,5 @@
+<% if problem.present? %>
+<%= t("reminder_delivery.problems.#{problem}") %> <%= t("reminder_delivery.emailed_instead") %>
+<%= t("reminder_delivery.change") %>: <%= users_url(locale: I18n.locale, anchor: "reminder-channel") %>
+
+<% end %>

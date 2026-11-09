@@ -28,6 +28,24 @@ class User < ApplicationRecord
 
   # Joined someone else's household and has no cats of their own: gets the smaller menu.
   def helper_only? = owned_household.nil? && household_memberships.exists?
+
+  # How reminders (weight and household) reach this person. They choose one; until
+  # they do, it's the Android app if a phone is signed in, else LINE if they signed
+  # in with LINE, else email. A failed app or LINE send goes by email instead.
+  REMINDER_CHANNELS = %w[android line email].freeze
+  REMINDER_PROBLEMS = %w[android_no_phone android_failed line_not_connected line_failed].freeze
+  validates :reminder_channel, inclusion: { in: REMINDER_CHANNELS }, allow_nil: true
+  validates :reminder_problem, inclusion: { in: REMINDER_PROBLEMS }, allow_nil: true
+
+  def reminder_channel_choice
+    reminder_channel.presence ||
+      if device_tokens.exists? then "android"
+      elsif line_connected? then "line"
+      else "email"
+      end
+  end
+
+  def line_connected? = connected_services.any? { |service| service.provider == "line" }
   has_many :vet_visit_members, dependent: :destroy
   has_many :shared_vet_visits, through: :vet_visit_members, source: :vet_visit
   encrypts :gemini_api_key

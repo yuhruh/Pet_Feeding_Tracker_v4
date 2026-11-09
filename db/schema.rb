@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_25_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_09_120000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -529,6 +529,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_120000) do
     t.string "gemini_api_key"
     t.datetime "last_sign_in_at"
     t.string "password_digest", null: false
+    t.string "reminder_channel"
+    t.string "reminder_problem"
+    t.datetime "reminder_problem_at"
     t.integer "sign_in_count"
     t.string "timezone"
     t.datetime "updated_at", null: false

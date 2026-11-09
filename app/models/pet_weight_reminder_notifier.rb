@@ -1,6 +1,6 @@
-# Tells one owner which of their pets are due a weighing, in one message by one
-# channel (see ReminderChannels): the Android app, else LINE, else email. In
-# their language, with a link to the pet's records (or the pet list for several).
+# Tells one owner which of their pets are due a weighing, in one message by the
+# channel they chose (see ReminderChannels). In their language, with a link to
+# the pet's records (or the pet list for several).
 class PetWeightReminderNotifier
   include ReminderChannels
 
@@ -13,11 +13,11 @@ class PetWeightReminderNotifier
   # Returns the channel used: "android", "line" or "email".
   def deliver
     I18n.with_locale(locale) do
-      return "android" if pushed_to_android?(title: subject, body: lines.join("\n"), url: url)
-      return "line" if line_uid && pushed_by_line?([ subject, "", *lines, "", "#{I18n.t('weight_reminders.open')} #{url}" ].join("\n"))
-
-      UserMailer.with(user: @user, subject: subject, lines: lines, url: url, locale: locale.to_s).send_pet_weight_reminder.deliver_later
-      "email"
+      line_text = [ subject, "", *lines, "", "#{I18n.t('weight_reminders.open')} #{url}" ].join("\n")
+      deliver_by_choice(title: subject, body: lines.join("\n"), url: url, line_text: line_text) do |problem|
+        UserMailer.with(user: @user, subject: subject, lines: lines, url: url, locale: locale.to_s, problem: problem)
+                  .send_pet_weight_reminder.deliver_later
+      end
     end
   end
 

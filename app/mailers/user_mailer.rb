@@ -10,6 +10,7 @@ class UserMailer < ApplicationMailer
     @user = params[:user]
     @lines = params[:lines]
     @url = params[:url]
+    @problem = params[:problem]
     I18n.with_locale(params[:locale].presence || I18n.default_locale) do
       mail(to: @user.email_address, cc: "ajicaretracker@gmail.com", subject: params[:subject])
     end

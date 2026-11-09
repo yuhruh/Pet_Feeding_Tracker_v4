@@ -4,7 +4,7 @@ require "minitest/mock"
 # Weight reminders: 14 days after the last weighing (or after the pet was added)
 # and every 14 days after that, once each, made up by a later run if one is
 # missed; between 9am and 9pm in the owner's time zone; only for active owners;
-# the Android app, else LINE, else email.
+# by the channel the owner chose, emailed with why when the app or LINE fails.
 class PetWeightReminderJobTest < ActiveJob::TestCase
   include ActionMailer::TestHelper
 
@@ -18,6 +18,9 @@ class PetWeightReminderJobTest < ActiveJob::TestCase
     @user.sessions.destroy_all
     @weighed_on = Date.new(2026, 10, 1)
   end
+
+  # Delivered emails stay in this list across tests in the same process.
+  teardown { ActionMailer::Base.deliveries.clear }
 
   def at(date, hour = 9, minute = 10) = TAIPEI.local(date.year, date.month, date.day, hour, minute)
 
@@ -176,22 +179,81 @@ class PetWeightReminderJobTest < ActiveJob::TestCase
     assert_match %r{/zh-TW/pets/#{@pet.id}/trackers\z}, pushed.first[:url]
   end
 
-  test "a gone phone is forgotten and LINE is used; a LINE failure falls back to email" do
+  # The owner's choice of channel: one channel, and email when the app or LINE fails.
+  def email_text(time)
+    perform_enqueued_jobs { assert_equal "email", run_at(time) }
+    ActionMailer::Base.deliveries.last.text_part.body.decoded
+  end
+
+  test "when the app send fails, it is emailed with why, and the profile keeps the problem until the app works again" do
+    active_user
+    weighed(@weighed_on)
+    @user.connected_services.create!(provider: "line", uid: "U123") # not used: the app is the default with a phone
+
+    text = nil
+    PetWeightReminderNotifier.stub(:push_line, ->(*) { flunk "one channel: not LINE" }) do
+      with_push(:failed) { text = email_text(day(14)) }
+    end
+    assert_includes text, "無法送到你手機上的 Pet Tracker App"
+    assert_includes text, "/zh-TW/users#reminder-channel"
+    assert_equal "android_failed", @user.reload.reminder_problem
+    assert_equal day(14), @user.reminder_problem_at
+
+    with_push { assert_equal "android", run_at(day(28)) }
+    assert_nil @user.reload.reminder_problem
+  end
+
+  test "a gone phone is forgotten; with no phone left, the default becomes LINE" do
     active_user
     weighed(@weighed_on)
     @user.connected_services.create!(provider: "line", uid: "U123")
-    texts = []
 
-    PetWeightReminderNotifier.stub(:push_line, ->(uid, text) { texts << [ uid, text ]; true }) do
-      with_push(:gone) { assert_equal "line", run_at(day(14)) }
-    end
+    with_push(:gone) { email_text(day(14)) }
     assert_empty DeviceToken.all
+
+    texts = []
+    PetWeightReminderNotifier.stub(:push_line, ->(uid, text) { texts << [ uid, text ]; true }) do
+      assert_equal "line", run_at(day(28))
+    end
     assert_equal "U123", texts.first.first
     assert_includes texts.first.last, "/zh-TW/pets/#{@pet.id}/trackers"
+  end
 
-    PetWeightReminderNotifier.stub(:push_line, false) do
-      assert_enqueued_emails(1) { assert_equal "email", run_at(day(28)) }
-    end
+  test "chose the app but no phone is signed in: emailed with why" do
+    active_user
+    weighed(@weighed_on)
+    @user.update!(reminder_channel: "android")
+
+    assert_includes email_text(day(14)), "沒有手機登入 Pet Tracker Android App"
+    assert_equal "android_no_phone", @user.reload.reminder_problem
+  end
+
+  test "chose LINE: a failed LINE send, or LINE no longer connected, is emailed with why" do
+    active_user
+    weighed(@weighed_on)
+    @user.connected_services.create!(provider: "line", uid: "U123")
+    @user.update!(reminder_channel: "line")
+
+    text = nil
+    PetWeightReminderNotifier.stub(:push_line, false) { text = email_text(day(14)) }
+    assert_includes text, "無法用 LINE 送出"
+    assert_equal "line_failed", @user.reload.reminder_problem
+
+    @user.connected_services.destroy_all
+    assert_includes email_text(day(28)), "已經沒有連結 LINE"
+    assert_equal "line_not_connected", @user.reload.reminder_problem
+  end
+
+  test "chose email: emailed even with a phone, with no problem note" do
+    active_user
+    weighed(@weighed_on)
+    @user.update!(reminder_channel: "email")
+
+    text = nil
+    pushed = with_push { text = email_text(day(14)) }
+    assert_empty pushed
+    assert_not_includes text, "reminder-channel"
+    assert_nil @user.reload.reminder_problem
   end
 
   test "the email is in the owner's language" do
