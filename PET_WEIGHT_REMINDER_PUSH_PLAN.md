@@ -2,7 +2,10 @@
 
 Nov 9, 2026 · @Rita · follows PET_WEIGHT_REMINDER_FIX_PLAN.md (done in ee5903d)
 
-**Status:** implemented Nov 9, 2026 with D = owners only. `NotificationService` and the `services.notifications` translations were removed.
+**Status:** done on main, Nov 9, 2026.
+
+- A–D in `b85ca65`, with D = owners only. `NotificationService` and the `services.notifications` translations were removed.
+- E (each person chooses the channel; email with why when the app or LINE fails) in `c844fec`. E replaces C's app → LINE → email order.
 
 ## Root causes
 
@@ -90,7 +93,7 @@ In `PetWeightReminderJob`, for each owned pet:
 Result: a missed hour or day is caught up on the next run. Days 14, 28, 42… each send once. Weighing again changes
 `last_weighed_date`, which starts a new key and restarts the count. Keep `inactive?` (15 days) as it is.
 
-### C. Push notifications, using the household reminder channels
+### C. Push notifications, using the household reminder channels (order replaced by E)
 
 New `PetWeightReminderNotifier(user, pets)`, shaped like `CareReminderNotifier`. It sends **one message per user per run**, listing every pet that is due:
 
@@ -113,6 +116,35 @@ New `PetWeightReminderNotifier(user, pets)`, shaped like `CareReminderNotifier`.
 | **Owners only, always (recommended, as now)** | No new settings; the household reminder switch doesn't affect it |
 | Follow the reminder switches | Owner if `owner_reminders_enabled`, plus caregivers with `reminders_enabled` (`household.reminder_recipients`). Fewer people get it, because the switches are off by default |
 
+### E. Follow-up: app users got no email; let each person choose
+
+**Root cause, found after C shipped:** push worked, but people with the Android app got no email. C used one channel:
+`return "android" if pushed_to_android?` stopped before the email was queued. The email wasn't lost; it was never sent.
+Household reminders worked the same way.
+
+**Decisions (Nov 9, 2026):**
+
+| Question | Choice |
+| --- | --- |
+| What the setting covers | All reminders, weight and household, one setting |
+| Choices | App notification / LINE (only for people signed in with LINE) / Email. One channel only |
+| Before someone chooses | The app if a phone is signed in, else LINE, else email (`User#reminder_channel_choice`) |
+| App or LINE fails | Email instead, starting with a note that says why, plus a link to the setting; the profile page shows the problem |
+
+**What was built:**
+
+- Migration `20261109120000`: `users.reminder_channel`, `users.reminder_problem`, `users.reminder_problem_at`, all empty to start.
+- `ReminderChannels#deliver_by_choice` sends by the choice and returns the channel used. On failure it passes the problem to the caller,
+  which sends the email. The problem is saved on the user and cleared when a send by their choice works.
+  Problems: `android_no_phone`, `android_failed`, `line_not_connected`, `line_failed`.
+- `ReminderChannelsController#update` (`PATCH /reminder_channel`): refuses LINE without LINE, and anything unknown;
+  a new choice clears the old problem.
+- Profile section `users/_reminder_channel` (`#reminder-channel`): radio buttons that save on change, and the problem in red.
+- `shared/_reminder_problem` (HTML and text) at the top of both reminder emails. Translations under `users.reminder_channel`,
+  `reminder_channels.update` and `reminder_delivery` in en / zh-TW / ja.
+
+**Behavior change:** a failed app send now goes to email (with the note) instead of falling through to LINE.
+
 ## Tests
 
 `test/jobs/pet_weight_reminders_job_test.rb` (new) and `test/jobs/pet_weight_reminder_job_test.rb` (rewritten):
@@ -130,9 +162,19 @@ New `PetWeightReminderNotifier(user, pets)`, shaped like `CareReminderNotifier`.
 | Taipei user, UTC date different from local date | Uses the local date |
 | Inactive 16 days | 0 |
 | FCM configured, token sends | Channel `android`, no email |
-| FCM `:gone` → token deleted, LINE user | Channel `line` |
-| LINE push not success | Falls back to email |
 | Two pets due | One message naming both |
+
+After E (`pet_weight_reminder_job_test.rb`, `household_reminders_test.rb`, new `reminder_channels_controller_test.rb`, `user_mailer_test.rb`):
+
+| Test | Expected |
+| --- | --- |
+| App chosen (default), push fails, LINE user | Email with the `android_failed` note, not LINE; problem saved; cleared after the app works |
+| Phone `:gone` | Token deleted, emailed; next time the default is LINE |
+| Chose the app, no phone | Email with the `android_no_phone` note |
+| Chose LINE: send fails / LINE disconnected | Email with the `line_failed` / `line_not_connected` note |
+| Chose email, phone signed in | Email, no push, no note |
+| Profile | Right choices, LINE hidden without LINE, problem shown |
+| Saving the choice | Saved and old problem cleared; LINE without LINE and unknown values refused; needs sign-in |
 
 Run `bin/rails test test/jobs test/models/household_reminders_test.rb`, then the full suite.
 
@@ -141,4 +183,8 @@ Run `bin/rails test test/jobs test/models/household_reminders_test.rb`, then the
 - On the first runs after deploy, every active owner with a pet unweighed for 14 or more days gets **one** reminder for the current cycle.
   This is expected; the 15-day inactive rule limits it.
 - After deploy, check the next day that `CareReminder.where("key LIKE 'weight:%'")` keeps growing and that the CC inbox gets mail.
-- No schema change and no new credentials; FCM already uses `FIREBASE_SERVICE_ACCOUNT_JSON` on the worker.
+- A–D: no schema change and no new credentials; FCM already uses `FIREBASE_SERVICE_ACCOUNT_JSON` on the worker.
+- E adds three empty `users` columns (the deploy migrates them). App users still get push only until they choose Email on their profile page.
+- Not yet checked: how the profile section looks in a browser and in the Android app.
+- Mail failures: none were checked in production (`SolidQueue::FailedExecution` for `ActionMailer::MailDeliveryJob`).
+  If emails are queued but still not arriving, look there, and at the Gmail refresh token.
