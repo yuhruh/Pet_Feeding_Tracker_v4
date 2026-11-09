@@ -524,17 +524,19 @@ en:
             items:
               - "The trackers page charts dry and wet food eaten each day, and weight, for the date range you choose."
               - "Weights from trackers and from ⚖️ Weight on the Today page are shown together."
+              - "Below it, 'Care by day' shows each day's 🍽 feeding taps, 🚽 litter jobs, 💧 water jobs, 💊 doses given and not given, and litter observations, each in its own soft color."
               - "Write hotel, boarding or 旅館 in a tracker's note and those meals are charted separately, so a boarding stay doesn't blur the trend at home."
               - "Download the chart as an image, or share it."
       - id: "households"
         title: "Households: Caregivers and Viewers"
-        description: "Your cats, food bags, litter boxes and water spots form your household. You're its owner and manage everything; family and pet sitters can help. Open it from the menu (🏠 My household) or your account page."
+        description: "Your cats, food bags, litter boxes and water spots form your household. You're its owner and manage everything; family and pet sitters can help. Open it from the menu (My household ▾ → 🏠 Household settings) or your account page."
         groups:
           - title: "Who can do what"
             ordered: false
             items:
               - "Caregivers (family, a pet sitter) record feeding, litter, water and medicine, and can read your trackers and charts. They need an account."
               - "Viewers (say, Grandma) see today's status, the timeline and the charts, read-only. They use a personal link and don't need an account."
+              - "In the owner's menu, My household ▾ holds 📅 Today, 🏠 Household settings and 📋 Care records. Caregivers and viewers see a plain Today link."
           - title: "Inviting a Caregiver"
             ordered: true
             items:
@@ -573,14 +575,21 @@ en:
             ordered: false
             items:
               - "Undo right after a tap (10 seconds)."
-              - "Change a record on the timeline: the time (up to 7 days back; the owner any time, on the Care records page), the jobs, the details or a note."
+              - "Change a record on the timeline: the time (caregivers up to 7 days back; the owner any past time), the jobs, the details or a note."
               - "Delete a mistaken record after you confirm; it is removed from Today, the charts, the CSV and reminders."
-              - "The owner can change and delete any record; a caregiver their own records, for 24 hours."
+              - "The owner can change and delete any record, however old; a caregiver their own records, for 24 hours."
           - title: "Litter Observations"
             ordered: false
             items:
               - "In a litter record's 'Add details': which cat (if you know), pee clumps, the number of poops, the stool, and anything unusual (blood, very large clumps, other)."
               - "Diarrhea and anything unusual show in red. With a cat chosen, they also appear on that cat's trackers page for 30 days."
+          - title: "Care Records (owner)"
+            ordered: false
+            items:
+              - "Open it from the menu (My household ▾ → 📋 Care records) or the household page's 'View and change care records' button."
+              - "Pick a day (or Previous day, Next day, Today), and filter by cat or spot and by type."
+              - "Every record has Change and Delete, on any day. Afterwards you're back on the same day, with the same filters."
+              - "To keep a copy of everything, use 'Download care records (CSV)' on the household page."
       - id: "medications"
         title: "Medications"
         description: "Keep track of every dose, whoever gives it."
@@ -605,8 +614,9 @@ en:
             ordered: false
             items:
               - "A job due on a day is sent at 9am in your time zone; a shorter interval when it's due, between 9am and 9pm; a set time at that time. If it's still not done, there's one follow-up. Overdue doses are reminded once."
-              - "Reminders arrive in the Android app if you use it, else on LINE if you signed in with LINE, else by email."
-              - "Weight reminders are sent by LINE or email."
+              - "Choose how reminders reach you on your account page, under '🔔 How you get reminders': App notification, LINE (if you signed in with LINE) or Email. It's one choice for all your reminders. Until you choose, it's the Android app if you use it, else LINE, else email. Today shows which one, with a 'How reminders come' link."
+              - "If an app notification or LINE message can't be sent (no phone signed in, LINE not connected, or the send failed), the reminder is emailed instead with a note saying why, and your account page shows what went wrong."
+              - "Weight reminders (owners): when a cat hasn't been weighed for 14 days (or since it was added), and again every 14 days until it is, sent between 9am and 9pm in your time zone, the way you chose. They stop if you haven't used the app for 15 days."
       - id: "kibble_prices"
         title: "Kibble Prices"
         description: "Pet Tracker checks what your pet's favorite kibbles cost in Taiwan's online shops, so you can buy the one your pet loves at the best price."

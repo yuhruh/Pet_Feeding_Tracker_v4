@@ -76,6 +76,12 @@ and a browser test in `test/system/navigation_menus_test.rb` that opens the menu
 `railway up` for both services. The next pushes (`cc8a47d`, `3e9262c`) deployed from GitHub on their own. After a push, check
 `railway deployment list --service Pet_Feeding_Tracker_v4 --json` shows the new commit.
 
+**Follow-up (2026-11-09): softer "Care by day" colors.** The chart's bars (`CareChart::COLORS`) moved from strong 500–700 shades to
+soft ones, like the eating chart's light bars, with fed and litter set well apart and water no longer the eating chart's blue:
+🍽 Fed `#F8B195` (coral), 🚽 Litter jobs `#B5A898` (taupe), 💧 Water jobs `#A9B7F2` (periwinkle), 💊 Doses given `#9ED7AE`,
+💊 Couldn't give `#F0A3A3`, 🔍 Litter observations `#BDA8E6`. Chosen from browser mockups in light and dark mode (`adabdc6`, `09c9c2d`).
+Coral and the light red for "Couldn't give" are fairly close; a deeper rose for "Couldn't give" is the fix if they are hard to tell apart.
+
 Times in the future are still refused for everyone. The page's explanation and the help text say the owner can change or delete any record, in en / zh-TW / ja.
 
 **Checks:** 7 tests in `test/controllers/care_records_pages_test.rb`:
@@ -1052,6 +1058,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 
 ## Change log
 
+- **Chart colors (2026-11-09):** "Care by day" uses soft colors: fed coral, litter taupe, water periwinkle; doses and observations pastel green, red and lavender.
 - **Nav (2026-11-09):** owners' **My household ▾** menu (Today, Household settings, Care records) replaces the Today link; caregivers and viewers keep Today. Care records button amber. Filters kept after Delete or Change on the care records page.
 - **Checkpoint G2 (2026-11-09):** the owner's **Care records** page: any day, filtered by cat or spot and type, with Change and Delete on every record, returning to the same day. The owner has no date limits (delete any age, move a time to any past day); caregivers keep theirs.
 - **Checkpoint J (2026-10-02):** `pets.user_id` and `dry_foods.user_id` removed (cats and bags belong to the household only; `schema.rb` loads into PostgreSQL again), start-up debug output removed, README, ARCHITECTURE and USAGE updated for households, care, reminders and the Android app.

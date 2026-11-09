@@ -29,6 +29,7 @@ This guide provides detailed instructions on how to use the key features of Pet 
   - [Recording Care](#recording-care)
   - [Fixing a Record: Undo, Change, Delete](#fixing-a-record-undo-change-delete)
   - [Litter Observations](#litter-observations)
+  - [Care Records (Owner)](#care-records-owner)
   - [Medications](#medications)
 - [Reminders](#reminders)
 - [Care Records CSV](#care-records-csv)
@@ -57,7 +58,7 @@ Your user account is the central hub for managing your pets and tracking their a
 
 ### Third-Party Sign-In
 
-You can also sign in with **Google**, **LINE** or **GitHub**. If you sign in with LINE, weight and care reminders are sent to you on LINE instead of by email (unless you get them in the Android app). In the Android app, these buttons open a Chrome tab over the app; after choosing your account you're back in the app, signed in.
+You can also sign in with **Google**, **LINE** or **GitHub**. Signing in with LINE also lets you get reminders on LINE (see [Reminders](#reminders)). In the Android app, these buttons open a Chrome tab over the app; after choosing your account you're back in the app, signed in.
 
 ### Timezone
 
@@ -142,7 +143,7 @@ Your cats, food bags, litter boxes and water spots form your **household**. You'
 -   **Caregivers** (family, a pet sitter) record feeding, litter, water and medicine, and can read your trackers and charts. They need an account.
 -   **Viewers** (say, Grandma) see today's status, the timeline and the charts, read-only. They use a personal link and don't need an account.
 
-Open the household page from the menu (**🏠 My household**) or your account page.
+Open the household page from the menu (**My household ▾** → **🏠 Household settings**) or your account page. The owner's **My household ▾** menu also holds **📅 Today** and **📋 Care records**; caregivers and viewers see a plain **Today** link.
 
 ### Inviting a Caregiver
 
@@ -180,13 +181,20 @@ Under "Litter boxes and water spots": add, rename, choose bowl or fountain, move
 ### Fixing a Record: Undo, Change, Delete
 
 -   **Undo** right after a tap (10 seconds).
--   **Change** on the timeline: the time (up to 7 days back), the jobs, the details or a note.
+-   **Change** on the timeline: the time (caregivers up to 7 days back; the owner any past time), the jobs, the details or a note.
 -   **Delete** on the timeline or the details page removes a mistaken record from Today, the charts, the CSV and reminders, after you confirm.
--   **Who:** the owner can change and delete any record; a caregiver their own records, for 24 hours.
+-   **Who:** the owner can change and delete any record, however old; a caregiver their own records, for 24 hours.
 
 ### Litter Observations
 
 In a litter record's **Add details**: which cat (if you know), pee clumps, the number of poops, the stool, and anything unusual (blood, very large clumps, other). Diarrhea and anything unusual show in red. With a cat chosen, they also appear on that cat's trackers page for 30 days.
+
+### Care Records (Owner)
+
+-   **Open it** from the menu (**My household ▾** → **📋 Care records**) or the household page's **View and change care records** button.
+-   **Pick a day** (or **Previous day**, **Next day**, **Today**), and filter by **cat or spot** and by **type**.
+-   **Every record** has **Change** and **Delete**, on any day. Afterwards you're back on the same day, with the same filters.
+-   **Care by day:** each cat's trackers page (and the viewer page) has a chart of each day's 🍽 feeding taps, 🚽 litter jobs, 💧 water jobs, 💊 doses given and not given, and litter observations, each in its own soft color.
 
 ### Medications
 
@@ -200,7 +208,9 @@ In a litter record's **Add details**: which cat (if you know), pee clumps, the n
 -   **See them on Today:** "🧽 Fountain cleaned due in 4 days", "🚽 Scooped due at 20:00", or for set times "08:00 ✓ 07:55 by Mom · 20:00 due".
 -   **Get them:** under your household's name on Today, tap **Turn on** next to 🔔 Reminders. Each owner and caregiver chooses for themselves; viewers don't get reminders.
 -   **When:** a job due on a day is sent at **9am** in your time zone; a shorter interval when it's due, between 9am and 9pm; a set time at that time. If it's still not done, there's one follow-up. Overdue doses are reminded once.
--   **How:** in the **Android app** if you use it, else on **LINE** if you signed in with LINE, else by **email**.
+-   **How:** choose on your account page, under **🔔 How you get reminders**: **App notification**, **LINE** (if you signed in with LINE) or **Email**. It's one choice for all your reminders. Until you choose, it's the Android app if you use it, else LINE, else email. Today shows which one, with a **How reminders come** link.
+-   **If it can't be sent:** when an app notification or LINE message fails (no phone signed in, LINE not connected, or the send failed), the reminder is emailed instead with a note saying why, and your account page shows what went wrong.
+-   **Weight reminders (owners):** when a cat hasn't been weighed for 14 days (or since it was added), and again every 14 days until it is, sent between 9am and 9pm in your time zone, the way you chose. They stop if you haven't used the app for 15 days.
 
 ## Care Records CSV
 
