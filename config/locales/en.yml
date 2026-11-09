@@ -57,7 +57,7 @@ en:
     show:
       title: "Care records"
       back: "Back to household"
-      explanation: "Every record for one day, in your household's time zone. You can change any record, and delete records up to 7 days old."
+      explanation: "Every record for one day, in your household's time zone. You can change or delete any record, of any day."
       date: "Day"
       subject: "Cat or spot"
       kind: "Type"
@@ -573,7 +573,7 @@ en:
             ordered: false
             items:
               - "Undo right after a tap (10 seconds)."
-              - "Change a record on the timeline: the time (up to 7 days back), the jobs, the details or a note."
+              - "Change a record on the timeline: the time (up to 7 days back; the owner any time, on the Care records page), the jobs, the details or a note."
               - "Delete a mistaken record after you confirm; it is removed from Today, the charts, the CSV and reminders."
               - "The owner can change and delete any record; a caregiver their own records, for 24 hours."
           - title: "Litter Observations"

@@ -16,7 +16,7 @@
     <div class="flex flex-col gap-1">
       <%= label_tag :occurred_at, t(".time"), class: "font-medium" %>
       <%= datetime_local_field_tag :occurred_at, @event.occurred_at.in_time_zone(zone).strftime("%Y-%m-%dT%H:%M"), required: true,
-            min: CareEvent::EARLIEST.ago.in_time_zone(zone).strftime("%Y-%m-%dT%H:%M"), max: Time.current.in_time_zone(zone).strftime("%Y-%m-%dT%H:%M"),
+            min: (CareEvent::EARLIEST.ago.in_time_zone(zone).strftime("%Y-%m-%dT%H:%M") unless HouseholdPolicy.new(Current.user, household).owner?), max: Time.current.in_time_zone(zone).strftime("%Y-%m-%dT%H:%M"),
             class: "rounded-md border px-3 py-2 dark:text-black" %>
       <span class="text-xs text-gray-500"><%= t(".time_zone_note", zone: zone.tzinfo.friendly_identifier(true)) %></span>
     </div>

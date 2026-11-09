@@ -7,6 +7,7 @@ Nov 9, 2026 · @Rita · follows PET_WEIGHT_REMINDER_FIX_PLAN.md (done in ee5903d
 - A–D in `b85ca65`, with D = owners only. `NotificationService` and the `services.notifications` translations were removed.
 - E (each person chooses the channel; email with why when the app or LINE fails) in `c844fec`. E replaces C's app → LINE → email order.
 - F (Today shows the chosen channel; one weight job instead of two), Nov 9, 2026.
+- `lib/tasks/notifications.rake` removed, Nov 9, 2026: nothing scheduled used it.
 
 ## Root causes
 
@@ -78,6 +79,7 @@ pet_weight_reminders:
 - New `PetWeightRemindersJob#perform`: goes over owners of households that have pets (the query the rake task uses now)
   and calls `PetWeightReminderJob.perform_now(user)`, or `perform_later` to spread the work, the way care reminders are scanned.
 - Keep `notifications:weigh_pets` for manual runs, as a thin `PetWeightRemindersJob.perform_now`.
+  (Removed Nov 9, 2026 with `lib/tasks/notifications.rake`; to send reminders by hand, run `bin/rails runner 'PetWeightRemindersJob.perform_now'`.)
 - Runs hourly so each person gets it in their own morning, like `CareReminderJob` (next point).
 
 ### B. "Due and not yet sent" instead of "exactly day 14"

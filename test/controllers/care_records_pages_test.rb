@@ -1,8 +1,8 @@
 require "test_helper"
 
 # The owner's care records page: any past day, filtered by cat or spot and type,
-# with Change on every record and Delete up to 7 days back, coming back to the
-# same day afterwards. Owner only.
+# with Change and Delete on every record of any age, coming back to the same day
+# afterwards. Owner only.
 class CareRecordsPagesTest < ActionDispatch::IntegrationTest
   L = { locale: I18n.default_locale }.freeze
 
@@ -66,17 +66,40 @@ class CareRecordsPagesTest < ActionDispatch::IntegrationTest
     assert @scooped.reload.undone?
   end
 
-  test "older than 7 days: Change, but no Delete" do
+  test "the owner changes and deletes records of any age, and moves a time any day back" do
     log_in_as(@owner)
     get page(date: (@today - 10).iso8601)
-
     assert_select "##{dom_id(@old)} a", text: "Change"
-    assert_select "##{dom_id(@old)} input[name=_method][value=delete]", count: 0
+    assert_select "##{dom_id(@old)} input[name=_method][value=delete]"
+
+    get edit_care_event_url(@old, **L, return_date: (@today - 10).iso8601)
+    assert_select "input[name=occurred_at]:not([min])", message: "no earliest time for the owner"
 
     patch care_event_url(@old, **L), params: { return_date: (@today - 10).iso8601, value: "4.4" }
     assert_redirected_to household_care_records_url(**L, date: (@today - 10).iso8601)
     assert_nil flash[:alert]
     assert_equal 4.4, @old.reload.value.to_f
+
+    months_ago = noon(@today - 60)
+    patch care_event_url(@old, **L), params: { occurred_at: months_ago.strftime("%Y-%m-%dT%H:%M") }
+    assert_nil flash[:alert]
+    assert_equal months_ago, @old.reload.occurred_at
+
+    patch care_event_url(@old, **L), params: { occurred_at: 1.day.from_now.in_time_zone(@zone).strftime("%Y-%m-%dT%H:%M") }
+    assert_equal I18n.t("activerecord.errors.models.care_event.attributes.occurred_at.in_the_future"), flash[:alert]
+
+    delete care_event_url(@old, **L), params: { return_date: (@today - 10).iso8601 }
+    assert @old.reload.undone?
+  end
+
+  test "caregivers keep their limits: an earliest time on the details page, and no moving a record more than 7 days back" do
+    mine = record(kind: :fed, pet: @pet, at: 1.hour.ago)
+    log_in_as(@mom)
+    get edit_care_event_url(mine, **L)
+    assert_select "input[name=occurred_at][min]"
+
+    patch care_event_url(mine, **L), params: { occurred_at: 9.days.ago.in_time_zone(@zone).strftime("%Y-%m-%dT%H:%M") }
+    assert_equal I18n.t("activerecord.errors.models.care_event.attributes.occurred_at.too_long_ago"), flash[:alert]
   end
 
   test "filters by cat or spot and by type" do

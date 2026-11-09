@@ -85,9 +85,12 @@ class CareEvent < ApplicationRecord
     policy.can?(:record_care) && actor_id == user.id && created_at > now - EDIT_WINDOW
   end
 
-  # Delete (checkpoint H3): the same people as Change, for records up to 7 days old.
+  # Delete (checkpoint H3): the same people as Change. A caregiver's records up to
+  # 7 days old; the owner's any age (the care records page reaches every day).
   def deletable_by?(user, now: Time.current)
-    !undone? && editable_by?(user, now: now) && occurred_at >= now - EARLIEST
+    return false if undone? || !editable_by?(user, now: now)
+
+    HouseholdPolicy.new(user, household).owner? || occurred_at >= now - EARLIEST
   end
 
   def deleted? = deleted_by_id.present?
@@ -195,13 +198,20 @@ class CareEvent < ApplicationRecord
     end
   end
 
+  # Never in the future. At most 7 days before it was recorded, except when the
+  # owner changes it (edited_by is set by CareEventsController#update): the owner
+  # may move any record to any past time.
   def occurred_in_allowed_range
     return unless occurred_at
 
     now = Time.current
     errors.add(:occurred_at, :in_the_future) if occurred_at > now + CLOCK_DRIFT
+    return if owner_edit?
+
     errors.add(:occurred_at, :too_long_ago) if occurred_at < (created_at || now) - EARLIEST
   end
+
+  def owner_edit? = persisted? && edited_by_id.present? && edited_by_id == household&.owner_id
 
   def fed_details_valid
     return errors.add(:details, :present) unless (details.keys - DETAILS.fetch(kind.to_s, [])).empty?

@@ -21,7 +21,7 @@
 | I2 — Google, LINE and GitHub sign-in in the Android app | ✅ Done (2026-10-02), merged into `main`; **Google sign-in works on a Pixel 9**. See [Checkpoint I2 result](#checkpoint-i2-result-2026-10-02) |
 | J — Clean-up, docs, CI, merge | ✅ Done (2026-10-02), merged into `main` and deployed: production migrated (no `user_id` on `pets` or `dry_foods`; 3 cats, 8 food bags and every tracker intact). See [Checkpoint J result](#checkpoint-j-result-2026-10-02) |
 
-| G2 — Care records page: see and change any day's records | ✅ Done (2026-11-09) on `main`. See [Checkpoint G2 result](#checkpoint-g2-result-2026-11-09) |
+| G2 — Care records page: see, change and delete any day's records | ✅ Done (2026-11-09) on `main`; the owner has no date limits. See [Checkpoint G2 result](#checkpoint-g2-result-2026-11-09) |
 
 **Commits:** each checkpoint is committed on `feature/households` once `bin/rails test` passes, then pushed. Merged into `main` only when you ask.
 
@@ -36,7 +36,7 @@ couldn't be reached. `CareRecordsController` only served the CSV.
   in the household's time zone, opening on today. It has ← previous day, today, next day → and a date picker, and can't go past today.
 - **Filters:** by cat or by litter box or water spot (removed spots are listed too, for their old records), and by type
   (fed, weight, litter, water, medicine). A tracker logged directly counts as a feeding of its cat.
-- **Each record** is shown as on the timeline, with **Change** always and **Delete** up to 7 days back, by the existing rules.
+- **Each record** is shown as on the timeline, with **Change** and **Delete** on every record, of any age (see the follow-up below).
   Saving or deleting comes back to the same day ("Back to care records" on the details page); from Today it still goes back to Today.
 
 **Who:** owner only (`OwnedHousehold`). Caregivers and viewers are sent away. Caregivers keep their 24-hour Change and Delete on Today.
@@ -47,18 +47,30 @@ and trackers), `care_events/_timeline` (optional `entries`, `title`, `empty`, `r
 translations under `care_records.show` in en / zh-TW / ja. No migration.
 
 **Found while building:** a record's time may be at most 7 days before **it was created** (`occurred_in_allowed_range`), not before now,
-so saving a change to an older record works; a test covers saving a 10-day-old weight.
+so saving a change to an older record worked on the server; a test covers saving a 10-day-old weight.
+
+**Follow-up (2026-11-09): no date limits for the owner.** The owner can now change and delete records of any age, and move a record's
+time to any past day. Three limits were in the way:
+
+| Limit | Before | Now |
+| --- | --- | --- |
+| Delete | Records up to 7 days old (`CareEvent#deletable_by?`) | Owner: any age. Caregiver: unchanged (their own, for 24 hours, up to 7 days old) |
+| The details page's time field | `min` 7 days ago, so **in a browser the owner couldn't save a change to an older record**: the form wouldn't submit (the first G2 test sent the request directly and missed this) | No `min` for the owner; caregivers keep it |
+| A record's time (`occurred_in_allowed_range`) | At most 7 days before it was recorded | Skipped when the owner changes it (`CareEvent#owner_edit?`: `edited_by` is the household's owner, set by `CareEventsController#update`); still applies to new taps and caregivers |
+
+Times in the future are still refused for everyone. The page's explanation and the help text say the owner can change or delete any record, in en / zh-TW / ja.
 
 **Checks:** 7 tests in `test/controllers/care_records_pages_test.rb`:
 - the link and opening on today
 - a past day's records, and Change and Delete coming back to that day
-- an older record: Change works, no Delete
+- the owner changes, deletes and moves a 10-day-old record to 60 days back (no `min` on the time field; a future time still refused)
+- caregivers keep their earliest time and can't move a record more than 7 days back
 - both filters, kept on the day links
 - a future or broken date shows today
 - without a return day, changes still go to Today
 - caregivers can't open it
 
-`bin/rails test`: 559 runs, 0 failures. Not yet looked at in a browser.
+`bin/rails test`: 560 runs, 0 failures (one run of 13 had one error that didn't come back). Not yet looked at in a browser.
 
 ## Checkpoint J result (2026-10-02)
 
@@ -745,7 +757,7 @@ One tap on a button saves that action; the notice lists all of the spot's action
 **Litter observations (checkpoint F), all optional, via "Add details":** pee clumps (none, few, normal, many), poop count, stool (normal, soft, diarrhea, hard), something unusual (blood, very large clumps, other), a note, and **which cat**, if known. With a cat chosen, the observation also shows on that cat's charts and history.
 
 **Rules:**
-- **Time limits:** `occurred_at` can't be more than 2 minutes in the future (clock drift) or more than 7 days ago.
+- **Time limits:** `occurred_at` can't be more than 2 minutes in the future (clock drift) or more than 7 days before the record was made. The owner's changes have no earliest time (checkpoint G2).
 - **Edits:** changing the time, actions or details sets `edited_by` and `edited_at`; the timeline shows "(changed)".
 - **Undo:** within 10 seconds, by the member who tapped; sets `undone_at` (kept, hidden from timelines).
 - **Double-tap guard:** as in [Decisions](#decisions).
@@ -1022,7 +1034,7 @@ The Android app (`pet_tracker_android/`, Hotwire Native) has **no Firebase or no
 
 ## Change log
 
-- **Checkpoint G2 (2026-11-09):** the owner's **Care records** page: any day, filtered by cat or spot and type, with Change on every record and Delete up to 7 days back, returning to the same day.
+- **Checkpoint G2 (2026-11-09):** the owner's **Care records** page: any day, filtered by cat or spot and type, with Change and Delete on every record, returning to the same day. The owner has no date limits (delete any age, move a time to any past day); caregivers keep theirs.
 - **Checkpoint J (2026-10-02):** `pets.user_id` and `dry_foods.user_id` removed (cats and bags belong to the household only; `schema.rb` loads into PostgreSQL again), start-up debug output removed, README, ARCHITECTURE and USAGE updated for households, care, reminders and the Android app.
 - **Checkpoint I2 (2026-10-02):** Google, LINE and GitHub sign-in in the Android app, through a Chrome tab and a one-time code (broken since the OAuth state check of 2026-09-15); fixed on the phone: the app no longer claims sign-in addresses, and Chrome's own website sign-in doesn't get in the way. **Checkpoint I** confirmed on a Pixel 9.
 - **Checkpoint I (2026-10-02):** Android app notifications through Firebase Cloud Messaging: device tokens per sign-in, the permission asked when turning reminders on, notifications opening Today, the app first then LINE or email; off until the Firebase project and its service account are set up.
