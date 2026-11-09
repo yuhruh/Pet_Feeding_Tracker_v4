@@ -4,7 +4,7 @@
 class CareChart
   SERIES = %w[fed litter water given not_given observations].freeze
   # Soft shades, like the eating chart's light bars.
-  COLORS = %w[#FBC98E #D2B48C #9CC9EA #9ED7AE #F0A3A3 #BDA8E6].freeze
+  COLORS = %w[#F8B195 #B5A898 #A9B7F2 #9ED7AE #F0A3A3 #BDA8E6].freeze
 
   attr_reader :pet, :zone
 
