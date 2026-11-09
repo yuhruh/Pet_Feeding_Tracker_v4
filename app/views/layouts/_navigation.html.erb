@@ -55,9 +55,6 @@
                 <%= link_to t('layouts.navigation.view'), users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-blue-100 hover:text-blue-600 focus:bg-blue-100 focus:text-softRed focus:outline-hidden" %>
                 <%= link_to t('layouts.navigation.edit'), edit_users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-green-100 hover:text-green-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
                 <%= link_to t('layouts.navigation.cat_list'), pets_path, hidden: helper_only, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
-                <% if Current.user.owned_household %>
-                  <%= link_to t('layouts.navigation.my_household'), household_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-teal-100 hover:text-teal-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
-                <% end %>
                 <%= link_to t('layouts.navigation.delete'), users_path, class: "block px-4 py-2 text-sm text-grayishBlue hover:bg-red-100 hover:text-softRed focus:bg-gray-100 focus:text-softRed focus:outline-hidden", 
                 data: {"turbo-confirm": t('layouts.navigation.delete_confirmation'), "turbo-method": "delete"} %>
               </div>
@@ -89,7 +86,27 @@
             </div>
           </div>
 
+        <%# Owners: Today, the household page and care records under "My household". Others: just Today. %>
+        <% if Current.user.owned_household %>
+        <div class="relative">
+          <div class="flex items-center w-max bg-white nav:px-1 xl:px-2 py-2
+          text-grayishBlue tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed dark:bg-darkBlue cursor-pointer btn" data-target="btn-household">
+            <%= t('layouts.navigation.household_menu') %>
+            <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400">
+              <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
+            </svg>
+          </div>
+          <div id="btn-household" class="absolute hidden w-max top-full mt-2 py-2 bg-white text-grayishBlue border border-gray-200 rounded-md shadow-lg z-10 transition-all duration-300 ease-in-out menu">
+            <div class="py-1">
+              <%= link_to t('layouts.navigation.household_today'), today_path, class: "block px-4 py-2 text-sm text-grayishBlue focus:bg-gray-100 focus:text-softRed focus:outline-hidden hover:bg-sky-100 hover:text-sky-600" %>
+              <%= link_to t('layouts.navigation.household_settings'), household_path, class: "block px-4 py-2 text-sm text-grayishBlue focus:bg-gray-100 focus:text-softRed focus:outline-hidden hover:bg-teal-100 hover:text-teal-600" %>
+              <%= link_to t('layouts.navigation.household_care_records'), household_care_records_path, class: "block px-4 py-2 text-sm text-grayishBlue focus:bg-gray-100 focus:text-softRed focus:outline-hidden hover:bg-amber-100 hover:text-amber-700" %>
+            </div>
+          </div>
+        </div>
+        <% else %>
         <%= link_to t('layouts.navigation.today'), today_path, class: "w-max nav:px-1 xl:px-2 py-2 tracking-wide inset-ring-1 inset-ring-gray-300 hover:text-softRed" %>
+        <% end %>
 
         <div class="relative">
           <div class="flex items-center w-max bg-white nav:px-1 xl:px-2 py-2 
@@ -276,7 +293,14 @@
     <% end %>
     <% if authenticated? %>
       <div class="w-full py-3 text-center">
-        <%= link_to t('layouts.navigation.today'), today_path, class: "block font-bold hover:text-softRed" %>
+        <% if Current.user.owned_household %>
+          <div class="font-bold"><%= t('layouts.navigation.household_menu') %></div>
+          <%= link_to t('layouts.navigation.household_today'), today_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-sky-100 hover:text-sky-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+          <%= link_to t('layouts.navigation.household_settings'), household_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-teal-100 hover:text-teal-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+          <%= link_to t('layouts.navigation.household_care_records'), household_care_records_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-amber-100 hover:text-amber-700 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
+        <% else %>
+          <%= link_to t('layouts.navigation.today'), today_path, class: "block font-bold hover:text-softRed" %>
+        <% end %>
       </div>
       <div class="w-full py-3 text-center">
         <div class="flex flex-row justify-center gap-3">
@@ -294,9 +318,6 @@
         <%= link_to t('layouts.navigation.mobile.delete_profile'), users_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-red-100 hover:text-softRed focus:bg-gray-100 focus:text-softRed focus:outline-hidden", 
         data: {"turbo-confirm": t('layouts.navigation.mobile.delete_confirmation'), "turbo-method": "delete"} %>
         <%= link_to t('layouts.navigation.mobile.cats_list'), pets_path, hidden: helper_only, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-orange-100 hover:text-orange-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
-        <% if Current.user.owned_household %>
-          <%= link_to t('layouts.navigation.my_household'), household_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-teal-100 hover:text-teal-600 focus:bg-gray-100 focus:text-softRed focus:outline-hidden" %>
-        <% end %>
       </div>
       <% unless helper_only %>
       <div class="w-full py-3 text-center">

@@ -45,6 +45,15 @@ class NavigationMenusTest < ApplicationSystemTestCase
     assert_selector "#care_notice"
   end
 
+  test "the My household menu opens and leads to the care records" do
+    sign_in(@owner)
+    visit today_url(locale: LOCALE)
+    find(".btn[data-target='btn-household']").click
+    assert_selector "#btn-household", visible: true
+    within("#btn-household") { click_on "📋 Care records" }
+    assert_selector "h1", text: "Care records"
+  end
+
   test "the Trackers menu opens and closes after taps on Today" do
     sign_in(@owner)
     visit today_url(locale: LOCALE)
