@@ -16,7 +16,7 @@ class OmniAuth::SessionsController < ApplicationController
 
     if Current.user.present?
       arrival = claim_household_invitation(@user)
-      redirect_to landing_path_for(@user), arrival || { notice: t("omni_auth.sessions.create.connected", provider: @service.provider.to_s.humanize) }
+      redirect_to after_connecting_path(@user), arrival || { notice: t("omni_auth.sessions.create.connected", provider: ConnectedService.provider_name(@service.provider)) }
     else
       start_new_session_for @user unless native_sign_in?
       @user.last_sign_in_at = @user.current_sign_in_at
@@ -60,6 +60,11 @@ class OmniAuth::SessionsController < ApplicationController
     render "native_sign_ins/return", layout: false
   end
 
+  # Connect on the profile page ("Sign-in methods") comes back to it.
+  def after_connecting_path(user)
+    request.env.dig("omniauth.params", "from") == "profile" ? users_path(anchor: "sign-in-methods") : landing_path_for(user)
+  end
+
   def user_info
     @user_info ||= request.env["omniauth.auth"]
   end
@@ -73,6 +78,10 @@ class OmniAuth::SessionsController < ApplicationController
     # Chrome is signed in to on the website (Custom Tabs share Chrome's cookies).
     user = resume_session.try(:user) unless native_sign_in?
     if user.present?
+      # A provider account that already signs in to someone else's account stays theirs.
+      if @service.present? && @service.user_id != user.id
+        redirect_to(after_connecting_path(user), alert: t("omni_auth.sessions.create.connected_elsewhere", provider: ConnectedService.provider_name(@service.provider))) and return
+      end
       @user = user
     elsif @service.present?
       @user = @service.user

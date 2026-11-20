@@ -686,6 +686,7 @@ en:
             ordered: false
             items:
               - "Sign out of your other devices from your account page if you've lost a phone or used a shared computer."
+              - "Your profile page lists the ways into your account under “Sign-in methods”: email and password, Google, LINE and GitHub. Connect one there, or disconnect any you don't recognize. Resetting a forgotten password disconnects them all; connect again from your profile page."
       - id: "mobile"
         title: "Android App and PWA"
         description: "Use Pet Tracker on your phone, as an Android app or installed from the browser."
@@ -859,7 +860,7 @@ en:
       notice: "Password reset instructions sent (if user with that email address exists)."
     update:
       notice: "Password has been reset."
-      notice_disconnected: "Password has been reset. To keep the account yours alone, sign-in with %{providers} was disconnected from it. Sign in with your new password."
+      notice_disconnected: "Password has been reset. To keep the account yours alone, sign-in with %{providers} was disconnected from it. Sign in with your new password; you can connect it again on your profile page."
       alert: "Passwords did not match."
     set_user_by_token:
       alert: "Password reset link is invalid or has expired."
@@ -1203,7 +1204,22 @@ en:
       alert_rate_limit: "Too many backups in a row. Please wait a few minutes and try again."
     destroy:
       notice: "Google Drive disconnected. Your backup files stay in your Drive."
+  sign_in_methods:
+    destroy:
+      notice: "%{provider} disconnected."
   users:
+    sign_in_methods:
+      title: "Sign-in methods"
+      description: "The ways into this account. Remove any you don't recognize."
+      password: "Email and password"
+      change: "Change"
+      connected: "Connected"
+      not_connected: "Not connected"
+      connect: "Connect"
+      disconnect: "Disconnect"
+      disconnect_confirm: "Disconnect %{provider}? You can still sign in with your email and password. If you never set a password, use “Forgot password?” on the sign-in page."
+      disconnect_confirm_line: "Disconnect %{provider}? Reminders by LINE will go by email instead. You can still sign in with your email and password. If you never set a password, use “Forgot password?” on the sign-in page."
+      connect_on_website: "Connecting isn't possible inside the app. Open Pet Tracker in your phone's or computer's browser, sign in, and connect on your profile page there."
     reminder_channel:
       title: "🔔 How you get reminders"
       description: "Weight reminders and household reminders (litter box, water, doses) come this way."
@@ -1820,6 +1836,7 @@ en:
     sessions:
       create:
         connected: "%{provider} connected"
+        connected_elsewhere: "That %{provider} account already signs in to another Pet Tracker account, so it wasn't connected to this one."
         first_time_sign_in: "This is your first time to sign in, please add a new cat first for further tracker."
         welcome_back: "You have been signed in. Welcome back to Cat Feeding Tracker App. %{username}"
         email_exists: "There's already an account with this email address. Please sign in with it using your %{service_methods} account to associate it with this service."

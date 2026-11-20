@@ -43,7 +43,7 @@ class PasswordsController < ApplicationController
       providers = @user.connected_services.destroy_all.map(&:provider).uniq
       return t(".notice") if providers.empty?
 
-      t(".notice_disconnected", providers: providers.map { |provider| t("native_sign_ins.start.providers.#{provider}", default: provider.to_s.humanize) }.to_sentence)
+      t(".notice_disconnected", providers: providers.map { |provider| ConnectedService.provider_name(provider) }.to_sentence)
     end
 
     def set_user_by_token

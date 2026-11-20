@@ -8,7 +8,7 @@
 class NativeSignInsController < ApplicationController
   allow_unauthenticated_access
 
-  PROVIDERS = %w[google_oauth2 line github].freeze
+  PROVIDERS = ConnectedService::PROVIDERS
 
   def start
     @provider = params[:provider].presence_in(PROVIDERS) or return head(:not_found)

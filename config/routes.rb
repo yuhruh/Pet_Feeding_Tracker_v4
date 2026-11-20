@@ -61,6 +61,7 @@ Rails.application.routes.draw do
     resources :ownership_transfer_offers, only: %i[show update], path: "transfers"
     resource :session, except: [ :new ]
     delete "session/others", to: "sessions#destroy_others", as: :other_sessions
+    delete "sign_in_methods/:provider", to: "sign_in_methods#destroy", as: :sign_in_method
     resource :registrations, only: [ :new, :create ]
     resource :timezone, only: [ :create ]
     resource :users, except: [ :new ]

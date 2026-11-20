@@ -686,6 +686,7 @@ zh-TW:
             ordered: false
             items:
               - "如果手機遺失或用過公用電腦，可以在帳號頁面「登出其他裝置」。"
+              - "個人資料頁的「登入方式」會列出可以登入帳號的方式：電子郵件與密碼、Google、LINE 和 GitHub。可以在那裡連結，或把不認得的解除連結。重設忘記的密碼會解除全部連結，之後可以在個人資料頁重新連結。"
       - id: "mobile"
         title: "Android App 與 PWA"
         description: "在手機上使用 Pet Tracker：Android App，或從瀏覽器安裝。"
@@ -859,7 +860,7 @@ zh-TW:
       notice: "密碼重設說明已傳送（如果存在使用該電子郵件地址的使用者）。"
     update:
       notice: "密碼已重設。"
-      notice_disconnected: "密碼已重設。為了確保帳號只有你能使用，已解除這個帳號與 %{providers} 登入的連結。請用新密碼登入。"
+      notice_disconnected: "密碼已重設。為了確保帳號只有你能使用，已解除這個帳號與 %{providers} 登入的連結。請用新密碼登入；之後可以在個人資料頁重新連結。"
       alert: "密碼不符。"
     set_user_by_token:
       alert: "密碼重設連結無效或已過期。"
@@ -1203,7 +1204,22 @@ zh-TW:
       alert_rate_limit: "短時間內備份太多次，請稍候幾分鐘再試。"
     destroy:
       notice: "已取消連結 Google 雲端硬碟，備份檔案會保留在你的雲端硬碟中。"
+  sign_in_methods:
+    destroy:
+      notice: "已解除與 %{provider} 的連結。"
   users:
+    sign_in_methods:
+      title: "登入方式"
+      description: "可以登入這個帳號的方式。看到不認得的，請解除連結。"
+      password: "電子郵件與密碼"
+      change: "變更"
+      connected: "已連結"
+      not_connected: "尚未連結"
+      connect: "連結"
+      disconnect: "解除連結"
+      disconnect_confirm: "要解除與 %{provider} 的連結嗎？你仍可用電子郵件和密碼登入。如果從未設定密碼，請在登入頁使用「忘記密碼？」。"
+      disconnect_confirm_line: "要解除與 %{provider} 的連結嗎？LINE 提醒會改用電子郵件寄送。你仍可用電子郵件和密碼登入。如果從未設定密碼，請在登入頁使用「忘記密碼？」。"
+      connect_on_website: "無法在 App 內連結。請用手機或電腦的瀏覽器開啟 Pet Tracker 並登入，再到個人資料頁連結。"
     reminder_channel:
       title: "🔔 提醒的通知方式"
       description: "體重提醒和家庭提醒（貓砂盆、飲水、用藥）都會用這個方式通知。"
@@ -1805,6 +1821,7 @@ zh-TW:
     sessions:
       create:
         connected: "%{provider} 已連結"
+        connected_elsewhere: "這個 %{provider} 帳號已經用來登入另一個 Pet Tracker 帳號，所以沒有連結到這個帳號。"
         first_time_sign_in: "這是您第一次登入，請先新增一隻貓以進行後續追蹤。"
         welcome_back: "您已登入。歡迎回到貓咪餵食追蹤 App，%{username}"
         email_exists: "已有使用此電子郵件地址的帳號。請使用您的 %{service_methods} 帳號登入，以與此服務關聯。"

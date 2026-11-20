@@ -60,6 +60,8 @@ Your user account is the central hub for managing your pets and tracking their a
 
 You can also sign in with **Google**, **LINE** or **GitHub**. Signing in with LINE also lets you get reminders on LINE (see [Reminders](#reminders)). In the Android app, these buttons open a Chrome tab over the app; after choosing your account you're back in the app, signed in.
 
+Your **profile page** lists every way into your account under **Sign-in methods**: email and password, Google, LINE and GitHub. Connect one there, or disconnect any you don't recognize. Connecting is done on the website; in the Android app you can see the list and disconnect. Resetting a forgotten password disconnects them all, so only the new password signs in; connect again from your profile page.
+
 ### Timezone
 
 The app will automatically detect your local timezone when setting up your account to ensure all tracking data is accurate. You can also manually update your timezone in your user settings.
