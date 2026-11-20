@@ -183,10 +183,29 @@ class VetVisitsControllerTest < ActionDispatch::IntegrationTest
         }
       }
     }
-    # Should fail transaction and rollback, showing unauthorized or redirecting
-    # Since it rolled back, database won't have the answer
+    # Turned away like on the list page, before anything about the pet is shown.
+    assert_redirected_to pets_url
+    assert_equal I18n.t("vet_visits.unauthorized"), flash[:alert]
+    assert_not_includes response.body, @pet.petname
     @vet_visit.reload
     assert_nil @vet_visit.answer
+  end
+
+  test "unauthorized user is turned away from batch update even with made-up visit ids" do
+    log_in_as(@non_owner)
+    patch batch_update_pet_vet_visits_url(@pet), params: { vet_visits: { "999999" => { answer: "x" } } }
+    assert_redirected_to pets_url
+    assert_not_includes response.body, @pet.petname
+  end
+
+  test "member's batch update of a visit not shared with them changes nothing" do
+    @vet_visit.members << @non_owner
+    other_visit = VetVisit.create!(pet: @pet, question: "Private question?", visit_date: Date.today - 1)
+    log_in_as(@non_owner)
+    patch batch_update_pet_vet_visits_url(@pet), params: { vet_visits: { other_visit.id => { answer: "Not mine to answer." } } }
+    assert_response :unprocessable_entity
+    assert_not_includes response.body, "Private question?"
+    assert_nil other_visit.reload.answer
   end
 
   test "owner can create vet_visit with vet_name and consultation_time" do

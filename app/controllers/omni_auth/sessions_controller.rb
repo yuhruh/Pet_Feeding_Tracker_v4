@@ -53,9 +53,9 @@ class OmniAuth::SessionsController < ApplicationController
   def finish_sign_in(path, flash_values, user: nil)
     return redirect_to(path, flash_values) unless native_sign_in?
 
-    session.delete(:native_sign_in)
+    challenge = session.delete(:native_sign_in)["challenge"]
     data = { "omniauth_auth" => session.delete("omniauth.auth") }
-    code = NativeSignIn.issue!(user: user, path: path, flash: flash_values.stringify_keys, data: data)
+    code = NativeSignIn.issue!(user: user, path: path, challenge: challenge, flash: flash_values.stringify_keys, data: data)
     @app_url = "pettracker://sign-in?code=#{code}"
     render "native_sign_ins/return", layout: false
   end

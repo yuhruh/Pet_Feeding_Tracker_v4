@@ -74,8 +74,10 @@ Rails.application.configure do
   config.action_mailer.default_options = { from: "ajicaretracker@gmail.com" }
   # config.action_mailer.default_options = { from: "onboarding@resend.dev" }
 
-  # Dynamically set host based on environment variable
-  host = ENV.fetch("RAILS_HOST", "pet-feeding-tracker-v4.onrender.com")
+  # The site's own address on Railway (also the Android app's base URL), used in
+  # emailed links unless RAILS_HOST names a custom domain. A default on a host we
+  # don't run would send password-reset links to whoever holds that name.
+  host = ENV["RAILS_HOST"].presence || "pet-feeding-tracker-v4.up.railway.app"
   config.action_mailer.default_url_options = { host: host }
   config.action_mailer.asset_host = "https://#{host}"
 
@@ -129,7 +131,7 @@ Rails.application.configure do
   # Enable DNS rebinding protection and other `Host` header attacks: requests for any other
   # host get a 403. Add a custom domain with RAILS_ALLOWED_HOSTS (comma-separated).
   config.hosts = [
-    "pet-feeding-tracker-v4.up.railway.app", # the Android app's base URL
+    "pet-feeding-tracker-v4.up.railway.app",
     host,
     ENV["RAILWAY_PUBLIC_DOMAIN"],
     *ENV.fetch("RAILS_ALLOWED_HOSTS", "").split(",").map(&:strip)

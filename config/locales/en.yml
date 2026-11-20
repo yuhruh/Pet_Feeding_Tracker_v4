@@ -859,6 +859,7 @@ en:
       notice: "Password reset instructions sent (if user with that email address exists)."
     update:
       notice: "Password has been reset."
+      notice_disconnected: "Password has been reset. To keep the account yours alone, sign-in with %{providers} was disconnected from it. Sign in with your new password."
       alert: "Passwords did not match."
     set_user_by_token:
       alert: "Password reset link is invalid or has expired."

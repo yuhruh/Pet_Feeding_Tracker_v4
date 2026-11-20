@@ -170,6 +170,53 @@ class NativeSignInTest < ActionDispatch::IntegrationTest
 
     @chrome.get routes.native_sign_in_path(provider: "google_oauth2", context: "forged"), headers: CHROME
     assert_nil @chrome.session[:invitation_token]
+    assert_not_started @chrome
+  end
+
+  # The code only works in the WebView session whose sign-in page started it.
+
+  test "a code caught by another app on the phone signs nobody in, and still works in the app" do
+    code = sign_in_in_chrome(google_link_in_app)
+
+    other_app = open_session
+    other_app.get routes.new_session_path(**L), headers: APP # its own session, its own secret
+    other_app.get routes.native_sign_in_finish_path(code: code), headers: APP
+    assert_equal I18n.t("native_sign_ins.finish.expired"), other_app.flash[:alert]
+    assert_not signed_in_session?(other_app)
+    assert_equal 0, Session.count
+
+    finish_in_app(code)
+    assert_redirected_to_landing @webview, url(routes.new_pet_path(**L))
+    assert_equal 1, Session.count
+  end
+
+  test "a link with someone else's code doesn't replace the sign-in of whoever opens it" do
+    code = sign_in_in_chrome(google_link_in_app) # the sender's own sign-in
+
+    owner = users(:one)
+    victim = open_session
+    victim.post routes.session_path(**L), params: { email_address: owner.email_address, password: "password123" }
+    cookie = victim.cookies["session_id"]
+    victim.get routes.native_sign_in_finish_path(code: code)
+    assert_equal I18n.t("native_sign_ins.finish.expired"), victim.flash[:alert]
+    assert_equal cookie, victim.cookies["session_id"]
+    assert_empty User.find_by!(email_address: "mom@example.com").sessions
+  end
+
+  test "the start page does nothing without the app's sign-in page, or with one left open too long" do
+    @chrome.get routes.native_sign_in_path(provider: "google_oauth2"), headers: CHROME
+    assert_not_started @chrome
+
+    link = google_link_in_app
+    travel NativeSignIn::CONTEXT_LIFETIME + 1.minute do
+      @chrome.get link, headers: CHROME
+      assert_not_started @chrome
+      # Back in the app: its sign-in page again, with a link that works.
+      finish_in_app("expired")
+      assert_equal I18n.t("native_sign_ins.finish.expired"), @webview.flash[:alert]
+      finish_in_app(sign_in_in_chrome(google_link_in_app))
+      assert_equal 1, Session.count
+    end
   end
 
   test "the website's Google sign-in is unchanged, also after an abandoned app sign-in in the same Chrome" do
@@ -186,6 +233,15 @@ class NativeSignInTest < ActionDispatch::IntegrationTest
 
   # Tests turn forgery protection off, so the form may have no token.
   def csrf_token(form) = form.at_css("input[name=authenticity_token]")&.[]("value")
+
+  # No provider form; Chrome is sent back to the app with a code that redeems nothing.
+  def assert_not_started(session)
+    assert_equal 200, session.response.status
+    assert_empty session.css_select("form")
+    assert_equal "pettracker://sign-in?code=expired", session.css_select("a#open_app").first["href"]
+    assert_nil session.session[:native_sign_in]
+    assert_equal 0, NativeSignIn.count
+  end
 
   def assert_redirected_to_landing(session, url)
     assert_equal 302, session.response.status

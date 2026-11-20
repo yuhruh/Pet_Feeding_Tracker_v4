@@ -859,6 +859,7 @@ zh-TW:
       notice: "密碼重設說明已傳送（如果存在使用該電子郵件地址的使用者）。"
     update:
       notice: "密碼已重設。"
+      notice_disconnected: "密碼已重設。為了確保帳號只有你能使用，已解除這個帳號與 %{providers} 登入的連結。請用新密碼登入。"
       alert: "密碼不符。"
     set_user_by_token:
       alert: "密碼重設連結無效或已過期。"

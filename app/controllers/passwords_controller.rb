@@ -26,7 +26,7 @@ class PasswordsController < ApplicationController
     if params[:password].present? && @user.update(params.permit(:password, :password_confirmation))
       # Whoever knew the old password may still be signed in somewhere.
       @user.sessions.destroy_all
-      redirect_to new_session_path, notice: t(".notice")
+      redirect_to new_session_path, notice: disconnect_linked_sign_ins
     else
       @user.errors.add(:password, :blank) if params[:password].blank?
       redirect_to edit_password_path(params[:token]), alert: @user.errors.full_messages.to_sentence
@@ -34,6 +34,18 @@ class PasswordsController < ApplicationController
   end
 
   private
+    # Sign-up doesn't prove the email is yours, so someone else may have opened
+    # this account and linked their own Google, LINE or GitHub to it. The reset
+    # link does prove it: from here on only the new password signs in, and a
+    # provider sign-in that is on its way to the app is dropped too.
+    def disconnect_linked_sign_ins
+      @user.native_sign_ins.delete_all
+      providers = @user.connected_services.destroy_all.map(&:provider).uniq
+      return t(".notice") if providers.empty?
+
+      t(".notice_disconnected", providers: providers.map { |provider| t("native_sign_ins.start.providers.#{provider}", default: provider.to_s.humanize) }.to_sentence)
+    end
+
     def set_user_by_token
       @user = User.find_by_password_reset_token!(params[:token])
     rescue ActiveSupport::MessageVerifier::InvalidSignature

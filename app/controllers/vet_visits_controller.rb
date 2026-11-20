@@ -1,19 +1,12 @@
 class VetVisitsController < ApplicationController
   before_action :require_authentication
   before_action :set_pet
+  before_action :set_visible_vet_visits, only: %i[index batch_update]
   before_action :set_vet_visit, only: %i[show edit update destroy]
   before_action :verify_access!, only: %i[show edit update destroy]
   before_action :verify_owner!, only: %i[new create destroy]
 
   def index
-    if @pet.owner == Current.user
-      @vet_visits = @pet.vet_visits.order(visit_date: :desc)
-    else
-      @vet_visits = @pet.vet_visits.joins(:vet_visit_members).where(vet_visit_members: { user_id: Current.user.id }).order(visit_date: :desc)
-      if @vet_visits.empty?
-        redirect_to pets_path, alert: t("vet_visits.unauthorized")
-      end
-    end
   end
 
   def show
@@ -79,11 +72,6 @@ class VetVisitsController < ApplicationController
     if @errors.empty?
       redirect_to pet_vet_visits_path(@pet), notice: t(".notice", default: "All changes saved successfully!")
     else
-      if @pet.owner == Current.user
-        @vet_visits = @pet.vet_visits.order(visit_date: :desc)
-      else
-        @vet_visits = @pet.vet_visits.joins(:vet_visit_members).where(vet_visit_members: { user_id: Current.user.id }).order(visit_date: :desc)
-      end
       flash.now[:alert] = @errors.uniq.join(", ")
       render :index, status: :unprocessable_entity
     end
@@ -102,6 +90,17 @@ class VetVisitsController < ApplicationController
 
   def set_vet_visit
     @vet_visit = @pet.vet_visits.find(params[:id])
+  end
+
+  # The list pages (index, and batch_update when it shows the list again): every
+  # visit for the owner, the shared ones for a member. Anyone else is turned away
+  # before the page, which names the pet, is rendered.
+  def set_visible_vet_visits
+    visits = @pet.vet_visits.order(visit_date: :desc)
+    return @vet_visits = visits if @pet.owner == Current.user
+
+    @vet_visits = visits.joins(:vet_visit_members).where(vet_visit_members: { user_id: Current.user.id })
+    redirect_to pets_path, alert: t("vet_visits.unauthorized") if @vet_visits.empty?
   end
 
   def verify_access!
