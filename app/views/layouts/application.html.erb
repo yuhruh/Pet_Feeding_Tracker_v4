@@ -23,7 +23,6 @@
     <%= javascript_importmap_tags %>
     
     <script type="module" nonce="<%= content_security_policy_nonce %>">
-      // import Big from "https://ga.jspm.io/npm:big.js@6.2.1/big.mjs";
       import Big from "big.js";
       window.BigNumber = Big;
     </script>

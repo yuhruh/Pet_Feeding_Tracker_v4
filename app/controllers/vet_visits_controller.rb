@@ -1,10 +1,18 @@
 class VetVisitsController < ApplicationController
+  MAX_NEW_MEMBERS_PER_SAVE = 10
+
   before_action :require_authentication
   before_action :set_pet
   before_action :set_visible_vet_visits, only: %i[index batch_update]
   before_action :set_vet_visit, only: %i[show edit update destroy]
   before_action :verify_access!, only: %i[show edit update destroy]
   before_action :verify_owner!, only: %i[new create destroy]
+  # Sharing a visit by email tells the owner which addresses have an account (only
+  # those can be added, and the form lists them), so new addresses can't be tried
+  # in bulk: 20 saves an hour that add someone new, 10 new addresses per save.
+  # People this cat's visits are already shared with don't count.
+  rate_limit to: 20, within: 1.hour, only: %i[create update], by: -> { Current.user.id }, if: -> { new_member_emails.any? },
+             with: -> { redirect_to pet_vet_visits_path(@pet), alert: t("vet_visits.alert_rate_limit") }
 
   def index
   end
@@ -125,9 +133,20 @@ class VetVisitsController < ApplicationController
     params.expect(vet_visit: [ :answer ])
   end
 
+  def member_emails
+    Array(params.dig(:vet_visit, :member_emails)).map { |email| email.to_s.strip }.reject(&:blank?).uniq
+  end
+
+  # Addresses not yet sharing any of this cat's visits: the ones whose lookup says something new.
+  def new_member_emails
+    @new_member_emails ||= begin
+      known = User.where(id: VetVisitMember.where(vet_visit_id: @pet.vet_visits.select(:id)).select(:user_id)).pluck(:email_address)
+      member_emails.reject { |email| known.include?(User.normalize_value_for(:email_address, email)) }
+    end
+  end
+
   def sync_members
-    emails = params[:vet_visit][:member_emails] || []
-    emails = emails.map(&:strip).reject(&:blank?).uniq
+    emails = member_emails - new_member_emails.drop(MAX_NEW_MEMBERS_PER_SAVE)
 
     users = User.where(email_address: emails)
 

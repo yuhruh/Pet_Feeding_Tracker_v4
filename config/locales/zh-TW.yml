@@ -1557,6 +1557,7 @@ zh-TW:
         note: "備註"
         weight: "體重(公斤)"
       pet:
+        pet_avatar: "寵物頭像"
         petname: "寵物名稱"
         birthday: "生日"
         weight: "體重(公斤)"
@@ -1629,6 +1630,11 @@ zh-TW:
         visit_date: "門診日期"
     errors:
       models:
+        pet:
+          attributes:
+            pet_avatar:
+              not_an_image: "必須是照片（JPEG、PNG、GIF、WebP 或 HEIC）"
+              too_large: "檔案太大（最多 %{megabytes} MB）"
         household_invitation:
           attributes:
             base:
@@ -1917,6 +1923,7 @@ zh-TW:
     unauthorized: "您無權檢視或編輯此門診提問。"
     unauthorized_owner: "只有寵物的主人才能執行此操作。"
     emails_not_found: "系統中找不到以下電子郵件，無法新增為成員：%{emails}"
+    alert_rate_limit: "分享對象變更得太頻繁，請稍候再試。"
   privacy_page:
     title: 隱私權政策
     intro: Cat Tracker（貓咪餵食紀錄網站與 Android App）是一個小型的個人應用程式，用來記錄貓咪吃了什麼、健康狀況的變化，以及家人為牠們做的照顧。本頁說明本應用程式儲存哪些資料、誰看得到、使用哪些服務，以及絕對不會做的事。

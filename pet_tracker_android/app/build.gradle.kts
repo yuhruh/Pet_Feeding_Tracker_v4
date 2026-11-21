@@ -88,7 +88,7 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.1")
 
     // PostHog Android SDK
-    implementation("com.posthog:posthog-android:3.+")
+    implementation("com.posthog:posthog-android:3.40.2")
 
     // Firebase Cloud Messaging: reminder notifications (checkpoint I)
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))

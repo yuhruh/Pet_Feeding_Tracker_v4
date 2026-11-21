@@ -53,7 +53,7 @@ The system is a **server-rendered Rails monolith** following the classic **MVC**
 | Layer | Technology |
 |---|---|
 | Language / runtime | Ruby 3.4.1, jemalloc |
-| Web framework | Rails 8.1.3.1 |
+| Web framework | Rails 8.1.4.1 |
 | App server / proxy | Puma, fronted by **Thruster** (HTTP/2, compression, asset caching) |
 | Front end | Turbo, Stimulus (14 controllers), Importmap, Tailwind CSS 3, Chartkick + Groupdate (charts), will_paginate |
 | i18n | `rails-i18n`, `i18n-js` (translations exported to `app/javascript/translations.js` for Stimulus); locales: `en` (default), `zh-TW`, `ja` |
@@ -970,7 +970,7 @@ Since checkpoint B, access comes from the person's **role in the cat's household
 | **Model validations** | `User` (presence, email format, uniqueness, length, confirmation, time zone on create), `Pet` (name 2–25), `Tracker` (food type, brand 1–50, description 2–100, amount > 0, leftover ≤ amount), `VetVisit` (question, visit date, waiting time ≥ 0 and ≤ consultation time, purpose enum), `VetVisitMember` (unique per visit) |
 | **CSV import validation** | Date parsing, date ≥ birthday, numeric checks, model validations, whole-file transaction rollback, row-numbered errors |
 | **SQL injection** | ActiveRecord bind parameters. Text filters use `Arel#matches`, which is parameterized. |
-| **XSS** | ERB auto-escaping by default, plus an enforced Content-Security-Policy: scripts only from the app, `ga.jspm.io`, `esm.sh`, `www.gstatic.com`, or inline with the per-session nonce; no inline event handlers (use Stimulus actions) (S7) |
+| **XSS** | ERB auto-escaping by default, plus an enforced Content-Security-Policy: scripts only from the app itself (every importmap pin is a file in `vendor/javascript`; no CDN since 2026-11-21) or inline with the per-session nonce; no inline event handlers (use Stimulus actions) (S7) |
 | **CSRF** | `protect_from_forgery` (Rails default) on all non-GET requests; OmniAuth CSRF gem |
 | **Secrets at rest** | `gemini_api_key` encrypted (`encrypts`); app secrets in `config/credentials.yml.enc` or environment variables; `config/master.key` is not committed |
 | **Transport** | `force_ssl` + `assume_ssl` → HTTPS redirect, HSTS, secure cookies |
@@ -981,7 +981,7 @@ Since checkpoint B, access comes from the person's **role in the cat's household
 
 ### 4.4 Security Findings and Gaps
 
-Ranked by severity. S1–S3 and S5–S17 are fixed and S4 is partly fixed; finish S4 before any public growth. S15–S17 come from the review of 2026-11-20; its low-severity findings are listed under them.
+Ranked by severity. S1–S3 and S5–S18 are fixed and S4 is partly fixed; finish S4 before any public growth. S15–S18 come from the review of 2026-11-20; S18 (its low-severity findings) and what is still open are listed under the table.
 
 | ID | Severity | Finding | Recommendation |
 |---|---|---|---|
@@ -1007,7 +1007,25 @@ Ranked by severity. S1–S3 and S5–S17 are fixed and S4 is partly fixed; finis
 | **S16** | ✅ Fixed 2026-11-20 (was 🟠 Medium) | **A password reset left linked sign-in methods in place.** Sign-up doesn't confirm the email address, so someone could open an account with another person's address and link their own Google, LINE or GitHub. When the real owner reset the password and started using the account, the provider still signed the other person in. | **Done:** a successful reset (`PasswordsController#update`) deletes the account's `connected_services` and any sign-in code on its way to the app, besides its sessions, and the message names what was disconnected. **Cost:** someone who signed up with a provider and resets the password signs in with the password until they connect the provider again, and LINE reminders fall back to email meanwhile. The profile page's **Sign-in methods** section (`users/_sign_in_methods`, `SignInMethodsController`) lists the password, Google, LINE and GitHub with Connect or Disconnect, so they can connect again and anyone can remove a link they don't recognize; in the Android app it lists and disconnects, and connecting is done on the website. A provider account that already signs in to another account is refused with a message instead of being reported as connected. Covered by `test/controllers/password_reset_linked_sign_ins_test.rb` and `test/controllers/sign_in_methods_test.rb`. |
 | **S17** | ✅ Fixed 2026-11-20 (was 🟠 Medium) | **Vet visits `batch_update` showed another person's cat.** The action had no access check before it rendered the list again on an error, so any signed-in person could PATCH `/pets/:id/vet_visits/batch_update` and get a page with the cat's name. Visits themselves stayed filtered. | **Done:** `set_visible_vet_visits` runs before `index` and `batch_update`: the owner gets every visit, a member the shared ones, anyone else is sent to the cat list. Covered by `test/controllers/vet_visits_controller_test.rb`. |
 
-**Open, low severity (review of 2026-11-20):** link tokens and the sign-in `code` appear in request logs (paths aren't filtered, and `code` isn't in `filter_parameters`); `/rails/active_storage/direct_uploads` accepts files without signing in, and `pet_avatar` has no type or size check (a non-image breaks the cat list); the care-records CSV writes cells starting with `=` as they are; the profile form prints the saved Gemini key into the page; adding vet-visit members tells which emails have no account; backups and welcome emails are CC'd to the app's Gmail account; the container runs as root (`USER` is commented out in the `Dockerfile`); `big.js` and `i18n-js` load from CDNs with no integrity hash; the Android app has `allowBackup="true"` and a floating PostHog version; `sqlite3` 2.9.6 has an advisory (dev and test only); rate limits depend on `request.remote_ip` being the real client behind Railway's proxy (not checked).
+**Low-severity findings of the 2026-11-20 review, fixed 2026-11-21 (S18):**
+
+| What was found | What was done |
+|---|---|
+| Link tokens and one-time codes in request logs | `code` and `state` are filtered parameters; `FilteredSecretPaths` (in `filter_parameter_logging.rb`) masks the token in `/view/…`, `/join/…`, `/shared/…` and `/passwords/…` wherever the request path is logged, and in "Redirected to". Thruster's own request log and Railway's HTTP log still show full paths; set `LOG_REQUESTS=false` on the web service to turn Thruster's off. `test/integration/secrets_in_logs_test.rb` |
+| Anyone could store files through `/rails/active_storage/direct_uploads`; a cat's photo could be any file, which broke the cat list | Direct uploads need a signed-in session (`SignedInDirectUploads`). A newly chosen photo must be JPEG, PNG, GIF, WebP, HEIC or AVIF (the type Active Storage reads from the file) and at most 10 MB; the list skips an older file that isn't a picture. `test/controllers/uploads_security_test.rb` |
+| CSV downloads kept cells that a spreadsheet runs as formulas | `CsvSafe` puts an apostrophe before text starting with `=`, `+`, `-`, `@`, tab or return in the trackers CSV (download, email and Drive backups) and the care-records CSV; the trackers import takes it off again. `test/models/csv_safe_test.rb` |
+| The profile form sent the saved Gemini key back to the browser | The field holds a stand-in (`User::SAVED_GEMINI_KEY_MASK`): unchanged keeps the key, blank removes it, anything else replaces it. `test/controllers/gemini_key_form_test.rb` |
+| Sharing a vet visit by email shows which addresses have an account | Inherent in the feature (only accounts can be added, and the form lists them), so it is slowed down: 20 saves an hour that add someone new, 10 new addresses per save; people the cat's visits are already shared with don't count. `test/controllers/rate_limit_test.rb` |
+| `big.js` and `i18n-js` loaded from `ga.jspm.io` and `esm.sh` without integrity hashes | Both are files in `vendor/javascript` now, and `script-src` is `'self'` plus the nonce. `test/integration/content_security_policy_test.rb` |
+| Android: `allowBackup="true"`, PostHog version `3.+` | `allowBackup="false"` and `posthog-android:3.40.2`. Takes effect with the next app release |
+| `sqlite3` 2.9.6 advisory | Updated to 2.10.2. The advisory database had moved on since the review: Rails 8.1.3.1 (one critical Active Storage advisory among 20), Puma 7.2.1, Rack 3.2.6, net-ssh, OmniAuth 2.1.4 and rails-html-sanitizer 1.7.1 were flagged too, and are now Rails 8.1.4.1, Puma 7.2.3, Rack 3.2.9, net-ssh 7.3.10, OmniAuth 2.4.2 and rails-html-sanitizer 1.7.2. `bundler-audit` reports nothing |
+| The provider's whole answer written to the debug log | Line removed from `OmniAuth::SessionsController` |
+
+**Still open from that review:**
+
+- **The container runs as root.** `USER 1000:1000` was commented out on purpose (commit `49e6aed`): Railway mounts the storage volume as root, so the app could not write uploads as another user. Doing it properly means an entrypoint that fixes the volume's owner and then drops to the `rails` user, tried on Railway before it is relied on.
+- **Sent mail stays in the app's Gmail account.** Backups, welcome emails and weight reminders are no longer CC'd to `ajicaretracker@gmail.com` (2026-11-21), but mail sent through the Gmail API is kept in that account's Sent folder, backups with their attachments included. The privacy text says mail is sent through that account, not that copies stay there; saying so is the owner's call.
+- **Rate limits and the real client address.** Sign-in, sign-up and password-reset limits count per `request.remote_ip`. If Railway's proxy address (reported to be in `100.64.0.0/10`, which Rails doesn't treat as a proxy by default) is what Rails sees, everyone shares one limit. Check `Session.order(:id).last(5).pluck(:ip_address)` in production; if they are all `100.64.…`, add that range to `config.action_dispatch.trusted_proxies`.
 
 ### 4.5 Authorization Pattern (implemented for S1, by household since checkpoint B)
 
@@ -1123,7 +1141,7 @@ flowchart TB
 
 #### Phase 1 — Stabilize (current scale, hundreds of users)
 
-1. Finish the last **S4** operator step: back up the new signing key and `keystore.properties` off the machine. The GitHub Support purge (verified 2026-09-22) and the forced password reset for the 3 exposed accounts (2026-09-22) are done. Every other security finding (S1–S3, S5–S17) is fixed; the low-severity ones from the 2026-11-20 review (§4.4) are open.
+1. Finish the last **S4** operator step: back up the new signing key and `keystore.properties` off the machine. The GitHub Support purge (verified 2026-09-22) and the forced password reset for the 3 exposed accounts (2026-09-22) are done. Every other security finding (S1–S3, S5–S18) is fixed; three low-severity items from the 2026-11-20 review are still open (§4.4).
 2. Move Active Storage to object storage and backups off-site (§5.4).
 3. Split `web` and `worker` into separate services and set `SOLID_QUEUE_IN_PUMA=false`.
 4. Add error tracking, uptime checks, and PostgreSQL in CI.

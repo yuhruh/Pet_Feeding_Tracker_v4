@@ -35,6 +35,8 @@ class CsvImportTrackersService
 
         csv = CSV.parse(file, headers: true, col_sep: ";", header_converters: header_converter)
         csv.each_with_index do |row, i|
+          # Exports mark text that a spreadsheet would run as a formula; take the mark off again.
+          row.each { |header, value| row[header] = CsvSafe.restore(value) if header }
           tracker_hash = {}
 
           # Validate and convert data types

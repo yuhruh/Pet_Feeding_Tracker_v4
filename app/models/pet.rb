@@ -4,6 +4,10 @@ class Pet < ApplicationRecord
   # How far back a kibble counts as a current favorite for the monthly price check.
   FAVORITE_KIBBLE_WINDOW = 4.months
 
+  # The photo: an image a browser or phone produces, small enough to show in the list.
+  AVATAR_CONTENT_TYPES = %w[image/jpeg image/png image/gif image/webp image/heic image/heif image/avif].freeze
+  AVATAR_MAX_SIZE = 10.megabytes
+
   has_one_attached :pet_avatar
   # A cat belongs to a household; who manages it is the household's owner.
   belongs_to :household
@@ -20,6 +24,8 @@ class Pet < ApplicationRecord
   has_many :kibble_price_checks, dependent: :destroy
   validates :petname, presence: true,
                       length: { minimum: 2, maximum: 25 }
+  # Only a newly chosen photo is checked, so cats with an older photo can still be edited.
+  validate :pet_avatar_is_a_small_image, if: -> { attachment_changes["pet_avatar"].present? && pet_avatar.attached? }
 
   # The cat's feeding records as CSV, oldest first on the given clock. Sorted in Ruby
   # because feed_time is stored in UTC and wraps past midnight.
@@ -89,6 +95,12 @@ class Pet < ApplicationRecord
   end
 
   private
+
+  # The type is the one Active Storage read from the file itself, not the one the browser claimed.
+  def pet_avatar_is_a_small_image
+    errors.add(:pet_avatar, :not_an_image) unless AVATAR_CONTENT_TYPES.include?(pet_avatar.blob.content_type)
+    errors.add(:pet_avatar, :too_large, megabytes: AVATAR_MAX_SIZE / 1.megabyte) if pet_avatar.blob.byte_size > AVATAR_MAX_SIZE
+  end
 
   # Feedings with a hungry or love rating, latest first.
   def rated_trackers

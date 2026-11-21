@@ -103,7 +103,7 @@ class Tracker < ApplicationRecord
     CSV.generate(headers: true, col_sep: ";") do |csv|
       csv << [ "date", "feed_time", "come_back_to_eat", "food_type", "brand", "description", "amount", "left_amount", "total_ate_amount", "hungry", "love", "result", "note", "weight" ].map { |attr| human_attribute_name(attr) }
       records.each do |tracker|
-        csv << [
+        csv << CsvSafe.row([
           tracker.date,
           tracker.feed_time&.in_time_zone(timezone)&.strftime("%H:%M"),
           tracker.come_back_to_eat,
@@ -118,7 +118,7 @@ class Tracker < ApplicationRecord
           tracker.result,
           tracker.note,
           tracker.weight
-        ]
+        ])
       end
     end
   end

@@ -50,6 +50,9 @@ class User < ApplicationRecord
   has_many :vet_visit_members, dependent: :destroy
   has_many :shared_vet_visits, through: :vet_visit_members, source: :vet_visit
   encrypts :gemini_api_key
+  # What the profile form holds in place of a saved key, so the key itself never
+  # goes back to the browser. Sent back unchanged, it means "keep the saved key".
+  SAVED_GEMINI_KEY_MASK = "saved-key-not-shown".freeze
 
   attr_accessor :email_address_confirmation
 

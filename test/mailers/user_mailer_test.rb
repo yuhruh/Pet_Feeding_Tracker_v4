@@ -5,6 +5,7 @@ class UserMailerTest < ActionMailer::TestCase
     mail = UserMailer.with(user: users(:one)).welcome_email
     assert_equal "Welcome to Cat Trackers App!", mail.subject
     assert_equal [ users(:one).email_address ], mail.to
+    assert_nil mail.cc, "nobody else gets a copy"
     assert_equal [ "ajicaretracker@gmail.com" ], mail.from
     assert_match /Welcome to Cat Tracker App/, mail.html_part.body.decoded
   end
@@ -14,7 +15,7 @@ class UserMailerTest < ActionMailer::TestCase
                            url: "http://example.com/zh-TW/pets/1/trackers", locale: "zh-TW").send_pet_weight_reminder
     assert_equal "⚖️ 該幫Aji量體重囉", mail.subject
     assert_equal [ users(:one).email_address ], mail.to
-    assert_equal [ "ajicaretracker@gmail.com" ], mail.cc
+    assert_nil mail.cc, "nobody else gets a copy"
     assert_equal [ "ajicaretracker@gmail.com" ], mail.from
     assert_includes mail.html_part.body.decoded, "上次量體重是 10/1"
     assert_includes mail.html_part.body.decoded, "http://example.com/zh-TW/pets/1/trackers"

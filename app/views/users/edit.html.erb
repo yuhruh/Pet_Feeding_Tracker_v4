@@ -80,7 +80,7 @@
           <%= form.label :gemini_api_key, class: "text-base font-medium text-gray-700 dark:text-gray-100 optional capitalize md:text-right" %>
         </div>
         <div class="flex flex-col items-center md:items-start md:w-5/6">
-          <%= form.password_field :gemini_api_key, value: @user.gemini_api_key, placeholder: "AIza...", class: "shadow-md rounded-md border border-gray-400 focus:outline-softBlue px-3 py-2 w-1/2 bg-white text-gray-900" %>
+          <%= form.password_field :gemini_api_key, value: (User::SAVED_GEMINI_KEY_MASK if @user.gemini_api_key_was.present?), placeholder: "AIza...", autocomplete: "off", class: "shadow-md rounded-md border border-gray-400 focus:outline-softBlue px-3 py-2 w-1/2 bg-white text-gray-900" %>
           
           <details class="w-1/2 mt-4 bg-amber-50 dark:bg-gray-700 border border-amber-200 dark:border-gray-600 rounded-lg p-3 shadow-sm transition-all duration-300">
             <summary class="text-sm font-bold text-amber-800 dark:text-amber-400 cursor-pointer hover:text-amber-600 list-none flex items-center">

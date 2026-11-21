@@ -132,7 +132,7 @@ For bulk data entry, you can import trackers from a CSV file.
 3.  **Choose File:** Select the CSV file you want to import.
 4.  **Upload:** Click "Import" to upload and process the file.
 
-The file must be **semicolon-separated** (`;`), in the same format as the CSV you download from the Trackers page, so the easiest start is to export first and edit that file. Its columns are:
+The file must be **semicolon-separated** (`;`), in the same format as the CSV you download from the Trackers page, so the easiest start is to export first and edit that file. In downloaded files, text that starts with `=`, `+`, `-` or `@` has an apostrophe in front, so a spreadsheet shows it as text instead of running it as a formula; importing takes the apostrophe off again. Its columns are:
 
 `date; feed_time; come_back_to_eat; food_type; brand; description; amount; left_amount; total_ate_amount; hungry; love; result; note; weight`
 

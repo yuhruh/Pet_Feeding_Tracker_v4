@@ -26,7 +26,7 @@ class CareRecordsCsv
 
   def row(event)
     local = event.occurred_at.in_time_zone(@zone)
-    [
+    CsvSafe.row([
       local.to_date.iso8601, local.strftime("%H:%M"),
       I18n.t("care_records.kinds.#{event.kind}"),
       (@helpers.pet_display_name(event.pet) if event.pet),
@@ -37,7 +37,7 @@ class CareRecordsCsv
       event.note,
       @helpers.care_person(event.actor),
       (I18n.t("care_records.changed", time: event.edited_at.in_time_zone(@zone).strftime("%Y-%m-%d %H:%M"), person: @helpers.care_person(event.edited_by)) if event.edited?)
-    ]
+    ])
   end
 
   def details(event)

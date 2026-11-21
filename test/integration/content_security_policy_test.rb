@@ -15,9 +15,17 @@ class ContentSecurityPolicyTest < ActionDispatch::IntegrationTest
     assert_match(/'nonce-[^']+'/, script_src)
     assert_not_includes script_src, "'unsafe-inline'"
     assert_not_includes script_src, "'unsafe-eval'"
+    assert_no_match(/https?:/, script_src, "scripts come from this app only, not from a CDN")
     assert_includes policy, "object-src 'none'"
     assert_includes policy, "base-uri 'self'"
     assert_includes policy, "frame-ancestors 'self'"
+  end
+
+  test "every importmap pin is a file served by this app" do
+    paths = Rails.application.importmap.packages.values.map { |package| package.path.to_s }
+    assert_empty paths.grep(%r{\A(https?:)?//}), "a pin to another server runs its script with the signed-in person's access"
+    assert_includes paths, "big.js.js"
+    assert_includes paths, "i18n-js.bundle.js"
   end
 
   test "public pages use the nonce and no inline event handlers" do

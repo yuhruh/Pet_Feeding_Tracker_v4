@@ -1572,6 +1572,7 @@ en:
         note: "Note"
         weight: "Weight(kg)"
       pet:
+        pet_avatar: "Pet avatar"
         petname: "Petname"
         birthday: "Birthday"
         weight: "Weight(kg)"
@@ -1644,6 +1645,11 @@ en:
         visit_date: "Visit Date"
     errors:
       models:
+        pet:
+          attributes:
+            pet_avatar:
+              not_an_image: "must be a photo (JPEG, PNG, GIF, WebP or HEIC)"
+              too_large: "is too large (at most %{megabytes} MB)"
         household_invitation:
           attributes:
             base:
@@ -1932,6 +1938,7 @@ en:
     unauthorized: "You are not authorized to view or edit this vet visit."
     unauthorized_owner: "Only the pet's owner can perform this action."
     emails_not_found: "The following email(s) were not found in the system and could not be added as members: %{emails}"
+    alert_rate_limit: "Too many changes to who a visit is shared with. Please wait a while and try again."
   privacy_page:
     title: Privacy Policy
     intro: Cat Tracker (the Cat Feeding Tracker website and the Android app) is a small personal app for recording what your cats eat, how their health changes, and the care your household gives them. This page explains what it stores, who can see it, which services it uses, and what it never does.

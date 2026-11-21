@@ -1557,6 +1557,7 @@
         note: "メモ"
         weight: "体重(kg)"
       pet:
+        pet_avatar: "ペットのアバター"
         petname: "ペットの名前"
         birthday: "誕生日"
         weight: "体重(kg)"
@@ -1629,6 +1630,11 @@
         visit_date: "訪問日"
     errors:
       models:
+        pet:
+          attributes:
+            pet_avatar:
+              not_an_image: "は写真（JPEG、PNG、GIF、WebP、HEIC）にしてください"
+              too_large: "はサイズが大きすぎます（%{megabytes} MB まで）"
         household_invitation:
           attributes:
             base:
@@ -1917,6 +1923,7 @@
     unauthorized: "この記録を表示または編集する権限がありません。"
     unauthorized_owner: "ペットの飼い主のみがこの操作を実行できます。"
     emails_not_found: "以下のメールアドレスはシステム内に見つからず、メンバーとして追加できませんでした：%{emails}"
+    alert_rate_limit: "共有相手の変更が多すぎます。しばらくしてからもう一度お試しください。"
   privacy_page:
     title: プライバシーポリシー
     intro: Cat Tracker（猫の給餌トラッカーのウェブサイトと Android アプリ）は、猫が何を食べたか、健康状態の変化、そして家族によるお世話を記録するための小さな個人向けアプリです。このページでは、保存する情報、それを見られる人、利用するサービス、そして決して行わないことを説明します。

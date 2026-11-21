@@ -64,6 +64,9 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:username, :email_address, :password, :password_confirmation, :timezone, :gemini_api_key)
+    permitted = params.require(:user).permit(:username, :email_address, :password, :password_confirmation, :timezone, :gemini_api_key)
+    # The form shows a stand-in for a saved Gemini key: unchanged means keep it, blank removes it.
+    permitted.delete(:gemini_api_key) if permitted[:gemini_api_key] == User::SAVED_GEMINI_KEY_MASK
+    permitted
   end
 end

@@ -10,8 +10,8 @@
 Rails.application.configure do
   config.content_security_policy do |policy|
     policy.default_src :self
-    # importmap pins: big.js (ga.jspm.io) and i18n-js (esm.sh).
-    policy.script_src  :self, "https://ga.jspm.io", "https://esm.sh"
+    # Every script is served by this app (importmap pins are files in vendor/javascript).
+    policy.script_src  :self
     # Inline style attributes are used throughout the views, so inline styles stay allowed.
     # Scripts are the main injection risk and get no such exception.
     policy.style_src   :self, :unsafe_inline, "https://fonts.googleapis.com"

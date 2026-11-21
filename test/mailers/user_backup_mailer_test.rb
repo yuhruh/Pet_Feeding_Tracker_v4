@@ -7,6 +7,7 @@ class UserBackupMailerTest < ActionMailer::TestCase
     assert_equal "Your Pet Tracker Backup", mail.subject
     assert_equal [ user.email_address ], mail.to
     assert_equal [ "ajicaretracker@gmail.com" ], mail.from
+    assert_nil mail.cc, "a backup holds the person's records: nobody else gets a copy"
     assert_match /Attached is your pet tracking data backup/, mail.html_part.body.decoded
   end
 
