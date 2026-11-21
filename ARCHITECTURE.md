@@ -1020,12 +1020,12 @@ Ranked by severity. S1–S3 and S5–S18 are fixed and S4 is partly fixed; finis
 | Android: `allowBackup="true"`, PostHog version `3.+` | `allowBackup="false"` and `posthog-android:3.40.2`. Takes effect with the next app release |
 | `sqlite3` 2.9.6 advisory | Updated to 2.10.2. The advisory database had moved on since the review: Rails 8.1.3.1 (one critical Active Storage advisory among 20), Puma 7.2.1, Rack 3.2.6, net-ssh, OmniAuth 2.1.4 and rails-html-sanitizer 1.7.1 were flagged too, and are now Rails 8.1.4.1, Puma 7.2.3, Rack 3.2.9, net-ssh 7.3.10, OmniAuth 2.4.2 and rails-html-sanitizer 1.7.2. `bundler-audit` reports nothing |
 | The provider's whole answer written to the debug log | Line removed from `OmniAuth::SessionsController` |
+| Rate limits counted Railway's edge, not the visitor (sessions in production recorded `100.64.0.x`), so everyone shared the sign-in, sign-up and password-reset limits | `config/initializers/trusted_proxies.rb` adds `100.64.0.0/10` to Rails' trusted proxies, so `request.remote_ip` is the visitor's address (the right-most address in `X-Forwarded-For` that isn't a proxy, so a made-up one is not believed). Covered by `test/integration/client_address_test.rb` |
 
 **Still open from that review:**
 
 - **The container runs as root.** `USER 1000:1000` was commented out on purpose (commit `49e6aed`): Railway mounts the storage volume as root, so the app could not write uploads as another user. Doing it properly means an entrypoint that fixes the volume's owner and then drops to the `rails` user, tried on Railway before it is relied on.
 - **Sent mail stays in the app's Gmail account.** Backups, welcome emails and weight reminders are no longer CC'd to `ajicaretracker@gmail.com` (2026-11-21), but mail sent through the Gmail API is kept in that account's Sent folder, backups with their attachments included. The privacy text says mail is sent through that account, not that copies stay there; saying so is the owner's call.
-- **Rate limits and the real client address.** Sign-in, sign-up and password-reset limits count per `request.remote_ip`. If Railway's proxy address (reported to be in `100.64.0.0/10`, which Rails doesn't treat as a proxy by default) is what Rails sees, everyone shares one limit. Check `Session.order(:id).last(5).pluck(:ip_address)` in production; if they are all `100.64.…`, add that range to `config.action_dispatch.trusted_proxies`.
 
 ### 4.5 Authorization Pattern (implemented for S1, by household since checkpoint B)
 
