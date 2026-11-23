@@ -25,6 +25,19 @@ class DeviceTokensTest < ActionDispatch::IntegrationTest
     assert_no_difference(-> { DeviceToken.count }) { register }
   end
 
+  test "keeps whether the phone shows notifications; an app that doesn't say leaves it as it was" do
+    log_in_as(@owner)
+    post device_token_url(**L), params: { token: "phone-1", platform: "android", notifications_allowed: false }, as: :json
+    assert_response :no_content
+    assert_not DeviceToken.sole.notifications_allowed
+
+    register # app 1.0.6 and earlier: no notifications_allowed
+    assert_not DeviceToken.sole.notifications_allowed
+
+    post device_token_url(**L), params: { token: "phone-1", notifications_allowed: true }, as: :json
+    assert DeviceToken.sole.notifications_allowed
+  end
+
   test "someone else signing in on the phone takes the token over" do
     log_in_as(@owner)
     register
@@ -54,6 +67,24 @@ class DeviceTokensTest < ActionDispatch::IntegrationTest
     log_in_as(@owner)
     post device_token_url(**L), params: { token: "" }, as: :json
     assert_response :bad_request
+  end
+
+  test "the app's pages say whether this sign-in has the phone, so signing in again registers it again" do
+    app = { "HTTP_USER_AGENT" => "Hotwire Native Android; Turbo Native Android; bridge-components: [toast push]" }
+    registered = ->(value) { assert_select "[data-controller=push][data-push-registered-value=#{value}]" }
+
+    log_in_as(@owner)
+    get pets_url(**L), headers: app
+    registered.call(false)
+
+    register
+    get pets_url(**L), headers: app
+    registered.call(true)
+
+    delete session_url(**L)
+    log_in_as(@owner)
+    get pets_url(**L), headers: app
+    registered.call(false)
   end
 
   test "an expired session's tokens go with it" do

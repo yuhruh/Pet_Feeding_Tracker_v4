@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
@@ -24,6 +25,16 @@ object Push {
         Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
             ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
 
+    // Whether reminders would actually show: notifications allowed for the app
+    // and the "Reminders" channel not turned off in Android's settings. The
+    // server emails reminders when this is false.
+    fun isShowing(context: Context): Boolean {
+        val manager = NotificationManagerCompat.from(context)
+        val channel = manager.getNotificationChannel(CHANNEL_ID)
+        return isAllowed(context) && manager.areNotificationsEnabled() &&
+            (channel == null || channel.importance != NotificationManagerCompat.IMPORTANCE_NONE)
+    }
+
     fun createChannel(context: Context) {
         val channel = NotificationChannel(CHANNEL_ID, context.getString(R.string.reminders_channel_name), NotificationManager.IMPORTANCE_DEFAULT).apply {
             description = context.getString(R.string.reminders_channel_description)
@@ -31,9 +42,11 @@ object Push {
         context.getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
     }
 
-    // The device's token, or null when push is off, not allowed or Firebase fails.
+    // The device's token, or null when push is off or Firebase fails. Sent even
+    // when notifications aren't allowed, with isShowing, so the server knows to
+    // email reminders instead.
     fun token(context: Context, callback: (String?) -> Unit) {
-        if (!isAvailable(context) || !isAllowed(context)) return callback(null)
+        if (!isAvailable(context)) return callback(null)
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             callback(if (task.isSuccessful) task.result else null)
         }

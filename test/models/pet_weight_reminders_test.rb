@@ -229,6 +229,34 @@ class PetWeightRemindersTest < ActiveSupport::TestCase
     assert_equal "android_no_phone", @user.reload.reminder_problem
   end
 
+  test "notifications turned off on the phone: emailed with why, not pushed, until they're on again" do
+    active_user
+    weighed(@weighed_on)
+    @user.update!(reminder_channel: "android")
+    DeviceToken.register(user: @user, session: nil, token: "phone-1", notifications_allowed: false)
+
+    text = nil
+    pushed = with_push { text = email_text(day(14)) }
+    assert_empty pushed, "a phone that wouldn't show it isn't sent the reminder"
+    assert_includes text, "App 通知已關閉"
+    assert_equal "android_notifications_off", @user.reload.reminder_problem
+
+    DeviceToken.register(user: @user, session: nil, token: "phone-2") # another phone, notifications on
+    pushed = with_push { assert_equal "android", run_at(day(28)) }
+    assert_equal [ "phone-2" ], pushed.map { |push| push[:token] }
+    assert_nil @user.reload.reminder_problem
+  end
+
+  test "by default, a phone with notifications off isn't the app choice" do
+    active_user
+    weighed(@weighed_on)
+    DeviceToken.register(user: @user, session: nil, token: "phone-1", notifications_allowed: false)
+
+    pushed = with_push { assert_equal "email", run_at(day(14)) }
+    assert_empty pushed
+    assert_nil @user.reload.reminder_problem, "email is the default here, not a fallback"
+  end
+
   test "chose LINE: a failed LINE send, or LINE no longer connected, is emailed with why" do
     active_user
     weighed(@weighed_on)

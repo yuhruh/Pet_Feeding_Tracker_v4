@@ -211,7 +211,7 @@ In a litter record's **Add details**: which cat (if you know), pee clumps, the n
 -   **Get them:** under your household's name on Today, tap **Turn on** next to 🔔 Reminders. Each owner and caregiver chooses for themselves; viewers don't get reminders.
 -   **When:** a job due on a day is sent at **9am** in your time zone; a shorter interval when it's due, between 9am and 9pm; a set time at that time. If it's still not done, there's one follow-up. Overdue doses are reminded once.
 -   **How:** choose on your account page, under **🔔 How you get reminders**: **App notification**, **LINE** (if you signed in with LINE) or **Email**. It's one choice for all your reminders. Until you choose, it's the Android app if you use it, else LINE, else email. Today shows which one, with a **How reminders come** link.
--   **If it can't be sent:** when an app notification or LINE message fails (no phone signed in, LINE not connected, or the send failed), the reminder is emailed instead with a note saying why, and your account page shows what went wrong.
+-   **If it can't be sent:** when an app notification or LINE message fails (no phone signed in, notifications turned off for the app on your phone, LINE not connected, or the send failed), the reminder is emailed instead with a note saying why, and your account page shows what went wrong.
 -   **Weight reminders (owners):** when a cat hasn't been weighed for 14 days (or since it was added), and again every 14 days until it is, sent between 9am and 9pm in your time zone, the way you chose. They stop if you haven't used the app for 15 days.
 
 ## Care Records CSV
@@ -221,7 +221,7 @@ The owner can download every care record (feeding taps, weight, litter, water, m
 ## Android App
 
 -   **Sign in** with email, or with Google, LINE or GitHub (a Chrome tab opens over the app and brings you back signed in).
--   **Notifications:** turning on 🔔 Reminders on Today asks to allow notifications (Android 13+). Reminders then arrive as notifications; tapping one opens Today. You can adjust the "Reminders" channel in Android's settings.
+-   **Notifications:** turning on 🔔 Reminders on Today asks to allow notifications (Android 13+). Reminders then arrive as notifications; tapping one opens Today. You can adjust the "Reminders" channel in Android's settings. If you turn Pet Tracker's notifications (or the "Reminders" channel) off, the app tells Pet Tracker the next time you open it, and reminders are emailed instead.
 -   **Signing out** of the app stops notifications on that phone.
 
 ## Kibble Prices

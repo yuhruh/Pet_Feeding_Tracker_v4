@@ -41,6 +41,7 @@ module ReminderChannels
 
   def android_problem(title:, body:, url:)
     return "android_no_phone" if @user.device_tokens.none?
+    return "android_notifications_off" if @user.device_tokens.notifying.none?
 
     "android_failed" unless pushed_to_android?(title: title, body: body, url: url)
   end
@@ -61,11 +62,12 @@ module ReminderChannels
 
   def line_uid = @user.connected_services.find { |service| service.provider == "line" }&.uid
 
-  # Sent to at least one of the person's phones; phones whose token is gone are forgotten.
+  # Sent to at least one of the person's phones that show notifications; phones
+  # whose token is gone are forgotten.
   def pushed_to_android?(title:, body:, url:)
     return false unless FcmClient.configured?
 
-    results = @user.device_tokens.map do |device|
+    results = @user.device_tokens.notifying.map do |device|
       result = self.class.push_android(device.token, title: title, body: body, url: url)
       result == :gone ? device.delete && :gone : result
     rescue StandardError => error

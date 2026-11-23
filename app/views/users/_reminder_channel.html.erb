@@ -23,6 +23,8 @@
             <span class="text-sm text-gray-500 dark:text-gray-300">(<%= user.email_address %>)</span>
           <% elsif channel == "android" && user.device_tokens.none? %>
             <span class="block text-sm text-gray-500 dark:text-gray-300"><%= t(".no_phone") %></span>
+          <% elsif channel == "android" && user.device_tokens.notifying.none? %>
+            <span class="block text-sm text-gray-500 dark:text-gray-300"><%= t(".notifications_off") %></span>
           <% end %>
         </span>
       </label>

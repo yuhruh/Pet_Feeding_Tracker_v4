@@ -7,9 +7,10 @@ import dev.hotwire.navigation.destinations.HotwireDestination
 import org.json.JSONObject
 
 // The "push" bridge component (checkpoint I): signed-in pages ask for this
-// phone's notification token and send it to the server. "token" answers only
-// when notifications are already allowed; "request" (after turning reminders
-// on) asks for the permission first, on Android 13+.
+// phone's notification token and send it to the server, with "allowed":
+// whether notifications would show (the server emails reminders when not).
+// "token" answers right away; "request" (after turning reminders on) asks for
+// the permission first, on Android 13+.
 class PushComponent(
     name: String,
     private val delegate: BridgeDelegate<HotwireDestination>
@@ -31,7 +32,10 @@ class PushComponent(
     private fun replyWithToken(message: Message) {
         val context = delegate.destination.fragment.context ?: return
         Push.token(context) { token ->
-            val data = JSONObject().apply { if (token != null) put("token", token) }
+            val data = JSONObject().apply {
+                if (token != null) put("token", token)
+                put("allowed", Push.isShowing(context))
+            }
             delegate.destination.fragment.activity?.runOnUiThread { replyTo(message.event, data.toString()) }
         }
     }

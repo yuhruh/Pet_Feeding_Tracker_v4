@@ -108,6 +108,7 @@ zh-TW:
   reminder_delivery:
     problems:
       android_no_phone: "沒有手機登入 Pet Tracker Android App，所以這則提醒無法送到 App。"
+      android_notifications_off: "你手機上的 Pet Tracker App 通知已關閉，這則提醒不會顯示。如果想再用 App 收到提醒，請在手機設定中允許 Pet Tracker 的通知，然後打開 App。"
       android_failed: "這則提醒無法送到你手機上的 Pet Tracker App。請打開 App，並確認已允許通知。"
       line_not_connected: "你的帳號已經沒有連結 LINE，所以這則提醒無法用 LINE 送出。"
       line_failed: "這則提醒無法用 LINE 送出。請確認你沒有封鎖 Pet Tracker 的 LINE 帳號。"
@@ -615,7 +616,7 @@ zh-TW:
             items:
               - "某天到期的工作會在您時區的早上 9 點送出；較短的間隔會在到期時送出（早上 9 點到晚上 9 點之間）；固定時間則在那個時間送出。如果還沒做，會再提醒一次。逾時的用藥會提醒一次。"
               - "在帳號頁面的「🔔 提醒的通知方式」選擇：App 通知、LINE（用 LINE 登入才有）或 Email。所有提醒都用同一個方式。還沒選的話，有用 Android App 就用 App，否則 LINE，再不然 Email。今天頁面會顯示目前的方式，並有「通知方式」連結。"
-              - "如果 App 通知或 LINE 訊息送不出去（沒有手機登入、沒有連結 LINE，或傳送失敗），會改用 Email 寄出提醒並說明原因，帳號頁面也會顯示問題。"
+              - "如果 App 通知或 LINE 訊息送不出去（沒有手機登入、手機上的 App 通知已關閉、沒有連結 LINE，或傳送失敗），會改用 Email 寄出提醒並說明原因，帳號頁面也會顯示問題。"
               - "體重提醒（擁有者）：貓咪 14 天沒量體重（或新增後一直沒量），之後每 14 天再提醒，直到量了為止；在您時區的早上 9 點到晚上 9 點之間，用您選的方式送出。15 天沒使用 App 就不再寄送。"
       - id: "kibble_prices"
         title: "飼料價格"
@@ -1228,8 +1229,9 @@ zh-TW:
       line: "LINE"
       email: "Email"
       no_phone: "還沒有手機登入 Android App。"
+      notifications_off: "你手機上的 Pet Tracker 通知已關閉。請在手機設定中允許通知，然後打開 App。"
       save: "儲存"
-      fallback_note: "如果 App 通知或 LINE 訊息送不出去，會改用 Email 寄出提醒。"
+      fallback_note: "如果 App 通知或 LINE 訊息送不出去，或手機上的 App 通知已關閉，會改用 Email 寄出提醒。"
     drive_backup:
       title: "☁️ Google 雲端硬碟備份"
       description: "每天在你選擇的時間，把每隻貓的餵食紀錄（CSV）存到你的 Google 雲端硬碟。"

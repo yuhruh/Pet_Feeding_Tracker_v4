@@ -42,7 +42,8 @@
                 params: { enabled: !reminders_on }, class: "text-sky-700 underline cursor-pointer" %>
           <% if reminders_on && hotwire_native_app? %>
             <%# In the Android app, reminders on: ask for the notification permission (once) and register this phone. %>
-            <span data-controller="push" data-push-url-value="<%= device_token_path %>" data-push-ask-value="true" hidden></span>
+            <span data-controller="push" data-push-url-value="<%= device_token_path %>" data-push-ask-value="true"
+                  data-push-registered-value="<%= Current.session.device_tokens.exists? %>" hidden></span>
           <% end %>
         </div>
       <% end %>

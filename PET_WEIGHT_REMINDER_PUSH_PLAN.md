@@ -8,6 +8,8 @@ Nov 9, 2026 · @Rita · follows PET_WEIGHT_REMINDER_FIX_PLAN.md (done in ee5903d
 - E (each person chooses the channel; email with why when the app or LINE fails) in `c844fec`. E replaces C's app → LINE → email order.
 - F (Today shows the chosen channel; one weight job instead of two), Nov 9, 2026.
 - `lib/tasks/notifications.rake` removed, Nov 9, 2026: nothing scheduled used it.
+- G (email when notifications are turned off on the phone), Nov 23, 2026. Server first; Android app 1.0.7 needed for it to take effect.
+- H (a new sign-in in the same app run never registered the phone again), Nov 23, 2026. Server only.
 
 ## Root causes
 
@@ -167,6 +169,58 @@ Now the pattern is the same as household reminders (`CareReminderJob` + `Househo
 | `test/jobs/pet_weight_reminder_job_test.rb` | `test/models/pet_weight_reminders_test.rb`, same cases |
 
 Nothing changes for users. `recurring.yml` is unchanged.
+
+### G. Follow-up: email when the phone wouldn't show the notification
+
+**Gap.** "Failed" only meant Firebase refused the message. If someone turned Pet Tracker's notifications (or the "Reminders"
+channel) off in Android's settings, Firebase still accepted it, the reminder counted as sent by the app, and nobody saw it.
+App 1.0.6 also kept the old token on the server after the permission was withdrawn.
+
+**Fix.** The app reports whether notifications would show; the server emails when no phone would.
+
+| Where | Change |
+| --- | --- |
+| Android `Push.isShowing` | App permission (Android 13+) **and** `areNotificationsEnabled()` **and** the "Reminders" channel not set to none |
+| Android `Push.token`, `PushComponent` | Token sent even when not allowed; the reply adds `allowed` |
+| `push_controller.js` | Posts `notifications_allowed` when the app gave it; re-sends when it changes (sessionStorage key = token + setting) |
+| `device_tokens.notifications_allowed` | New boolean, default true. Missing param (app ≤ 1.0.6) leaves it as it was |
+| `ReminderChannels#android_problem` | Phones but none notifying → `android_notifications_off`, emailed with the note; pushes go only to notifying phones |
+| `User#reminder_channel_choice` | The default picks the app only if a phone is notifying |
+| Profile `#reminder-channel` | Under App notification: "Notifications are turned off for Pet Tracker on your phone…" |
+
+The server only learns of a change when the app next opens a signed-in page (the push bridge runs on every page in the native layout).
+Turned off and the app never opened again → still sent by the app; not solvable from the server.
+
+**Tests:** `pet_weight_reminders_test.rb` (notifications off → email with note, no push; another phone with them on → push to it only,
+problem cleared; default with only a muted phone → email, no note), `device_tokens_test.rb` (flag saved; missing flag keeps it),
+`reminder_channels_controller_test.rb` (profile note).
+
+**Rollout:** the migration adds one column (default true, so nothing changes until phones report). Then build and upload Android 1.0.7
+(versionCode 8).
+
+### H. Follow-up: weight reminder emailed although household reminders reached the phone
+
+**What the user saw:** household reminders came to the phone, but the Nov 23 weight reminder came only by email.
+
+**Production data (user 3, read-only runner):**
+
+| UTC | |
+| --- | --- |
+| to Nov 19 | Household reminders `android` (old token) |
+| Nov 21 08:43 | New app session 75; the old app session and its token are gone |
+| Nov 23 01:10 | `weight:2:2026-11-09:1` sent by `email`, `problem=nil`: no token, so the default channel was email |
+| Nov 23 06:26:47 | App cold start (`GET /` → `/en/pets`), then `POST /en/device_tokens` at 06:26:49: token 2 for session 75 |
+
+**Root cause.** A token belongs to a session and is deleted with it (sign-out, expiry, "sign out other devices", password change).
+`push_controller.js` skipped the POST when `sessionStorage` already held the token, and sessionStorage lasts for the app run, across
+signing out and in. So the new session had no token until the app was restarted two days later. Weight reminders weren't special:
+no household reminder fell due in that gap. (Logs before Nov 23 05:07 are gone, so the Nov 21 sign-out itself wasn't seen; a fresh
+install with notifications allowed only later would look the same.)
+
+**Fix.** The native layout and Today's push element render `data-push-registered-value` = `Current.session.device_tokens.exists?`;
+the controller skips the POST only when the server says registered **and** sessionStorage matches. One indexed query per app page.
+
+**Test:** `device_tokens_test.rb`: app page says false before registering, true after, false again after signing out and in.
 
 ## Tests
 

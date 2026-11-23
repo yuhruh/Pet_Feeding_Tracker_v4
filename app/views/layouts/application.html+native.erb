@@ -22,9 +22,11 @@
   </head>
 
   <body class="dark:bg-darkBlue dark:text-white">
-    <%# Android app notifications (checkpoint I): keeps this phone's token registered while signed in. %>
+    <%# Android app notifications (checkpoint I): keeps this phone's token registered while signed in.
+        registered: whether this sign-in has a phone, so a new sign-in in the same app run registers again. %>
     <% if authenticated? %>
-      <div data-controller="push" data-push-url-value="<%= device_token_path %>" hidden></div>
+      <div data-controller="push" data-push-url-value="<%= device_token_path %>"
+           data-push-registered-value="<%= Current.session.device_tokens.exists? %>" hidden></div>
     <% end %>
     <%= render 'layouts/navigation' unless content_for?(:without_app_menu) %>
     <%= render 'layouts/messages' %>

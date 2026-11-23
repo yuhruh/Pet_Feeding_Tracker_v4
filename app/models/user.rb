@@ -30,17 +30,17 @@ class User < ApplicationRecord
   def helper_only? = owned_household.nil? && household_memberships.exists?
 
   # How reminders (weight and household) reach this person. They choose one; until
-  # they do, it's the Android app if a phone is signed in (and push is set up),
-  # else LINE if they signed in with LINE, else email. A failed app or LINE send
-  # goes by email instead.
+  # they do, it's the Android app if a signed-in phone shows notifications (and
+  # push is set up), else LINE if they signed in with LINE, else email. A failed
+  # app or LINE send, or notifications turned off on the phone, goes by email instead.
   REMINDER_CHANNELS = %w[android line email].freeze
-  REMINDER_PROBLEMS = %w[android_no_phone android_failed line_not_connected line_failed].freeze
+  REMINDER_PROBLEMS = %w[android_no_phone android_notifications_off android_failed line_not_connected line_failed].freeze
   validates :reminder_channel, inclusion: { in: REMINDER_CHANNELS }, allow_nil: true
   validates :reminder_problem, inclusion: { in: REMINDER_PROBLEMS }, allow_nil: true
 
   def reminder_channel_choice
     reminder_channel.presence ||
-      if FcmClient.configured? && device_tokens.exists? then "android"
+      if FcmClient.configured? && device_tokens.notifying.exists? then "android"
       elsif line_connected? then "line"
       else "email"
       end

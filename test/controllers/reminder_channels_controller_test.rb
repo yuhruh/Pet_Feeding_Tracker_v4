@@ -21,6 +21,19 @@ class ReminderChannelsControllerTest < ActionDispatch::IntegrationTest
     assert_select "#reminder-channel input[type=radio][value=line][checked]"
   end
 
+  test "the profile says when the app's phone has notifications turned off" do
+    get users_path
+    assert_select "#reminder-channel", text: /No phone is signed in/
+
+    DeviceToken.register(user: @user, session: nil, token: "phone-1", notifications_allowed: false)
+    get users_path
+    assert_select "#reminder-channel", text: /Notifications are turned off for Pet Tracker on your phone/
+
+    DeviceToken.sole.update!(notifications_allowed: true)
+    get users_path
+    assert_select "#reminder-channel", text: /turned off for Pet Tracker/, count: 0
+  end
+
   test "choosing a channel saves it and clears an old problem" do
     @user.update!(reminder_problem: "android_failed", reminder_problem_at: 1.day.ago)
 

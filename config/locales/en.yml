@@ -108,6 +108,7 @@ en:
   reminder_delivery:
     problems:
       android_no_phone: "No phone is signed in to the Pet Tracker Android app, so this reminder couldn't go to the app."
+      android_notifications_off: "Notifications are turned off for the Pet Tracker app on your phone, so this reminder wouldn't have shown. To get reminders in the app again, allow notifications for Pet Tracker in your phone's settings, then open the app."
       android_failed: "We couldn't send this reminder to the Pet Tracker app on your phone. Open the app and check that notifications are allowed."
       line_not_connected: "Your account isn't connected to LINE anymore, so this reminder couldn't go by LINE."
       line_failed: "We couldn't send this reminder by LINE. Check that you haven't blocked the Pet Tracker LINE account."
@@ -615,7 +616,7 @@ en:
             items:
               - "A job due on a day is sent at 9am in your time zone; a shorter interval when it's due, between 9am and 9pm; a set time at that time. If it's still not done, there's one follow-up. Overdue doses are reminded once."
               - "Choose how reminders reach you on your account page, under '🔔 How you get reminders': App notification, LINE (if you signed in with LINE) or Email. It's one choice for all your reminders. Until you choose, it's the Android app if you use it, else LINE, else email. Today shows which one, with a 'How reminders come' link."
-              - "If an app notification or LINE message can't be sent (no phone signed in, LINE not connected, or the send failed), the reminder is emailed instead with a note saying why, and your account page shows what went wrong."
+              - "If an app notification or LINE message can't be sent (no phone signed in, notifications turned off for the app on your phone, LINE not connected, or the send failed), the reminder is emailed instead with a note saying why, and your account page shows what went wrong."
               - "Weight reminders (owners): when a cat hasn't been weighed for 14 days (or since it was added), and again every 14 days until it is, sent between 9am and 9pm in your time zone, the way you chose. They stop if you haven't used the app for 15 days."
       - id: "kibble_prices"
         title: "Kibble Prices"
@@ -1228,8 +1229,9 @@ en:
       line: "LINE"
       email: "Email"
       no_phone: "No phone is signed in to the Android app yet."
+      notifications_off: "Notifications are turned off for Pet Tracker on your phone. Allow them in your phone's settings, then open the app."
       save: "Save"
-      fallback_note: "If an app notification or LINE message can't be sent, the reminder is emailed instead."
+      fallback_note: "If an app notification or LINE message can't be sent, or notifications are turned off for the app on your phone, the reminder is emailed instead."
     drive_backup:
       title: "☁️ Google Drive backup"
       description: "Save a copy of each cat's feeding records (CSV) to your Google Drive every day, at a time you choose."
