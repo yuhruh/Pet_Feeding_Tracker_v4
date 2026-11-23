@@ -17,7 +17,7 @@ class TrackersControllerTest < ActionDispatch::IntegrationTest
     get new_pet_tracker_url(@pet)
     assert_response :success
     wet_foods = JSON.parse(css_select("[data-controller=tracker-form]").first["data-tracker-form-wet-foods-value"])
-    assert_equal [ "imc-222 果凍杯 鮪魚+雞肉+干貝" ], wet_foods["ciao"]
+    assert_equal [ { "description" => "imc-222 果凍杯 鮪魚+雞肉+干貝", "amount" => 105.0, "date" => "2026/01/01" } ], wet_foods["ciao"]
     assert_not_includes wet_foods.keys, "weruva"
   end
 

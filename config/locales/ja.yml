@@ -1510,6 +1510,7 @@
       wet_brand_hint: "タップして保存済みのブランドを選ぶか、新しいブランドを入力"
       wet_description_pick_brand: "ブランドを先に選ぶと、保存済みのフードが表示されます"
       wet_description_saved: "タップして保存済みの %{brand} のフード %{number} 件から選ぶか、新しく入力"
+      wet_amount_filled: "✓ 前回の給餌（%{date}）の量を入力しました。今日の量が違う場合は変更してください。"
     hello_controller:
       hello_world: "こんにちは、世界！"
   will_paginate:

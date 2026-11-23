@@ -3,8 +3,8 @@ require "application_system_test_case"
 class WetFoodInputTest < ApplicationSystemTestCase
   setup do
     @pet = pets(:one)
-    [ [ "Ciao", "Tuna & chicken" ], [ "Ciao", "Tuna & scallop" ], [ "Inaba", "Churu tuna" ] ].each do |brand, description|
-      @pet.trackers.create!(date: Date.current, feed_time: "08:00", food_type: "Wet", brand: brand, description: description, amount: 50)
+    [ [ "Ciao", "Tuna & chicken", 85 ], [ "Ciao", "Tuna & scallop", 70 ], [ "Inaba", "Churu tuna", 14 ] ].each do |brand, description, amount|
+      @pet.trackers.create!(date: Date.current, feed_time: "08:00", food_type: "Wet", brand: brand, description: description, amount: amount)
     end
   end
 
@@ -31,5 +31,28 @@ class WetFoodInputTest < ApplicationSystemTestCase
     find("[data-tracker-form-target=submitButton]").click
     assert_text "Tracker was successfully created."
     assert @pet.trackers.wet.exists?(brand: "weruva", description: "mideast feast")
+  end
+
+  test "a saved wet food fills in the amount of its last feeding, but never replaces a typed amount" do
+    sign_in_as(users(:one))
+    visit new_pet_tracker_url(@pet, locale: :en)
+    select "Wet", from: "tracker_food_type"
+
+    fill_in "tracker_brand", with: "Ciao"
+    fill_in "tracker_description", with: "tuna & chicken"
+    assert_field "tracker_amount", with: "85"
+    assert_text "Filled from the last feeding"
+
+    fill_in "tracker_description", with: "tuna & scallop"
+    assert_field "tracker_amount", with: "70"
+
+    fill_in "tracker_description", with: "something new"
+    assert_field "tracker_amount", with: ""
+    assert_no_text "Filled from the last feeding"
+
+    fill_in "tracker_amount", with: 60
+    fill_in "tracker_description", with: "tuna & chicken"
+    assert_field "tracker_amount", with: "60"
+    assert_no_text "Filled from the last feeding"
   end
 end

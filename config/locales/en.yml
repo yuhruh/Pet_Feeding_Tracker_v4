@@ -1510,6 +1510,7 @@ en:
       wet_brand_hint: "Tap to pick a saved brand, or type a new one"
       wet_description_pick_brand: "Choose a brand first to see its saved foods"
       wet_description_saved: "Tap to pick one of %{number} saved %{brand} foods, or type a new one"
+      wet_amount_filled: "✓ Filled from the last feeding (%{date}). Change it if today's portion is different."
     hello_controller:
       hello_world: "Hello World!"
   will_paginate:

@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["foodType", "dryFoodOptions", "dryFoodSelect", "wetFoodOptions", "wetFoodSelect", "brand", "description", "amount", "amountAlert", "submitButton", "discardLeftoverOption", "discardLeftover", "lastLeftoverOption", "lastLeftoverLabel", "lastLeftover", "brandList", "descriptionList", "brandHint", "descriptionHint"]
+  static targets = ["foodType", "dryFoodOptions", "dryFoodSelect", "wetFoodOptions", "wetFoodSelect", "brand", "description", "amount", "amountAlert", "submitButton", "discardLeftoverOption", "discardLeftover", "lastLeftoverOption", "lastLeftoverLabel", "lastLeftover", "brandList", "descriptionList", "brandHint", "descriptionHint", "wetAmountNote"]
   static values = {
     dryFoods: Array,
     trackerUrl: String,
@@ -9,13 +9,14 @@ export default class extends Controller {
     // Bag id => this cat's last feeding from it, whose leftover may still be in
     // the bowl: { amount, left_amount (null if not recorded), discarded, when }.
     lastFeedings: Object,
-    // The household's past wet foods: { brand => [description, ...] }.
+    // The household's past wet foods: { brand => [{ description, amount, date }, ...] }.
     wetFoods: Object
   }
 
   connect() {
     this.csrfToken = document.querySelector("meta[name='csrf-token']")?.content;
     this.selectedFoodLeftAmount = null; // Initialize storage state
+    this.wetAmountFilled = false; // the amount came from a saved wet food, not typed
     this.lastFeeding = null;
     if (this.hasFoodTypeTarget) {
       this.toggleDryFoodOptions()
@@ -261,6 +262,7 @@ export default class extends Controller {
   // still taking anything typed. Other food types keep plain text boxes.
   toggleWetFoodChoices(wet) {
     if (!this.hasBrandListTarget || !this.hasDescriptionListTarget) return;
+    if (!wet) this.clearWetAmount();
     if (this.brandListTarget.options.length === 0) {
       Object.keys(this.wetFoodsValue).forEach(brand => this.brandListTarget.appendChild(new Option(brand)));
     }
@@ -282,16 +284,18 @@ export default class extends Controller {
     this.refreshWetDescriptions();
   }
 
-  // The chosen brand's saved foods (brand matched ignoring case).
+  // The chosen brand's saved foods (brand matched ignoring case), and the
+  // amount of the picked food's last feeding.
   refreshWetDescriptions() {
     if (!this.hasDescriptionListTarget || !this.hasBrandTarget) return;
     const typed = this.brandTarget.value.trim();
     const brand = Object.keys(this.wetFoodsValue).find(known => known.toLowerCase() === typed.toLowerCase());
     const foods = brand ? this.wetFoodsValue[brand] : [];
-    this.descriptionListTarget.replaceChildren(...foods.map(food => new Option(food)));
+    this.descriptionListTarget.replaceChildren(...foods.map(food => new Option(food.description)));
 
-    if (!this.hasDescriptionHintTarget) return;
     const wet = this.hasFoodTypeTarget && this.foodTypeTarget.value === "wet";
+    if (wet) this.fillWetAmount(foods);
+    if (!this.hasDescriptionHintTarget) return;
     const hasBrands = Object.keys(this.wetFoodsValue).length > 0;
     let hint = "";
     if (foods.length > 0) {
@@ -301,6 +305,37 @@ export default class extends Controller {
     }
     this.descriptionHintTarget.textContent = hint;
     this.descriptionHintTarget.classList.toggle("hidden", !wet || !hasBrands || hint === "");
+  }
+
+  // A saved food fills in the amount of its last feeding, unless an amount was
+  // typed by hand. Changing to a food that isn't saved clears a filled amount.
+  fillWetAmount(foods) {
+    if (!this.hasAmountTarget || !this.hasDescriptionTarget) return;
+    const typed = this.descriptionTarget.value.trim().toLowerCase();
+    const food = typed === "" ? null : foods.find(known => known.description.toLowerCase() === typed);
+    if (food && (this.amountTarget.value === "" || this.wetAmountFilled)) {
+      this.amountTarget.value = food.amount;
+      this.wetAmountFilled = true;
+      if (this.hasWetAmountNoteTarget) {
+        this.wetAmountNoteTarget.textContent = I18n.t('javascript.tracker_form_controller.wet_amount_filled', { date: food.date });
+        this.wetAmountNoteTarget.classList.remove("hidden");
+      }
+      this.validateAmount();
+    } else if (!food) {
+      this.clearWetAmount();
+    }
+  }
+
+  clearWetAmount() {
+    if (this.wetAmountFilled && this.hasAmountTarget) this.amountTarget.value = "";
+    this.wetAmountFilled = false;
+    if (this.hasWetAmountNoteTarget) this.wetAmountNoteTarget.classList.add("hidden");
+  }
+
+  // An amount typed by hand is kept when the food changes.
+  amountTyped() {
+    this.wetAmountFilled = false;
+    if (this.hasWetAmountNoteTarget) this.wetAmountNoteTarget.classList.add("hidden");
   }
 
   validateAmount() {
