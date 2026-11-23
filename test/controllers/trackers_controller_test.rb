@@ -11,6 +11,16 @@ class TrackersControllerTest < ActionDispatch::IntegrationTest
     # post session_url, params: { email_address: @user.email_address, password: "password" }
   end
 
+  test "the new-feeding form offers this household's wet foods, not another household's" do
+    pets(:two).trackers.create!(date: "2026-01-01", feed_time: "09:00", food_type: "Wet", brand: "Weruva", description: "Mideast feast", amount: 85)
+
+    get new_pet_tracker_url(@pet)
+    assert_response :success
+    wet_foods = JSON.parse(css_select("[data-controller=tracker-form]").first["data-tracker-form-wet-foods-value"])
+    assert_equal [ "imc-222 果凍杯 鮪魚+雞肉+干貝" ], wet_foods["ciao"]
+    assert_not_includes wet_foods.keys, "weruva"
+  end
+
   test "should get index" do
     get pet_trackers_url(@pet)
     assert_response :success

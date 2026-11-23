@@ -1507,6 +1507,9 @@ en:
       select_wet_food: "Select a favorite or enter manually"
       favorite_score: "Favorite Score:"
       last_feed_date: "Last Feed Date:"
+      wet_brand_hint: "Tap to pick a saved brand, or type a new one"
+      wet_description_pick_brand: "Choose a brand first to see its saved foods"
+      wet_description_saved: "Tap to pick one of %{number} saved %{brand} foods, or type a new one"
     hello_controller:
       hello_world: "Hello World!"
   will_paginate:

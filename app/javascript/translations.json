@@ -19,7 +19,10 @@
         "only_left_in_storage": "⚠️ Only %{amount}g left in storage.",
         "select_wet_food": "Select a favorite or enter manually",
         "should_restock": "should restock",
-        "topped_up_amount": "Tops up the %{bowl}g still in the bowl, so %{drawn}g comes from the bag."
+        "topped_up_amount": "Tops up the %{bowl}g still in the bowl, so %{drawn}g comes from the bag.",
+        "wet_brand_hint": "Tap to pick a saved brand, or type a new one",
+        "wet_description_pick_brand": "Choose a brand first to see its saved foods",
+        "wet_description_saved": "Tap to pick one of %{number} saved %{brand} foods, or type a new one"
       }
     },
     "trackers": {
@@ -233,7 +236,10 @@
         "only_left_in_storage": "⚠️ 在庫は残り %{amount}g です。",
         "select_wet_food": "お気に入りを選択するか、手動で入力してください",
         "should_restock": "補充が必要です",
-        "topped_up_amount": "器に残っている %{bowl}g に継ぎ足すので、袋から使うのは %{drawn}g です。"
+        "topped_up_amount": "器に残っている %{bowl}g に継ぎ足すので、袋から使うのは %{drawn}g です。",
+        "wet_brand_hint": "タップして保存済みのブランドを選ぶか、新しいブランドを入力",
+        "wet_description_pick_brand": "ブランドを先に選ぶと、保存済みのフードが表示されます",
+        "wet_description_saved": "タップして保存済みの %{brand} のフード %{number} 件から選ぶか、新しく入力"
       }
     },
     "trackers": {
@@ -447,7 +453,10 @@
         "only_left_in_storage": "⚠️ 庫存僅剩 %{amount} 克。",
         "select_wet_food": "選擇一個最愛或手動輸入",
         "should_restock": "應該補貨了",
-        "topped_up_amount": "碗裡還有 %{bowl} 克，補添後只從袋中取用 %{drawn} 克。"
+        "topped_up_amount": "碗裡還有 %{bowl} 克，補添後只從袋中取用 %{drawn} 克。",
+        "wet_brand_hint": "點一下選擇已存的品牌，或輸入新品牌",
+        "wet_description_pick_brand": "先選品牌，就能看到該品牌已存的食物",
+        "wet_description_saved": "點一下從 %{number} 種已存的 %{brand} 食物中選擇，或輸入新的"
       }
     },
     "trackers": {

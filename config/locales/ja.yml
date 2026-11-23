@@ -1507,6 +1507,9 @@
       select_wet_food: "お気に入りを選択するか、手動で入力してください"
       favorite_score: "お気に入りスコア:"
       last_feed_date: "最終給餌日:"
+      wet_brand_hint: "タップして保存済みのブランドを選ぶか、新しいブランドを入力"
+      wet_description_pick_brand: "ブランドを先に選ぶと、保存済みのフードが表示されます"
+      wet_description_saved: "タップして保存済みの %{brand} のフード %{number} 件から選ぶか、新しく入力"
     hello_controller:
       hello_world: "こんにちは、世界！"
   will_paginate:

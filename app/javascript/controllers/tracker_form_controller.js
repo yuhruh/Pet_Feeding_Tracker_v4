@@ -1,14 +1,16 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["foodType", "dryFoodOptions", "dryFoodSelect", "wetFoodOptions", "wetFoodSelect", "brand", "description", "amount", "amountAlert", "submitButton", "discardLeftoverOption", "discardLeftover", "lastLeftoverOption", "lastLeftoverLabel", "lastLeftover"]
+  static targets = ["foodType", "dryFoodOptions", "dryFoodSelect", "wetFoodOptions", "wetFoodSelect", "brand", "description", "amount", "amountAlert", "submitButton", "discardLeftoverOption", "discardLeftover", "lastLeftoverOption", "lastLeftoverLabel", "lastLeftover", "brandList", "descriptionList", "brandHint", "descriptionHint"]
   static values = {
     dryFoods: Array,
     trackerUrl: String,
     newDryFoodUrl: String,
     // Bag id => this cat's last feeding from it, whose leftover may still be in
     // the bowl: { amount, left_amount (null if not recorded), discarded, when }.
-    lastFeedings: Object
+    lastFeedings: Object,
+    // The household's past wet foods: { brand => [description, ...] }.
+    wetFoods: Object
   }
 
   connect() {
@@ -24,6 +26,7 @@ export default class extends Controller {
     if (!this.hasFoodTypeTarget) return;
 
     const type = this.foodTypeTarget.value;
+    this.toggleWetFoodChoices(type === "wet");
     const pathParts = window.location.pathname.split('/');
     const locale = document.documentElement.lang || 'en';
     const dryFoodsUrl = `/${locale}/dry_foods.json`;
@@ -247,10 +250,57 @@ export default class extends Controller {
         if (this.hasBrandTarget) this.brandTarget.value = data.brand;
         if (this.hasDescriptionTarget) this.descriptionTarget.value = data.description;
         if (this.hasAmountTarget) this.amountTarget.value = data.amount;
+        this.refreshWetDescriptions();
       } catch (error) {
         console.error("Error fetching wet food data:", error);
       }
     }
+  }
+
+  // Wet food: brand and description offer the household's saved values while
+  // still taking anything typed. Other food types keep plain text boxes.
+  toggleWetFoodChoices(wet) {
+    if (!this.hasBrandListTarget || !this.hasDescriptionListTarget) return;
+    if (this.brandListTarget.options.length === 0) {
+      Object.keys(this.wetFoodsValue).forEach(brand => this.brandListTarget.appendChild(new Option(brand)));
+    }
+    const fields = [[this.brandTarget, this.brandListTarget], [this.descriptionTarget, this.descriptionListTarget]];
+    fields.forEach(([input, list]) => {
+      if (wet) {
+        input.setAttribute("list", list.id);
+        input.setAttribute("autocomplete", "off");
+      } else {
+        input.removeAttribute("list");
+        input.removeAttribute("autocomplete");
+      }
+    });
+    if (this.hasBrandHintTarget) {
+      const hasBrands = this.brandListTarget.options.length > 0;
+      this.brandHintTarget.textContent = I18n.t('javascript.tracker_form_controller.wet_brand_hint');
+      this.brandHintTarget.classList.toggle("hidden", !wet || !hasBrands);
+    }
+    this.refreshWetDescriptions();
+  }
+
+  // The chosen brand's saved foods (brand matched ignoring case).
+  refreshWetDescriptions() {
+    if (!this.hasDescriptionListTarget || !this.hasBrandTarget) return;
+    const typed = this.brandTarget.value.trim();
+    const brand = Object.keys(this.wetFoodsValue).find(known => known.toLowerCase() === typed.toLowerCase());
+    const foods = brand ? this.wetFoodsValue[brand] : [];
+    this.descriptionListTarget.replaceChildren(...foods.map(food => new Option(food)));
+
+    if (!this.hasDescriptionHintTarget) return;
+    const wet = this.hasFoodTypeTarget && this.foodTypeTarget.value === "wet";
+    const hasBrands = Object.keys(this.wetFoodsValue).length > 0;
+    let hint = "";
+    if (foods.length > 0) {
+      hint = I18n.t('javascript.tracker_form_controller.wet_description_saved', { number: foods.length, brand: brand });
+    } else if (typed === "") {
+      hint = I18n.t('javascript.tracker_form_controller.wet_description_pick_brand');
+    }
+    this.descriptionHintTarget.textContent = hint;
+    this.descriptionHintTarget.classList.toggle("hidden", !wet || !hasBrands || hint === "");
   }
 
   validateAmount() {

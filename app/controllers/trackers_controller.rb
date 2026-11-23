@@ -10,6 +10,7 @@ class TrackersController < ApplicationController
   before_action :set_pet
   before_action :set_tracker, only: %i[ show edit update destroy ]
   before_action :set_current_date, :set_current_time
+  before_action :set_wet_food_choices, only: %i[ new create ]
 
   def import
     file = params[:file]
@@ -190,6 +191,11 @@ class TrackersController < ApplicationController
       permission = :export_trackers if action_name == "index" && request.format.csv?
       load_pet(params[:pet_id], permission)
     end
+    # The household's past wet foods by brand, offered as brand and description choices.
+    def set_wet_food_choices
+      @wet_food_choices = WetFoodChoices.new(@pet).by_brand
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_tracker
       # @tracker = Tracker.find(params.expect(:id))

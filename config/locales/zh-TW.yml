@@ -1507,6 +1507,9 @@ zh-TW:
       select_wet_food: "選擇一個最愛或手動輸入"
       favorite_score: "喜愛程度分數:"
       last_feed_date: "上次餵食日期:"
+      wet_brand_hint: "點一下選擇已存的品牌，或輸入新品牌"
+      wet_description_pick_brand: "先選品牌，就能看到該品牌已存的食物"
+      wet_description_saved: "點一下從 %{number} 種已存的 %{brand} 食物中選擇，或輸入新的"
     hello_controller:
       hello_world: "你好，世界！"
   will_paginate:
