@@ -55,4 +55,23 @@ class WetFoodInputTest < ApplicationSystemTestCase
     assert_field "tracker_amount", with: "60"
     assert_no_text "Filled from the last feeding"
   end
+
+  test "changing the brand clears the description and amount for the new brand's foods" do
+    sign_in_as(users(:one))
+    visit new_pet_tracker_url(@pet, locale: :en)
+    select "Wet", from: "tracker_food_type"
+
+    fill_in "tracker_brand", with: "Ciao"
+    fill_in "tracker_description", with: "tuna & chicken"
+    assert_field "tracker_amount", with: "85"
+
+    fill_in "tracker_brand", with: "Inaba"
+    assert_field "tracker_description", with: ""
+    assert_field "tracker_amount", with: ""
+    assert_no_text "Filled from the last feeding"
+    assert_equal [ "churu tuna" ], all("#wet-description-list option", visible: :all).map(&:value)
+
+    fill_in "tracker_description", with: "churu tuna"
+    assert_field "tracker_amount", with: "14"
+  end
 end

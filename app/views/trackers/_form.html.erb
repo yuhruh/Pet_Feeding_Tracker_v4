@@ -63,7 +63,7 @@
       <%= form.label :brand, t('trackers.form.brand'), class: "text-sm font-medium text-gray-700 dark:text-gray-100 capitalize required md:text-base" %>
     </div>
     <div class="flex flex-col items-center md:items-start md:w-5/6">
-      <%= form.text_field :brand, required: true, class: "input-field mt-2", data: { tracker_form_target: "brand", action: "input->tracker-form#refreshWetDescriptions" } %>
+      <%= form.text_field :brand, required: true, class: "input-field mt-2", data: { tracker_form_target: "brand", action: "input->tracker-form#brandTyped" } %>
       <%# Wet food only: the household's saved brands, and the chosen brand's saved foods. Typing something new is fine. %>
       <datalist id="wet-brand-list" data-tracker-form-target="brandList"></datalist>
       <span class="hidden italic text-sm mt-1" data-tracker-form-target="brandHint"></span>

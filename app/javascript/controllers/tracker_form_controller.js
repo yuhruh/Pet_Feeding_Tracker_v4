@@ -307,6 +307,20 @@ export default class extends Controller {
     this.descriptionHintTarget.classList.toggle("hidden", !wet || !hasBrands || hint === "");
   }
 
+  // Wet food: a brand typed or picked by hand starts the description and amount
+  // over, so one of the new brand's saved foods can be picked. (Filling the
+  // brand from a favorite sets them itself and fires no input event.)
+  brandTyped() {
+    if (this.hasFoodTypeTarget && this.foodTypeTarget.value === "wet") {
+      if (this.hasDescriptionTarget) this.descriptionTarget.value = "";
+      if (this.hasAmountTarget) this.amountTarget.value = "";
+      if (this.hasWetFoodSelectTarget) this.wetFoodSelectTarget.value = "";
+      this.wetAmountFilled = false;
+      this.validateAmount();
+    }
+    this.refreshWetDescriptions();
+  }
+
   // A saved food fills in the amount of its last feeding, unless an amount was
   // typed by hand. Changing to a food that isn't saved clears a filled amount.
   fillWetAmount(foods) {
