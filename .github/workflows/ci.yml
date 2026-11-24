@@ -90,6 +90,17 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      # lib/tasks/tailwind.rake builds the CSS with `npx tailwindcss`, so the
+      # test run needs node_modules (no longer committed).
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install npm packages
+        run: npm ci
+
       - name: Run tests
         env:
           RAILS_ENV: test
