@@ -72,3 +72,6 @@ client_secret*.json
 
 # Personal Claude Code settings
 /.claude/settings.local.json
+
+# npm packages (the Dockerfile runs npm install)
+/node_modules/

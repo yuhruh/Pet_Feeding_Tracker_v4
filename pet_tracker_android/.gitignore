@@ -1,5 +1,15 @@
-\n# Android Signing Configuration\nkeystore.properties
-\n# Android Keystore\n*.jks\n*.keystore
+# Android Signing Configuration
+keystore.properties
+keystore*.properties
+
+# Android Keystore
+*.jks
+*.keystore
 
 # Firebase project config (checkpoint I); download it from the Firebase console
 app/google-services.json
+
+# Release builds (upload the .aab to Play; don't commit it)
+app/release/
+*.aab
+*.apk
