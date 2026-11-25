@@ -143,7 +143,8 @@
   native_sign_ins:
     start:
       title: "ログイン"
-      continuing: "%{provider}に移動しています…"
+      continuing: "%{provider} で Pet Tracker アプリにログインしますか？"
+      only_if_you_started: "このスマートフォンの Pet Tracker アプリでログインボタンをタップした直後の場合のみ続けてください。リンクやほかのアプリからこのページが開いた場合は閉じてください。"
       continue: "続ける"
       providers:
         google_oauth2: "Google"
@@ -428,6 +429,7 @@
     creating_account_step_2c: "Line：Lineを使用してアカウントを作成します。"
     creating_account_step_2d: "Lineを使用してサインアップすると、メールアドレスとパスワードを入力するフォームにリダイレクトされます。"
     creating_account_step_3: "登録：「サインアップ」ボタンをクリックしてアカウントを作成します。"
+    creating_account_confirm_email: "メールアドレスの確認：フォームで登録すると、あなたのアドレスにリンクをお送りします。リンクを開くまでは、猫の追加やお世話の記録はできますが、お世話係の招待、閲覧リンクや共有リンクの作成、通院記録の共有はできず、ほかの人があなたと通院記録を共有することもできません。リンクはプロフィールページから再送できます。Google、LINE、GitHub での登録や、お世話係の招待からの登録では確認は不要です。プロフィールでメールアドレスを変更すると、新しいアドレスの確認が必要です。"
     signing_in_title: "サインイン"
     signing_in_step_1: "サインイン：「サインイン」ページに移動します。"
     signing_in_step_2: "認証情報を入力：メールアドレスとパスワードを入力します。"
@@ -865,6 +867,8 @@
     update:
       notice: "パスワードがリセットされました。"
       notice_disconnected: "パスワードがリセットされました。アカウントを守るため、%{providers} でのログイン連携を解除しました。新しいパスワードでログインしてください。プロフィールページからもう一度連携できます。"
+      household_reviewed: "あなたの家庭からの未承諾の招待とオーナー移譲は取り消しました。猫を見られるほかの人は「マイ家庭」ページに表示されます。知らない人がいれば削除してください。"
+      household_revoked: "このアカウントのメールアドレスは一度も確認されていなかったため、アカウントを作ったのがご本人でない可能性があります。家庭のメンバー、閲覧リンク、共有リンク、招待、オーナー移譲を削除しました。必要な方を「マイ家庭」ページで追加し直してください。"
       alert: "パスワードが一致しませんでした。"
     set_user_by_token:
       alert: "パスワードリセットリンクが無効か、有効期限が切れています。"
@@ -933,6 +937,13 @@
     destroy:
       notice: "猫%{name}は正常に破棄されました。"
   security_mailer:
+    sign_in_method_added:
+      subject: "Pet Tracker アカウントに %{provider} でのログインが追加されました"
+      greeting: "%{username} さん"
+      what_happened: "Pet Tracker アカウントに %{provider} でのログインが連携されました。この %{provider} アカウントであなたのアカウントにログインできます。"
+      if_not_you_html: "お心当たりがない場合は、%{profile_link}の「ログイン方法」で連携を解除し、パスワードを変更してほかの端末からログアウトしてください。"
+      if_not_you_text: "お心当たりがない場合は、プロフィールページの「ログイン方法」で連携を解除し、パスワードを変更してほかの端末からログアウトしてください："
+      profile_link: "プロフィールページ"
     password_reset_required:
       subject: "Aji Tracker のパスワードを再設定してください"
       greeting: "%{username} さん"
@@ -940,6 +951,8 @@
       what_we_did: "コピーはリポジトリから削除済みで、GitHubに残っているコピーの削除も依頼しました。念のため、パスワードをランダムなものに置き換え、すべてのデバイスからサインアウトしました。"
       what_to_do_html: "再度サインインするには、%{forgot_password_link}でこのメールアドレスを使って新しいパスワードを設定してください。Google、LINE、GitHubでサインインしている場合は、これまでどおりご利用いただけます。"
       what_to_do_text: "再度サインインするには、「パスワードをお忘れですか」のページでこのメールアドレスを使って新しいパスワードを設定してください。Google、LINE、GitHubでサインインしている場合は、これまでどおりご利用いただけます："
+      what_to_do_disconnected_html: "再度サインインするには、%{forgot_password_link}でこのメールアドレスを使って新しいパスワードを設定してください。アカウントに連携していたGoogle、LINE、GitHubのサインインも解除しました。サインイン後、プロフィールページで再度連携できます。"
+      what_to_do_disconnected_text: "再度サインインするには、「パスワードをお忘れですか」のページでこのメールアドレスを使って新しいパスワードを設定してください。アカウントに連携していたGoogle、LINE、GitHubのサインインも解除しました。サインイン後、プロフィールページで再度連携できます："
       forgot_password_link: "「パスワードをお忘れですか」のページ"
       other_sites: "同じパスワードを他のウェブサイトでも使用している場合は、そちらも変更してください。"
       apology: "ご迷惑をおかけして申し訳ありません。ご不明な点があれば、このメールに返信してください。"
@@ -955,6 +968,7 @@
       alert_rate_limit: "サインアップの試行回数が多すぎます。しばらく待ってからもう一度お試しください。"
       notice: "こんにちは、%{username}さん 👋。猫の給餌トラッカーアプリへのサインアップが完了しました。初めてのサインインですので、今後のトラッカーのためにまず新しい猫を追加してください。ようこそ、%{username}さん！"
     new:
+      linking_provider: "この新しいアカウントは、先ほどログインした %{provider} アカウントと連携され、%{provider} でログインできるようになります。"
       title: "🐾 猫トラッカーアプリにサインアップ 🐾"
       username: "ユーザー名"
       username_placeholder: "ユーザー名を入力してください"
@@ -1278,6 +1292,8 @@
         step_3: "「新しいプロジェクトでAPIキーを作成 (Create API key in new project)」をクリック"
         step_4: "キーをコピーして上に貼り付けてください"
     show:
+      email_unconfirmed: "まだ確認されていません。招待や共有をするには、お送りしたリンクを開いてください。"
+      resend_confirmation: "リンクをもう一度送る"
       other_sessions:
         zero: "他のデバイスではサインインしていません。"
         one: "他に1台のデバイスでもサインインしています。"
@@ -1417,7 +1433,7 @@
       review: "依頼を確認する"
       fine_print: "このメールアドレスでログインして承諾してください。%{date}まで有効です。心当たりがない場合は、このメールを無視してください。"
     invitation:
-      subject: "%{owner}さんから猫のお世話のお手伝いに招待されました"
+      subject: "Pet Tracker で猫のお世話のお手伝いに招待されました"
       intro: "%{owner}さんが、Pet Trackerで%{pets}のお世話を手伝う「ケアする人」としてあなたを招待しました。"
       their_cats: "猫たち"
       what_you_can_do: "ケアする人は、ごはん・トイレ・水・お薬をワンタップで記録でき、記録とグラフを見られます。"
@@ -1459,7 +1475,23 @@
   mailers:
     user_backup:
       subject: "ペットトラッカーのバックアップ"
+  email_confirmations:
+    required: "先にメールアドレスを確認してください。%{email} にお送りしたリンクを開くか、プロフィールページから新しいリンクを送ってください。"
+    sent_at_sign_up: "%{email} にリンクを送りました。招待や共有の前に、リンクを開いてアドレスを確認してください。"
+    show:
+      confirmed: "%{email} を確認しました。ありがとうございます。"
+      invalid: "この確認リンクは期限切れか、以前のアドレス宛てのものか、正しくありません。ログインしてプロフィールページから新しいリンクを送ってください。"
+    create:
+      rate_limited: "確認メールの送信回数が多すぎます。しばらくしてからお試しください。"
+      already_confirmed: "メールアドレスはすでに確認済みです。"
+      sent: "%{email} に確認リンクを送りました。"
   user_mailer:
+    email_confirmation:
+      subject: "Pet Tracker のメールアドレスを確認してください"
+      intro: "このアドレスで Pet Tracker に登録した方、またはアカウントのメールアドレスをこのアドレスに変更した方がいます（ご本人であれば幸いです）。ご自身のアドレスであることを確認してください："
+      confirm: "メールアドレスを確認する"
+      valid_for: "このリンクは %{days} 日間有効です。"
+      not_you: "お心当たりがない場合は、このメールを無視してください。確認されるまで、このアカウントは何も共有できず、このアドレスで見つけられることもありません。"
     welcome_email:
       subject: "猫トラッカーアプリへようこそ！"
     send_pet_weight_reminder:
@@ -1469,6 +1501,7 @@
   services:
     csv_import:
       failed_to_parse: "CSVファイルの解析に失敗しました: %{message}"
+      too_large: "ファイルが大きすぎてインポートできません（最大 %{megabytes} MB、%{rows} 行）。小さいファイルに分けてください。"
       failed_to_import: "データのインポートに失敗しました: %{message}"
       row_error: "%{row}行目: %{message}"
       date_earlier_than_birthday: "日付はペットの誕生日より前にはできません。"
@@ -1489,6 +1522,7 @@
       file_too_large: "画像は1枚あたり%{max}以下にしてください。"
       total_too_large: "画像の合計サイズは%{max}以下にしてください。"
       unsupported_type: "読み取れるのはPNG、JPEG、WebP、HEIC形式の画像のみです。"
+      busy: "別のレポートを読み取り中です。1分ほどしてからもう一度お試しください。"
       rate_limited: "アップロードが多すぎます。1分ほど待ってから再度お試しください。"
       prompt: |
         専門的な獣医検査結果データ抽出ツールとして機能してください。
@@ -1747,6 +1781,7 @@
               not_pending: "この依頼は承諾済み・取り消し済み、または期限切れです。"
               wrong_person: "この依頼は別の方宛てです。"
               still_owner_changed: "この家庭のオーナーはすでに替わっています。"
+              not_a_member_anymore: "あなたはもうこの家庭のメンバーではありません。"
               already_owns: "すでにご自身の家庭があります。先にそれを引き継ぐか、猫を削除してください。"
             to_user:
               not_a_member: "世帯のメンバーにのみ引き継げます。"

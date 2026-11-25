@@ -11,7 +11,8 @@ module TrackersHelper
 
   # The controller remembers the chosen per page in the session.
   def current_per_page
-    (params[:per_page].presence || session[:per_page] || 10).to_i
+    choices = TrackersCalculable::PER_PAGE_CHOICES
+    [ params[:per_page].to_s.to_i, session[:per_page].to_i ].find { |value| choices.include?(value) } || 10
   end
 
   # The search keywords and chart range now applied to the list, for exporting

@@ -57,6 +57,10 @@ class User < ApplicationRecord
   attr_accessor :email_address_confirmation
 
   validates :username, presence: true
+  # Names go into emails sent to other people (invitations), so keep them short.
+  # Only checked when the name changes, so older long names still save.
+  USERNAME_MAX_LENGTH = 50
+  validates :username, length: { maximum: USERNAME_MAX_LENGTH }, if: :will_save_change_to_username?
   validates :email_address, presence: true,
                     uniqueness: { case_sensitive: false },
                     length: { maximum: 105 },
@@ -67,6 +71,9 @@ class User < ApplicationRecord
   # has_secure_password already requires a password on create and rejects ones
   # over 72 bytes (bcrypt's limit). A blank password on update keeps the current one.
   validates :password, length: { minimum: MINIMUM_PASSWORD_LENGTH }, allow_blank: true
+  # " " is "blank" to Rails but still a password to has_secure_password: refuse it,
+  # so spaces can't stand in for a real password or skip the minimum length.
+  validate :password_not_only_spaces
   validates :password_confirmation, presence: true, if: -> { password.present? }, on: :update
   # A new password typed only in the confirmation box must not look like a successful change.
   validates :password, presence: true, if: -> { password_confirmation.present? }, on: :update
@@ -74,6 +81,31 @@ class User < ApplicationRecord
   validate :timezone_must_be_known, if: :will_save_change_to_timezone?
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
+
+  # Sign-up doesn't prove the address is the person's (security scan F24), so a
+  # password sign-up starts unconfirmed: until the link in the confirmation email
+  # is used, the account can't share (invite, viewer links, share links, vet
+  # visits) and can't be found by its address for a vet visit. Google, LINE and
+  # GitHub sign-ups, an emailed invitation and a password reset prove it too.
+  # The link stops working once the address changes; changing the address makes
+  # the account unconfirmed again.
+  EMAIL_CONFIRMATION_VALID_FOR = 3.days
+  generates_token_for :email_confirmation, expires_in: EMAIL_CONFIRMATION_VALID_FOR do
+    email_address
+  end
+  before_update -> { self.email_confirmed_at = nil }, if: :will_save_change_to_email_address?
+  scope :email_confirmed, -> { where.not(email_confirmed_at: nil) }
+
+  def email_confirmed? = email_confirmed_at.present?
+
+  def confirm_email!
+    update_column(:email_confirmed_at, Time.current) unless email_confirmed?
+  end
+
+  def password_not_only_spaces
+    errors.add(:password, :blank) if password.is_a?(String) && !password.empty? && password.strip.empty?
+  end
+  private :password_not_only_spaces
 
   def new_user?
     sign_in_count == 1

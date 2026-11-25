@@ -40,7 +40,7 @@ class HouseholdPolicyTest < ActiveSupport::TestCase
     pets(:one).trackers.create!(date: Date.current, food_type: "Kibble", brand: "曙光", description: "鴨肉", amount: 30)
 
     UserBackupJob.perform_now
-    backups_for = enqueued_jobs.select { |job| job["job_class"] == "ActionMailer::MailDeliveryJob" }
+    backups_for = enqueued_jobs.select { |job| job["job_class"] == ApplicationMailer.delivery_job.name }
                                .map { |job| GlobalID::Locator.locate(job["arguments"].last["args"].first["_aj_globalid"]) }
     assert_includes backups_for, @owner
     assert_not_includes backups_for, @caregiver, "backups go to the owner, not the caregiver"

@@ -51,6 +51,8 @@ Your user account is the central hub for managing your pets and tracking their a
 2.  **Enter Your Details:** Provide your email address and a secure password.
 3.  **Register:** Click the "Sign Up" button to create your account.
 
+**Confirm your email:** signing up with the form sends a link to your address. Until you open it, you can add cats and record care, but you can't invite caregivers, make viewer or share links, or share vet visits, and others can't share vet visits with you. Send the link again from your profile page. Signing up with Google, LINE or GitHub, or from a caregiver invitation, needs no confirmation. Changing your email on the profile asks you to confirm the new address.
+
 ### Signing In
 
 1.  **Sign In:** Go to the "Sign In" page.

@@ -1,0 +1,4 @@
+<p><%= t(".intro") %></p>
+<p><%= link_to t(".confirm"), @confirm_url %></p>
+<p><%= t(".valid_for", days: User::EMAIL_CONFIRMATION_VALID_FOR.in_days.to_i) %></p>
+<p><%= t(".not_you") %></p>

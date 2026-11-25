@@ -74,6 +74,9 @@ Rails.application.routes.draw do
     # post 'registration/create', to: "registrations#create", as: :registrations
     get "/login", to: "sessions#new", as: :new_session
     resources :passwords, only: [ :new, :create, :edit, :update ], param: :token
+    # The link in the confirmation email, and sending it again (User#email_confirmed?).
+    get "confirm_email/:token", to: "email_confirmations#show", as: :email_confirmation
+    post "email_confirmation", to: "email_confirmations#create", as: :resend_email_confirmation
     get "/home", to: "pages#hero_section"
     get "/about", to: "pages#about"
     get "/doc", to: "pages#doc"

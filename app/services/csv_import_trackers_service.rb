@@ -2,6 +2,11 @@ class CsvImportTrackersService
   require "csv"
   attr_reader :errors
 
+  # The file is read inside the web request, so keep it to what a cat's records
+  # could need (an export of years of feedings is far smaller).
+  MAX_BYTES = 2.megabytes
+  MAX_ROWS = 20_000
+
   def initialize(pet, user)
     @pet = pet
     @user = user
@@ -9,6 +14,11 @@ class CsvImportTrackersService
   end
 
   def call(file)
+    if File.size(file) > MAX_BYTES
+      @errors << I18n.t("services.csv_import.too_large", megabytes: MAX_BYTES / 1.megabyte, rows: MAX_ROWS)
+      return false
+    end
+
     ActiveRecord::Base.transaction do
       begin
         file = File.open(file)
@@ -33,8 +43,13 @@ class CsvImportTrackersService
           mapping[header] || header.to_s.downcase.gsub(/\(.*\)/, "").strip.gsub(" ", "_")
         end
 
-        csv = CSV.parse(file, headers: true, col_sep: ";", header_converters: header_converter)
+        # Row by row, not the whole file into memory first.
+        csv = CSV.new(file, headers: true, col_sep: ";", header_converters: header_converter)
         csv.each_with_index do |row, i|
+          if i >= MAX_ROWS
+            @errors << I18n.t("services.csv_import.too_large", megabytes: MAX_BYTES / 1.megabyte, rows: MAX_ROWS)
+            raise ActiveRecord::Rollback
+          end
           # Exports mark text that a spreadsheet would run as a formula; take the mark off again.
           row.each { |header, value| row[header] = CsvSafe.restore(value) if header }
           tracker_hash = {}

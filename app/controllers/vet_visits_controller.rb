@@ -1,4 +1,5 @@
 class VetVisitsController < ApplicationController
+  include ConfirmedEmailRequired
   MAX_NEW_MEMBERS_PER_SAVE = 10
 
   before_action :require_authentication
@@ -7,6 +8,8 @@ class VetVisitsController < ApplicationController
   before_action :set_vet_visit, only: %i[show edit update destroy]
   before_action :verify_access!, only: %i[show edit update destroy]
   before_action :verify_owner!, only: %i[new create destroy]
+  # Sharing with someone new needs a confirmed address; saving without new people doesn't.
+  before_action :require_confirmed_email, only: %i[create update], if: -> { new_member_emails.any? }
   # Sharing a visit by email tells the owner which addresses have an account (only
   # those can be added, and the form lists them), so new addresses can't be tried
   # in bulk: 20 saves an hour that add someone new, 10 new addresses per save.
@@ -92,12 +95,20 @@ class VetVisitsController < ApplicationController
 
   private
 
+  # A pet or visit that doesn't exist gets the same answer as one the user may
+  # not see, so ids can't be tried to learn which exist.
   def set_pet
-    @pet = Pet.find(params[:pet_id])
+    @pet = Pet.find_by(id: params[:pet_id])
+    not_yours unless @pet
   end
 
   def set_vet_visit
-    @vet_visit = @pet.vet_visits.find(params[:id])
+    @vet_visit = @pet.vet_visits.find_by(id: params[:id])
+    not_yours unless @vet_visit
+  end
+
+  def not_yours
+    redirect_to pets_path, alert: t("vet_visits.unauthorized")
   end
 
   # The list pages (index, and batch_update when it shows the list again): every
@@ -134,21 +145,23 @@ class VetVisitsController < ApplicationController
   end
 
   def member_emails
-    Array(params.dig(:vet_visit, :member_emails)).map { |email| email.to_s.strip }.reject(&:blank?).uniq
+    Array(params.dig(:vet_visit, :member_emails)).map { |email| User.normalize_value_for(:email_address, email.to_s) }.reject(&:blank?).uniq
   end
 
   # Addresses not yet sharing any of this cat's visits: the ones whose lookup says something new.
   def new_member_emails
     @new_member_emails ||= begin
       known = User.where(id: VetVisitMember.where(vet_visit_id: @pet.vet_visits.select(:id)).select(:user_id)).pluck(:email_address)
-      member_emails.reject { |email| known.include?(User.normalize_value_for(:email_address, email)) }
+      member_emails.reject { |email| known.include?(email) }
     end
   end
 
   def sync_members
     emails = member_emails - new_member_emails.drop(MAX_NEW_MEMBERS_PER_SAVE)
 
-    users = User.where(email_address: emails)
+    # Only confirmed addresses: an account opened with someone else's address
+    # doesn't receive what the owner meant for that person (F24).
+    users = User.email_confirmed.where(email_address: emails)
 
     missing_emails = emails - users.map(&:email_address)
     if missing_emails.any?

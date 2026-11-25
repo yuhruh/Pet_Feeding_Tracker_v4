@@ -27,6 +27,11 @@ production:
   purge_expired_sessions:
     command: "Session.expired.delete_all"
     schedule: every day at 4am
+  # Photos uploaded but never attached to a cat (an abandoned form, or someone
+  # filling the disk on purpose).
+  purge_unattached_uploads:
+    command: "ActiveStorage::Blob.unattached.where(created_at: ...1.day.ago).find_each(&:purge_later)"
+    schedule: every day at 4:30am
   user_backups:
     class: UserBackupJob
     schedule: every day at 3am

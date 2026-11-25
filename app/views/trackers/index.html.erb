@@ -21,7 +21,7 @@
     
     <%# Share and Download Section %>
     <div class="flex flex-row flex-wrap justify-center gap-4 mt-4" data-controller="share-and-download" 
-         data-share-and-download-share-url-value="<%= @pet.sharing? ? shared_pet_trackers_url(share_token: @pet.share_token) : '' %>"
+         data-share-and-download-share-url-value="<%= @pet.sharing? && household_policy.can?(:manage_share) ? shared_pet_trackers_url(share_token: @pet.share_token) : '' %>"
          data-share-and-download-chart-id-value="pet-chart"
          data-share-and-download-filename-value="<%= @pet.petname %>_feeding_chart">
       

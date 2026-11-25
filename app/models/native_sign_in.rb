@@ -6,18 +6,34 @@
 # The code alone signs nobody in: it only works in the WebView session that
 # started the sign-in. That session keeps a secret; its digest (the challenge)
 # travels to Chrome inside the signed context and is stored with the code. So a
-# code caught by another app on the phone, or put in a link for someone else to
-# open, is useless.
+# code put in a link for someone else to open is useless. And Chrome hands the
+# code only to the Pet Tracker app (app_url), so another app on the phone that
+# starts a sign-in with its own context never receives the code.
 class NativeSignIn < ApplicationRecord
   LIFETIME = 2.minutes
-  # What the app's session was holding when sign-in started, carried to Chrome.
+  # Carried to Chrome: the app's language and the challenge. Invitation and
+  # viewer-link tokens stay in the app's session (the context is only signed,
+  # so anything in it can be read from the address and the request log).
   CONTEXT_LIFETIME = 10.minutes
-  CONTEXT_KEYS = %w[invitation_token viewer_link_token locale challenge].freeze
+  CONTEXT_KEYS = %w[locale challenge].freeze
   SECRET_KEY = :native_sign_in_secret
 
   belongs_to :user, optional: true
 
   def self.digest(code) = OpenSSL::Digest::SHA256.hexdigest(code.to_s)
+
+  # The Android app (as in public/.well-known/assetlinks.json).
+  APP_PACKAGE = "com.pettracker.v4".freeze
+
+  # Where Chrome hands the code back. Not a bare pettracker:// link, which any
+  # app on the phone can register for: an intent link naming the package, which
+  # Android gives only to the installed Pet Tracker app (package names are
+  # unique on a phone). Without the app, Chrome opens fallback_url instead.
+  # The app (1.0.7 and later) reads it as pettracker://sign-in?code=…
+  def self.app_url(code, fallback_url:)
+    "intent://sign-in?code=#{CGI.escape(code.to_s)}#Intent;scheme=pettracker;package=#{APP_PACKAGE};" \
+      "S.browser_fallback_url=#{CGI.escape(fallback_url)};end"
+  end
 
   # Returns the code to hand to the app.
   def self.issue!(user:, path:, challenge:, flash: {}, data: {})
@@ -43,12 +59,11 @@ class NativeSignIn < ApplicationRecord
     record
   end
 
-  # A signed, short-lived copy of the session values the sign-in should keep,
-  # with the challenge for this session's secret (made on first use).
+  # A signed, short-lived context for the app's sign-in: its language and the
+  # challenge for this session's secret (made on first use).
   def self.context_for(session, locale:)
     session[SECRET_KEY] ||= SecureRandom.urlsafe_base64(32)
-    values = { "invitation_token" => session[:invitation_token], "viewer_link_token" => session[:viewer_link_token], "locale" => locale.to_s,
-               "challenge" => digest(session[SECRET_KEY]) }.compact_blank
+    values = { "locale" => locale.to_s, "challenge" => digest(session[SECRET_KEY]) }.compact_blank
     verifier.generate(values, expires_in: CONTEXT_LIFETIME)
   end
 

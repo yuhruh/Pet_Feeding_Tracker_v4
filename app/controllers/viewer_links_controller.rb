@@ -1,6 +1,8 @@
 # The owner makes a personal viewer link, or turns one off.
 class ViewerLinksController < ApplicationController
   include OwnedHousehold
+  include ConfirmedEmailRequired
+  before_action :require_confirmed_email, only: :create
 
   EXPIRY = { "never" => nil, "7_days" => 7.days, "30_days" => 30.days, "90_days" => 90.days }.freeze
 

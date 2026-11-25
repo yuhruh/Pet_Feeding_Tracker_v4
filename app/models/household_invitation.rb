@@ -42,6 +42,8 @@ class HouseholdInvitation < ApplicationRecord
       household.memberships.find_or_create_by!(user: user) { |membership| membership.role = :caregiver }
       update!(accepted_at: Time.current, accepted_by: user)
     end
+    # The token came by email to this address, which the user's account has.
+    user.confirm_email!
     true
   end
 

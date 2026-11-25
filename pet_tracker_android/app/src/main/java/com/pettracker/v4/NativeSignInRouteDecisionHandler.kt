@@ -10,7 +10,8 @@ import dev.hotwire.navigation.routing.Router
 // Google, LINE and GitHub sign-in (checkpoint I2): the app's provider buttons
 // link to /auth/native/:provider, which opens in a Chrome Custom Tab so the
 // whole sign-in happens in Chrome (Google doesn't allow it in a WebView). The
-// server sends Chrome back with pettracker://sign-in?code=…, handled by MainActivity.
+// server sends Chrome back with an intent:// link naming this package, which
+// arrives as pettracker://sign-in?code=…, handled by MainActivity.
 class NativeSignInRouteDecisionHandler : Router.RouteDecisionHandler {
     override val name = "native-sign-in"
 

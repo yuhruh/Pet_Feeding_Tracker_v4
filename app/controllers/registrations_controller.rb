@@ -8,8 +8,8 @@ class RegistrationsController < ApplicationController
     session[:init] = true
     @user = User.new
 
-    if session["omniauth.auth"].present?
-      auth_data = session["omniauth.auth"]
+    if (auth_data = pending_provider_identity)
+      @linking_provider = auth_data["provider"]
       auth_info = auth_data["info"] || {}
 
       # Handle LINE-specific username structure
@@ -33,19 +33,20 @@ class RegistrationsController < ApplicationController
     @user = User.new(user_params)
     @user.sign_in_count = 1
     if @user.save
-      if session["omniauth.auth"].present?
-        auth_data = session["omniauth.auth"]
+      if (auth_data = pending_provider_identity)
         @user.connected_services.create!(
           provider: auth_data["provider"],
           uid: auth_data["uid"]
         )
-        session.delete("omniauth.auth")
+        forget_provider_identity
       end
       start_new_session_for @user
-      UserMailer.with(user: @user).welcome_email.deliver_later
+      # The typed address isn't proven yet: send the link that confirms it.
+      UserMailer.with(user: @user, locale: I18n.locale.to_s).email_confirmation.deliver_later
       arrival = claim_household_invitation(@user)
-      redirect_to landing_path_for(@user), arrival || { notice: t(".notice", username: @user.username.capitalize) }
+      redirect_to landing_path_for(@user), arrival || { notice: [ t(".notice", username: @user.username.capitalize), t("email_confirmations.sent_at_sign_up", email: @user.email_address) ].join(" ") }
     else
+      @linking_provider = pending_provider_identity&.dig("provider")
       flash[:alert] = @user.errors.full_messages.join(", ")
       render :new, status: :unprocessable_entity
     end

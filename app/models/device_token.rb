@@ -2,6 +2,9 @@
 # Android app for the person signed in on it, in that sign-in session.
 class DeviceToken < ApplicationRecord
   PLATFORMS = %w[android].freeze
+  # Phones one person keeps for reminders; older ones are forgotten. A reminder
+  # goes to each, one after another, so one account can't hold up everyone's.
+  MAX_PER_USER = 5
 
   belongs_to :user
   belongs_to :session, optional: true
@@ -19,9 +22,16 @@ class DeviceToken < ApplicationRecord
     record = find_or_initialize_by(token: token.to_s)
     record.assign_attributes(user: user, session: session, platform: platform, last_used_at: Time.current)
     record.notifications_allowed = notifications_allowed unless notifications_allowed.nil?
-    record.save
+    record.forget_older_tokens if record.save
     record
   rescue ActiveRecord::RecordNotUnique
     retry
+  end
+
+  # One token per sign-in session (the phone's newest), and the newest few per person.
+  def forget_older_tokens
+    DeviceToken.where(session_id: session_id).where.not(id: id).delete_all if session_id
+    keep = user.device_tokens.order(last_used_at: :desc, id: :desc).limit(MAX_PER_USER).pluck(:id)
+    user.device_tokens.where.not(id: keep).delete_all
   end
 end

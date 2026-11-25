@@ -1,7 +1,9 @@
 # Turns a pet's public share link on (with a new token each time) and off.
 class PetSharesController < ApplicationController
   include PetAccess
+  include ConfirmedEmailRequired
   before_action :set_pet
+  before_action :require_confirmed_email, only: :create
 
   def create
     unless Pet::SHARE_DURATIONS.key?(params[:expires_in].to_s)

@@ -12,6 +12,8 @@ class GeminiOcrService
   MAX_FILES = 5
   MAX_FILE_SIZE = 10.megabytes
   MAX_TOTAL_SIZE = 14.megabytes
+  # Enough for a full report as JSON (and the model's thinking), not an endless answer.
+  MAX_OUTPUT_TOKENS = 16_384
   # Detected from each file's contents, never from its name or the browser's content type.
   ALLOWED_TYPES = %w[image/png image/jpeg image/webp image/heic image/heif].freeze
 
@@ -68,13 +70,14 @@ class GeminiOcrService
       }
     end
 
-    body = { contents: [ { parts: parts } ] }
+    # A report's results fit easily; a cap keeps a long answer from holding the request.
+    body = { contents: [ { parts: parts } ], generationConfig: { maxOutputTokens: MAX_OUTPUT_TOKENS } }
 
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     http.open_timeout = 10
     http.write_timeout = 30
-    http.read_timeout = 90 # reading several report images can take a while
+    http.read_timeout = 60 # reading several report images can take a while
     request = Net::HTTP::Post.new(uri.request_uri, header)
     request.body = body.to_json
 

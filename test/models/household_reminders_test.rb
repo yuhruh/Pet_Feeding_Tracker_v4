@@ -31,7 +31,7 @@ class HouseholdRemindersTest < ActiveSupport::TestCase
     travel_to(time) { HouseholdReminders.new(@household.reload).deliver }
   end
 
-  def emails_to(user) = enqueued_jobs.count { |job| job["job_class"] == "ActionMailer::MailDeliveryJob" && job["arguments"].to_s.include?(user.to_gid.to_s) }
+  def emails_to(user) = enqueued_jobs.count { |job| job["job_class"] == ApplicationMailer.delivery_job.name && job["arguments"].to_s.include?(user.to_gid.to_s) }
 
   test "a due job is sent once at 9am, followed up once 2 days later, then nothing" do
     assert_empty run_at(at(@monday, 8, 55)), "not before 9am"

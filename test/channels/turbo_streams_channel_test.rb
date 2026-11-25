@@ -5,6 +5,7 @@ class TurboStreamsChannelTest < ActionCable::Channel::TestCase
   tests Turbo::StreamsChannel
 
   test "a signed household stream is accepted, a made-up one is refused" do
+    stub_connection(current_user: users(:one))
     subscribe signed_stream_name: Turbo::StreamsChannel.signed_stream_name(households(:one))
     assert subscription.confirmed?
     assert_has_stream Turbo::StreamsChannel.send(:stream_name_from, households(:one))

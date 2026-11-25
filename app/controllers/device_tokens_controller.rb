@@ -2,6 +2,8 @@
 # component on signed-in pages: registered for the signed-in person and this
 # sign-in session, with whether the phone shows notifications, or removed. JSON only.
 class DeviceTokensController < ApplicationController
+  # The app sends its token when a page loads; far fewer than this.
+  rate_limit to: 60, within: 1.hour, only: :create, by: -> { Current.user.id }, with: -> { head :too_many_requests }
   def create
     token = DeviceToken.register(user: Current.user, session: Current.session, token: params.require(:token),
                                  platform: params[:platform].presence || "android", notifications_allowed: notifications_allowed)

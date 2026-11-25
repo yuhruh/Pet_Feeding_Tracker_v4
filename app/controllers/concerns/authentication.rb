@@ -59,5 +59,31 @@ module Authentication
     def terminate_session
       Current.session.destroy
       cookies.delete(:session_id)
+      # Nothing the browser was holding is left for whoever uses it next: a LINE
+      # account waiting for its sign-up, an invitation or viewer link.
+      reset_session
+    end
+
+    # A LINE sign-in that came back without an email, waiting for the sign-up page.
+    # It lasts a few minutes, so it can't be linked to someone else's account made
+    # in this browser later.
+    PROVIDER_IDENTITY_LIFETIME = 15.minutes
+
+    def remember_provider_identity(auth)
+      session["omniauth.auth"] = auth
+      session["omniauth.auth_at"] = Time.current.to_i
+    end
+
+    def pending_provider_identity
+      auth = session["omniauth.auth"]
+      return auth if auth.present? && session["omniauth.auth_at"].to_i > PROVIDER_IDENTITY_LIFETIME.ago.to_i
+
+      forget_provider_identity
+      nil
+    end
+
+    def forget_provider_identity
+      session.delete("omniauth.auth")
+      session.delete("omniauth.auth_at")
     end
 end

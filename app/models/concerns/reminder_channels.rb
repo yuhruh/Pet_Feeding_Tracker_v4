@@ -67,7 +67,7 @@ module ReminderChannels
   def pushed_to_android?(title:, body:, url:)
     return false unless FcmClient.configured?
 
-    results = @user.device_tokens.notifying.map do |device|
+    results = @user.device_tokens.notifying.order(last_used_at: :desc).limit(DeviceToken::MAX_PER_USER).map do |device|
       result = self.class.push_android(device.token, title: title, body: body, url: url)
       result == :gone ? device.delete && :gone : result
     rescue StandardError => error

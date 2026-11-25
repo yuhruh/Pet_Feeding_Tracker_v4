@@ -1,0 +1,10 @@
+<% SecurityMailer::LOCALES.each_with_index do |locale, index| %>
+  <% I18n.with_locale(locale) do %>
+    <%= tag.hr if index.positive? %>
+    <div lang="<%= locale %>">
+      <p><%= t("security_mailer.sign_in_method_added.greeting", username: @user.username) %></p>
+      <p><%= t("security_mailer.sign_in_method_added.what_happened", provider: @provider) %></p>
+      <p><%= t("security_mailer.sign_in_method_added.if_not_you_html", profile_link: link_to(t("security_mailer.sign_in_method_added.profile_link"), users_url(locale: locale, anchor: "sign-in-methods"))) %></p>
+    </div>
+  <% end %>
+<% end %>

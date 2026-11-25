@@ -40,7 +40,9 @@ class HouseholdJoinsController < ApplicationController
 
   # The email is the invited one, whatever the form sends.
   def sign_up_and_join
-    @user = User.new(sign_up_params.merge(email_address: @invitation.email, email_address_confirmation: @invitation.email, sign_in_count: 1))
+    # The invitation link was emailed to this address, so it is confirmed.
+    @user = User.new(sign_up_params.merge(email_address: @invitation.email, email_address_confirmation: @invitation.email, sign_in_count: 1,
+                                          email_confirmed_at: Time.current))
     if @user.save
       start_new_session_for @user
       UserMailer.with(user: @user).welcome_email.deliver_later

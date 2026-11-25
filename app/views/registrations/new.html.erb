@@ -3,6 +3,10 @@
     <div class="mx-auto mb-6">
       <h1 class="text-center font-semibold text-xl capitalize md:text-2xl lg:text-4xl"><%= t(".title") %></h1>
     </div>
+    <% if @linking_provider %>
+      <%# Says plainly which sign-in this new account gets, so nobody signs up with someone else's left behind. %>
+      <p id="linking_provider" class="mx-auto mb-4 max-w-prose text-center text-sm"><%= t(".linking_provider", provider: ConnectedService.provider_name(@linking_provider)) %></p>
+    <% end %>
 
     <%= form_with url: registrations_url, model: @user, class: "contents" do |form| %>
       <div class="flex flex-col justify-center space-x-3 items-center mb-4 md:flex-row">

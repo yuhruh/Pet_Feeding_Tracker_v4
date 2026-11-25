@@ -19,6 +19,14 @@
             <%= Current.user.email_address %>
           </div>
         </div>
+        <% unless Current.user.email_confirmed? %>
+          <%# Until the address is confirmed the account can't invite or share (User#email_confirmed?). %>
+          <div id="email_unconfirmed" class="flex flex-col items-center gap-1 text-sm mb-2">
+            <p><%= t(".email_unconfirmed") %></p>
+            <%= button_to t(".resend_confirmation"), resend_email_confirmation_path, method: :post,
+                  class: "text-grayishBlue underline decoration-2 decoration-grayishBlue hover:text-softRed hover:decoration-softRed" %>
+          </div>
+        <% end %>
 
         <div class="flex justify-center text-lg space-x-3 mb-2 md:text-2xl">
           <strong class="capitalize"><%= t(".timezone") %></strong>

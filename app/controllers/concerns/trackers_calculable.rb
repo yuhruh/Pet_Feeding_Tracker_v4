@@ -1,6 +1,12 @@
 module TrackersCalculable
   extend ActiveSupport::Concern
 
+  # The search box's filters. They narrow the records by their text, so only
+  # someone who may read the records (view_trackers) gets to use them.
+  TEXT_FILTERS = %i[food_type brand description note].freeze
+  # How the records can be paged.
+  PER_PAGE_CHOICES = [ 5, 10, 20, 50 ].freeze
+
   # care: also the household's care records (⚖️ weights on the weight line and
   # the "Care by day" chart); not on the public share page.
   def calculate_tracker_data(pet, params, user, care: false)
@@ -32,10 +38,13 @@ module TrackersCalculable
     care_chart = CareChart.new(pet, from: start_date, to: end_date) if care && pet.household
 
     # Apply filters
-    all_trackers = all_trackers.where(trackers_table[:food_type].matches("%#{params[:food_type].strip}%")) if params[:food_type].present?
-    all_trackers = all_trackers.where(trackers_table[:brand].matches("%#{params[:brand].strip}%")) if params[:brand].present?
-    all_trackers = all_trackers.where(trackers_table[:description].matches("%#{params[:description].strip}%")) if params[:description].present?
-    all_trackers = all_trackers.where(trackers_table[:note].matches("%#{params[:note].strip}%")) if params[:note].present?
+    # The search words are matched as typed: % and _ are not wildcards.
+    TEXT_FILTERS.each do |key|
+      value = params[key]
+      next unless value.is_a?(String) && value.strip.present?
+
+      all_trackers = all_trackers.where(trackers_table[key].matches("%#{ActiveRecord::Base.sanitize_sql_like(value.strip)}%"))
+    end
 
     hotel_keywords = [ "hotel", "旅館", "貓旅", "boarding", "resort" ]
     formatted_keywords = hotel_keywords.map { |k| "%#{k}%" }

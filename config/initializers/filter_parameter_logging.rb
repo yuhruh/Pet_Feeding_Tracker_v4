@@ -6,7 +6,9 @@
 Rails.application.config.filter_parameters += [
   :passw, :email, :secret, :token, :_key, :crypt, :salt, :certificate, :otp, :ssn, :cvv, :cvc,
   # One-time codes (the Android app's sign-in, Google's and the providers' callbacks) and their state.
-  /\Acode\z/, /\Astate\z/
+  /\Acode\z/, /\Astate\z/,
+  # The app's sign-in context, and OmniAuth's return address that can repeat it.
+  /\Acontext\z/, /\Aorigin\z/
 ]
 
 # Secret links carry their token in the path, which parameter filtering doesn't
@@ -14,7 +16,7 @@ Rails.application.config.filter_parameters += [
 # the token in the "Started GET …" line and wherever else the request's path is
 # logged or reported, and in "Redirected to …".
 module FilteredSecretPaths
-  PATTERN = %r{(/(?:view|join|shared|passwords)/)(?!new(?:[/?.]|\z))[^/?]+}
+  PATTERN = %r{(/(?:view|join|shared|passwords|confirm_email)/)(?!new(?:[/?.]|\z))[^/?]+}
 
   def self.mask(path) = path.to_s.sub(PATTERN) { "#{$1}[FILTERED]" }
 

@@ -4,6 +4,9 @@ class UsersController < ApplicationController
   # Limits guessing the current password with a signed-in (possibly stolen) session.
   rate_limit to: 10, within: 5.minutes, only: :update, by: -> { Current.user.id },
              with: -> { redirect_to edit_users_path, alert: t("users.update.alert_rate_limit") }
+  # Each new address gets a confirmation email.
+  rate_limit to: 5, within: 1.day, only: :update, name: "email_change", by: -> { Current.user.id }, if: -> { changing_email? },
+             with: -> { redirect_to edit_users_path, alert: t("users.update.alert_rate_limit") }
 
   def edit
     @user = Current.user
@@ -26,6 +29,8 @@ class UsersController < ApplicationController
       if @user.update(user_params)
         # Whoever knew the old password may still be signed in on another device.
         @user.sessions.where.not(id: Current.session.id).destroy_all if @user.saved_change_to_password_digest?
+        # A new address is unconfirmed until its link is used (User#email_confirmed?).
+        UserMailer.with(user: @user, locale: I18n.locale.to_s).email_confirmation.deliver_later if @user.saved_change_to_email_address?
         format.html { redirect_to users_path, notice: t(".update.notice") }
         format.json { render :show, status: :ok, location: users_path }
       else
@@ -58,9 +63,13 @@ class UsersController < ApplicationController
   end
 
   def changing_sign_in_details?
+    # Any text at all, even " ", is a new password: has_secure_password takes it.
+    !params.dig(:user, :password).to_s.empty? || !params.dig(:user, :password_confirmation).to_s.empty? || changing_email?
+  end
+
+  def changing_email?
     new_email = params.dig(:user, :email_address)
-    params.dig(:user, :password).present? || params.dig(:user, :password_confirmation).present? ||
-      (!new_email.nil? && User.normalize_value_for(:email_address, new_email.to_s) != @user.email_address)
+    !new_email.nil? && User.normalize_value_for(:email_address, new_email.to_s) != Current.user.email_address
   end
 
   def user_params

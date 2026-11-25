@@ -143,7 +143,8 @@ zh-TW:
   native_sign_ins:
     start:
       title: "登入中"
-      continuing: "正在前往 %{provider}…"
+      continuing: "要用 %{provider} 登入 Pet Tracker App 嗎？"
+      only_if_you_started: "只有在你剛剛在這支手機的 Pet Tracker App 裡點了登入按鈕時才繼續。如果這個頁面是從連結或其他 App 開啟的，請關閉它。"
       continue: "繼續"
       providers:
         google_oauth2: "Google"
@@ -428,6 +429,7 @@ zh-TW:
     creating_account_step_2c: "Line：使用 Line 建立帳戶。"
     creating_account_step_2d: "使用 Line 註冊，頁面將重新導向至填寫電子郵件和密碼的表單。"
     creating_account_step_3: "註冊：按一下「註冊」按鈕以建立您的帳戶。"
+    creating_account_confirm_email: "確認電子郵件：用表單註冊後，我們會寄一封含連結的信到你的地址。打開連結之前，你可以新增貓咪和記錄照顧，但無法邀請照顧者、建立檢視或分享連結、分享就診紀錄，別人也無法和你分享就診紀錄。可在個人資料頁重新寄送連結。用 Google、LINE 或 GitHub 註冊，或從照顧者邀請註冊，不需要確認。在個人資料頁變更電子郵件後，需要確認新的地址。"
     signing_in_title: "登入"
     signing_in_step_1: "登入：前往「登入」頁面。"
     signing_in_step_2: "輸入您的憑證：輸入您的電子郵件和密碼。"
@@ -865,6 +867,8 @@ zh-TW:
     update:
       notice: "密碼已重設。"
       notice_disconnected: "密碼已重設。為了確保帳號只有你能使用，已解除這個帳號與 %{providers} 登入的連結。請用新密碼登入；之後可以在個人資料頁重新連結。"
+      household_reviewed: "已取消你的家庭尚未接受的邀請和移交。其他能看到你的貓的人列在「我的家庭」頁面；請移除你不認識的人。"
+      household_revoked: "這個帳號的電子郵件地址從未確認過，開設帳號的人可能不是你：已移除家庭的成員、檢視連結、分享連結、邀請和移交。請在「我的家庭」頁面重新加入你想要的人。"
       alert: "密碼不符。"
     set_user_by_token:
       alert: "密碼重設連結無效或已過期。"
@@ -933,6 +937,13 @@ zh-TW:
     destroy:
       notice: "寵物 %{name} 已成功刪除。"
   security_mailer:
+    sign_in_method_added:
+      subject: "你的 Pet Tracker 帳號新增了 %{provider} 登入"
+      greeting: "%{username} 你好，"
+      what_happened: "你的 Pet Tracker 帳號剛剛連結了 %{provider} 登入，這個 %{provider} 帳號現在可以登入你的帳號。"
+      if_not_you_html: "如果這不是你做的，請到%{profile_link}的「登入方式」解除連結，並變更密碼、登出其他裝置。"
+      if_not_you_text: "如果這不是你做的，請到個人資料頁的「登入方式」解除連結，並變更密碼、登出其他裝置："
+      profile_link: "個人資料頁"
     password_reset_required:
       subject: "請重新設定 Aji Tracker 的密碼"
       greeting: "%{username} 您好："
@@ -940,6 +951,8 @@ zh-TW:
       what_we_did: "該副本已從儲存庫中移除，我們也已請 GitHub 刪除其仍保留的副本。為了保險起見，我們已將您的密碼更換為隨機密碼，並將您在所有裝置上登出。"
       what_to_do_html: "若要重新登入，請在%{forgot_password_link}以此電子郵件地址設定新密碼。若您使用 Google、LINE 或 GitHub 登入，仍可照常使用。"
       what_to_do_text: "若要重新登入，請在「忘記密碼」頁面以此電子郵件地址設定新密碼。若您使用 Google、LINE 或 GitHub 登入，仍可照常使用："
+      what_to_do_disconnected_html: "若要重新登入，請在%{forgot_password_link}以此電子郵件地址設定新密碼。您帳號連結的 Google、LINE 和 GitHub 登入也已中斷連結；登入後可在個人資料頁面重新連結。"
+      what_to_do_disconnected_text: "若要重新登入，請在「忘記密碼」頁面以此電子郵件地址設定新密碼。您帳號連結的 Google、LINE 和 GitHub 登入也已中斷連結；登入後可在個人資料頁面重新連結："
       forgot_password_link: "「忘記密碼」頁面"
       other_sites: "如果您在其他網站也使用相同的密碼，請一併更改。"
       apology: "造成您的不便，我們深感抱歉。若有任何問題，請直接回覆此郵件。"
@@ -955,6 +968,7 @@ zh-TW:
       alert_rate_limit: "註冊嘗試次數過多。請稍候再試。"
       notice: "您好，%{username} 👋。您已成功註冊寵物飲食紀錄應用程式，這是您第一次登入，請先新增一隻寵物以便進一步紀錄。歡迎您，%{username}！"
     new:
+      linking_provider: "這個新帳號會連結到你剛剛登入的 %{provider} 帳號，之後可以用 %{provider} 登入。"
       title: "🐾 註冊寵物飲食紀錄應用程式 🐾"
       username: "使用者名稱"
       username_placeholder: "輸入您的使用者名稱"
@@ -1278,6 +1292,8 @@ zh-TW:
         step_3: "點擊「在新建專案中建立 API 金鑰 (Create API key in new project)」"
         step_4: "複製您的金鑰並貼在上方"
     show:
+      email_unconfirmed: "尚未確認：請打開我們寄給你的連結，才能邀請或分享。"
+      resend_confirmation: "重新寄送連結"
       other_sessions:
         zero: "您沒有在其他裝置上登入。"
         one: "您也在另外 1 台裝置上登入。"
@@ -1417,7 +1433,7 @@ zh-TW:
       review: "查看移交"
       fine_print: "請用這個 Email 登入後接受。移交在 %{date} 前有效。如果你沒有預期收到這封信，可以忽略。"
     invitation:
-      subject: "%{owner} 邀請你一起照顧貓咪"
+      subject: "你受邀在 Pet Tracker 一起照顧貓咪"
       intro: "%{owner} 邀請你在 Pet Tracker 當照顧者，一起照顧 %{pets}。"
       their_cats: "他的貓咪"
       what_you_can_do: "照顧者可以一鍵記錄餵食、貓砂、飲水和用藥，也能查看紀錄和圖表。"
@@ -1459,7 +1475,23 @@ zh-TW:
   mailers:
     user_backup:
       subject: "您的寵物追蹤器備份"
+  email_confirmations:
+    required: "請先確認你的電子郵件地址：使用我們寄到 %{email} 的連結，或在個人資料頁重新寄送。"
+    sent_at_sign_up: "我們已寄一封信到 %{email}；請打開連結確認地址，之後才能邀請或分享。"
+    show:
+      confirmed: "謝謝，%{email} 已確認。"
+      invalid: "這個確認連結已過期、是寄給先前的地址，或不正確。請登入後在個人資料頁重新寄送。"
+    create:
+      rate_limited: "確認信寄送次數太多，請稍後再試。"
+      already_confirmed: "你的電子郵件地址已經確認過了。"
+      sent: "已寄出確認連結到 %{email}。"
   user_mailer:
+    email_confirmation:
+      subject: "確認你的 Pet Tracker 電子郵件地址"
+      intro: "有人（希望是你）用這個地址註冊了 Pet Tracker，或把帳號的電子郵件改成這個地址。請確認這是你的地址："
+      confirm: "確認我的電子郵件地址"
+      valid_for: "此連結在 %{days} 天內有效。"
+      not_you: "如果不是你，請忽略這封信：在確認之前，這個帳號無法分享任何內容，也無法用這個地址被找到。"
     welcome_email:
       subject: "歡迎使用寵物飲食紀錄 App！"
     send_pet_weight_reminder:
@@ -1469,6 +1501,7 @@ zh-TW:
   services:
     csv_import:
       failed_to_parse: "CSV 檔案解析失敗: %{message}"
+      too_large: "檔案太大，無法匯入（最多 %{megabytes} MB、%{rows} 列）。請分成較小的檔案。"
       failed_to_import: "資料匯入失敗: %{message}"
       row_error: "第 %{row} 列: %{message}"
       date_earlier_than_birthday: "日期不能早於寵物的生日。"
@@ -1489,6 +1522,7 @@ zh-TW:
       file_too_large: "每張圖片不得超過 %{max}。"
       total_too_large: "所有圖片合計不得超過 %{max}。"
       unsupported_type: "僅支援 PNG、JPEG、WebP 或 HEIC 圖片。"
+      busy: "目前正在讀取另一份報告，請稍後一分鐘再試。"
       rate_limited: "上傳次數過多，請稍候一分鐘再試。"
       prompt: |
         擔任專業的獸醫檢驗結果數據提取工具。
@@ -1747,6 +1781,7 @@ zh-TW:
               not_pending: "這個移交已被接受、撤回或已過期。"
               wrong_person: "這個移交是給別人的。"
               still_owner_changed: "這個家庭已經換了主人。"
+              not_a_member_anymore: "你已經不是這個家庭的成員了。"
               already_owns: "你已經有自己的家庭。請先移交它，或刪除其中的貓咪。"
             to_user:
               not_a_member: "只能交給家庭裡的成員。"

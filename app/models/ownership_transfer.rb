@@ -34,13 +34,26 @@ class OwnershipTransfer < ApplicationRecord
 
     transaction do
       household.lock!
-      household.memberships.where(user_id: to_user_id).destroy_all
+      reload
+      # Checked again under the lock, and the member must still be a member: a
+      # person removed from the household (or who left) can't take it over.
+      raise ActiveRecord::Rollback unless pending? && household.owner_id == from_user_id
+      unless household.memberships.exists?(user_id: to_user_id)
+        reject(:not_a_member_anymore)
+        raise ActiveRecord::Rollback
+      end
+
+      # delete_all: destroying it would cancel this very offer (HouseholdMembership's after_destroy).
+      household.memberships.where(user_id: to_user_id).delete_all
       household.update!(owner_id: to_user_id)
       household.memberships.create!(user_id: from_user_id, role: :caregiver)
       household.ownership_transfers.pending.where.not(id: id).update_all(cancelled_at: Time.current)
       update!(accepted_at: Time.current)
     end
-    true
+    return true if accepted_at
+
+    reject(:not_pending) if errors.empty?
+    false
   end
 
   private

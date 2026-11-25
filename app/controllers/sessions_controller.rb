@@ -2,6 +2,10 @@ class SessionsController < ApplicationController
   include HouseholdArrival
   allow_unauthenticated_access only: %i[ new create ]
   rate_limit to: 10, within: 5.minutes, only: :create, with: -> { redirect_to new_session_url, alert: t("sessions.create.alert_rate_limit") }
+  # Also per account, so guesses spread over many addresses still stop.
+  rate_limit to: 20, within: 1.hour, only: :create, name: "per_email",
+             by: -> { params[:email_address].is_a?(String) ? User.normalize_value_for(:email_address, params[:email_address]) : "" },
+             with: -> { redirect_to new_session_url, alert: t("sessions.create.alert_rate_limit") }
 
   def new
     session[:init] = true
@@ -13,6 +17,8 @@ class SessionsController < ApplicationController
     # request from sending a list of emails or leaving the password out.
     if (@user = User.authenticate_by(email_address: params[:email_address].to_s, password: params[:password].to_s))
       start_new_session_for @user
+      # A LINE account left waiting for a sign-up is not this person's.
+      forget_provider_identity
       @user.update_columns(
         last_sign_in_at: @user.current_sign_in_at,
         current_sign_in_at: Time.current,

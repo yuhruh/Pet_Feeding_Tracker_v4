@@ -143,7 +143,8 @@ en:
   native_sign_ins:
     start:
       title: "Signing in"
-      continuing: "Continuing to %{provider}…"
+      continuing: "Sign in to the Pet Tracker app with %{provider}?"
+      only_if_you_started: "Only continue if you just tapped this sign-in button in the Pet Tracker app on this phone. If this page opened from a link or another app, close it."
       continue: "Continue"
       providers:
         google_oauth2: "Google"
@@ -428,6 +429,7 @@ en:
     creating_account_step_2c: "Line: Using Line to create account."
     creating_account_step_2d: "Using line to sign up, the page will redirect to the form for filling email and password"
     creating_account_step_3: "Register: Click the 'Sign Up' button to create your account."
+    creating_account_confirm_email: "Confirm your email: signing up with the form sends a link to your address. Until you open it, you can add cats and record care, but can't invite caregivers, make viewer or share links, or share vet visits, and others can't share vet visits with you. Send the link again from your profile page. Signing up with Google, LINE or GitHub, or from a caregiver invitation, needs no confirmation. Changing your email on the profile asks you to confirm the new address."
     signing_in_title: "Signing In"
     signing_in_step_1: "Sign In: Go to the 'Sign In' page."
     signing_in_step_2: "Enter Your Credentials: Enter your email and password."
@@ -865,6 +867,8 @@ en:
     update:
       notice: "Password has been reset."
       notice_disconnected: "Password has been reset. To keep the account yours alone, sign-in with %{providers} was disconnected from it. Sign in with your new password; you can connect it again on your profile page."
+      household_reviewed: "Pending invitations and ownership offers from your household were cancelled. Others who can see your cats are listed on the My household page; remove anyone you don't know."
+      household_revoked: "This account's email address had never been confirmed, so whoever opened it may not have been you: its household's members, viewer links, share links, invitations and ownership offers were removed. Add the people you want again on the My household page."
       alert: "Passwords did not match."
     set_user_by_token:
       alert: "Password reset link is invalid or has expired."
@@ -933,6 +937,13 @@ en:
     destroy:
       notice: "Cat %{name} was successfully destroyed."
   security_mailer:
+    sign_in_method_added:
+      subject: "A %{provider} sign-in was added to your Pet Tracker account"
+      greeting: "Hi %{username},"
+      what_happened: "Sign-in with %{provider} was just linked to your Pet Tracker account, so that %{provider} account can now sign in to yours."
+      if_not_you_html: "If this wasn't you, disconnect it under Sign-in methods on %{profile_link}, change your password and sign out your other devices."
+      if_not_you_text: "If this wasn't you, disconnect it under Sign-in methods on your profile page, change your password and sign out your other devices:"
+      profile_link: "your profile page"
     password_reset_required:
       subject: "Action needed: set a new password for Aji Tracker"
       greeting: "Hi %{username},"
@@ -940,6 +951,8 @@ en:
       what_we_did: "The copy has been removed from the repository, and we have asked GitHub to delete the copies it still keeps. As a precaution, we have replaced your password with a random one and signed you out on every device."
       what_to_do_html: "To sign in again, set a new password on %{forgot_password_link} using this email address. If you sign in with Google, LINE or GitHub, that still works as before."
       what_to_do_text: "To sign in again, set a new password on the Forgot password page using this email address. If you sign in with Google, LINE or GitHub, that still works as before:"
+      what_to_do_disconnected_html: "To sign in again, set a new password on %{forgot_password_link} using this email address. Google, LINE and GitHub sign-ins were disconnected from your account too; you can connect them again on your profile page after signing in."
+      what_to_do_disconnected_text: "To sign in again, set a new password on the Forgot password page using this email address. Google, LINE and GitHub sign-ins were disconnected from your account too; you can connect them again on your profile page after signing in:"
       forgot_password_link: "the Forgot password page"
       other_sites: "If you used the same password on any other website, please change it there too."
       apology: "We're sorry for the trouble. If you have any questions, just reply to this email."
@@ -955,6 +968,7 @@ en:
       alert_rate_limit: "Too many sign-up attempts. Please wait a while and try again."
       notice: "Hello, %{username} 👋. You've successfully signed up to Cat Feeding Tracker App and this is your first time to sign in, please add a new cat first for further tracker. Welcome %{username}!"
     new:
+      linking_provider: "This new account will be linked to the %{provider} account you just signed in with, so it can sign in with %{provider}."
       title: "🐾 Sign up Cat Trackers App 🐾"
       username: "Username"
       username_placeholder: "Enter your username"
@@ -1278,6 +1292,8 @@ en:
         step_3: "Click 'Create API key in new project'"
         step_4: "Copy your key and paste it above"
     show:
+      email_unconfirmed: "Not confirmed yet: open the link we emailed you to invite or share."
+      resend_confirmation: "Send the link again"
       other_sessions:
         zero: "You are not signed in on any other device."
         one: "You are also signed in on 1 other device."
@@ -1417,7 +1433,7 @@ en:
       review: "Review the offer"
       fine_print: "Sign in with this email address to accept. The offer is open until %{date}. If you weren't expecting it, you can ignore this email."
     invitation:
-      subject: "%{owner} invited you to help look after their cats"
+      subject: "You're invited to help look after cats on Pet Tracker"
       intro: "%{owner} invited you to help look after %{pets} on Pet Tracker, as a caregiver."
       their_cats: "their cats"
       what_you_can_do: "As a caregiver you can record feeding, litter, water and meds with one tap, and see their trackers and charts."
@@ -1459,7 +1475,23 @@ en:
   mailers:
     user_backup:
       subject: "Your Pet Tracker Backup"
+  email_confirmations:
+    required: "Please confirm your email address first: use the link we sent to %{email}, or send a new one from your profile page."
+    sent_at_sign_up: "We sent a link to %{email}; open it to confirm your address before inviting or sharing."
+    show:
+      confirmed: "Thanks, %{email} is confirmed."
+      invalid: "That confirmation link has expired, was for an earlier address, or is wrong. Sign in and send a new one from your profile page."
+    create:
+      rate_limited: "Too many confirmation emails. Please try again later."
+      already_confirmed: "Your email address is already confirmed."
+      sent: "We sent a confirmation link to %{email}."
   user_mailer:
+    email_confirmation:
+      subject: "Confirm your email address for Pet Tracker"
+      intro: "Someone (hopefully you) signed up for Pet Tracker, or changed an account's email, with this address. Confirm it's yours:"
+      confirm: "Confirm my email address"
+      valid_for: "The link works for %{days} days."
+      not_you: "If this wasn't you, ignore this email: the account can't share anything or be found by this address until it is confirmed."
     welcome_email:
       subject: "Welcome to Cat Trackers App!"
     send_pet_weight_reminder:
@@ -1469,6 +1501,7 @@ en:
   services:
     csv_import:
       failed_to_parse: "Failed to parse CSV file: %{message}"
+      too_large: "The file is too large to import (at most %{megabytes} MB and %{rows} rows). Split it into smaller files."
       failed_to_import: "Failed to import data: %{message}"
       row_error: "Row %{row}: %{message}"
       date_earlier_than_birthday: "Date cannot be earlier than pet's birthday."
@@ -1489,6 +1522,7 @@ en:
       file_too_large: "Each image must be %{max} or smaller."
       total_too_large: "The images together must be %{max} or smaller."
       unsupported_type: "Only PNG, JPEG, WebP or HEIC images can be read."
+      busy: "Another report is being read right now. Please try again in a minute."
       rate_limited: "Too many uploads. Please wait a minute and try again."
       prompt: |
         Act as a specialized veterinary lab result data extraction tool.
@@ -1762,6 +1796,7 @@ en:
               not_pending: "This offer was accepted, withdrawn or has expired."
               wrong_person: "This offer is for someone else."
               still_owner_changed: "The household has a different owner now."
+              not_a_member_anymore: "You are no longer a member of this household."
               already_owns: "You already have a household of your own. Hand it to someone, or delete its cats, first."
             to_user:
               not_a_member: "You can only hand the household to one of its members."

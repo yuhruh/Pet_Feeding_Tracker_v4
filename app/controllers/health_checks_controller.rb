@@ -1,7 +1,8 @@
 class HealthChecksController < ApplicationController
   include PetAccess
-  # Each extraction holds a server thread while Gemini reads the images.
-  rate_limit to: 10, within: 1.minute, only: :extract_data, by: -> { Current.user&.id || request.remote_ip },
+  # Each extraction holds a server thread while Gemini reads the images, so one
+  # at a time per person, and never all of Puma's threads at once.
+  rate_limit to: 5, within: 1.minute, only: :extract_data, by: -> { Current.user&.id || request.remote_ip },
              with: -> { render_json_error(t("services.gemini_ocr.rate_limited"), status: :too_many_requests) }
   before_action :set_pet
   before_action :set_health_check, only: %i[ show edit update destroy ]
@@ -27,7 +28,12 @@ class HealthChecksController < ApplicationController
     if (upload_error = GeminiOcrService.upload_error(file_paths))
       render_json_error(upload_error, status: :unprocessable_entity)
     else
-      result = GeminiOcrService.new(file_paths, Current.user).call
+      result = nil
+      ran = ConcurrencyLimit.within("gemini_ocr/user/#{Current.user.id}" => 1, "gemini_ocr/all" => extractions_at_once) do
+        result = GeminiOcrService.new(file_paths, Current.user).call
+      end
+      return render_json_error(t("services.gemini_ocr.busy"), status: :too_many_requests) unless ran
+
       # The service reports a missing key, quota or Gemini failure as { error: }; don't send that as a success.
       if (error = result[:error] || result["error"])
         render_json_error(error, status: :unprocessable_entity)
@@ -101,6 +107,11 @@ class HealthChecksController < ApplicationController
   end
 
   private
+    # Leaves at least one Puma thread for everyone else's pages.
+    def extractions_at_once
+      [ ENV.fetch("RAILS_MAX_THREADS", 3).to_i - 1, 1 ].max
+    end
+
     # Health records are the owner's only.
     def set_pet
       load_pet(params[:pet_id], :manage_health)

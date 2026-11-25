@@ -58,7 +58,7 @@ class HouseholdsControllerTest < ActionDispatch::IntegrationTest
     assert_not first.reload.pending?, "the earlier link stops working"
     mail = ActionMailer::Base.deliveries.last
     assert_equal [ "mom@example.com" ], mail.to
-    assert_match "invited you to help look after", mail.subject
+    assert_match "invited to help look after", mail.subject
     token = mail.text_part.body.decoded[%r{/join/([\w-]+)}, 1]
     assert_equal @household.invitations.pending.sole, HouseholdInvitation.find_by_token(token)
   end

@@ -13,7 +13,9 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_pet_path(locale: I18n.default_locale)
     follow_redirect!
     assert_response :success
-    assert_equal "Hello, New_user 👋. You've successfully signed up to Cat Feeding Tracker App and this is your first time to sign in, please add a new cat first for further tracker. Welcome New_user!", flash[:notice]
+    assert_equal "Hello, New_user 👋. You've successfully signed up to Cat Feeding Tracker App and this is your first time to sign in, please add a new cat first for further tracker. Welcome New_user! " \
+                 "We sent a link to new_user@example.com; open it to confirm your address before inviting or sharing.", flash[:notice]
+    assert_not User.find_by!(email_address: "new_user@example.com").email_confirmed?, "a typed address starts unconfirmed"
   end
 
   test "should not create user with invalid params" do

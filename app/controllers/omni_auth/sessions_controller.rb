@@ -11,20 +11,27 @@ class OmniAuth::SessionsController < ApplicationController
   def create
     if !@service.present?
       @service = @user.connected_services.create!(provider: user_info.provider, uid: user_info.uid)
+      # A new way into the account: tell its owner, in case it wasn't them.
+      SecurityMailer.sign_in_method_added(@user, @service.provider).deliver_later if Current.user.present?
     end
 
     if Current.user.present?
       arrival = claim_household_invitation(@user)
       redirect_to after_connecting_path(@user), arrival || { notice: t("omni_auth.sessions.create.connected", provider: ConnectedService.provider_name(@service.provider)) }
     else
-      start_new_session_for @user unless native_sign_in?
+      unless native_sign_in?
+        start_new_session_for @user
+        forget_provider_identity
+      end
       @user.last_sign_in_at = @user.current_sign_in_at
       @user.current_sign_in_at = Time.current
       @user.sign_in_count = @user.sign_in_count.to_i + 1
       @user.save(validate: false)
 
       greeting = @user.new_user? ? t("omni_auth.sessions.create.first_time_sign_in") : t("omni_auth.sessions.create.welcome_back", username: @user.username.capitalize)
-      arrival = claim_household_invitation(@user)
+      # The app's invitation or viewer link stays in the app's own session and is
+      # used when the app redeems the code (NativeSignInsController#finish).
+      arrival = claim_household_invitation(@user) unless native_sign_in?
       finish_sign_in landing_path_for(@user), arrival || { notice: greeting }, user: @user
     end
   end
@@ -53,9 +60,10 @@ class OmniAuth::SessionsController < ApplicationController
     return redirect_to(path, flash_values) unless native_sign_in?
 
     challenge = session.delete(:native_sign_in)["challenge"]
-    data = { "omniauth_auth" => session.delete("omniauth.auth") }
+    data = { "omniauth_auth" => pending_provider_identity }
+    forget_provider_identity
     code = NativeSignIn.issue!(user: user, path: path, challenge: challenge, flash: flash_values.stringify_keys, data: data)
-    @app_url = "pettracker://sign-in?code=#{code}"
+    @app_url = NativeSignIn.app_url(code, fallback_url: new_session_url)
     render "native_sign_ins/return", layout: false
   end
 
@@ -89,7 +97,7 @@ class OmniAuth::SessionsController < ApplicationController
       finish_sign_in(new_session_path, { notice: t("omni_auth.sessions.create.email_exists", service_methods: service_methods) }) and return
     else
       if user_info.dig(:info, :email).blank? && user_info.provider == "line"
-        session["omniauth.auth"] = user_info.to_hash
+        remember_provider_identity(user_info.to_hash)
         finish_sign_in(new_registrations_path, { notice: t("omni_auth.sessions.create.enter_email_line") }) and return
       elsif user_info.dig(:info, :email).blank?
         finish_sign_in(new_registrations_path, { alert: t("omni_auth.sessions.create.enter_email") }) and return
@@ -112,6 +120,8 @@ class OmniAuth::SessionsController < ApplicationController
       username: username,
       password: random_password,
       password_confirmation: random_password,
-      timezone: user_timezone)
+      timezone: user_timezone,
+      # Google and GitHub give only an address they verified; LINE the account's own.
+      email_confirmed_at: Time.current)
   end
 end

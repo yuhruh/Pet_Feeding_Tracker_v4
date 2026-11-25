@@ -1,8 +1,17 @@
 # The owner invites a caregiver by email, or cancels a pending invitation.
 class HouseholdInvitationsController < ApplicationController
   include OwnedHousehold
+  include ConfirmedEmailRequired
+  before_action :require_confirmed_email, only: :create
 
+  # Each invitation is an email from the app's one Gmail account, whose daily
+  # quota password resets and reminders need too: limits per person, per day,
+  # and for everyone together.
   rate_limit to: 20, within: 1.hour, only: :create, by: -> { Current.user.id },
+             with: -> { redirect_to household_path, alert: t("household_invitations.create.rate_limited") }
+  rate_limit to: 40, within: 1.day, only: :create, name: "daily", by: -> { Current.user.id },
+             with: -> { redirect_to household_path, alert: t("household_invitations.create.rate_limited") }
+  rate_limit to: 150, within: 1.day, only: :create, name: "everyone", by: -> { "all" },
              with: -> { redirect_to household_path, alert: t("household_invitations.create.rate_limited") }
 
   def create

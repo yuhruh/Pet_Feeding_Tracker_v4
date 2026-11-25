@@ -5,7 +5,8 @@
   <%# Live updates: the household's changes refresh this page in place. %>
   <%= turbo_refreshes_with(method: :morph, scroll: :preserve) %>
 <% end %>
-<%= turbo_stream_from @household %>
+<%# The link goes with the subscription, which stops when the link is revoked or expires. %>
+<%= turbo_stream_from @household, data: { viewer_link: params[:token] } %>
 
 <div class="container mx-auto w-full px-2 md:w-5/6 py-6 space-y-6">
   <div class="text-center">

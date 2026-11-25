@@ -49,7 +49,10 @@ class NativeSignInTest < ActionDispatch::IntegrationTest
     app_link = @chrome.css_select("a#open_app").first
     assert app_link, "Chrome shows the way back to the app"
     uri = URI(app_link["href"])
-    assert_equal [ "pettracker", "sign-in" ], [ uri.scheme, uri.host ]
+    # Only the Pet Tracker app can receive it, as pettracker://sign-in?code=…
+    assert_equal [ "intent", "sign-in" ], [ uri.scheme, uri.host ]
+    assert_includes uri.fragment.split(";"), "scheme=pettracker"
+    assert_includes uri.fragment.split(";"), "package=#{NativeSignIn::APP_PACKAGE}"
     Rack::Utils.parse_query(uri.query)["code"]
   end
 
@@ -58,6 +61,10 @@ class NativeSignInTest < ActionDispatch::IntegrationTest
   end
 
   def signed_in_session?(session) = session.cookies["session_id"].present?
+
+  def assert_select_in(session, selector)
+    assert session.css_select(selector).any?, "expected #{selector}"
+  end
 
   test "on the website the buttons still post to the provider; in the app they're links for Chrome" do
     get routes.new_session_path(**L)
@@ -173,6 +180,48 @@ class NativeSignInTest < ActionDispatch::IntegrationTest
     assert_not_started @chrome
   end
 
+  test "the code goes back only to the Pet Tracker app, never as a bare pettracker:// link" do
+    code = sign_in_in_chrome(google_link_in_app)
+    assert code.present?
+    assert_no_match %r{["']pettracker://}, @chrome.response.body
+    fallback = @chrome.css_select("a#open_app").first["href"][/S\.browser_fallback_url=([^;]+)/, 1]
+    assert_equal url(routes.new_session_path(**L)), CGI.unescape(fallback), "without the app, Chrome goes to the sign-in page, not the code"
+  end
+
+  test "the start page asks before going to the provider, and never posts by itself" do
+    @chrome.get google_link_in_app, headers: CHROME
+    assert_equal 200, @chrome.response.status
+    assert_select_in(@chrome, "form#native_sign_in button[type=submit]")
+    assert_no_match(/\.submit\(\)/, @chrome.response.body, "the page doesn't submit the form itself")
+    assert_match I18n.t("native_sign_ins.start.only_if_you_started"), @chrome.response.body
+  end
+
+  test "an app sign-in link carries no viewer link or invitation, and puts none in the browser that opens it" do
+    # Someone opens a viewer link in their own "app" session and copies its sign-in link.
+    link_record = households(:two).viewer_links.create!(name: "Grandma", created_by: users(:two))
+    @webview.post routes.viewer_page_path(token: link_record.token, **L), headers: APP
+    link = google_link_in_app
+
+    context = Rack::Utils.parse_query(URI(link).query)["context"]
+    assert_equal %w[challenge locale], NativeSignIn.read_context(context).keys.sort
+
+    # Whoever opens that link gets nothing put into their browser session.
+    victim = open_session
+    victim.get link, headers: CHROME
+    assert_nil victim.session[:viewer_link_token]
+    assert_nil victim.session[:invitation_token]
+  end
+
+  test "a viewer link opened in the app is followed when the app redeems the code" do
+    link_record = households(:two).viewer_links.create!(name: "Grandma", created_by: users(:two))
+    @webview.post routes.viewer_page_path(token: link_record.token, **L), headers: APP
+    code = sign_in_in_chrome(google_link_in_app)
+    finish_in_app(code)
+
+    mom = User.find_by!(email_address: "mom@example.com")
+    assert households(:two).memberships.exists?(user: mom, role: :viewer)
+  end
+
   # The code only works in the WebView session whose sign-in page started it.
 
   test "a code caught by another app on the phone signs nobody in, and still works in the app" do
@@ -238,7 +287,7 @@ class NativeSignInTest < ActionDispatch::IntegrationTest
   def assert_not_started(session)
     assert_equal 200, session.response.status
     assert_empty session.css_select("form")
-    assert_equal "pettracker://sign-in?code=expired", session.css_select("a#open_app").first["href"]
+    assert_match %r{\Aintent://sign-in\?code=expired#Intent;scheme=pettracker;package=com\.pettracker\.v4;}, session.css_select("a#open_app").first["href"]
     assert_nil session.session[:native_sign_in]
     assert_equal 0, NativeSignIn.count
   end

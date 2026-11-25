@@ -28,8 +28,11 @@ class TrackersController < ApplicationController
 
   # GET /trackers or /trackers.json
   def index
-    # Use the shared calculation logic from TrackersCalculable concern
-    result = calculate_tracker_data(@pet, params, Current.user, care: true)
+    # Use the shared calculation logic from TrackersCalculable concern. The text
+    # search narrows the chart too, so a viewer (charts only) gets just the date
+    # range: otherwise the chart would answer "does that day's note contain …?".
+    filters = household_policy.can?(:view_trackers) ? params : params.except(*TEXT_FILTERS)
+    result = calculate_tracker_data(@pet, filters, Current.user, care: true)
 
     @all_trackers = result[:all_trackers]
     @data = result[:chart_data]
@@ -42,8 +45,7 @@ class TrackersController < ApplicationController
     @care = result[:care]
 
     page = params[:page].blank? ? 1 : params[:page]
-    session[:per_page] = params[:per_page] if params[:per_page].present?
-    per_page = session[:per_page] || 10
+    per_page = remember_per_page
     # Unfinished rows first, then newest date, then latest feed time on the user's clock.
     order_sql = "CASE WHEN come_back_to_eat = '' OR left_amount IS NULL THEN 0 ELSE 1 END ASC, date DESC, #{Tracker.local_feed_time_sql(Current.user.timezone)} DESC"
     @trackers = @all_trackers.reorder(Arel.sql(order_sql)).paginate(page: page, per_page: per_page)
@@ -149,8 +151,7 @@ class TrackersController < ApplicationController
     all_favorite_foods = @pet.favorite_foods(food_type: params[:food_type])
 
     require "will_paginate/array"
-    session[:per_page] = params[:per_page] if params[:per_page].present?
-    per_page = session[:per_page] || 10
+    per_page = remember_per_page
     @favorite_foods = all_favorite_foods.paginate(page: params[:page], per_page: per_page)
 
 
@@ -188,12 +189,22 @@ class TrackersController < ApplicationController
 
     def set_pet
       permission = READ_PERMISSIONS.fetch(action_name.to_sym, :manage_trackers)
-      permission = :export_trackers if action_name == "index" && request.format.csv?
+      # respond_to serves the first format in Accept that it has, so check every
+      # one asked for: "application/json, text/csv" still gets the CSV.
+      permission = :export_trackers if action_name == "index" && request.formats.any?(&:csv?)
       load_pet(params[:pet_id], permission)
     end
     # The household's past wet foods by brand, offered as brand and description choices.
     def set_wet_food_choices
       @wet_food_choices = WetFoodChoices.new(@pet).by_brand
+    end
+
+    # A per page from the list's own choices, kept for later visits; anything
+    # else (0, -1, "abc" from a link) is ignored rather than breaking the list.
+    def remember_per_page
+      chosen = params[:per_page].to_s.to_i
+      session[:per_page] = chosen if PER_PAGE_CHOICES.include?(chosen)
+      PER_PAGE_CHOICES.include?(session[:per_page].to_i) ? session[:per_page].to_i : 10
     end
 
     # Use callbacks to share common setup or constraints between actions.

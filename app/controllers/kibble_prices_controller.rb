@@ -4,6 +4,10 @@ class KibblePricesController < ApplicationController
   # Each refresh queues a search of BigGo and PChome, so a user can't queue many at once.
   rate_limit to: 5, within: 10.minutes, only: :create, by: -> { Current.user.id },
              with: -> { redirect_to pet_kibble_prices_path(params[:pet_id]), alert: t("kibble_prices.create.rate_limited") }
+  # The searches run one at a time for the whole site, so one person's share of
+  # the queue stays small enough not to hold up everyone else's.
+  rate_limit to: 10, within: 1.day, only: :create, name: "daily", by: -> { Current.user.id },
+             with: -> { redirect_to pet_kibble_prices_path(params[:pet_id]), alert: t("kibble_prices.create.rate_limited") }
   before_action :set_pet
 
   def index

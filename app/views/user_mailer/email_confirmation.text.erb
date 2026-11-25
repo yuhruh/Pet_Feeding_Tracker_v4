@@ -1,0 +1,7 @@
+<%= t(".intro") %>
+
+<%= @confirm_url %>
+
+<%= t(".valid_for", days: User::EMAIL_CONFIRMATION_VALID_FOR.in_days.to_i) %>
+
+<%= t(".not_you") %>

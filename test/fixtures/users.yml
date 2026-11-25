@@ -3,6 +3,7 @@
 one:
   username: userone
   email_address: one@example.com
+  email_confirmed_at: <%= 1.month.ago.to_fs(:db) %>
   password_digest: <%= password_digest %>
   sign_in_count: 2
   timezone: "Asia/Taipei"
@@ -10,5 +11,6 @@ one:
 two:
   username: usertwo
   email_address: two@example.com
+  email_confirmed_at: <%= 1.month.ago.to_fs(:db) %>
   password_digest: <%= password_digest %>
   timezone: "Asia/Taipei"

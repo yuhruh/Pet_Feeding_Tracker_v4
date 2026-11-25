@@ -133,7 +133,7 @@
                       <div class="flex flex-wrap gap-2 mt-1">
                         <% visit.members.each do |member| %>
                           <span class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-medium">
-                            <%= member.username %> (<%= member.email_address %>)
+                            <%# Only the address the owner typed: the account's name isn't the owner's to learn. %><%= member.email_address %>
                           </span>
                         <% end %>
                       </div>
