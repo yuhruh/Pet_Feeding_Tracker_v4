@@ -4,7 +4,7 @@
 |---|---|
 | Document version | 1.15 (the owner's care records page, any day, with no date limits for the owner; the My household menu; weight reminders hourly by `PetWeightRemindersJob`; one reminder channel per person with email fallback. 1.14: households, caregivers and viewers; care records on the Today page; medications; reminders by Android app, LINE or email; live updates; the Android app's sign-in through Chrome; `pets.user_id` and `dry_foods.user_id` removed. 1.13: the monthly kibble price check) |
 | Date | 2026-11-09 |
-| Source baseline | `main` after checkpoint G2 of [HOUSEHOLDS_CAREGIVER_PLAN.md](HOUSEHOLDS_CAREGIVER_PLAN.md) and [PET_WEIGHT_REMINDER_PUSH_PLAN.md](PET_WEIGHT_REMINDER_PUSH_PLAN.md) |
+| Source baseline | `main` after checkpoint G2 of [HOUSEHOLDS_CAREGIVER_PLAN.md](docs/plans/HOUSEHOLDS_CAREGIVER_PLAN.md) and [PET_WEIGHT_REMINDER_PUSH_PLAN.md](docs/plans/PET_WEIGHT_REMINDER_PUSH_PLAN.md) |
 | Application | Pet Tracker v4 (Rails 8.1 monolith + Hotwire Native Android shell) |
 | Audience | Developers, reviewers, and operators of the application |
 
@@ -210,7 +210,7 @@ sequenceDiagram
 
 ### 1.9 Households, Caregivers and Care
 
-Built in checkpoints A–J of [HOUSEHOLDS_CAREGIVER_PLAN.md](HOUSEHOLDS_CAREGIVER_PLAN.md) (2026-09-29 – 10-02), which records every decision and test.
+Built in checkpoints A–J of [HOUSEHOLDS_CAREGIVER_PLAN.md](docs/plans/HOUSEHOLDS_CAREGIVER_PLAN.md) (2026-09-29 – 10-02), which records every decision and test.
 
 | Area | Where | How it works |
 |---|---|---|

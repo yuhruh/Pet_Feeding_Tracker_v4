@@ -56,7 +56,7 @@ Pet Tracker compares what your pet's favorite kibbles cost in Taiwan's online sh
 - **When nothing is found:** if neither BigGo nor PChome lists a kibble, the page says **"Can't find this kibble in shops right now."**
 - **Being a good neighbor:** each search is made at most once a month (shared across users), requests are spaced 2 seconds apart and one pet is checked at a time, and BigGo's redirect links, which its robots.txt disallows, are never fetched.
 
-Prices are approximate. Pet Tracker doesn't sell anything and isn't paid by these shops. The design, decisions and test results are recorded in [KIBBLE_PRICE_PLAN.md](KIBBLE_PRICE_PLAN.md).
+Prices are approximate. Pet Tracker doesn't sell anything and isn't paid by these shops. The design, decisions and test results are recorded in [KIBBLE_PRICE_PLAN.md](docs/plans/KIBBLE_PRICE_PLAN.md).
 
 ## Scheduled Jobs
 
@@ -140,9 +140,9 @@ For step-by-step instructions, open **Docs** in the app's menu (`/doc`) or see [
 | [USAGE.md](USAGE.md) | The same usage guide as Markdown |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | How the app is built, including the security reviews and what is still open |
 | [CLAUDE.md](CLAUDE.md) | Short orientation for working on the code: commands, architecture and conventions |
-| [HOUSEHOLDS_CAREGIVER_PLAN.md](HOUSEHOLDS_CAREGIVER_PLAN.md) | Design and checkpoints for households, caregivers, the Today page, the care records page and reminders |
-| [PET_WEIGHT_REMINDER_PUSH_PLAN.md](PET_WEIGHT_REMINDER_PUSH_PLAN.md) | Why weight reminder emails stopped, the hourly fix, the per-person reminder channel choice, and email when the phone's notifications are off |
-| [KIBBLE_PRICE_PLAN.md](KIBBLE_PRICE_PLAN.md) | Design, decisions and test results for the kibble price check |
+| [docs/plans/HOUSEHOLDS_CAREGIVER_PLAN.md](docs/plans/HOUSEHOLDS_CAREGIVER_PLAN.md) | Design and checkpoints for households, caregivers, the Today page, the care records page and reminders |
+| [docs/plans/PET_WEIGHT_REMINDER_PUSH_PLAN.md](docs/plans/PET_WEIGHT_REMINDER_PUSH_PLAN.md) | Why weight reminder emails stopped, the hourly fix, the per-person reminder channel choice, and email when the phone's notifications are off |
+| [docs/plans/KIBBLE_PRICE_PLAN.md](docs/plans/KIBBLE_PRICE_PLAN.md) | Design, decisions and test results for the kibble price check |
 
 ## Contributing
 
@@ -150,4 +150,4 @@ Contributions are welcome! Please feel free to submit a pull request or open an 
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License; see [LICENSE](LICENSE).
