@@ -12,7 +12,7 @@ Pet Tracker v4 helps pet owners keep an accurate record of what their pets eat, 
 - **Everything else builds on that record.** Dry food bags are drawn down by each tracker, so the app knows how much is left and when it will run out. The favorite list decides which kibbles get a monthly **price check**. Health checks, weight and vet visits sit alongside, so a vet can see the whole picture.
 - **Looking after them together.** Each owner has a **household**: their cats, food bags, litter boxes and water spots. They invite **caregivers** (who record care) and give **viewers** a personal read-only link. Taps on the Today page show up on everyone's page at once, and **reminders** (by the Android app, LINE or email, as each person chooses) say when the litter box, water fountain or a dose is due. The owner can look back at any day on the **Care records** page and fix or delete any record.
 - **Sharing is opt-in.** Owners can also create a read-only link to a pet's feeding dashboard (for a vet), or invite other members to a specific vet visit.
-- **It runs itself in the background.** Hourly jobs send care and weight reminders; a daily job sends backups; a monthly job checks kibble prices and emails the results.
+- **It runs itself in the background.** Hourly jobs send care and weight reminders and save Google Drive backups at each owner's chosen time; a daily job emails backups; a monthly job checks kibble prices and emails the results.
 
 **Under the hood:** a server-rendered **Rails 8.1** app (Hotwire: Turbo and Stimulus, Tailwind CSS). The same pages serve desktop and mobile browsers, an installable PWA, and an **Android app** (`pet_tracker_android/`, Hotwire Native). Background jobs, caching and real-time updates run on the database through Solid Queue, Solid Cache and Solid Cable, so no Redis is needed. Production runs on **Railway** with PostgreSQL and deploys every push to `main`. For the full design, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
@@ -25,7 +25,7 @@ Pet Tracker v4 helps pet owners keep an accurate record of what their pets eat, 
 *   **Care Records (owner):** Any day's records, filtered by cat or spot and by type, with Change and Delete for records of any age. Open it from the **My household ▾** menu (Today, Household settings, Care records).
 *   **Medications:** Doses at set times or as needed; each dose shows due, given, couldn't give or overdue, with a double-dose check.
 *   **Care Reminders:** For each litter box and water spot job, every few hours or days, or at set times; overdue doses too. Sent once, with one follow-up, the way each person chooses.
-*   **Dietary Tracking & Preference Analysis:** Log daily feeding records and identify your pet's favorite foods using a scoring algorithm based on their hunger, how much they loved the food, how much they left and how often they came back to it.
+*   **Dietary Tracking & Preference Analysis:** Log daily feeding records and identify your pet's favorite foods using a scoring algorithm based on their hunger, how much they loved the food, how much they left and how often they came back to it. For wet food, the form offers the brands and foods your household has logged before and fills in the amount from that food's last feeding.
 *   **Kibble Price Check:** On the 1st of every month, the app finds current Taiwan prices for the kibbles your pet has loved over the last 4 months, ranks them by **price per kg**, and emails you the list. See [Kibble Price Check](#kibble-price-check) below.
 *   **Smart Inventory Management:** Track dry food bags with automatic calculation of the food left and a predicted run-out date based on how fast your pet eats; restock a bag when you open a new one.
 *   **Comprehensive Data Visualization:** Interactive charts of food consumption (dry and wet) and weight over time, including separate tracking for boarding stays (meals whose note says hotel, boarding or 旅館). A **Care by day** chart counts each day's feedings, litter and water jobs, doses and litter observations, in soft colors. Download or share a chart as an image.
@@ -33,10 +33,10 @@ Pet Tracker v4 helps pet owners keep an accurate record of what their pets eat, 
 *   **AI Data Extraction:** Upload photos of health checkup reports and let Google Gemini fill in the results, using your own Gemini API key.
 *   **Vet Visit Preparation & Q&A:** Prepare questions before a vet visit and record the vet's answers afterward, with the vet's name, the purpose of the visit (vaccination, checkup, dental cleaning, surgery, and more), and how long you waited versus how long you spent with the vet.
 *   **Sharing:** Create a read-only link to a pet's records for others such as sitters or vets (lasting 1, 7 or 30 days, or with no expiry, and turned off at any time), or invite specific members to view and answer vet questions.
-*   **User Authentication:** Email and password, or sign in with Google, LINE or GitHub; sign out of your other devices from your account page.
-*   **Data Portability & Bulk Operations:** Import and export trackers as CSV, download every care record as CSV, and delete many records at once.
-*   **Automated Backups:** A CSV backup of your trackers by email every day you've changed them.
-*   **Smart Notifications:** Each person picks one way to get every reminder (care and weight): Android app notifications (Firebase), LINE or email. If the app or LINE can't deliver, the reminder is emailed with a note saying why, and the account page shows it.
+*   **User Authentication:** Email and password, or sign in with Google, LINE or GitHub. The profile page's **Sign-in methods** list connects or disconnects each one; resetting a forgotten password disconnects them all. Sign out of your other devices from your account page.
+*   **Data Portability & Bulk Operations:** Import and export trackers as CSV, download every care record as CSV, and delete many records at once. Downloaded CSVs put an apostrophe before text a spreadsheet would run as a formula; importing takes it off again.
+*   **Automated Backups:** A CSV backup of your trackers by email every day you've changed them, and, for owners who connect Google Drive, a dated CSV per cat in a "Pet Tracker Backups" folder every day at the time they choose (the last 30 days kept).
+*   **Smart Notifications:** Each person picks one way to get every reminder (care and weight): Android app notifications (Firebase), LINE or email. If the app or LINE can't deliver, or notifications are turned off for the app on the phone, the reminder is emailed with a note saying why, and the account page shows it.
 *   **Multilingual Support:** English, 繁體中文 and 日本語, with feeding times shown in your own time zone.
 *   **Mobile:** Install it on your phone as a Progressive Web App, or use the Android app.
 
@@ -67,9 +67,10 @@ Defined in `config/recurring.yml` and run by Solid Queue in production (server t
 | `CareReminderJob` | Every hour at :05 | Sends due litter box and water spot jobs and overdue doses to owners and caregivers who turned reminders on (9am in their own time zone for daily jobs) |
 | `UserBackupJob` | Every day at 3am | Emails a CSV backup to users who changed a tracker in the last day |
 | `PetWeightRemindersJob` | Every hour at :10 | Reminds owners to weigh cats not weighed for 14 days (9am–9pm in their own time zone), the way they chose |
+| `DriveBackupJob` | Every hour at :20 | Saves each cat's trackers as a dated CSV to the owner's Google Drive at the hour they chose, and moves files older than 30 days to the Drive trash |
 | `purge_expired_sessions` | Every day at 4am | Deletes expired sign-in sessions |
 | `MonthlyKibblePriceJob` | The 1st of every month at 6am | Checks kibble prices for every pet fed kibble in the last 30 days and emails the results |
-| `clear_solid_queue_finished_jobs` | Every hour | Clears finished background jobs |
+| `clear_solid_queue_finished_jobs` | Every hour at :12 | Clears finished background jobs |
 
 ## Technical Highlights
 
@@ -78,9 +79,10 @@ Defined in `config/recurring.yml` and run by Solid Queue in production (server t
 *   **Households and roles** in one policy (`HouseholdPolicy`), with the household always taken from the cat, box or spot, never from a form.
 *   **Firebase Cloud Messaging** (HTTP v1) for Android notifications, and Google/LINE/GitHub sign-in in the Android app through a Chrome Custom Tab and a one-time code.
 *   **Gemini AI Integration** for reading health-check reports, with each user's own API key.
+*   **Google Drive API** (`GoogleDriveClient`) for daily backups, with access only to the files the app creates.
 *   **Price lookups with Nokogiri** over a small, allow-listed HTTP client (only BigGo's and PChome's search pages; no redirects; size and time limits).
 *   **Internationalization** with `rails-i18n` and `i18n-js` (translations shared with Stimulus controllers).
-*   **Deployment:** Railway in production (PostgreSQL, a web process and a `bin/jobs` worker, see `Procfile`), with `Thruster` for HTTP caching and compression. A `Kamal` configuration is also included.
+*   **Deployment:** Railway in production (PostgreSQL, a web process and a `bin/jobs` worker, see `Procfile`), with `Thruster` for HTTP caching and compression. Railway deploys every push to `main` without waiting for CI, so check the deployed commit afterwards. The `Kamal` configuration (`config/deploy.yml`) is not used.
 *   **Testing:** Minitest unit, integration and browser (system) tests, plus Brakeman, RuboCop and importmap audits, all run by GitHub Actions on pull requests and pushes to `main`.
 
 ## Getting Started
@@ -112,14 +114,14 @@ You'll need **Ruby 3.4.1** and Node.js (for Tailwind CSS and i18n-js). Developme
     bin/rails test:system   # browser tests (needs Chrome)
     ```
 
-Sign-in with Google, LINE or GitHub needs their client IDs and secrets in the environment; email sign-in works without them. Android app notifications need the Firebase service account JSON in `FIREBASE_SERVICE_ACCOUNT_JSON` (on the web and worker services) and the project's `google-services.json` in `pet_tracker_android/app/` (not committed); without them reminders go by LINE or email.
+Sign-in with Google, LINE or GitHub needs their client IDs and secrets in the environment; email sign-in works without them. Google Drive backup uses the Google client too, with the Drive API enabled. Android app notifications need the Firebase service account JSON in `FIREBASE_SERVICE_ACCOUNT_JSON` (on the web and worker services) and the project's `google-services.json` in `pet_tracker_android/app/` (not committed); without them reminders go by LINE or email.
 
 ## How to Use
 
 1.  **Create an account:** Sign up, or sign in with Google, LINE or GitHub.
-2.  **Set your time zone** in your profile so feeding times are recorded correctly.
+2.  **Set your time zone** in your profile so feeding times are recorded correctly. The profile page also lists your **Sign-in methods** and, for owners, **☁️ Google Drive backup**.
 3.  **Add a pet** in the "Pets" section.
-4.  **Log meals** in "Trackers". Charts show intake and weight trends, and the **Favorite Food** list shows your pet's most loved foods.
+4.  **Log meals** in "Trackers" (for wet food, pick a saved brand and food and the amount is filled in from last time). Charts show intake and weight trends, and the **Favorite Food** list shows your pet's most loved foods.
 5.  **Check kibble prices:** open your pet's profile → **Kibble Prices** to see where its favorite kibbles are cheapest per kg. Prices are checked on the 1st of every month and emailed to you; press **Refresh now** to check today.
 6.  **Manage food storage** in "Dry Foods". The app predicts when each bag will run out based on current feeding.
 7.  **Track health** in "Health Checks". Add your Gemini API key in your profile to have report photos read for you.
@@ -136,9 +138,10 @@ For step-by-step instructions, open **Docs** in the app's menu (`/doc`) or see [
 |---|---|
 | `/doc` in the app (`app/views/pages/doc.html.erb`) | The usage guide for users, in all three languages. The account, pet, dry food, tracker and CSV import sections are written in the view; every other feature is a section under `doc_page.feature_sections` in `config/locales/*.yml`, so adding a feature to the guide means adding a section there in each language. |
 | [USAGE.md](USAGE.md) | The same usage guide as Markdown |
-| [ARCHITECTURE.md](ARCHITECTURE.md) | How the app is built |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | How the app is built, including the security reviews and what is still open |
+| [CLAUDE.md](CLAUDE.md) | Short orientation for working on the code: commands, architecture and conventions |
 | [HOUSEHOLDS_CAREGIVER_PLAN.md](HOUSEHOLDS_CAREGIVER_PLAN.md) | Design and checkpoints for households, caregivers, the Today page, the care records page and reminders |
-| [PET_WEIGHT_REMINDER_PUSH_PLAN.md](PET_WEIGHT_REMINDER_PUSH_PLAN.md) | Why weight reminder emails stopped, the hourly fix, and the per-person reminder channel choice |
+| [PET_WEIGHT_REMINDER_PUSH_PLAN.md](PET_WEIGHT_REMINDER_PUSH_PLAN.md) | Why weight reminder emails stopped, the hourly fix, the per-person reminder channel choice, and email when the phone's notifications are off |
 | [KIBBLE_PRICE_PLAN.md](KIBBLE_PRICE_PLAN.md) | Design, decisions and test results for the kibble price check |
 
 ## Contributing

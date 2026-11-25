@@ -33,6 +33,7 @@ This guide provides detailed instructions on how to use the key features of Pet 
   - [Medications](#medications)
 - [Reminders](#reminders)
 - [Care Records CSV](#care-records-csv)
+- [Backups](#backups)
 - [Android App](#android-app)
 - [Kibble Prices](#kibble-prices)
   - [Which Kibbles Are Checked](#which-kibbles-are-checked)
@@ -114,6 +115,8 @@ Trackers are used to log your pet's daily activities, such as feeding times, wal
 2.  **New Tracker:** Click the "New Tracker" button.
 3.  **Enter Details:** Fill in the activity details, such as the type of activity, time, and any notes.
 4.  **Save:** Click "Create Tracker" to log the activity.
+
+**Wet food:** after you choose **Wet**, **Brand** offers the brands your household has fed before, and **Description** then offers that brand's saved foods. Pick one or type a new one. When both match a saved food, **Amount** is filled in from its last feeding (this cat's, or else another cat's in the household), with a note saying so; change it if today's portion is different. An amount you typed or picked from a favorite is never replaced. Changing the brand clears the description and the filled-in amount.
 
 ### Favorite Food
 
@@ -217,6 +220,11 @@ In a litter record's **Add details**: which cat (if you know), pee clumps, the n
 ## Care Records CSV
 
 The owner can download every care record (feeding taps, weight, litter, water, medicine) from the household page: **Download care records (CSV)**, in your household's time zone.
+
+## Backups
+
+-   **By email:** every day you've changed a tracker, a CSV backup of your trackers is emailed to you.
+-   **Google Drive (owners):** on your profile page, under **☁️ Google Drive backup**, tap **Connect Google Drive** and choose a time (in your time zone). Every day, one CSV file per cat, named with the date, goes to the **Pet Tracker Backups** folder in your Drive; a second backup on the same day replaces that day's file. Files older than 30 days go to your Drive trash, where you can still restore them. **Back up now** makes one at once, and **Open folder** opens it in Drive. You can move or rename the folder; backups keep going there. Pet Tracker can only see the files it creates. Connect on the website: Google doesn't allow it inside the Android app. **Disconnect** stops the backups and leaves your files in Drive.
 
 ## Android App
 

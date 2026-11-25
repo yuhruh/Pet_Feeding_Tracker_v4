@@ -464,6 +464,7 @@ en:
     creating_tracker_step_3: "Select Pet: Choose the 'Petname's Tracker' in the dropdown menu."
     creating_tracker_step_4: "Enter Details: Fill in the dietary details, such as the type of food, feeding time, and any notes."
     creating_tracker_step_5: "Save: Click 'Add A Record For petname' to log the dietary information you want to create for."
+    creating_tracker_wet_tip: "Wet food: after you choose Wet, Brand offers the brands your household has fed before, and Description then offers that brand's saved foods. Pick one or type a new one. When both match a saved food, Amount is filled in from its last feeding (this cat's, or else another cat's in the household); change it if today's portion is different. Changing the brand clears the description and the filled-in amount."
     importing_trackers_title: "Importing Trackers from CSV"
     importing_trackers_description: "For bulk data entry, you can import trackers from a CSV file."
     importing_trackers_step_1: "Go to Trackers: Navigate to the 'Trackers' section."
@@ -683,6 +684,7 @@ en:
               - "Export trackers as CSV from the trackers page, and select several records to delete at once."
               - "The owner can download every care record (feeding taps, weight, litter, water, medicine) from the household page, in the household's time zone."
               - "A CSV backup of your trackers is emailed to you every day you've changed them."
+              - "Google Drive backup (owners): on your profile page, connect Google Drive and choose a time. Every day a CSV file per cat, named with the date, goes to the “Pet Tracker Backups” folder; files older than 30 days go to your Drive trash. “Back up now” makes one at once. Pet Tracker can only see the files it creates. Connect on the website; Google doesn't allow it inside the Android app."
           - title: "Your Account"
             ordered: false
             items:
@@ -697,6 +699,7 @@ en:
             items:
               - "Sign in with email, or with Google, LINE or GitHub: a Chrome tab opens over the app and brings you back signed in."
               - "Turning on 🔔 Reminders on Today asks to allow notifications. Reminders then arrive as notifications; tapping one opens Today."
+              - "If you turn off Pet Tracker's notifications (or its “Reminders” channel) in your phone's settings, the app tells Pet Tracker the next time you open it, and reminders are emailed instead."
               - "Signing out of the app stops notifications on that phone."
           - title: "Progressive Web App (PWA)"
             ordered: true

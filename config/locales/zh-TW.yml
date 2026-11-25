@@ -464,6 +464,7 @@ zh-TW:
     creating_tracker_step_3: "選取寵物：在下拉式選單中選擇「寵物姓名的飲食紀錄」。"
     creating_tracker_step_4: "輸入詳細資料：填寫飲食詳細資料，例如食物類型、餵食時間和任何注意事項。"
     creating_tracker_step_5: "儲存：按一下「為寵物姓名新增記錄」以記錄您要建立的飲食資訊。"
+    creating_tracker_wet_tip: "濕食：選擇「濕食」後，「品牌」會列出家庭裡餵過的品牌，選好品牌後，「描述」會列出該品牌存過的食物。可以從中挑選，也可以輸入新的。品牌和描述都對上存過的食物時，「份量」會帶入那種食物上次餵食的份量（先找這隻貓的，沒有的話找家庭裡其他貓的）；今天份量不同的話再修改。換品牌時，描述和帶入的份量會清空。"
     importing_trackers_title: "從 CSV 上傳飲食紀錄"
     importing_trackers_description: "對於大量資料輸入，您可以從 CSV 檔案上傳飲食紀錄。"
     importing_trackers_step_1: "前往飲食紀錄：導覽至「飲食紀錄」部分。"
@@ -683,6 +684,7 @@ zh-TW:
               - "在紀錄表頁面將紀錄匯出為 CSV，也可以勾選多筆一次刪除。"
               - "擁有者可以在家庭頁面下載所有照顧紀錄（餵食、體重、貓砂、喝水、用藥），以家庭的時區顯示。"
               - "每天只要有修改紀錄，就會用 email 寄給您一份 CSV 備份。"
+              - "Google 雲端硬碟備份（擁有者）：在個人資料頁連結 Google 雲端硬碟並選擇時間。每天會為每隻貓在「Pet Tracker Backups」資料夾存一個以日期命名的 CSV 檔，超過 30 天的檔案會移到雲端硬碟的垃圾桶。按「立即備份」可以馬上備份一次。Pet Tracker 只看得到它自己建立的檔案。請在網站上連結；Google 不允許在 Android App 裡連結。"
           - title: "您的帳號"
             ordered: false
             items:
@@ -697,6 +699,7 @@ zh-TW:
             items:
               - "用 email 登入，或用 Google、LINE、GitHub 登入：App 上會開啟一個 Chrome 分頁，完成後回到 App 並已登入。"
               - "在今天頁面開啟 🔔 提醒時，會詢問是否允許通知。之後提醒會以通知送達，點一下就會打開今天頁面。"
+              - "如果在手機設定中關閉 Pet Tracker 的通知（或它的「Reminders」通知類別），下次打開 App 時會告訴 Pet Tracker，之後提醒會改用 email 寄送。"
               - "在 App 登出後，那支手機就不會再收到通知。"
           - title: "漸進式網頁應用程式（PWA）"
             ordered: true
